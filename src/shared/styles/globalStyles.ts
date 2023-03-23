@@ -1,19 +1,27 @@
 import { createGlobalStyle } from "styled-components";
 import '../styles/variables.css'
-import Inter400 from '../fonts/Inter/static/Inter-Regular.ttf'
-import Inter700 from '../fonts/Inter/static/Inter-Bold.ttf'
+import InterRegular from '../fonts/Inter/static/Inter-Regular.ttf'
+import InterMedium from '../fonts/Inter/static/Inter-Medium.ttf'
+import InterBold from '../fonts/Inter/static/Inter-Bold.ttf'
 
 export const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: 'Inter';
-    src: url(${Inter400}) format('truetype');
+    src: url(${InterRegular}) format('truetype');
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${Inter700}) format('truetype');
+    src: url(${InterMedium}) format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url(${InterBold}) format('truetype');
     font-weight: 700;
     font-style: normal;
   }

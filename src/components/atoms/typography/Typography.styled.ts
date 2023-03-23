@@ -22,7 +22,7 @@ export const Typography = styled.p<TypographyProps>(props => {
   return css`
     margin: ${m || 0};
     padding: ${p || 0};
-    font-size: ${fz || 'inherit'};
+    font-size: ${fz || '14px'};
     font-weight: ${fw || '400'};
     color: ${color || 'inherit'};
     text-align: ${textAlign || 'left'};

@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import '../styles/variables.css'
+import './variables.ts'
 import InterRegular from '../fonts/Inter/static/Inter-Regular.ttf'
 import InterMedium from '../fonts/Inter/static/Inter-Medium.ttf'
 import InterBold from '../fonts/Inter/static/Inter-Bold.ttf'

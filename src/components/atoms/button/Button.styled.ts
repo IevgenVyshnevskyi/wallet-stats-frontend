@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import "../../../shared/styles/variables.css"
+import "../../../shared/styles/variables.ts"
 
 export const Button = styled.button`
   font-weight: 700;

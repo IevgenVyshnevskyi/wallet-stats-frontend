@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import '../../../shared/styles/variables.css'
+import '../../../shared/styles/variables.ts'
 
 type ImgProps = {
 }

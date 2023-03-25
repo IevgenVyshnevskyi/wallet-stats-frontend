@@ -4,6 +4,7 @@ import InterRegular from '../fonts/Inter/static/Inter-Regular.ttf'
 import InterMedium from '../fonts/Inter/static/Inter-Medium.ttf'
 import InterSemiBold from '../fonts/Inter/static/Inter-SemiBold.ttf'
 import InterBold from '../fonts/Inter/static/Inter-Bold.ttf'
+import { ALMOST_BLACK_FOR_TEXT, WHITE } from "./variables";
 
 export const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -42,7 +43,8 @@ export const GlobalStyles = createGlobalStyle`
   
   body {
     font-weight: 400;
-    background-color: var(--grey);
-    color: var(--almost-black);
+    background-color: ${ALMOST_BLACK_FOR_TEXT};
+    background-color: #555;
+    color: ${WHITE};
   }
 `

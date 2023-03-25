@@ -4,7 +4,8 @@ import InterRegular from '../fonts/Inter/static/Inter-Regular.ttf'
 import InterMedium from '../fonts/Inter/static/Inter-Medium.ttf'
 import InterSemiBold from '../fonts/Inter/static/Inter-SemiBold.ttf'
 import InterBold from '../fonts/Inter/static/Inter-Bold.ttf'
-import { ALMOST_BLACK_FOR_TEXT, WHITE } from "./variables";
+import InterExtraBold from '../fonts/Inter/static/Inter-ExtraBold.ttf'
+import { ALMOST_BLACK_FOR_TEXT, BASE_1, WHITE } from "./variables";
 
 export const GlobalStyles = createGlobalStyle`
   @font-face {
@@ -35,6 +36,13 @@ export const GlobalStyles = createGlobalStyle`
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'Inter';
+    src: url(${InterExtraBold}) format('truetype');
+    font-weight: 800;
+    font-style: normal;
+  }
+
   * {
     margin : 0;
     padding: 0;
@@ -44,7 +52,7 @@ export const GlobalStyles = createGlobalStyle`
   body {
     font-weight: 400;
     background-color: ${ALMOST_BLACK_FOR_TEXT};
-    background-color: #555;
+    background-color: ${BASE_1};
     color: ${WHITE};
   }
 `

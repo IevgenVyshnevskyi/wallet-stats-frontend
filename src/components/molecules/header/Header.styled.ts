@@ -12,10 +12,6 @@ export const StyledHeader = styled.nav`
   border-bottom: 2px solid ${DIVIDER};
   
   ${Box} {
-    &:first-child {
-      margin-right: 56px;
-    }
-    
     > a {
       display: flex;
       align-items: center;
@@ -28,12 +24,6 @@ export const StyledHeader = styled.nav`
         font-size: 20px;
         color: ${ALMOST_BLACK_FOR_TEXT};
       }
-    }
-
-    &:last-child {
-      display: flex;
-      align-items: center;
-      gap: 40px;
     }
   }
 

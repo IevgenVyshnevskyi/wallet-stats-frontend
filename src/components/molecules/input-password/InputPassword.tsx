@@ -2,9 +2,9 @@ import { Input } from '../../atoms/input/Input.styled';
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg'
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg'
 import { useState } from 'react';
-import { StyledInputPassword } from './InputPassword.styles';
+import { InputPasswordWrapper } from './InputPassword.styled';
 
-const InputPassword = () => {
+const InputPassword: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -12,14 +12,14 @@ const InputPassword = () => {
   };
 
   return (
-    <StyledInputPassword>
+    <InputPasswordWrapper>
       <Input type={showPassword ? 'text' : 'password'} />
       {showPassword ?
-        <VisibilityOn onClick={toggleShowPassword} />
-        :
         <VisibilityOff onClick={toggleShowPassword} />
+        :
+        <VisibilityOn onClick={toggleShowPassword} />
       }
-    </StyledInputPassword>
+    </InputPasswordWrapper>
   );
 }
 

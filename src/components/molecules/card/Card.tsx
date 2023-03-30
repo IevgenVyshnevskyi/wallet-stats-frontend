@@ -2,9 +2,14 @@ import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import { CardButton } from "./Card.styled";
 import SettingsCardIcon from '../../../shared/assets/icons/settings-card.svg'
-import { ALMOST_BLACK_FOR_TEXT, DARK_FOR_TEXT } from "../../../shared/styles/variables";
+import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
 
-const Card: React.FC = () => {
+type CardProps = {
+  name?: string;
+  sum: string;
+}
+
+const Card: React.FC<CardProps> = ({ name, sum }) => {
 
   return (
     <CardButton>
@@ -12,22 +17,24 @@ const Card: React.FC = () => {
         display="flex"
         direction="column"
         alignItems="start"
+        m={!name && "10px 0"}
       >
-        <Typography
-          as="h4"
-          fw="500"
-          color={DARK_FOR_TEXT}
-          m="0 0 10px 0"
-        >
-          Приват
-        </Typography>
+        {name && (
+          <Typography
+            as="h4"
+            fw="500"
+            color={DARK_FOR_TEXT}
+            m="0 0 10px 0"
+          >
+            {name}
+          </Typography>
+        )}
         <Typography
           as="span"
           fw="600"
-          color={ALMOST_BLACK_FOR_TEXT}
           fz="22px"
         >
-          2 348,35 ₴
+          {sum}
         </Typography>
       </Box>
 

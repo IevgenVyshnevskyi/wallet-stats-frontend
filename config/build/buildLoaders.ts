@@ -22,9 +22,24 @@ export function buildLoaders({ isDev }: BuildOptions): webpack.RuleSetRule[] {
     use: '@svgr/webpack',
   };
 
-  const fileLoader = {
-    test: /\.(png|jpe?g|gif|ttf)$/i,
-    use: 'file-loader',
+  const graphicsLoader = {
+    test: /\.(png|jpe?g|gif)$/i,
+    use: {
+      loader: 'file-loader',
+      options: {
+        outputPath: 'assets',
+      },
+    },
+  };
+
+  const fontsLoader = {
+    test: /\.(ttf)$/i,
+    use: {
+      loader: 'file-loader',
+      options: {
+        outputPath: 'fonts',
+      },
+    },
   };
 
   const babelLoader = {
@@ -43,9 +58,10 @@ export function buildLoaders({ isDev }: BuildOptions): webpack.RuleSetRule[] {
 
   return [
     svgLoader,
-    fileLoader,
+    graphicsLoader,
+    fontsLoader,
     typescriptLoader,
-    babelLoader,
     styleLoader,
+    babelLoader,
   ];
 }

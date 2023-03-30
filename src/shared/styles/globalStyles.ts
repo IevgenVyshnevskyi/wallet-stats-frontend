@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { ALMOST_BLACK_FOR_TEXT, BASE_1, WHITE } from "./variables";
+import { ALMOST_BLACK_FOR_TEXT, BASE_1 } from "./variables";
 import { fontStyles } from "./fontStyles";
 
 export const GlobalStyles = createGlobalStyle`
@@ -13,8 +13,7 @@ export const GlobalStyles = createGlobalStyle`
   
   body {
     font-weight: 400;
-    background-color: ${ALMOST_BLACK_FOR_TEXT};
     background-color: ${BASE_1};
-    color: ${WHITE};
+    color: ${ALMOST_BLACK_FOR_TEXT};
   }
 `

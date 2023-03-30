@@ -8,9 +8,9 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
     port: options.port,
     hot: true,
     open: true,
-    // historyApiFallback: true,
-    // static: {
-    //   directory: paths.output,
-    // }
+    historyApiFallback: true,
+    static: {
+      directory: paths.output,
+    }
   }
 }

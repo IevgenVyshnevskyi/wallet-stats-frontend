@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { ALMOST_BLACK_FOR_TEXT } from "../../../shared/styles/variables";
 
 export const InputPasswordWrapper = styled.div`
   position: relative;
@@ -8,7 +7,6 @@ export const InputPasswordWrapper = styled.div`
 
   > input {
     font-size: 16px;
-    color: ${ALMOST_BLACK_FOR_TEXT};
   }
 
   > svg {

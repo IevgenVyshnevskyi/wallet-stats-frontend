@@ -16,5 +16,6 @@ export const MENU_BUTTON_HOVER = "#E1E5F5";
 export const GREY_50 = "#808080";
 
 export const GREEN = "#2FB876";
+export const SUCCESS = "#04C000";
 export const RED = "#F86C6C"
 export const GRADIENT = `linear-gradient(130.59deg, #A96BF8 0%, #725DD9 19.48%, #737FEF 39.78%, #5D8AD9 60.07%, #6BC3F8 77.93%)`;

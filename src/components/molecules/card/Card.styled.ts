@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { WHITE, ALMOST_BLACK_FOR_TEXT, MENU_BUTTON_HOVER } from "../../../shared/styles/variables";
+import { WHITE, PRIMARY } from "../../../shared/styles/variables";
 import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
+import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 
 export const CardButton = styled(ButtonTransparent)`
-  display: flex;
   width: 100%;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
@@ -14,14 +15,15 @@ export const CardButton = styled(ButtonTransparent)`
   margin-bottom: 8px;
 
   &:hover {
-    background-color: ${MENU_BUTTON_HOVER};
+    background-color: ${PRIMARY};
 
-    h4 {
-      color: ${ALMOST_BLACK_FOR_TEXT};
+    * {
+      color: ${WHITE};
     }
 
     svg {
       opacity: 1;
+      ${blackSVGtoWhite}
     }
   }
 `

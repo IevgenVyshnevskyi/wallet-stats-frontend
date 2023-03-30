@@ -12,7 +12,7 @@ import PieChartIcon from '../../../shared/assets/icons/pie-chart.svg'
 import SettingsIcon from '../../../shared/assets/icons/settings-header.svg'
 import LogoutIcon from '../../../shared/assets/icons/logout.svg'
 
-import { StyledHeader } from './Header.styled';
+import { HeaderWrapper } from './Header.styled';
 import { List } from './../../atoms/list/List.styled';
 import { ListItem } from './../../atoms/list/ListItem.styled';
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
@@ -21,8 +21,8 @@ const Header: React.FC = () => {
   function logOut() { }
 
   return (
-    <StyledHeader>
-      <Box m="0 56px 0 0">
+    <HeaderWrapper>
+      <Box mr="56px">  
         <Link to="/">
           <LogoIcon />
           <Typography as="span">Spendwise</Typography>
@@ -62,7 +62,7 @@ const Header: React.FC = () => {
           <LogoutIcon onClick={logOut} />
         </ButtonTransparent>
       </Box>
-    </StyledHeader>
+    </HeaderWrapper>
   );
 }
 

@@ -1,6 +1,7 @@
 import styled from "styled-components"
-import { MENU_BUTTON_HOVER, ALMOST_BLACK_FOR_TEXT } from "../../../shared/styles/variables"
+import { PRIMARY, WHITE } from "../../../shared/styles/variables"
 import { Link as RouterLink } from 'react-router-dom';
+import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 
 export const LinkMenu = styled(RouterLink)`
   padding: 10px 28px;
@@ -10,7 +11,15 @@ export const LinkMenu = styled(RouterLink)`
   text-decoration: none;
 
   &:hover {
-    background-color: ${MENU_BUTTON_HOVER};
+    background-color: ${PRIMARY};
+
+    svg {
+      ${blackSVGtoWhite}
+    }
+
+    > span {
+      color: ${WHITE};
+    }
   }
 
   > svg {
@@ -18,7 +27,6 @@ export const LinkMenu = styled(RouterLink)`
   }
 
   > span {
-    color: ${ALMOST_BLACK_FOR_TEXT};
     font-size: 14px;
     font-weight: 600;
   }

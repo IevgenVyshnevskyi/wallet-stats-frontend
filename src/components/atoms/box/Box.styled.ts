@@ -1,15 +1,13 @@
 import styled from "styled-components";
-import '../../../shared/styles/variables.ts'
+import { commonStyles, commonStylesProps } from "../../../shared/styles/commonStyles";
 
-type BoxProps = {
-  m?: string;
-  p?: string;
-  width?: string;
-  color?: string;
+type BoxProps = commonStylesProps & {
   bgColor?: string;
   display?: string;
   direction?: string;
   grow?: string;
+  basis?: string;
+  wrap?: string;
   justifyContent?: string;
   alignItems?: string;
   gap?: string;
@@ -22,14 +20,13 @@ type BoxProps = {
 }
 
 export const Box = styled.div<BoxProps>`
-  margin: ${({ m }) => m || 0};
-  padding: ${({ p }) => p || 0};
-  width: ${({ width }) => width || undefined};
-  color: ${({ color }) => color || "inherit"};
-  background-color: ${({ bgColor }) => bgColor || "var(--grey)"};
+  ${commonStyles}
+  background-color: ${({ bgColor }) => bgColor || 'transparent'};
   display: ${({ display }) => display || 'block'};
   flex-direction: ${({ direction }) => direction || undefined};
   flex-grow: ${({ grow }) => grow || undefined};
+  flex-basis: ${({ basis }) => basis || undefined};
+  flex-wrap: ${({ wrap }) => wrap && "wrap" || undefined};
   justify-content: ${({ justifyContent }) => justifyContent || undefined};
   align-items: ${({ alignItems }) => alignItems || undefined};
   gap: ${({ gap }) => gap || undefined};

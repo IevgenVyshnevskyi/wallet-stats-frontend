@@ -1,16 +1,15 @@
 import styled, { css } from "styled-components"
-import { ALMOST_BLACK_FOR_TEXT, DISABLED, PRIMARY, PRIMARY_HOVER, WHITE } from "./../../../shared/styles/variables"
+import { DISABLED, PRIMARY, PRIMARY_HOVER, WHITE } from "./../../../shared/styles/variables"
+import { commonStyles, commonStylesProps } from "../../../shared/styles/commonStyles"
 
-type ButtonProps = {
+export type ButtonProps = commonStylesProps & {
   primary?: boolean
   secondary?: boolean
   disabled?: boolean
 }
 
-export const Button = styled.button<ButtonProps>((props) => {
-  const { primary, secondary, disabled } = props
-
-  return css`
+export const buttonStyles = css<ButtonProps>`
+  ${({ primary, secondary, disabled }) => `
     font-weight: 600;
     font-size: 16px;
     padding: 10px 32px;
@@ -26,7 +25,6 @@ export const Button = styled.button<ButtonProps>((props) => {
       }
     ` : secondary ? `
       border: 2px solid ${PRIMARY};
-      color: ${ALMOST_BLACK_FOR_TEXT};
       background-color: ${WHITE};
       &:hover {
         border-color: ${PRIMARY_HOVER};
@@ -44,5 +42,10 @@ export const Button = styled.button<ButtonProps>((props) => {
       color: ${DISABLED};
     ` ) : undefined
     }
-  `
-})
+  `}
+`
+
+export const Button = styled.button<ButtonProps>`
+  ${commonStyles}
+  ${buttonStyles}
+`

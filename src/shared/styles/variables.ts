@@ -16,4 +16,4 @@ export const MENU_BUTTON_HOVER = "#E1E5F5";
 export const GREY_50 = "#808080";
 
 export const GREEN = "#2FB876";
-export const RED = "#F86C6C";
+export const SUCCESS = "#04C000";

@@ -1,7 +1,7 @@
 import { Typography } from "../../atoms/typography/Typography.styled";
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
-import { DARK_FOR_TEXT, GREEN, RED, ALMOST_BLACK_FOR_TEXT, WHITE, DIVIDER } from './../../../shared/styles/variables';
+import { DARK_FOR_TEXT, GREEN, WHITE, DIVIDER, ALERT_1 } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
 
 type TransactionProps = {
@@ -32,7 +32,6 @@ const Transaction: React.FC<TransactionProps> = ({ type }) => {
           as="h5"
           fw="600"
           fz="16px"
-          color={ALMOST_BLACK_FOR_TEXT}
         >
           Назва категорії
         </Typography>
@@ -49,7 +48,7 @@ const Transaction: React.FC<TransactionProps> = ({ type }) => {
         <Box display="flex" alignItems="center" m="0 0 15px 0">
           <Typography
             as="span"
-            color={type === "income" ? GREEN : RED}
+            color={type === "income" ? GREEN : ALERT_1}
             textAlign="right"
             fw="600"
             m="0 6px 0 0"
@@ -64,7 +63,6 @@ const Transaction: React.FC<TransactionProps> = ({ type }) => {
           textAlign="right"
           fz="16px"
           fw="600"
-          color={ALMOST_BLACK_FOR_TEXT}
         >
           1 265,35 ₴
         </Typography>

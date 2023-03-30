@@ -6,6 +6,7 @@ type TypographyProps = commonStylesProps & {
   fw?: string;
   textAlign?: string;
   letterSpacing?: string;
+  lh?: string;
 }
 
 export const Typography = styled.p<TypographyProps>(props => {
@@ -13,6 +14,7 @@ export const Typography = styled.p<TypographyProps>(props => {
     fz, fw,
     textAlign,
     letterSpacing,
+    lh
   } = props
 
   return css`
@@ -21,5 +23,6 @@ export const Typography = styled.p<TypographyProps>(props => {
     font-weight: ${fw || '400'};
     text-align: ${textAlign || 'left'};
     letter-spacing: ${letterSpacing || 'normal'};
+    line-height: ${lh || undefined};
   `
 })

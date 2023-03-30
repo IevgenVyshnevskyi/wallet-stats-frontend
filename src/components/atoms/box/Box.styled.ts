@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import '../../../shared/styles/variables.ts'
+
 
 type BoxProps = {
   m?: string;
@@ -19,6 +19,20 @@ type BoxProps = {
   borderLeft?: string;
   borderBottom?: string;
   borderRadius?: string;
+
+  pt?: string;
+  pb?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  textAlign?: string;
+  background?: string;    //
+  position?: string;
+  zIndex?: string;
+  height?: string;   //
+  flexDirection?: string;
+  flex?: string;   //
+  flexBasis?: string;
+  overflow?: string;   //
 }
 
 export const Box = styled.div<BoxProps>`
@@ -39,4 +53,18 @@ export const Box = styled.div<BoxProps>`
   border-bottom: ${({ borderBottom }) => borderBottom || undefined};
   border-left: ${({ borderLeft }) => borderLeft || undefined};
   border-radius: ${({ borderRadius }) => borderRadius || undefined};
+
+  padding-top: ${({pt}) => pt || undefined};
+  padding-bottom: ${({pb}) => pb || undefined};
+  max-width: ${({maxWidth}) => maxWidth || undefined};
+  max-height: ${({maxHeight}) => maxHeight || undefined};
+  text-align: ${({textAlign}) => textAlign || 0};
+  background: ${({background}) => background || undefined};   //
+  position: ${({position}) => position || "static"};
+  z-index: ${({zIndex}) => zIndex || 0};
+  height: ${({height}) => height || undefined};   //
+  flex-direction: ${({flexDirection}) => flexDirection || undefined};
+  flex: ${({flex}) => flex || undefined};                               //
+  flex-basis: ${({flexBasis}) => flexBasis || undefined};
+  overflow: ${({overflow}) => overflow || undefined};     //
 `

@@ -8,6 +8,7 @@ type TypographyProps = {
   fw?: string;
   textAlign?: string;
   letterSpacing?: string;
+  lh?: string;
 }
 
 export const Typography = styled.p<TypographyProps>(props => {
@@ -17,6 +18,7 @@ export const Typography = styled.p<TypographyProps>(props => {
     color,
     textAlign,
     letterSpacing,
+      lh
   } = props
 
   return css`
@@ -27,5 +29,6 @@ export const Typography = styled.p<TypographyProps>(props => {
     color: ${color || 'inherit'};
     text-align: ${textAlign || 'left'};
     letter-spacing: ${letterSpacing || 'normal'};
+    line-height: ${lh || 0};
   `
 })

@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import '../../../shared/styles/variables.css'
+
+import {WHITE} from "../../../shared/styles/variables";
 
 type ContainerProps = {
-  maxWidth?: string;
+     display?: string;
 }
 
 export const Container = styled.div<ContainerProps>`
-  max-width: ${({ maxWidth }) => maxWidth};
-  margin: 0 auto;
+  display: ${({display}) => display || undefined};
 `

@@ -1,32 +1,20 @@
 import { createGlobalStyle } from "styled-components";
-import '../styles/variables.css'
-import Inter400 from '../fonts/Inter/static/Inter-Regular.ttf'
-import Inter700 from '../fonts/Inter/static/Inter-Bold.ttf'
+import { ALMOST_BLACK_FOR_TEXT, BASE_1, WHITE } from "./variables";
+import { fontStyles } from "./fontStyles";
 
 export const GlobalStyles = createGlobalStyle`
-  @font-face {
-    font-family: 'Inter';
-    src: url(${Inter400}) format('truetype');
-    font-weight: 400;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'Inter';
-    src: url(${Inter700}) format('truetype');
-    font-weight: 700;
-    font-style: normal;
-  }
+  ${fontStyles}
 
   * {
     margin : 0;
     padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
   }
   
   body {
-    font-family: 'Inter';
     font-weight: 400;
-    background-color: var(--grey);
-    color: var(--almost-black);
+    background-color: ${ALMOST_BLACK_FOR_TEXT};
+    background-color: ${BASE_1};
+    color: ${WHITE};
   }
 `

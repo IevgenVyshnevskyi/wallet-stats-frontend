@@ -10,6 +10,18 @@ export const LinkMenu = styled(RouterLink)`
   align-items: center;
   text-decoration: none;
 
+  ${({ to }) => (to === window.location.pathname ? `
+    background-color: ${PRIMARY};
+    > span {
+      color: ${WHITE};
+    }
+
+    svg {
+      ${blackSVGtoWhite};
+    }
+  ` : undefined
+  )}
+
   &:hover {
     background-color: ${PRIMARY};
 

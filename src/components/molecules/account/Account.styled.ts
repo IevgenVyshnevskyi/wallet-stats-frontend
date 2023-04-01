@@ -2,8 +2,10 @@ import styled from "styled-components";
 import { WHITE, PRIMARY } from "../../../shared/styles/variables";
 import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
 import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
+import { commonStyles } from "../../../shared/styles/commonStyles";
 
-export const CardButton = styled(ButtonTransparent)`
+export const AccountButton = styled(ButtonTransparent)/*  <{ isActive: boolean }> */`
+  ${commonStyles}
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -12,7 +14,6 @@ export const CardButton = styled(ButtonTransparent)`
   padding: 20px 15px;
   background: ${WHITE};
   border-radius: 8px;
-  margin-bottom: 8px;
 
   &:hover {
     background-color: ${PRIMARY};

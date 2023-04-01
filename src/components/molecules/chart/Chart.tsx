@@ -3,7 +3,7 @@ import { Chart as ChartJS } from "chart.js/auto";
 import { Box } from "../../atoms/box/Box.styled";
 import { WHITE } from "../../../shared/styles/variables";
 
-const Chart = () => {
+const Chart: React.FC = () => {
   const chartRef = useRef(null);
   const chart = useRef(null);
 
@@ -76,7 +76,7 @@ const Chart = () => {
   }, []);
 
   return (
-    <Box bgColor={WHITE} borderRadius="8px" p="10px">
+    <Box bgColor={WHITE} borderRadius="8px" p="5px 0">
       <Box width="315px" m="0 auto">
         <canvas id="myChart" ref={chartRef} />
       </Box>

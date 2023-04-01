@@ -7,6 +7,7 @@ export const InputPasswordWrapper = styled.div`
 
   > input {
     font-size: 16px;
+    padding-right: 50px;
   }
 
   > svg {

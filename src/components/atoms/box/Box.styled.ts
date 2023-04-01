@@ -23,7 +23,7 @@ type BoxProps = commonStylesProps & {
 }
 
 export const Box = styled.div<BoxProps>`
-  ${commonStyles}
+  ${commonStyles};
   border: ${({ border }) => border || undefined};
   border-top: ${({ borderTop }) => borderTop || undefined};
   border-right: ${({ borderRight }) => borderRight || undefined};

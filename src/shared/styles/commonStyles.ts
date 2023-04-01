@@ -16,6 +16,7 @@ export type commonStylesProps = {
   width?: string;
   height?: string;
   lh?: string;
+  textAlight?: string;
   display?: string;
   direction?: string;
   gap?: string;
@@ -44,6 +45,8 @@ export const commonStyles = css<commonStylesProps>`
   width: ${({ width }) => width || undefined};
   height: ${({ height }) => height || undefined};
   line-height: ${({ lh }) => lh || undefined};
+  
+  text-align: ${({ textAlight }) => textAlight || undefined};
   display: ${({ display }) => display || 'block'};
   flex-direction: ${({ direction }) => direction || 'block'};
   gap: ${({ gap }) => gap || 'block'};

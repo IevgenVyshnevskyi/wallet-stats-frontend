@@ -4,7 +4,7 @@ import { commonStyles } from '../../../shared/styles/commonStyles';
 
 export const Input = styled.input`
   width: 100%;
-  ${commonStyles}
+  ${commonStyles};
   padding: 12px 16px;
   border-radius: 10px;
   font-weight: 400;

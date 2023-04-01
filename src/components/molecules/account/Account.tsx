@@ -1,18 +1,23 @@
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
-import { CardButton } from "./Card.styled";
-import SettingsCardIcon from '../../../shared/assets/icons/settings-card.svg'
+import { AccountButton } from "./Account.styled";
+import SettingsAccountIcon from '../../../shared/assets/icons/settings-account.svg'
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
 
-type CardProps = {
+export type AccountProps = {
   name?: string;
   sum: string;
+  noIcon?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ name, sum }) => {
+const Account: React.FC<AccountProps> = ({ name, sum, noIcon }) => {
+
+  // context for active button,
+  // add data attribute
+  // check if context activeButton === clicked button
 
   return (
-    <CardButton>
+    <AccountButton>
       <Box
         display="flex"
         direction="column"
@@ -38,9 +43,9 @@ const Card: React.FC<CardProps> = ({ name, sum }) => {
         </Typography>
       </Box>
 
-      <SettingsCardIcon opacity=".2" />
-    </CardButton>
+      {!noIcon && <SettingsAccountIcon opacity=".2" />}
+    </AccountButton>
   );
 }
 
-export default Card;
+export default Account;

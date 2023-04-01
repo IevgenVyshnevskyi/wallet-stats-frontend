@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { PRIMARY, PRIMARY_2 } from './../../../shared/styles/variables';
-import {commonStyles} from "../../../shared/styles/commonStyles";
+import { commonStyles } from '../../../shared/styles/commonStyles';
 
 export const Input = styled.input`
-  ${commonStyles};
-  
   width: 100%;
+  ${commonStyles};
   padding: 12px 16px;
   border-radius: 10px;
   font-weight: 400;

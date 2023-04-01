@@ -2,31 +2,34 @@ import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import Header from '../../molecules/header/Header';
 import { Typography } from '../../atoms/typography/Typography.styled';
-import Card from '../../molecules/card/Card';
+import Account from '../../molecules/account/Account';
 import { ListItem } from '../../atoms/list/ListItem.styled';
 import { List } from "../../atoms/list/List.styled";
 import { Button } from "../../atoms/button/Button.styled";
-import Transaction from "../../molecules/transaction/Transaction";
 import Chart from "../../molecules/chart/Chart";
-import { MainPageWrapper } from "./MainPageWrapper";
+import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useContext } from "react";
-import PopupAddAccount from "./../../molecules/popup/PopupAddAccount";
+import PopupAddAccount from "../../molecules/popup/PopupAddAccount";
 import PopupEditAccount from "../../molecules/popup/PopupEditAccount";
+import TransactionList from "../../molecules/transaction/TransactionList";
+import { mockTransactions } from "../../../../mock-data/transactions";
+import { mockAccounts } from "../../../../mock-data/accounts";
 
-const MainPage: React.FC = () => {
+const HomePage: React.FC = () => {
   const { isAddAccountPopupOpen, isEditAccountPopupOpen } = useContext(PopupContext);
 
   return (
     <>
-      <MainPageWrapper>
+      <HomePageWrapper>
         <Header />
-        <Box m="0 20px 20px" display="flex" grow="1" gap="25px">
+
+        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
           <Accounts />
           <Transactions />
           <Statistics />
         </Box>
-      </MainPageWrapper>
+      </HomePageWrapper>
 
       {isAddAccountPopupOpen && <PopupAddAccount />}
       {isEditAccountPopupOpen && <PopupEditAccount />}
@@ -35,7 +38,10 @@ const MainPage: React.FC = () => {
 }
 
 const Accounts = () => {
-  const { setIsAddAccountPopupOpen, setIsEditAccountPopupOpen } = useContext(PopupContext);
+  const {
+    setIsAddAccountPopupOpen,
+    setIsEditAccountPopupOpen
+  } = useContext(PopupContext);
 
   const handleAddAccountClick = () => {
     setIsAddAccountPopupOpen(true);
@@ -67,7 +73,6 @@ const Accounts = () => {
           p="0 0 20px 0"
           borderBottom={`2px solid ${DIVIDER}`}
           mb="20px"
-          grow="1"
         >
           <Typography
             as="h3"
@@ -77,12 +82,9 @@ const Accounts = () => {
           >
             Готівка
           </Typography>
-          <Card sum="2 348,35 ₴" />
+          <Account sum="2 348,35 ₴" />
         </Box>
-        <Box
-          height="100%"
-          mb="20px"
-        >
+        <Box grow="1">
           <Typography
             as="h3"
             fz="16px"
@@ -91,13 +93,12 @@ const Accounts = () => {
           >
             Картки
           </Typography>
-          <List>
-            <ListItem onClick={handleEditAccountClick}>
-              <Card name="Приват" sum="2 348,35 ₴" />
-            </ListItem>
-            <ListItem>
-              <Card name="Моно" sum="13 248,26 ₴" />
-            </ListItem>
+          <List display="flex" direction="column" gap="8px">
+            {mockAccounts.map(({ name, sum }, index) => (
+              <ListItem key={index} onClick={handleEditAccountClick}>
+                <Account name={name} sum={sum} />
+              </ListItem>
+            ))}
           </List>
         </Box>
         <Button secondary onClick={handleAddAccountClick}>
@@ -119,56 +120,7 @@ const Transactions = () => {
       >
         Останні транзакції
       </Typography>
-      <Box
-        display="flex"
-        direction="column"
-        bgColor={BASE_2}
-        p="15px"
-        borderRadius="16px"
-      >
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="20px"
-          >
-            Пʼятниця, 10 березня
-          </Typography>
-          <List>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="expense" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-          </List>
-        </Box>
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="20px"
-          >
-            Четвер, 9 березня
-          </Typography>
-          <List>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="expense" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-          </List>
-        </Box>
-      </Box>
+      <TransactionList transactions={mockTransactions} />
     </Box>
   );
 }
@@ -242,4 +194,4 @@ const Statistics = () => {
   );
 }
 
-export default MainPage;
+export default HomePage;

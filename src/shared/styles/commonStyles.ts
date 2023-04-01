@@ -17,6 +17,17 @@ export type commonStylesProps = {
   height?: string;
   lh?: string;
   textAlight?: string;
+  display?: string;
+  direction?: string;
+  gap?: string;
+  bgColor?: string;
+  grow?: string;
+  basis?: string;
+  wrap?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  fz?: string;
+  fw?: string;
 }
 
 export const commonStyles = css<commonStylesProps>`
@@ -36,4 +47,15 @@ export const commonStyles = css<commonStylesProps>`
   line-height: ${({ lh }) => lh || undefined};
   
   text-align: ${({ textAlight }) => textAlight || undefined};
+  display: ${({ display }) => display || 'block'};
+  flex-direction: ${({ direction }) => direction || 'block'};
+  gap: ${({ gap }) => gap || 'block'};
+  background-color: ${({ bgColor }) => bgColor || 'transparent'};
+  flex-grow: ${({ grow }) => grow || undefined};
+  flex-basis: ${({ basis }) => basis || undefined};
+  flex-wrap: ${({ wrap }) => wrap && "wrap" || undefined};
+  justify-content: ${({ justifyContent }) => justifyContent || undefined};
+  align-items: ${({ alignItems }) => alignItems || undefined};
+  font-size: ${({ fz }) => fz || undefined};
+  font-weight: ${({ fw }) => fw || undefined};
 `

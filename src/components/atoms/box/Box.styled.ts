@@ -32,7 +32,7 @@ type BoxProps = commonStylesProps & {
 }
 
 export const Box = styled.div<BoxProps>`
-  ${commonStyles}
+  ${commonStyles};
   background-color: ${({ bgColor }) => bgColor || 'transparent'};
   display: ${({ display }) => display || 'block'};
   flex-direction: ${({ direction }) => direction || undefined};

@@ -7,6 +7,11 @@ import LoginPage from "./components/pages/login/LoginPage";
 import RegisterPage from "./components/pages/register/RegisterPage";
 import HomePage from "./components/pages/home/HomePage";
 import TransactionsPage from './components/pages/transactions/TransactionsPage';
+import DataEntryPage from "./components/pages/data/DataEntryPage";
+import PasswordRecoveryOnePage from "./components/pages/passwordRecoveryOne/PasswordRecoveryOnePage";
+import PasswordRecoveryTwoPage from "./components/pages/passwordRecoveryTwo/PasswordRecoveryTwoPage";
+import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/PasswordRecoveryThreePage";
+import TwoFactorAuthenticationPage from "./components/pages/twoFactorAuthentication/TwoFactorAuthenticationPage";
 
 function App() {
   const elements = useRoutes([
@@ -15,6 +20,11 @@ function App() {
     { path: '/register', element: <RegisterPage /> },
     { path: '/home', element: <HomePage /> },
     { path: '/transactions', element: <TransactionsPage /> },
+    { path: '/data', element: <DataEntryPage /> },
+    { path: '/recoveryOne', element: <PasswordRecoveryOnePage /> },
+    { path: '/recoveryTwo', element: <PasswordRecoveryTwoPage /> },
+    { path: '/recoveryThree', element: <PasswordRecoveryThreePage /> },
+    { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
   ])
 
   return (

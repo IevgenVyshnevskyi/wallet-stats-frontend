@@ -43,7 +43,7 @@ const Header: React.FC = () => {
           </LinkMenu>
         </ListItem>
         <ListItem>
-          <LinkMenu to="#">
+          <LinkMenu to="/categories">
             <FolderCheckIcon />
             <Typography as="span">Категорії</Typography>
           </LinkMenu>

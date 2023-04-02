@@ -1,17 +1,17 @@
 import React, { createContext, useState } from 'react';
 
 type PopupContextType = {
-  isAddAccountPopupOpen: boolean;
-  setIsAddAccountPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditAccountPopupOpen: boolean;
-  setIsEditAccountPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddWalletPopupOpen: boolean;
+  setIsAddWalletPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditWalletPopupOpen: boolean;
+  setIsEditWalletPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const PopupContext = createContext<PopupContextType>({
-  isAddAccountPopupOpen: false,
-  setIsAddAccountPopupOpen: () => { },
-  isEditAccountPopupOpen: false,
-  setIsEditAccountPopupOpen: () => { },
+  isAddWalletPopupOpen: false,
+  setIsAddWalletPopupOpen: () => { },
+  isEditWalletPopupOpen: false,
+  setIsEditWalletPopupOpen: () => { },
 });
 
 type PopupProviderProps = {
@@ -19,15 +19,15 @@ type PopupProviderProps = {
 };
 
 export const PopupProvider: React.FC<PopupProviderProps> = ({ children }) => {
-  const [isAddAccountPopupOpen, setIsAddAccountPopupOpen] = useState(false);
-  const [isEditAccountPopupOpen, setIsEditAccountPopupOpen] = useState(false);
+  const [isAddWalletPopupOpen, setIsAddWalletPopupOpen] = useState(false);
+  const [isEditWalletPopupOpen, setIsEditWalletPopupOpen] = useState(false);
 
   return (
     <PopupContext.Provider value={{
-      isAddAccountPopupOpen,
-      setIsAddAccountPopupOpen,
-      isEditAccountPopupOpen,
-      setIsEditAccountPopupOpen,
+      isAddWalletPopupOpen,
+      setIsAddWalletPopupOpen,
+      isEditWalletPopupOpen,
+      setIsEditWalletPopupOpen,
     }}>
       {children}
     </PopupContext.Provider>

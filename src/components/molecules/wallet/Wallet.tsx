@@ -1,37 +1,42 @@
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
-import { AccountButton } from "./Account.styled";
-import SettingsAccountIcon from '../../../shared/assets/icons/settings-account.svg'
+import { WalletButton } from "./Wallet.styled";
+import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
 
-export type AccountProps = {
-  name?: string;
-  sum: string;
-  noIcon?: boolean;
+export interface IWallet {
+  id: number,
+  title: string,
+  amount: string | number,
+  type_of_account: string,
+  owner: number,
 }
 
-const Account: React.FC<AccountProps> = ({ name, sum, noIcon }) => {
+type WalletProps = {
+  wallet: IWallet;
+}
 
+const Wallet: React.FC<WalletProps> = ({ wallet }) => {
   // context for active button,
   // add data attribute
   // check if context activeButton === clicked button
 
   return (
-    <AccountButton>
+    <WalletButton>
       <Box
         display="flex"
         direction="column"
         alignItems="start"
-        m={!name && "10px 0"}
+        m={!wallet.title && "10px 0"}
       >
-        {name && (
+        {wallet.title && (
           <Typography
             as="h4"
             fw="500"
             color={DARK_FOR_TEXT}
             m="0 0 10px 0"
           >
-            {name}
+            {wallet.title}
           </Typography>
         )}
         <Typography
@@ -39,13 +44,13 @@ const Account: React.FC<AccountProps> = ({ name, sum, noIcon }) => {
           fw="600"
           fz="22px"
         >
-          {sum}
+          {wallet.amount}
         </Typography>
       </Box>
 
-      {!noIcon && <SettingsAccountIcon opacity=".2" />}
-    </AccountButton>
+      {wallet.type_of_account !== "cash" && <SettingsWalletIcon opacity=".2" />}
+    </WalletButton>
   );
 }
 
-export default Account;
+export default Wallet;

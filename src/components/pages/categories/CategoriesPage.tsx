@@ -27,17 +27,15 @@ const CategoriesPage: React.FC = () => {
   console.log('filterOption in TransactionsPage', filterOption)
 
   return (
-    <>
-      <CategoriesPageWrapper>
-        <Header />
+    <CategoriesPageWrapper>
+      <Header />
 
-        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
-          <Categories />
+      <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
+        <Categories />
 
-          {isEditCategoryOpen ? <EditCategory /> : <AddCategory />}
-        </Box>
-      </CategoriesPageWrapper>
-    </>
+        {isEditCategoryOpen ? <EditCategory /> : <AddCategory />}
+      </Box>
+    </CategoriesPageWrapper>
   );
 }
 

@@ -47,7 +47,7 @@ const Header: React.FC = () => {
             <FolderCheckIcon />
             <Typography as="span">Категорії</Typography>
           </LinkMenu>
-          <LinkMenu to="#">
+          <LinkMenu to="/statistics">
             <PieChartIcon />
             <Typography as="span">Статистика</Typography>
           </LinkMenu>

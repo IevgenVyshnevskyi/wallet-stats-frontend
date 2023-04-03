@@ -8,6 +8,7 @@ import RegisterPage from "./components/pages/register/RegisterPage";
 import HomePage from "./components/pages/home/HomePage";
 import TransactionsPage from './components/pages/transactions/TransactionsPage';
 import CategoriesPage from './components/pages/categories/CategoriesPage';
+import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 
 function App() {
   const elements = useRoutes([
@@ -17,6 +18,7 @@ function App() {
     { path: '/home', element: <HomePage /> },
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },
+    { path: '/statistics', element: <StatisticsPage /> },
   ])
 
   return (

@@ -1,26 +1,6 @@
 import styled from "styled-components";
-import { commonStyles, commonStylesProps } from "../../../shared/styles/commonStyles";
-
-type BoxProps = commonStylesProps & {
-  border?: string;
-  borderTop?: string;
-  borderRight?: string;
-  borderLeft?: string;
-  borderBottom?: string;
-  borderRadius?: string;
-
-  maxWidth?: string;
-  maxHeight?: string;
-  textAlign?: string;
-  background?: string;    //
-  position?: string;
-  zIndex?: string;
-  height?: string;   //
-  flexDirection?: string;
-  flex?: string;   //
-  flexBasis?: string;
-  overflow?: string;   //
-}
+import { commonStyles } from "../../../shared/styles/commonStyles";
+import { BoxProps } from "../../../../types/atoms";
 
 export const Box = styled.div<BoxProps>`
   ${commonStyles};

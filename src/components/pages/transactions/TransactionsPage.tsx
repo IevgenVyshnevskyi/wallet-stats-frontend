@@ -8,8 +8,7 @@ import { TransactionsPageWrapper } from "./TransactionsPage.styled";
 import { useSearchParams } from "react-router-dom";
 import { BASE_2, DARK_FOR_TEXT, MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
-import { IFilterButton } from './../../molecules/tabs/filter/TabFilter';
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import { List } from "../../atoms/list/List.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
 import { mockWallets } from "../../../../mock-data/wallets";
@@ -19,8 +18,9 @@ import { Label } from "../../atoms/label/Label.styled";
 import { Select } from "../../atoms/select/Select.styled";
 import { mockOptions } from "../../../../mock-data/options";
 import { Option } from "../../atoms/select/Option.styled";
-import Transaction, { ITransaction } from "../../molecules/transaction/Transaction";
+import Transaction from "../../molecules/transaction/Transaction";
 import { mockTransactions } from "../../../../mock-data/transactions";
+import { IFilterButton, ISwitchButton, ITransaction } from "../../../../types/molecules";
 
 const TransactionsPage: React.FC = () => {
   const [searchParams] = useSearchParams();

@@ -1,8 +1,5 @@
 import styled from "styled-components";
-
-type ContainerProps = {
-  display?: string;
-}
+import { ContainerProps } from "../../../../types/atoms";
 
 export const Container = styled.div<ContainerProps>`
   display: ${({ display }) => display || undefined};

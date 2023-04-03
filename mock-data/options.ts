@@ -1,4 +1,4 @@
-import { IOption } from "../src/components/atoms/select/Option.styled";
+import { IOption } from "../types/atoms";
 
 export const mockOptions: IOption[] = [
   { value: 'option-1', label: 'Подарунки та благодійність (подарунки родичам та друзям, пожертвування)' },

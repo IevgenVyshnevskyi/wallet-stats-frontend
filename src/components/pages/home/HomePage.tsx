@@ -9,7 +9,7 @@ import { Button } from "../../atoms/button/Button.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import { mockTransactions } from "../../../../mock-data/transactions";
@@ -17,7 +17,10 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 
 const HomePage: React.FC = () => {
-  const { isAddWalletPopupOpen, isEditWalletPopupOpen } = useContext(PopupContext);
+  const {
+    isAddWalletPopupOpen,
+    isEditWalletPopupOpen
+  } = useContext(PopupContext);
 
   return (
     <>
@@ -37,7 +40,7 @@ const HomePage: React.FC = () => {
   );
 }
 
-const Wallets = () => {
+const Wallets: React.FC = () => {
   const {
     setIsAddWalletPopupOpen,
     setIsEditWalletPopupOpen
@@ -109,7 +112,7 @@ const Wallets = () => {
   );
 }
 
-const Transactions = () => {
+const Transactions: React.FC = () => {
   return (
     <Box display="flex" direction="column" grow="1">
       <Typography
@@ -131,7 +134,7 @@ const Transactions = () => {
   );
 }
 
-const Statistics = () => {
+const Statistics: React.FC = () => {
   return (
     <Box display="flex" direction="column" width="600px">
       <Typography

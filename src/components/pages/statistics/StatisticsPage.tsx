@@ -2,13 +2,14 @@ import { BASE_2, DARK_FOR_TEXT, DIVIDER, WHITE } from "../../../shared/styles/va
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Header from '../../molecules/header/Header';
-import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
+import TabFilter from "../../molecules/tabs/filter/TabFilter";
 import { StatisticsPageWrapper } from "./StatisticsPage.styled";
 import DoughnutChart from './../../molecules/charts/DoughnutChart';
 import { mockOptions } from "../../../../mock-data/options";
 import { Select } from "../../atoms/select/Select.styled";
 import { Option } from "../../atoms/select/Option.styled";
 import LineChart from "../../molecules/charts/LineChart";
+import { IFilterButton } from "../../../../types/molecules";
 
 const StatisticsPage: React.FC = () => {
   return (

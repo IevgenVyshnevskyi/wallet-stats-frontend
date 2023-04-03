@@ -3,18 +3,7 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import { WalletButton } from "./Wallet.styled";
 import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
-
-export interface IWallet {
-  id: number,
-  title: string,
-  amount: string | number,
-  type_of_account: string,
-  owner: number,
-}
-
-type WalletProps = {
-  wallet: IWallet;
-}
+import { WalletProps } from "../../../../types/molecules";
 
 const Wallet: React.FC<WalletProps> = ({ wallet }) => {
   // context for active button,

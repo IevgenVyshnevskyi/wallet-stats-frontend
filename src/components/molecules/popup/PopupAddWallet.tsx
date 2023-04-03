@@ -11,13 +11,13 @@ import PackageErrorIcon from "../../../shared/assets/icons/package-error.svg";
 import { useContext, useRef } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
 
-const PopupAddAccount: React.FC = () => {
+const PopupAddWallet: React.FC = () => {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
-  const { setIsAddAccountPopupOpen } = useContext(PopupContext);
+  const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
   const handleCloseClick = () => {
-    setIsAddAccountPopupOpen(false);
+    setIsAddWalletPopupOpen(false);
   };
 
   return (
@@ -114,4 +114,4 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   );
 }
 
-export default PopupAddAccount;
+export default PopupAddWallet;

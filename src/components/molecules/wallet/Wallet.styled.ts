@@ -4,7 +4,7 @@ import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
 import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 import { commonStyles } from "../../../shared/styles/commonStyles";
 
-export const AccountButton = styled(ButtonTransparent)/*  <{ isActive: boolean }> */`
+export const WalletButton = styled(ButtonTransparent)/*  <{ isActive: boolean }> */`
   ${commonStyles}
   width: 100%;
   display: flex;

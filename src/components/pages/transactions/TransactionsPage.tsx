@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
@@ -6,31 +6,26 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import Header from "../../molecules/header/Header";
 import { TransactionsPageWrapper } from "./TransactionsPage.styled";
 import { useSearchParams } from "react-router-dom";
-import { BASE_2, DARK_FOR_TEXT, WHITE } from "../../../shared/styles/variables";
-import TransactionList from "../../molecules/transaction/TransactionList";
+import { BASE_2, DARK_FOR_TEXT, MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 import { IFilterButton } from './../../molecules/tabs/filter/TabFilter';
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { List } from "../../atoms/list/List.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
-import { mockTransactions } from "../../../../mock-data/transactions";
-import { mockAccounts } from "../../../../mock-data/accounts";
-import Account from "../../molecules/account/Account";
+import { mockWallets } from "../../../../mock-data/wallets";
+import Wallet from "../../molecules/wallet/Wallet";
 import { Input } from './../../atoms/input/Input.styled';
 import { Label } from "../../atoms/label/Label.styled";
 import { Select } from "../../atoms/select/Select.styled";
 import { mockOptions } from "../../../../mock-data/options";
 import { Option } from "../../atoms/select/Option.styled";
+import Transaction, { ITransaction } from "../../molecules/transaction/Transaction";
+import { mockTransactions } from "../../../../mock-data/transactions";
 
 const TransactionsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isEditTransactionOpen, setIsEditTransactionOpen] = useState(false);
-
-  const filterButtons: IFilterButton[] = [
-    { buttonName: 'Всі транзакції', filterBy: '?filter=all' },
-    { buttonName: 'Витрати', filterBy: '?filter=expenses' },
-    { buttonName: 'Надходження', filterBy: '?filter=incomes' },
-  ];
+  // create EditContext for transactions & categories
 
   const filterOption: string | null = searchParams.get('filter');
   console.log('filterOption in TransactionsPage', filterOption)
@@ -40,22 +35,36 @@ const TransactionsPage: React.FC = () => {
       <Header />
 
       <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
-        <Transactions filterButtonsProps={filterButtons} />
+        <Transactions />
 
-        {!isEditTransactionOpen && <AddTransactions />}
-        {isEditTransactionOpen && <EditTransactions />}
+        {isEditTransactionOpen ? <EditTransaction /> : <AddTransaction />}
       </Box>
     </TransactionsPageWrapper>
   );
 }
 
-type TransactionsProps = {
-  filterButtonsProps: IFilterButton[];
-}
+const Transactions: React.FC = () => {
+  const filterButtons: IFilterButton[] = [
+    { buttonName: 'Всі транзакції', filterBy: '?filter=all' },
+    { buttonName: 'Витрати', filterBy: '?filter=expenses' },
+    { buttonName: 'Надходження', filterBy: '?filter=incomes' },
+  ];
 
-const Transactions: React.FC<TransactionsProps> = ({
-  filterButtonsProps
-}) => {
+  const [searchParams] = useSearchParams();
+  const [allTransactions, setAllTransactions] = useState<ITransaction[]>(mockTransactions);
+  const filterOption: string | null = searchParams.get('sort') || '';
+  console.log('filterOption in TransactionPage', filterOption)
+
+  const filteredTransactions = useMemo(() => {
+    switch (filterOption) {
+      case 'income':
+        return [...allTransactions].filter((t) => t.type_of_outlay === "income")
+      case 'expense':
+        return [...allTransactions].filter((t) => t.type_of_outlay === "expense")
+      default:
+        return allTransactions
+    }
+  }, [allTransactions, filterOption])
 
   return (
     <Box grow="1" display="flex" direction="column">
@@ -70,21 +79,44 @@ const Transactions: React.FC<TransactionsProps> = ({
           mr="10px"
           fw="600"
           color={DARK_FOR_TEXT}
+          fz="12px"
         >
           Відобразити
         </Typography>
-        <TabFilter filterButtons={filterButtonsProps} />
+        <TabFilter filterButtons={filterButtons} />
       </Box>
 
-      <TransactionList transactions={mockTransactions} />
+      <Box
+        display="flex"
+        direction="column"
+        bgColor={BASE_2}
+        p="15px"
+        borderRadius="16px"
+        grow="1"
+      >
+        <Box mb="20px">
+          <Typography
+            as="h3"
+            fz="16px"
+            fw="500"
+            mb="20px"
+          >
+            {/* {t.created} */} Четвер
+          </Typography>
+          <List>
+            {filteredTransactions.map((t) => (
+              <ListItem key={t.id}>
+                <Transaction transaction={t} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Box>
     </Box>
   );
 }
 
-
-
-
-const AddTransactions: React.FC = () => {
+const AddTransaction: React.FC = () => {
   return (
     <Box display="flex" direction="column" width="540px">
       <Typography
@@ -106,7 +138,7 @@ const AddTransactions: React.FC = () => {
   );
 }
 
-const EditTransactions: React.FC = () => {
+const EditTransaction: React.FC = () => {
   return (
     <Box display="flex" direction="column" width="540px">
       <Typography
@@ -118,9 +150,9 @@ const EditTransactions: React.FC = () => {
       >
         Редагування транзакції
       </Typography>
-      <Box bgColor={BASE_2} borderRadius="16px" grow="1" p="15px">
+      <Box bgColor={MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px">
         <TransactionsSettings />
-        <Box display="flex" gap="8px">
+        <Box display="flex" gap="8px" mb="27px">
           <Button primary width="100%">Зберегти</Button>
           <Button secondary width="100%">Скасувати</Button>
         </Box>
@@ -162,9 +194,9 @@ const TransactionsSettings: React.FC = () => {
         </Typography>
         <Box display="flex">
           <List display="flex" gap="8px" wrap="wrap">
-            {mockAccounts.map(({ name, sum }, index) => (
+            {mockWallets.map((wallet, index) => (
               <ListItem key={index} width="250px">
-                <Account name={name} sum={sum} noIcon />
+                <Wallet wallet={wallet} />
               </ListItem>
             ))}
           </List>
@@ -179,8 +211,8 @@ const TransactionsSettings: React.FC = () => {
         </Select>
       </Box>
       <Box mb="24px">
-        <Label fw="500" mb="12px">Сума</Label>
-        <Input type="text" width="270px" bgColor={WHITE} />
+        <Label fw="500" htmlFor="sum" mb="12px">Сума</Label>
+        <Input fz="22px" type="text" id="sum" width="270px" bgColor={WHITE} />
       </Box>
     </>
   );

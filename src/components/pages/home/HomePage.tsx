@@ -2,7 +2,7 @@ import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import Header from '../../molecules/header/Header';
 import { Typography } from '../../atoms/typography/Typography.styled';
-import Account from '../../molecules/account/Account';
+import Wallet from '../../molecules/wallet/Wallet';
 import { ListItem } from '../../atoms/list/ListItem.styled';
 import { List } from "../../atoms/list/List.styled";
 import { Button } from "../../atoms/button/Button.styled";
@@ -10,14 +10,14 @@ import Chart from "../../molecules/chart/Chart";
 import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useContext } from "react";
-import PopupAddAccount from "../../molecules/popup/PopupAddAccount";
-import PopupEditAccount from "../../molecules/popup/PopupEditAccount";
-import TransactionList from "../../molecules/transaction/TransactionList";
+import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
+import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import { mockTransactions } from "../../../../mock-data/transactions";
-import { mockAccounts } from "../../../../mock-data/accounts";
+import { mockWallets } from "../../../../mock-data/wallets";
+import Transaction from "../../molecules/transaction/Transaction";
 
 const HomePage: React.FC = () => {
-  const { isAddAccountPopupOpen, isEditAccountPopupOpen } = useContext(PopupContext);
+  const { isAddWalletPopupOpen, isEditWalletPopupOpen } = useContext(PopupContext);
 
   return (
     <>
@@ -25,30 +25,30 @@ const HomePage: React.FC = () => {
         <Header />
 
         <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
-          <Accounts />
+          <Wallets />
           <Transactions />
           <Statistics />
         </Box>
       </HomePageWrapper>
 
-      {isAddAccountPopupOpen && <PopupAddAccount />}
-      {isEditAccountPopupOpen && <PopupEditAccount />}
+      {isAddWalletPopupOpen && <PopupAddWallet />}
+      {isEditWalletPopupOpen && <PopupEditWallet />}
     </>
   );
 }
 
-const Accounts = () => {
+const Wallets = () => {
   const {
-    setIsAddAccountPopupOpen,
-    setIsEditAccountPopupOpen
+    setIsAddWalletPopupOpen,
+    setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
-  const handleAddAccountClick = () => {
-    setIsAddAccountPopupOpen(true);
+  const handleAddWalletClick = () => {
+    setIsAddWalletPopupOpen(true);
   };
 
-  const handleEditAccountClick = () => {
-    setIsEditAccountPopupOpen(true);
+  const handleEditWalletClick = () => {
+    setIsEditWalletPopupOpen(true);
   };
 
   return (
@@ -82,7 +82,7 @@ const Accounts = () => {
           >
             Готівка
           </Typography>
-          <Account sum="2 348,35 ₴" />
+          <Wallet wallet={mockWallets[0]} />
         </Box>
         <Box grow="1">
           <Typography
@@ -94,14 +94,14 @@ const Accounts = () => {
             Картки
           </Typography>
           <List display="flex" direction="column" gap="8px">
-            {mockAccounts.map(({ name, sum }, index) => (
-              <ListItem key={index} onClick={handleEditAccountClick}>
-                <Account name={name} sum={sum} />
+            {mockWallets.map((wallet, index) => (
+              <ListItem key={index} onClick={handleEditWalletClick}>
+                <Wallet wallet={wallet} />
               </ListItem>
             ))}
           </List>
         </Box>
-        <Button secondary onClick={handleAddAccountClick}>
+        <Button secondary onClick={handleAddWalletClick}>
           Додати картковий рахунок
         </Button>
       </Box>
@@ -120,7 +120,13 @@ const Transactions = () => {
       >
         Останні транзакції
       </Typography>
-      <TransactionList transactions={mockTransactions} />
+      <List display="flex" direction="column" gap="8px">
+        {mockTransactions.map((transaction, index) => (
+          <ListItem key={index}>
+            <Transaction transaction={transaction} />
+          </ListItem>
+        ))}
+      </List>
     </Box>
   );
 }

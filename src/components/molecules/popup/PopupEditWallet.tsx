@@ -7,14 +7,14 @@ import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import { PopupWrapper } from "./Popup.styled";
 import { useContext } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
-import { Typography } from './../../atoms/typography/Typography.styled';
+import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 
-const PopupEditAccount: React.FC = () => {
-  const { setIsEditAccountPopupOpen } = useContext(PopupContext);
+const PopupEditWallet: React.FC = () => {
+  const { setIsEditWalletPopupOpen } = useContext(PopupContext);
 
   const handleCloseClick = () => {
-    setIsEditAccountPopupOpen(false);
+    setIsEditWalletPopupOpen(false);
   };
 
   return (
@@ -61,4 +61,4 @@ const PopupEditAccount: React.FC = () => {
   );
 }
 
-export default PopupEditAccount;
+export default PopupEditWallet;

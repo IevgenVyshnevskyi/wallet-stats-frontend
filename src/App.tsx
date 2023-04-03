@@ -12,19 +12,21 @@ import PasswordRecoveryOnePage from "./components/pages/passwordRecoveryOne/Pass
 import PasswordRecoveryTwoPage from "./components/pages/passwordRecoveryTwo/PasswordRecoveryTwoPage";
 import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/PasswordRecoveryThreePage";
 import TwoFactorAuthenticationPage from "./components/pages/twoFactorAuthentication/TwoFactorAuthenticationPage";
+import CategoriesPage from './components/pages/categories/CategoriesPage';
 
 function App() {
   const elements = useRoutes([
     { path: '/', element: <WelcomePage /> },
-    { path: '/login', element: <LoginPage /> },
-    { path: '/register', element: <RegisterPage /> },
-    { path: '/home', element: <HomePage /> },
-    { path: '/transactions', element: <TransactionsPage /> },
-    { path: '/data', element: <DataEntryPage /> },
     { path: '/recoveryOne', element: <PasswordRecoveryOnePage /> },
     { path: '/recoveryTwo', element: <PasswordRecoveryTwoPage /> },
     { path: '/recoveryThree', element: <PasswordRecoveryThreePage /> },
     { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
+    { path: '/data', element: <DataEntryPage /> },
+    { path: '/login', element: <LoginPage /> },
+    { path: '/register', element: <RegisterPage /> },
+    { path: '/home', element: <HomePage /> },
+    { path: '/transactions', element: <TransactionsPage /> },
+    { path: '/categories', element: <CategoriesPage /> },
   ])
 
   return (

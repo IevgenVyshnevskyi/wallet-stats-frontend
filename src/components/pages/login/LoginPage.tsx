@@ -123,10 +123,10 @@ const LoginPage: React.FC = () => {
                             <Box width="356px" p="0 0 0 60%"><Link to="#" fz="14px" outline="none" color={PRIMARY}>
                                 Забули пароль?</Link></Box>
                         </Box>
-                        <Button type="submit" disabled={!isValid} mt="64px" primary>Увійти</Button>
+                        <Button type="submit" disabled={!isValid}  m="56px auto 0" primary>Увійти</Button>
                     </Form>
                 </Box>
-            </Box>
+            </Box> 
         </Container>
     )
 }

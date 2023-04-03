@@ -4,9 +4,7 @@ import { PRIMARY_2, WHITE } from "../../../shared/styles/variables";
 
 export const Select = styled.select`
   ${commonStyles}
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
+  padding: 10px 14px;
   background: ${WHITE};
   font-size: 16px;
   border: 2px solid ${PRIMARY_2};

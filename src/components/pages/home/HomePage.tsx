@@ -6,7 +6,7 @@ import Wallet from '../../molecules/wallet/Wallet';
 import { ListItem } from '../../atoms/list/ListItem.styled';
 import { List } from "../../atoms/list/List.styled";
 import { Button } from "../../atoms/button/Button.styled";
-import Chart from "../../molecules/chart/Chart";
+import DoughnutChart from "../../molecules/charts/DoughnutChart";
 import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useContext } from "react";
@@ -120,7 +120,7 @@ const Transactions = () => {
       >
         Останні транзакції
       </Typography>
-      <List display="flex" direction="column" gap="8px">
+      <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1">
         {mockTransactions.map((transaction, index) => (
           <ListItem key={index}>
             <Transaction transaction={transaction} />
@@ -169,7 +169,7 @@ const Statistics = () => {
             </Typography>
           </Box>
           <Box>
-            <Chart />
+            <DoughnutChart />
           </Box>
         </Box>
         <Box mb="20px">
@@ -192,7 +192,7 @@ const Statistics = () => {
             </Typography>
           </Box>
           <Box>
-            <Chart />
+            <DoughnutChart />
           </Box>
         </Box>
       </Box>

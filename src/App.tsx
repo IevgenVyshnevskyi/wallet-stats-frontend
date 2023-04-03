@@ -11,7 +11,7 @@ import DataEntryPage from "./components/pages/data/DataEntryPage";
 import PasswordRecoveryOnePage from "./components/pages/passwordRecoveryOne/PasswordRecoveryOnePage";
 import PasswordRecoveryTwoPage from "./components/pages/passwordRecoveryTwo/PasswordRecoveryTwoPage";
 import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/PasswordRecoveryThreePage";
-import TwoFactorAuthenticationPage from "./components/pages/twoFactorAuthentication/TwoFactorAuthenticationPage";
+import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 

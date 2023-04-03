@@ -2,15 +2,7 @@ import { Link } from "react-router-dom";
 import { TabFilterWrapper } from "./TabFilter.styled";
 import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
-
-export interface IFilterButton {
-  filterBy: string;
-  buttonName: string;
-};
-
-type TabFilterProps = {
-  filterButtons: IFilterButton[];
-};
+import { TabFilterProps } from "../../../../../types/molecules";
 
 const TabFilter: React.FC<TabFilterProps> = ({ filterButtons }) => {
   return (

@@ -14,8 +14,6 @@ import {Form} from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
 
-
-
 const PopupEditProfile: React.FC = () => {
     const {setIsEditProfilePopupOpen} = useContext(PopupContext);
     const [showOldPassword, setShowOldPassword] = useState(false);

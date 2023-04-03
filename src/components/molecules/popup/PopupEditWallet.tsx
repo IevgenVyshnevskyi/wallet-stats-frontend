@@ -40,7 +40,7 @@ const PopupEditWallet: React.FC = () => {
             gap="35px"
             borderTop={`2px solid ${DIVIDER}`}
             pt="25px"
-            mb="25px" 
+            mb="25px"
           >
             <Button primary width="100%" onClick={handleCloseClick}>
               Зберегти

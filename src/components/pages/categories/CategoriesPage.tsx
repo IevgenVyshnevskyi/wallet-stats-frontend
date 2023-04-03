@@ -5,11 +5,11 @@ import { ListItem } from "../../atoms/list/ListItem.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Category from "../../molecules/category/Category";
 import Header from '../../molecules/header/Header';
-import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
+import TabFilter from "../../molecules/tabs/filter/TabFilter";
 import { CategoriesPageWrapper } from "./CategoriesPage.styled";
 import { mockCategories } from './../../../../mock-data/categories';
 import { Button } from "../../atoms/button/Button.styled";
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { mockOptions } from "../../../../mock-data/options";
@@ -17,6 +17,7 @@ import { Select } from "../../atoms/select/Select.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { Option } from "../../atoms/select/Option.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { IFilterButton, ISwitchButton } from "../../../../types/molecules";
 
 const CategoriesPage: React.FC = () => {
   const [searchParams] = useSearchParams();

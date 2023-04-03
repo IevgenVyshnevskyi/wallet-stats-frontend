@@ -14,7 +14,6 @@ import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/
 import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
-import PopupEditProfile from "./components/molecules/popup/PopupEditProfile";
 
 function App() {
   const elements = useRoutes([

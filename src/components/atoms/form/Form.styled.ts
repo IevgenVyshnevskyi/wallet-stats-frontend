@@ -2,13 +2,7 @@ import styled from "styled-components";
 
 import {commonStyles} from "../../../shared/styles/commonStyles";
 import { WHITE } from "../../../shared/styles/variables";
-
-type FormProps = {
-    maxWidth?: string;
-    textAlign?: string;
-    color?: string;
-    alignItems?: string;
-}
+import { FormProps } from "../../../../types/atoms";
 
 export const Form = styled.form<FormProps>`
   ${commonStyles};

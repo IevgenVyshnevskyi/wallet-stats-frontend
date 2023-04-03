@@ -1,4 +1,4 @@
-import { ITransaction } from "../src/components/molecules/transaction/Transaction";
+import { ITransaction } from "../types/molecules";
 
 export const mockTransactions: ITransaction[] = [
   {

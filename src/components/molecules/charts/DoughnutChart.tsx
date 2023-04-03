@@ -1,20 +1,20 @@
 import { useEffect, useRef } from "react";
-import { Chart as ChartJS } from "chart.js/auto";
+import { Chart } from "chart.js/auto";
 import { Box } from "../../atoms/box/Box.styled";
 import { WHITE } from "../../../shared/styles/variables";
 
-const Chart = () => {
+const DoughnutChart: React.FC = () => {
   const chartRef = useRef(null);
   const chart = useRef(null);
 
   useEffect(() => {
-    const myChartRef = chartRef.current.getContext("2d");
+    const myDoughnutChartRef = chartRef.current.getContext("2d");
 
     if (chart.current) {
       chart.current.destroy(); // Destroy the previous chart instance
     }
 
-    chart.current = new ChartJS(myChartRef, {
+    chart.current = new Chart(myDoughnutChartRef, {
       type: "doughnut",
       data: {
         labels: [
@@ -65,6 +65,8 @@ const Chart = () => {
             },
           },
         },
+        responsive: true,
+        maintainAspectRatio: false
       },
     });
 
@@ -76,12 +78,12 @@ const Chart = () => {
   }, []);
 
   return (
-    <Box bgColor={WHITE} borderRadius="8px" p="10px">
+    <Box bgColor={WHITE} borderRadius="8px" p="5px 0">
       <Box width="315px" m="0 auto">
-        <canvas id="myChart" ref={chartRef} />
+        <canvas id="myDoughnutChart" ref={chartRef} />
       </Box>
     </Box>
   );
 };
 
-export default Chart;
+export default DoughnutChart;

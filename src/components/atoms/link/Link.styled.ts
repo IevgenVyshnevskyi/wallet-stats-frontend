@@ -15,6 +15,8 @@ type LinkProps = {
   width?: string;
   height?: string;
   mb?: string;
+  m?: string;
+  outline?: string;
 }
 
 export const Link = styled(RouterLink) <LinkProps>`
@@ -31,4 +33,6 @@ export const Link = styled(RouterLink) <LinkProps>`
   width: ${({ width }) => width || undefined};
   height: ${({ height }) => height || undefined};
   margin-bottom: ${({ mb }) => mb || undefined};
+  margin: ${({ m }) => m || undefined};
+  outline: ${({ outline }) => outline || undefined};
 `

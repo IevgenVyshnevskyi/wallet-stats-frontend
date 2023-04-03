@@ -22,8 +22,8 @@ const Header: React.FC = () => {
 
   return (
     <HeaderWrapper>
-      <Box mr="56px">  
-        <Link to="/">
+      <Box mr="56px">
+        <Link to="/home">
           <LogoIcon />
           <Typography as="span">Spendwise</Typography>
         </Link>
@@ -31,23 +31,23 @@ const Header: React.FC = () => {
 
       <List>
         <ListItem>
-          <LinkMenu to="#">
+          <LinkMenu to="/home">
             <HomeIcon />
             <Typography as="span">Головна</Typography>
           </LinkMenu>
         </ListItem>
         <ListItem>
-          <LinkMenu to="#">
+          <LinkMenu to="/transactions">
             <RouteIcon />
             <Typography as="span">Транзакції</Typography>
           </LinkMenu>
         </ListItem>
         <ListItem>
-          <LinkMenu to="#">
+          <LinkMenu to="/categories">
             <FolderCheckIcon />
             <Typography as="span">Категорії</Typography>
           </LinkMenu>
-          <LinkMenu to="#">
+          <LinkMenu to="/statistics">
             <PieChartIcon />
             <Typography as="span">Статистика</Typography>
           </LinkMenu>

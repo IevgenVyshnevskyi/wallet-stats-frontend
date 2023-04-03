@@ -2,47 +2,53 @@ import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import Header from '../../molecules/header/Header';
 import { Typography } from '../../atoms/typography/Typography.styled';
-import Card from '../../molecules/card/Card';
+import Wallet from '../../molecules/wallet/Wallet';
 import { ListItem } from '../../atoms/list/ListItem.styled';
 import { List } from "../../atoms/list/List.styled";
 import { Button } from "../../atoms/button/Button.styled";
-import Transaction from "../../molecules/transaction/Transaction";
-import Chart from "../../molecules/chart/Chart";
-import { MainPageWrapper } from "./MainPageWrapper";
+import DoughnutChart from "../../molecules/charts/DoughnutChart";
+import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useContext } from "react";
-import PopupAddAccount from "./../../molecules/popup/PopupAddAccount";
-import PopupEditAccount from "../../molecules/popup/PopupEditAccount";
+import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
+import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
+import { mockTransactions } from "../../../../mock-data/transactions";
+import { mockWallets } from "../../../../mock-data/wallets";
+import Transaction from "../../molecules/transaction/Transaction";
 
-const MainPage: React.FC = () => {
-  const { isAddAccountPopupOpen, isEditAccountPopupOpen } = useContext(PopupContext);
+const HomePage: React.FC = () => {
+  const { isAddWalletPopupOpen, isEditWalletPopupOpen } = useContext(PopupContext);
 
   return (
     <>
-      <MainPageWrapper>
+      <HomePageWrapper>
         <Header />
-        <Box m="0 20px 20px" display="flex" grow="1" gap="25px">
-          <Accounts />
+
+        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
+          <Wallets />
           <Transactions />
           <Statistics />
         </Box>
-      </MainPageWrapper>
+      </HomePageWrapper>
 
-      {isAddAccountPopupOpen && <PopupAddAccount />}
-      {isEditAccountPopupOpen && <PopupEditAccount />}
+      {isAddWalletPopupOpen && <PopupAddWallet />}
+      {isEditWalletPopupOpen && <PopupEditWallet />}
     </>
   );
 }
 
-const Accounts = () => {
-  const { setIsAddAccountPopupOpen, setIsEditAccountPopupOpen } = useContext(PopupContext);
+const Wallets = () => {
+  const {
+    setIsAddWalletPopupOpen,
+    setIsEditWalletPopupOpen
+  } = useContext(PopupContext);
 
-  const handleAddAccountClick = () => {
-    setIsAddAccountPopupOpen(true);
+  const handleAddWalletClick = () => {
+    setIsAddWalletPopupOpen(true);
   };
 
-  const handleEditAccountClick = () => {
-    setIsEditAccountPopupOpen(true);
+  const handleEditWalletClick = () => {
+    setIsEditWalletPopupOpen(true);
   };
 
   return (
@@ -67,7 +73,6 @@ const Accounts = () => {
           p="0 0 20px 0"
           borderBottom={`2px solid ${DIVIDER}`}
           mb="20px"
-          grow="1"
         >
           <Typography
             as="h3"
@@ -77,12 +82,9 @@ const Accounts = () => {
           >
             Готівка
           </Typography>
-          <Card sum="2 348,35 ₴" />
+          <Wallet wallet={mockWallets[0]} />
         </Box>
-        <Box
-          height="100%"
-          mb="20px"
-        >
+        <Box grow="1">
           <Typography
             as="h3"
             fz="16px"
@@ -91,16 +93,15 @@ const Accounts = () => {
           >
             Картки
           </Typography>
-          <List>
-            <ListItem onClick={handleEditAccountClick}>
-              <Card name="Приват" sum="2 348,35 ₴" />
-            </ListItem>
-            <ListItem>
-              <Card name="Моно" sum="13 248,26 ₴" />
-            </ListItem>
+          <List display="flex" direction="column" gap="8px">
+            {mockWallets.map((wallet, index) => (
+              <ListItem key={index} onClick={handleEditWalletClick}>
+                <Wallet wallet={wallet} />
+              </ListItem>
+            ))}
           </List>
         </Box>
-        <Button secondary onClick={handleAddAccountClick}>
+        <Button secondary onClick={handleAddWalletClick}>
           Додати картковий рахунок
         </Button>
       </Box>
@@ -119,56 +120,13 @@ const Transactions = () => {
       >
         Останні транзакції
       </Typography>
-      <Box
-        display="flex"
-        direction="column"
-        bgColor={BASE_2}
-        p="15px"
-        borderRadius="16px"
-      >
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="20px"
-          >
-            Пʼятниця, 10 березня
-          </Typography>
-          <List>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="expense" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-          </List>
-        </Box>
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="20px"
-          >
-            Четвер, 9 березня
-          </Typography>
-          <List>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="expense" />
-            </ListItem>
-            <ListItem>
-              <Transaction type="income" />
-            </ListItem>
-          </List>
-        </Box>
-      </Box>
+      <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1">
+        {mockTransactions.map((transaction, index) => (
+          <ListItem key={index}>
+            <Transaction transaction={transaction} />
+          </ListItem>
+        ))}
+      </List>
     </Box>
   );
 }
@@ -211,7 +169,7 @@ const Statistics = () => {
             </Typography>
           </Box>
           <Box>
-            <Chart />
+            <DoughnutChart />
           </Box>
         </Box>
         <Box mb="20px">
@@ -234,7 +192,7 @@ const Statistics = () => {
             </Typography>
           </Box>
           <Box>
-            <Chart />
+            <DoughnutChart />
           </Box>
         </Box>
       </Box>
@@ -242,4 +200,4 @@ const Statistics = () => {
   );
 }
 
-export default MainPage;
+export default HomePage;

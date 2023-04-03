@@ -4,11 +4,34 @@ import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 import { DARK_FOR_TEXT, GREEN, WHITE, DIVIDER, ALERT_1 } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
 
-type TransactionProps = {
-  type: "income" | "expense";
+export interface ITransaction {
+  id: number,
+  owner: number,
+  wallet: {
+    id: number,
+    title: string,
+    amount: number | string,
+    type_of_account: string,
+    owner: number
+  },
+  title: string,
+  category: {
+    id: number,
+    title: string,
+    type_of_outlay: "income" | "expense",
+    owner: number
+  },
+  description: string,
+  type_of_outlay: "income" | "expense",
+  amount_of_funds: number | string,
+  created: string
 }
 
-const Transaction: React.FC<TransactionProps> = ({ type }) => {
+type TransactionProps = {
+  transaction: ITransaction;
+}
+
+const Transaction: React.FC<TransactionProps> = ({ transaction }) => {
   return (
     <Box
       display="flex"
@@ -26,7 +49,7 @@ const Transaction: React.FC<TransactionProps> = ({ type }) => {
           color={DARK_FOR_TEXT}
           m="0 0 16px 0"
         >
-          Назва рахунку
+          {transaction.wallet.type_of_account}
         </Typography>
         <Typography
           as="h5"
@@ -43,19 +66,28 @@ const Transaction: React.FC<TransactionProps> = ({ type }) => {
         direction="column"
         alignItems="flex-end"
         borderLeft={`2px solid ${DIVIDER}`}
-        p="0 0 0 18px"
+        p="0 0 0 50px"
       >
         <Box display="flex" alignItems="center" m="0 0 15px 0">
           <Typography
             as="span"
-            color={type === "income" ? GREEN : ALERT_1}
+            color={transaction.category.type_of_outlay === "income"
+              ? GREEN
+              : ALERT_1
+            }
             textAlign="right"
             fw="600"
             m="0 6px 0 0"
           >
-            {type === "income" ? "Надходження" : "Витрата"}
+            {transaction.category.type_of_outlay === "income"
+              ? "Надходження"
+              : "Витрата"
+            }
           </Typography>
-          {type === "income" ? <IncomeIcon /> : <ExpenseIcon />}
+          {transaction.category.type_of_outlay === "income"
+            ? <IncomeIcon />
+            : <ExpenseIcon />
+          }
         </Box>
 
         <Typography

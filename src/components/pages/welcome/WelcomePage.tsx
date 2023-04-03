@@ -35,7 +35,7 @@ const WelcomePage: React.FC = () => {
                     <Typography fw="400" fz="16px" lh="19px" m="42.5px 0 26.5px 0" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
                         Ви вже маєте аккаунт?
                     </Typography>
-                    <Link to="/main" fw="600" fz="16px" lh="19px" width="115px" height="40px" color={ALMOST_BLACK_FOR_TEXT}
+                    <Link to="/home" fw="600" fz="16px" lh="19px" width="115px" height="40px" color={ALMOST_BLACK_FOR_TEXT}
                         background={WHITE} padding="10.5px 32px" border="2px solid #737FEF"
                         borderRadius="12px">Увійти </Link>
                 </Box>

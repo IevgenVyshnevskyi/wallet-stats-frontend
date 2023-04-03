@@ -16,53 +16,69 @@ import { HeaderWrapper } from './Header.styled';
 import { List } from './../../atoms/list/List.styled';
 import { ListItem } from './../../atoms/list/ListItem.styled';
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
+import { useContext } from "react";
+import { PopupContext } from "../../../contexts/PopupContext";
+import PopupEditProfile from "../popup/PopupEditProfile";
 
 const Header: React.FC = () => {
-  function logOut() { }
+  const {
+    isEditProfilePopupOpen,
+    setIsEditProfilePopupOpen
+  } = useContext(PopupContext);
+
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  };
+
+  function handleLogOutClick() { }
 
   return (
-    <HeaderWrapper>
-      <Box mr="56px">
-        <Link to="/home">
-          <LogoIcon />
-          <Typography as="span">Spendwise</Typography>
-        </Link>
-      </Box>
+    <>
+      <HeaderWrapper>
+        <Box mr="56px">
+          <Link to="/home">
+            <LogoIcon />
+            <Typography as="span">Spendwise</Typography>
+          </Link>
+        </Box>
 
-      <List>
-        <ListItem>
-          <LinkMenu to="/home">
-            <HomeIcon />
-            <Typography as="span">Головна</Typography>
-          </LinkMenu>
-        </ListItem>
-        <ListItem>
-          <LinkMenu to="/transactions">
-            <RouteIcon />
-            <Typography as="span">Транзакції</Typography>
-          </LinkMenu>
-        </ListItem>
-        <ListItem>
-          <LinkMenu to="/categories">
-            <FolderCheckIcon />
-            <Typography as="span">Категорії</Typography>
-          </LinkMenu>
-          <LinkMenu to="/statistics">
-            <PieChartIcon />
-            <Typography as="span">Статистика</Typography>
-          </LinkMenu>
-        </ListItem>
-      </List>
+        <List>
+          <ListItem>
+            <LinkMenu to="/home">
+              <HomeIcon />
+              <Typography as="span">Головна</Typography>
+            </LinkMenu>
+          </ListItem>
+          <ListItem>
+            <LinkMenu to="/transactions">
+              <RouteIcon />
+              <Typography as="span">Транзакції</Typography>
+            </LinkMenu>
+          </ListItem>
+          <ListItem>
+            <LinkMenu to="/categories">
+              <FolderCheckIcon />
+              <Typography as="span">Категорії</Typography>
+            </LinkMenu>
+            <LinkMenu to="/statistics">
+              <PieChartIcon />
+              <Typography as="span">Статистика</Typography>
+            </LinkMenu>
+          </ListItem>
+        </List>
 
-      <Box display="flex" alignItems="center" gap="40px">
-        <ButtonTransparent>
-          <SettingsIcon />
-        </ButtonTransparent>
-        <ButtonTransparent>
-          <LogoutIcon onClick={logOut} />
-        </ButtonTransparent>
-      </Box>
-    </HeaderWrapper>
+        <Box display="flex" alignItems="center" gap="40px">
+          <ButtonTransparent>
+            <SettingsIcon onClick={handleEditProfileClick} />
+          </ButtonTransparent>
+          <ButtonTransparent>
+            <LogoutIcon onClick={handleLogOutClick} />
+          </ButtonTransparent>
+        </Box>
+      </HeaderWrapper>
+
+      {isEditProfilePopupOpen && <PopupEditProfile />}
+    </>
   );
 }
 

@@ -21,9 +21,9 @@ import {
 
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
-import { IUser } from "../../../../types/other";
+import { RegisterFormData } from "../../../store/types";
 import { useAppDispatch } from "../../../store/hooks";
-import { registerUser } from './../../../store/registerSlice';
+import { registerUser } from '../../../store/userSlice';
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const RegisterPage: React.FC = () => {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
-    function handleSub(data: IUser) {
+    function handleSub(data: RegisterFormData) {
         console.log(data);
         dispatch(registerUser(data));
         //alert(JSON.stringify(data));

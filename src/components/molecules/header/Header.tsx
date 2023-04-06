@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
 import { Box } from './../../atoms/box/Box.styled';
@@ -19,8 +19,13 @@ import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { useContext } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
 import PopupEditProfile from "../popup/PopupEditProfile";
+import { useAppDispatch } from "../../../store/hooks";
+import { logoutUser } from "../../../store/userSlice";
 
 const Header: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+
   const {
     isEditProfilePopupOpen,
     setIsEditProfilePopupOpen
@@ -30,7 +35,10 @@ const Header: React.FC = () => {
     setIsEditProfilePopupOpen(true);
   };
 
-  function handleLogOutClick() { }
+  function handleLogOutClick() {
+    navigate('/');
+    dispatch(logoutUser());
+  }
 
   return (
     <>
@@ -68,10 +76,10 @@ const Header: React.FC = () => {
         </List>
 
         <Box display="flex" alignItems="center" gap="40px">
-          <ButtonTransparent>
+          <ButtonTransparent title="Налаштування">
             <SettingsIcon onClick={handleEditProfileClick} />
           </ButtonTransparent>
-          <ButtonTransparent>
+          <ButtonTransparent title="Вийти">
             <LogoutIcon onClick={handleLogOutClick} />
           </ButtonTransparent>
         </Box>

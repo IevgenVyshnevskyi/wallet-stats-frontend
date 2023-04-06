@@ -7,6 +7,9 @@ declare module "*.svg" {
   export default content;
 }
 
+declare const __DEV__: boolean;
+declare const __API_URL__: string;
+
 declare module '*.ttf';
 declare module '*.woff';
 declare module '*.woff2';

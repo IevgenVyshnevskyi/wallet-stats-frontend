@@ -1,6 +1,6 @@
-import { IAccount } from "../types/other";
+import { IUser } from "../src/store/types";
 
-export const mockAccount: IAccount = {
+export const mockAccount: IUser = {
   id: 0,
   first_name: "john",
   last_name: "doe",

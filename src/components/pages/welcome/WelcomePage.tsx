@@ -24,20 +24,25 @@ const WelcomePage: React.FC = () => {
                 background={WHITE}>
                 <Box m="100px 0 100px 0" justifyContent="space-around" textAlign="center">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center" m="48px 0 80px 0">
+                    <Typography fw="700" fz="24px" lh="170%" textAlign="center" m="48px 0 80px 0">
                         Контролюйте свої кошти з програмою <br /> обліку персональних фінансів!
                     </Typography>
-                    <Typography fw="400" fz="16px" lh="24px" m="0 0 26.5px 0" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
+                    <Typography fw="400" fz="16px" lh="24px" m="0 0 26.5px 0" textAlign="center">
                         Для початку потрібно пройти невеличку реєстрацію
                     </Typography>
-                    <Link to="#" fw="600" fz="16px" lh="19px" width="211px" height="40px" color="WHITE"
+                    <Link to="/register" fw="600" fz="16px" lh="19px" width="211px" height="40px" color="WHITE"
                         background={PRIMARY} padding="10.5px 32px" borderRadius="12px">Почати реєстрацію</Link>
-                    <Typography fw="400" fz="16px" lh="19px" m="42.5px 0 26.5px 0" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
+                    <Typography fw="400" fz="16px" lh="19px" m="42.5px 0 26.5px 0" textAlign="center">
                         Ви вже маєте аккаунт?
                     </Typography>
-                    <Link to="/home" fw="600" fz="16px" lh="19px" width="115px" height="40px" color={ALMOST_BLACK_FOR_TEXT}
-                        background={WHITE} padding="10.5px 32px" border="2px solid #737FEF"
-                        borderRadius="12px">Увійти </Link>
+                    <Box display='flex' direction='column' justifyContent='center' alignItems='center' gap="100px">
+                        <Link to="/login" fw="600" fz="16px" color={ALMOST_BLACK_FOR_TEXT}
+                            background={WHITE} padding="10.5px 32px" border="2px solid #737FEF"
+                            borderRadius="12px">Увійти</Link>
+                        <Link to="/home" fw="600" fz="16px" lh="19px" color={ALMOST_BLACK_FOR_TEXT}
+                            background={WHITE} padding="10.5px 32px" border="2px solid #737FEF"
+                            borderRadius="12px">Перейти на головну сторінку</Link>
+                    </Box>
                 </Box>
             </Box>
         </Container>

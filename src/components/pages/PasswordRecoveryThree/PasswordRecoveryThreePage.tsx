@@ -21,17 +21,11 @@ import {
 
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
+import {PasswordRecoveryThreeFormData} from "../../../store/types";
 
-interface FormState {
-    firstName?: string;
-    surname?: string;
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-}
+
 
 const PasswordRecoveryThreePage: React.FC = () => {
-    const [formState, setFormState] = useState<FormState>({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -47,12 +41,6 @@ const PasswordRecoveryThreePage: React.FC = () => {
     } = useForm({
         mode: "onBlur",
     });
-    const handleChange = (event: any) => {
-        setFormState({
-            ...formState,
-            [event.target.name]: event.target.value
-        });
-    };
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
@@ -60,7 +48,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
-    function handleSub(data: {}) {
+    function handleSub(data: PasswordRecoveryThreeFormData) {
         console.log(data);
         //alert(JSON.stringify(data));
         reset();
@@ -92,7 +80,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                 <Box position="relative">
                                     <span onClick={handleTogglePassword} style={{
                                         position: "absolute", top: "16px",
-                                        right: "-30px", cursor: "pointer", zIndex: "1"
+                                        right: "10px", cursor: "pointer"
                                     }}>{showPassword ?
                                         <VisibilityOff/>
                                         :
@@ -102,25 +90,19 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
-                                        onChange={handleChange}
+                                        width="265px" style={{paddingRight: '35px'}}
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                         })} />
                                 </Box>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "2px 0 0 0"
-                                }}>{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</div>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="2px 0 0 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="confirmPassword" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
                                        mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
                                         position: "absolute", top: "16px",
-                                        right: "-30px", cursor: "pointer", zIndex: "1"
+                                        right: "10px", cursor: "pointer"
                                     }}>{showConfirmPassword ?
                                         <VisibilityOff/>
                                         :
@@ -130,9 +112,9 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         type={showConfirmPassword ? "text" : "password"}
                                         id="confirmPassword"
                                         name="confirmPassword"
-                                        onChange={handleChange}
+                                        width="265px" style={{paddingRight: '35px'}}
                                         {...register("confirmPassword", {
-                                            required: true,
+                                            required: 'Обов\'язкове поле для заповнення',
                                             validate: (val: string) => {
                                                 if (watch('password') != val) {
                                                     return "Паролі не співпадають";
@@ -140,14 +122,8 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                             }
                                         })}/>
                                 </Box>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 14px 0"
-                                }}>{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</div>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 14px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
                         <Button type="submit" disabled={!isValid} width="139px" m="44px auto 0"

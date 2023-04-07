@@ -68,15 +68,9 @@ const PasswordRecoveryOnePage: React.FC = () => {
                                         value: /\S+@\S+.\S+/,
                                         message: "Введіть коректну електронну адресу"
                                     }
-                                })} type="email" id="email"/>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 58px 0"
-                                }}>{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</div>
+                                })} type="email" id="email" width="284px"/>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 58px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
                         <Button type="submit" disabled={!isValid} width="100px" m="0 auto" mt="56px"

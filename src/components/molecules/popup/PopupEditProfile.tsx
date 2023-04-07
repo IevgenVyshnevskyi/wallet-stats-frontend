@@ -44,6 +44,7 @@ const PopupEditProfile: React.FC = () => {
     const handleCloseClick = () => {
         setIsEditProfilePopupOpen(false);
     };
+
     function handleSub(data: {}) {
         console.log(data);
         //alert(JSON.stringify(data));
@@ -66,7 +67,8 @@ const PopupEditProfile: React.FC = () => {
                                     Дані користувача
                                 </Typography>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="firstName" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                    <Label htmlFor="firstName" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
+                                           mb="6px"
                                            textAlight="left">Ім'я</Label>
                                     <Input {...register('firstName', {
                                         required: 'Обов\'язкове поле для заповнення',
@@ -75,18 +77,11 @@ const PopupEditProfile: React.FC = () => {
                                             message: "Повинно бути не менше 2 символів",
                                         }
                                     })} type="text" id="firstName"/>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.firstName && <>{errors?.firstName?.message || 'Error!'}</>}
-                                    </div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.firstName && <>{errors?.firstName?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="lastName" fz="13px"  lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                    <Label htmlFor="lastName" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                            textAlight="left">Прізвище</Label>
                                     <Input {...register('lastName', {
                                         required: 'Обов\'язкове поле для заповнення',
@@ -95,18 +90,11 @@ const PopupEditProfile: React.FC = () => {
                                             message: "Повинно бути не менше 2 символів",
                                         }
                                     })} type="text" id="lastName"/>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.lastName && <>{errors?.lastName?.message || 'Error!'}</>}
-                                    </div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.lastName && <>{errors?.lastName?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="email" fz="13px"  lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                    <Label htmlFor="email" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                            textAlight="left">Пошта</Label>
                                     <Input {...register('email', {
                                         required: 'Обов\'язкове поле для заповнення',
@@ -115,14 +103,8 @@ const PopupEditProfile: React.FC = () => {
                                             message: "Введіть коректну електронну адресу"
                                         }
                                     })} type="email" id="email"/>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                                 </Box>
                             </Box>
                             <Box pl="32px">
@@ -131,7 +113,8 @@ const PopupEditProfile: React.FC = () => {
                                     Змінити пароль
                                 </Typography>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="oldPassword" fz="13px"  lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                    <Label htmlFor="oldPassword" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
+                                           mb="6px"
                                            textAlight="left">Старий пароль</Label>
                                     <Box position="relative">
                                     <span onClick={handleToggleOldPassword} style={{
@@ -150,17 +133,11 @@ const PopupEditProfile: React.FC = () => {
                                                 required: 'Обов\'язкове поле для заповнення',
                                             })} />
                                     </Box>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.oldPassword && <>{errors?.oldPassword?.message || 'Error!'}</>}</div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.oldPassword && <>{errors?.oldPassword?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="password" fz="13px"  lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                    <Label htmlFor="password" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                            textAlight="left">Новий пароль</Label>
                                     <Box position="relative">
                                     <span onClick={handleTogglePassword} style={{
@@ -179,17 +156,12 @@ const PopupEditProfile: React.FC = () => {
                                                 required: 'Обов\'язкове поле для заповнення',
                                             })} />
                                     </Box>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="10px" mr="30px">
-                                    <Label htmlFor="confirmPassword" fz="13px"  lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
+                                    <Label htmlFor="confirmPassword" fz="13px" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
+                                           mt="16px"
                                            mb="6px" textAlight="left">Повторити пароль</Label>
                                     <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
@@ -213,14 +185,8 @@ const PopupEditProfile: React.FC = () => {
                                                 }
                                             })}/>
                                     </Box>
-                                    <div style={{
-                                        color: 'red',
-                                        textAlign: 'left',
-                                        border: 'red',
-                                        fontSize: '13px',
-                                        height: '14px',
-                                        margin: "6px 0 14px 0"
-                                    }}>{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Обов\'язкове поле для заповнення'}</>}</div>
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         m="6px 0 14px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Обов\'язкове поле для заповнення'}</>}</Box>
                                 </Box>
                             </Box>
                         </Box>

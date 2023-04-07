@@ -66,18 +66,13 @@ const TwoFactorAuthenticationPage: React.FC = () => {
                                        textAlight="left">Код</Label>
                                 <Input {...register('authentication', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                })} type="number" id="authentication" />
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 6px 0"
-                                }}>{errors?.authentication && <>{errors?.authentication?.message || 'Error!'}</>}
-                                </div>
-                                <Box width="320px" p="0 0 0 25%"><Link to="#" fz="14px" outline="none"
-                                    color={PRIMARY_2}>Надіслати код ще раз (59)</Link></Box>
+                                    min: 0,
+                                })} type="number" id="authentication" width="290px" style={{paddingRight: '10px'}}/>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 6px 0">{errors?.authentication && <>{errors?.authentication?.message || 'Error!'}</>}</Box>
+                                <Box width="320px" p="0 0 0 29%"><Link to="#" fz="14px" outline="none"
+                                                                       color={PRIMARY_2}>Надіслати код ще раз
+                                    (59)</Link></Box>
                             </Box>
                         </Box>
                         <Button type="submit" disabled={!isValid} width="115px" m="52px auto 0"

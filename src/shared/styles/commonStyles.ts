@@ -28,6 +28,8 @@ export type commonStylesProps = {
   alignItems?: string;
   fz?: string;
   fw?: string;
+  position?: string;
+  zIndex?: string;
 }
 
 export const commonStyles = css<commonStylesProps>`
@@ -58,4 +60,6 @@ export const commonStyles = css<commonStylesProps>`
   align-items: ${({ alignItems }) => alignItems || undefined};
   font-size: ${({ fz }) => fz || undefined};
   font-weight: ${({ fw }) => fw || undefined};
+  position: ${({ position }) => position || "static"};
+  z-index: ${({ zIndex }) => zIndex || 0};
 `

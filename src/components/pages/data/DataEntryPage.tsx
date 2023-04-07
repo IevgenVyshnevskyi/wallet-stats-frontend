@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useForm} from "react-hook-form";
 
 import {Box} from '../../atoms/box/Box.styled';
@@ -20,14 +20,7 @@ import {
 } from "../../../shared/styles/variables";
 
 import {Link} from "../../atoms/link/Link.styled";
-
-interface FormState {
-    firstName?: string;
-    surname?: string;
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-}
+import {DataEntryFormData} from "../../../store/types";
 
 const DataEntryPage: React.FC = () => {
 
@@ -43,7 +36,7 @@ const DataEntryPage: React.FC = () => {
         mode: "onBlur",
     });
 
-    function handleSub(data: {}) {
+    function handleSub(data: DataEntryFormData) {
         console.log(data);
         //alert(JSON.stringify(data));
         reset();
@@ -75,16 +68,10 @@ const DataEntryPage: React.FC = () => {
                                 <Input {...register('availableCash', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     min: 0.01,
-                                })} id="availableCash" type="number" step="0.01"/>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 34px 0"
-                                }}>{errors?.availableCash && <>{errors?.availableCash?.message || 'Error!'}</>}
-                                </div>
+                                })} id="availableCash" type="number" step="0.01" width="290px"
+                                       style={{paddingRight: '10px'}}/>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 34px 0">{errors?.availableCash && <>{errors?.availableCash?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                        textAlight="left">Введіть назву карткового рахунку</Label>
                                 <Input {...register('cardAccountName', {
@@ -93,31 +80,18 @@ const DataEntryPage: React.FC = () => {
                                         value: 2,
                                         message: "Повинно бути не менше 2 символів",
                                     }
-                                })} type="text" id="cardAccountName"/>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 10px 0"
-                                }}>{errors?.cardAccountName && <>{errors?.cardAccountName?.message || 'Error!'}</>}
-                                </div>
+                                })} type="text" id="cardAccountName" width="284px"/>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 10px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                        textAlight="left">Введіть суму наявної готівки</Label>
                                 <Input {...register('amountAccount', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     min: 0.01,
-                                })} id="amountAccount" type="number" step="0.01"/>
-                                <div style={{
-                                    color: 'red',
-                                    textAlign: 'left',
-                                    border: 'red',
-                                    fontSize: '13px',
-                                    height: '14px',
-                                    margin: "6px 0 10px 0"
-                                }}>{errors?.amountAccount && <>{errors?.amountAccount?.message || 'Error!'}</>}
-                                </div>
+                                })} id="amountAccount" type="number" step="0.01" width="290px"
+                                       style={{paddingRight: '10px'}}/>
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                     m="6px 0 10px 0">{errors?.amountAccount && <>{errors?.amountAccount?.message || 'Error!'}</>}</Box>
                             </Box>
                             <Box textAlight="start" fz="14px" lh="150%" color={GREY_50}>Додаткові карткові рахунки ви
                                 зможете <br/> внести пізніше.</Box>

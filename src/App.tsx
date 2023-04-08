@@ -22,7 +22,7 @@ function App() {
     { path: '/recoveryTwo', element: <PasswordRecoveryTwoPage /> },
     { path: '/recoveryThree', element: <PasswordRecoveryThreePage /> },
     { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
-    { path: '/data', element: <DataEntryPage /> },
+    { path: '/data-entry', element: <DataEntryPage /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/register', element: <RegisterPage /> },
     { path: '/home', element: <HomePage /> },

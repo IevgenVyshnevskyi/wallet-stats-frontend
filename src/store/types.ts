@@ -1,3 +1,5 @@
+/* USER */
+
 export interface IUser {
   id?: number,
   first_name: string,
@@ -21,3 +23,4 @@ export type LoginFormData = {
 export type LoginResponse = {
   email: string
 }
+

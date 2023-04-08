@@ -23,7 +23,7 @@ import {
     WHITE
 } from "../../../shared/styles/variables";
 import { loginUser } from "../../../store/userSlice";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { LoginFormData } from "../../../store/types";
 
 interface FormState {
@@ -36,6 +36,8 @@ const LoginPage: React.FC = () => {
     const [formState, setFormState] = useState<FormState>({});
     const [showPassword, setShowPassword] = useState(false);
 
+    const { loginError } = useAppSelector(state => state.user)
+    
     const {
         register,
         formState: {
@@ -129,7 +131,11 @@ const LoginPage: React.FC = () => {
                             <Box width="356px" p="0 0 0 60%"><Link to="/recoveryOne" fz="14px" outline="none" color={PRIMARY}>
                                 Забули пароль?</Link></Box>
                         </Box>
+                        
+                        {loginError && <Typography as="p">{loginError}</Typography>}
+                        
                         <Button type="submit" disabled={!isValid} m="56px auto 0" primary>Увійти</Button>
+                        
                     </Form>
                 </Box>
             </Box>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 import { Box } from '../../atoms/box/Box.styled';
@@ -22,11 +23,15 @@ import {
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import { RegisterFormData } from "../../../store/types";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { registerUser } from '../../../store/userSlice';
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
+
+    const { registerError, isRegistered } = useAppSelector(state => state.user)
+
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -50,11 +55,17 @@ const RegisterPage: React.FC = () => {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
-    function handleSub(data: RegisterFormData) {
+    useEffect(() => {
+        if (isRegistered) {
+            navigate('/data-entry');
+            reset();
+        }
+    }, [isRegistered]);
+
+    async function handleSub(data: RegisterFormData) {
         console.log(data);
-        dispatch(registerUser(data));
+        await dispatch(registerUser(data));
         //alert(JSON.stringify(data));
-        reset();
     }
 
     return (
@@ -144,6 +155,10 @@ const RegisterPage: React.FC = () => {
                                         name="password"
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
+                                            pattern: {
+                                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
+                                            },
                                         })} />
                                 </Box>
                                 <div style={{
@@ -188,6 +203,9 @@ const RegisterPage: React.FC = () => {
                                 }}>{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</div>
                             </Box>
                         </Box>
+
+                        {registerError && <Typography as="p">{registerError}</Typography>}
+
                         <Button type="submit" disabled={!isValid} width="204px" mt="56px"
                             primary>Зареєструватись</Button>
                     </Form>

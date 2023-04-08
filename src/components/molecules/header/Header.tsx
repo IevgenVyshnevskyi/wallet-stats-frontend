@@ -1,9 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
-import { Box } from './../../atoms/box/Box.styled';
-import { Typography } from "../../atoms/typography/Typography.styled";
-
 import LogoIcon from '../../../shared/assets/icons/logo.svg'
 import HomeIcon from '../../../shared/assets/icons/home.svg'
 import RouteIcon from '../../../shared/assets/icons/route.svg'
@@ -12,15 +8,18 @@ import PieChartIcon from '../../../shared/assets/icons/pie-chart.svg'
 import SettingsIcon from '../../../shared/assets/icons/settings-header.svg'
 import LogoutIcon from '../../../shared/assets/icons/logout.svg'
 
+import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
+import { Box } from './../../atoms/box/Box.styled';
+import { Typography } from "../../atoms/typography/Typography.styled";
 import { HeaderWrapper } from './Header.styled';
 import { List } from './../../atoms/list/List.styled';
 import { ListItem } from './../../atoms/list/ListItem.styled';
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { useContext } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
-import PopupEditProfile from "../popup/PopupEditProfile";
 import { useAppDispatch } from "../../../store/hooks";
 import { logoutUser } from "../../../store/userSlice";
+import PopupEditProfile from "../popup/PopupEditProfile";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch()

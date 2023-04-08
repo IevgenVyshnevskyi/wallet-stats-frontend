@@ -23,8 +23,6 @@ import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {PasswordRecoveryThreeFormData} from "../../../store/types";
 
-
-
 const PasswordRecoveryThreePage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -59,7 +57,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage"/>
             </Box>
-            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
+            <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center" textAlign="center"
                  background={WHITE}>
                 <Box m="92.5px 0 76.5px 0" alignItems="center" textAlign="center">
                     <Img src={logo} alt="Logo"/>

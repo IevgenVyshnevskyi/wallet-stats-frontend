@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 
-import { BuildOptions } from './types/config';
+import { BuildOptions } from '../../types/config';
 
 import { buildLoaders } from './buildLoaders';
 import { buildResolve } from './buildResolve';

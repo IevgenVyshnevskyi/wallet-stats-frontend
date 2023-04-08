@@ -1,4 +1,6 @@
-export const mockCategories = [
+import { ICategory } from "../types/molecules";
+
+export const mockCategories: ICategory[] = [
   { id: 1, title: "Dividends", type_of_outlay: "income", owner: 0 },
   { id: 2, title: "Mortgage", type_of_outlay: "expense", owner: 0 },
   { id: 3, title: "Utilities", type_of_outlay: "income", owner: 0 },

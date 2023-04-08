@@ -1,12 +1,7 @@
 import styled, { css } from "styled-components"
 import { DISABLED, PRIMARY, PRIMARY_HOVER, WHITE } from "./../../../shared/styles/variables"
-import { commonStyles, commonStylesProps } from "../../../shared/styles/commonStyles"
-
-export type ButtonProps = commonStylesProps & {
-  primary?: boolean
-  secondary?: boolean
-  disabled?: boolean
-}
+import { commonStyles} from "../../../shared/styles/commonStyles"
+import { ButtonProps } from "../../../../types/atoms"
 
 export const buttonStyles = css<ButtonProps>`
   ${({ primary, secondary, disabled }) => `

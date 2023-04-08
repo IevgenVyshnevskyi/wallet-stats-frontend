@@ -3,33 +3,7 @@ import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 import { DARK_FOR_TEXT, GREEN, WHITE, DIVIDER, ALERT_1 } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
-
-export interface ITransaction {
-  id: number,
-  owner: number,
-  wallet: {
-    id: number,
-    title: string,
-    amount: number | string,
-    type_of_account: string,
-    owner: number
-  },
-  title: string,
-  category: {
-    id: number,
-    title: string,
-    type_of_outlay: "income" | "expense",
-    owner: number
-  },
-  description: string,
-  type_of_outlay: "income" | "expense",
-  amount_of_funds: number | string,
-  created: string
-}
-
-type TransactionProps = {
-  transaction: ITransaction;
-}
+import { TransactionProps } from "../../../../types/molecules";
 
 const Transaction: React.FC<TransactionProps> = ({ transaction }) => {
   return (

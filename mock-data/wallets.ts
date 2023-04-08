@@ -1,4 +1,5 @@
-import { IWallet } from "../src/components/molecules/wallet/Wallet";
+import { IWallet } from "../types/molecules";
+
 export const mockWallets: IWallet[] = [
   {
     id: 0,

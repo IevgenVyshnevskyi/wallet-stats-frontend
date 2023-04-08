@@ -3,17 +3,7 @@ import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 import { GREEN, WHITE, ALERT_1 } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
-
-export interface ICategory {
-  id: number,
-  title: string,
-  type_of_outlay: string,
-  owner: number
-}
-
-type CategoryProps = {
-  category: ICategory;
-}
+import { CategoryProps } from "../../../../types/molecules";
 
 const Category: React.FC<CategoryProps> = ({ category }) => {
   return (

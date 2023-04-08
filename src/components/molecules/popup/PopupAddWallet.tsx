@@ -10,6 +10,7 @@ import PackageSuccessIcon from "../../../shared/assets/icons/package-success.svg
 import PackageErrorIcon from "../../../shared/assets/icons/package-error.svg";
 import { useContext, useRef } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
+import { MessageProps } from "../../../../types/molecules";
 
 const PopupAddWallet: React.FC = () => {
   const inputFileRef = useRef<HTMLInputElement>(null)
@@ -83,10 +84,6 @@ const PopupAddWallet: React.FC = () => {
       </Box>
     </PopupWrapper>
   );
-}
-
-type MessageProps = {
-  message: "success" | "error"
 }
 
 const Message: React.FC<MessageProps> = ({ message }) => {

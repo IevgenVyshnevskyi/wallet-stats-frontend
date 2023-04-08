@@ -3,7 +3,7 @@ import { BASE_1, GREY_50, PRIMARY } from '../../../shared/styles/variables'
 import { blackSVGtoWhite } from '../../../shared/styles/iconStyles'
 import { Box } from '../../atoms/box/Box.styled'
 
-export const PopupWrapper = styled.div`
+export const PopupWrapper = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;

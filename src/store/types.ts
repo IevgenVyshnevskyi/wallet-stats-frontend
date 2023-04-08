@@ -23,4 +23,18 @@ export type LoginFormData = {
 export type LoginResponse = {
   email: string
 }
+export interface PasswordRecoveryThreeFormData {
+  firstName?: string;
+  surname?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
+export interface DataEntryFormData {
+  firstName?: string;
+  surname?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}

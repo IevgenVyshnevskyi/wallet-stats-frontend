@@ -5,8 +5,8 @@ import {Typography} from '../../atoms/typography/Typography.styled';
 import {Img} from '../../atoms/img/Img.styled';
 import {Container} from "../../atoms/container/Container.styled";
 
-import logo from "../../../shared/assets/icons/logo.png";
-import InterfaceImage from "../../../shared/assets/icons/interface-image-full.png";
+import logo from "../../../shared/assets/images/logo.png";
+import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
     ALMOST_BLACK_FOR_TEXT,

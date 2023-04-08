@@ -18,13 +18,13 @@ import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 function App() {
   const elements = useRoutes([
     { path: '/', element: <WelcomePage /> },
+    { path: '/register', element: <RegisterPage /> },
+    { path: '/data-entry', element: <DataEntryPage /> },
+    { path: '/login', element: <LoginPage /> },
+    { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
     { path: '/recoveryOne', element: <PasswordRecoveryOnePage /> },
     { path: '/recoveryTwo', element: <PasswordRecoveryTwoPage /> },
     { path: '/recoveryThree', element: <PasswordRecoveryThreePage /> },
-    { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
-    { path: '/data-entry', element: <DataEntryPage /> },
-    { path: '/login', element: <LoginPage /> },
-    { path: '/register', element: <RegisterPage /> },
     { path: '/home', element: <HomePage /> },
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },

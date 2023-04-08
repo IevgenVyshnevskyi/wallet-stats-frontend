@@ -212,7 +212,7 @@ const TransactionsSettings: React.FC = () => {
       </Box>
       <Box mb="24px">
         <Label fw="500" htmlFor="sum" mb="12px">Сума</Label>
-        <Input fz="22px" type="text" id="sum" width="270px" bgColor={WHITE} />
+        <Input fz="22px" type="number" id="sum" width="270px" bgColor={WHITE} />
       </Box>
     </>
   );

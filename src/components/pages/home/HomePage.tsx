@@ -123,7 +123,7 @@ const Transactions: React.FC = () => {
       >
         Останні транзакції
       </Typography>
-      <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1">
+      <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1" p="15px">
         {mockTransactions.map((transaction, index) => (
           <ListItem key={index}>
             <Transaction transaction={transaction} />

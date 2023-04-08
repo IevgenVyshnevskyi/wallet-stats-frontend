@@ -144,7 +144,7 @@ const RegisterPage: React.FC = () => {
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                     m="6px 0 6px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
-                                <Label htmlFor="confirmPassword" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
+                                <Label htmlFor="password2" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
                                     mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
@@ -157,10 +157,10 @@ const RegisterPage: React.FC = () => {
                                         }</span>
                                     <Input
                                         type={showConfirmPassword ? "text" : "password"}
-                                        id="confirmPassword"
-                                        name="confirmPassword"
+                                        id="password2"
+                                        name="password2"
                                         width="265px" style={{ paddingRight: '35px' }}
-                                        {...register("confirmPassword", {
+                                        {...register("password2", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             validate: (val: string) => {
                                                 if (watch('password') != val) {
@@ -170,7 +170,7 @@ const RegisterPage: React.FC = () => {
                                         })} />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 14px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>
+                                    m="6px 0 14px 0">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
 

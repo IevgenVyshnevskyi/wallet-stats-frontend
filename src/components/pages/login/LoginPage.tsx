@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Box } from '../../atoms/box/Box.styled';
@@ -25,14 +25,18 @@ import {
 import { loginUser } from "../../../store/userSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { LoginFormData } from "../../../store/types";
+import { useNavigate } from "react-router-dom";
 
 
 const LoginPage: React.FC = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
+
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
 
-    const { loginError } = useAppSelector(state => state.user)
-    
+    const { loginError, isLoggedIn } = useAppSelector(state => state.user)
+
     const {
         register,
         formState: {
@@ -48,11 +52,16 @@ const LoginPage: React.FC = () => {
         setShowPassword(!showPassword);
     };
 
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/authentication');
+            reset();
+        }
+    }, [isLoggedIn]);
+
     function handleSub(data: LoginFormData) {
         console.log(data);
         dispatch(loginUser(data));
-        //alert(JSON.stringify(data));
-        reset();
     }
 
     return (
@@ -108,11 +117,10 @@ const LoginPage: React.FC = () => {
                                 color={PRIMARY}>
                                 Забули пароль?</Link></Box>
                         </Box>
-                        
+
                         {loginError && <Typography as="p">{loginError}</Typography>}
-                        
+
                         <Button type="submit" disabled={!isValid} m="56px auto 0" primary>Увійти</Button>
-                        
                     </Form>
                 </Box>
             </Box>

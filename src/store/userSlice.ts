@@ -37,11 +37,9 @@ export const registerUser = createAsyncThunk<IUser, RegisterFormData, { rejectVa
   }
 );
 
-export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string, state: { user: UserState } }>(
+export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
   'user/loginUser',
-  async function (loginData, { rejectWithValue, getState }) {
-    // const currentUser = getState().user.user
-
+  async function (loginData, { rejectWithValue}) {
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Accept", "application/json");
@@ -51,8 +49,6 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
       headers: myHeaders,
       body: JSON.stringify(loginData),
     });
-
-    console.log(response)
 
     if (!response.ok) {
       const errorMessage = formatLoginErrorMessage(await response.json());
@@ -171,18 +167,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.getDetailsError = null;
       })
-
-    // .addMatcher(isError, (state, action: PayloadAction<string>) => {
-    //   state.error = action.payload;
-    //   state.isLoading = false;
-    // });
   }
 });
-
-// function isError(action: AnyAction) {
-//   return action.type.endsWith('rejected');
-// }
-
-// export const { logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

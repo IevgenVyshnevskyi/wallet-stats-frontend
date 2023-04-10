@@ -98,8 +98,8 @@ const DataEntryPage: React.FC = () => {
                         </Box>
                         <Button type="submit" disabled={!isValid} width="177px" m="48px auto 8px"
                                 primary>Зберегти дані</Button>
-                        <Link to="/home" fz="14px" outline="none" m="0 auto" color={PRIMARY}>
-                            Пропустити цей крок</Link>
+                        {/* <Link to="/home" fz="14px" outline="none" m="0 auto" color={PRIMARY}>
+                            Пропустити цей крок</Link> */}
                     </Form>
                 </Box>
             </Box>

@@ -41,7 +41,7 @@ const TwoFactorAuthenticationPage: React.FC = () => {
         reset();
     }
 
-    const [count, setCount] = useState(3);
+    const [count, setCount] = useState(60);
     const intervalRef = useRef(null);
 
     useEffect(() => {

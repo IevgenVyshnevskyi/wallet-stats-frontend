@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { PRIMARY, WHITE } from "../../../shared/styles/variables"
+import { PRIMARY, PRIMARY_HOVER, WHITE } from "../../../shared/styles/variables"
 import { Link as RouterLink } from 'react-router-dom';
 import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 
@@ -23,7 +23,7 @@ export const LinkMenu = styled(RouterLink)`
   )}
 
   &:hover {
-    background-color: ${PRIMARY};
+    background-color: ${PRIMARY_HOVER};
 
     svg {
       ${blackSVGtoWhite}

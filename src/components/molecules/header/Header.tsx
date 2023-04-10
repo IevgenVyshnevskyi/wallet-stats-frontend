@@ -49,7 +49,7 @@ const Header: React.FC = () => {
           </Link>
         </Box>
 
-        <List>
+        <List gap="4px">
           <ListItem>
             <LinkMenu to="/home">
               <HomeIcon />

@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
-import { BASE_URL, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
+import { $api, BASE_URL, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
+import axios from 'axios';
 
-type UserState = {
+export type UserState = {
   user: IUser;
   isLoading: boolean;
   isLoggedIn: boolean;
@@ -15,38 +16,35 @@ type UserState = {
   registerError: string | null;
 }
 
-export const registerUser = createAsyncThunk<IUser, RegisterFormData, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValue: string }>(
   'user/registerUser',
   async function (registerData, { rejectWithValue }) {
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "application/json");
+    return $api.post(REGISTER_PATH, registerData)
+      .then(response => {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
 
-    const response = await fetch(`${BASE_URL}${REGISTER_PATH}`, {
-      method: 'POST',
-      headers: myHeaders,
-      body: JSON.stringify(registerData),
-    });
-
-    if (!response.ok) {
-      const errorMessage = formatRegisterErrorMessage(await response.json());
-      return rejectWithValue(errorMessage);
-    }
-
-    return (await response.json()) as IUser;
+        return token;
+      })
+      .catch(error => {
+        const errorMessage = formatRegisterErrorMessage(error.response.data);
+        return rejectWithValue(errorMessage);
+      });
   }
 );
 
 export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
   'user/loginUser',
-  async function (loginData, { rejectWithValue}) {
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "application/json");
+  async function (loginData, { rejectWithValue }) {
+    const loginUserHeaders = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Token ${localStorage.getItem('token')}`,
+    };
 
     const response = await fetch(`${BASE_URL}${LOGIN_PATH}`, {
       method: 'POST',
-      headers: myHeaders,
+      headers: loginUserHeaders,
       body: JSON.stringify(loginData),
     });
 
@@ -62,14 +60,13 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
 export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
   'user/logoutUser',
   async function (_, { rejectWithValue }) {
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "application/json");
-
     const response = await fetch(`${BASE_URL}${LOGOUT_PATH}`, {
       method: 'GET',
-      headers: myHeaders,
+      // headers: myHeaders,
     });
+
+    localStorage.removeItem('token');
+
 
     if (!response.ok) {
       return rejectWithValue(await response.text());
@@ -81,23 +78,23 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
 
 export const getUserDetails = createAsyncThunk<IUser, undefined, { rejectValue: string }>(
   'user/getUserDetails',
-  async function (loginData, { rejectWithValue }) {
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "application/json");
+  async function (_, { rejectWithValue }) {
+    const getUserDetailsHeaders = {
+      "Authorization": `Token ${localStorage.getItem('token')}`,
+    };
 
-    console.log(JSON.stringify(loginData))
+    const response = await axios({
+      headers: getUserDetailsHeaders,
+      method: "GET",
+      url: `${BASE_URL}${USER_DETAILS_PATH}`,
+    })
+      .then(res =>  res.data)
+      .catch(error => {
+        const errorMessage = error.response.data;
+        return rejectWithValue(errorMessage);
+      });
 
-    const response = await fetch(`${BASE_URL}${USER_DETAILS_PATH}`, {
-      method: 'GET',
-      headers: myHeaders,
-    });
-
-    if (!response.ok) {
-      return rejectWithValue('Can\'t get user details. Server error.');
-    }
-
-    return (await response.json()) as IUser;
+    return (await response) as IUser;
   }
 );
 
@@ -123,7 +120,6 @@ const userSlice = createSlice({
         state.registerError = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
         state.isLoading = false;
         state.isRegistered = true;
       })
@@ -158,14 +154,17 @@ const userSlice = createSlice({
 
       .addCase(getUserDetails.pending, (state) => {
         state.isLoading = true;
+        state.getDetailsError = null;
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoading = false;
+        state.getDetailsError = null;
+        localStorage.setItem('userData', JSON.stringify(action.payload))
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
-        state.getDetailsError = null;
+        state.getDetailsError = action.payload;
       })
   }
 });

@@ -1,3 +1,5 @@
+import { IWallet } from "../src/store/types";
+
 export interface ICategory {
   id: number,
   title: string,
@@ -52,14 +54,6 @@ export interface ITransaction {
 
 export type TransactionProps = {
   transaction: ITransaction;
-}
-
-export interface IWallet {
-  id: number,
-  title: string,
-  amount: string | number,
-  type_of_account: string,
-  owner: number,
 }
 
 export type WalletProps = {

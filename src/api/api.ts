@@ -14,11 +14,13 @@ export const CATEGORY_PATH = "/wallet/category/";
 export const TRANSACTION_PATH = "/wallet/transactions/";
 
 const token = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-const authHeader = token ? { authorization: `Bearer ${token}` } : {};
+const authHeader = token ? { authorization: `Token ${token}` } : {};
 
-// export const $api = axios.create({
-//   baseURL: __API_URL__,
-//   headers: {
-//     ...authHeader
-//   }
-// });
+export const $api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    ...authHeader,
+  }
+});

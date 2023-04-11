@@ -13,7 +13,7 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { MessageProps } from "../../../../types/molecules";
 
 const PopupAddWallet: React.FC = () => {
-  const inputFileRef = useRef<HTMLInputElement>(null)
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
@@ -93,8 +93,8 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         <PackageSuccessIcon />
       ) : (
         <PackageErrorIcon />
-      )
-      }
+      )}
+
       <Typography
         as="span"
         fz="16px"

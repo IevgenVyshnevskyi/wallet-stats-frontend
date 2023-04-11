@@ -46,7 +46,7 @@ const RegisterPage: React.FC = () => {
         reset,
         watch,
     } = useForm({
-        mode: "onBlur",
+        mode: "all",
     });
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
@@ -112,7 +112,7 @@ const RegisterPage: React.FC = () => {
                                 <Input {...register('email', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: /\S+@\S+.\S+/,
+                                        value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                                         message: "Введіть коректну електронну адресу"
                                     }
                                 })} type="email" id="email" width="284px" />

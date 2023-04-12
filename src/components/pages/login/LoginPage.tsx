@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
         handleSubmit,
         reset,
     } = useForm({
-        mode: "onBlur",
+        mode: "all",
     });
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
@@ -85,7 +85,7 @@ const LoginPage: React.FC = () => {
                             <Input {...register('email', {
                                 required: 'Обов\'язкове поле для заповнення',
                                 pattern: {
-                                    value: /\S+@\S+.\S+/,
+                                    value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                     message: "Введіть коректну електронну адресу"
                                 }
                             })} type="email" id="email" width="284px" />
@@ -109,10 +109,14 @@ const LoginPage: React.FC = () => {
                                     width="265px" style={{ paddingRight: '35px' }}
                                     {...register("password", {
                                         required: 'Обов\'язкове поле для заповнення',
+                                        pattern: {
+                                            value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                            message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
+                                        },
                                     })} />
                             </Box>
-                            <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                m="6px 0 6px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
+                            <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
+                                m="0px 0 14px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
                             <Box width="320px" p="0 0 0 50%"><Link to="/recoveryOne" fz="14px" outline="none"
                                 color={PRIMARY}>
                                 Забули пароль?</Link></Box>

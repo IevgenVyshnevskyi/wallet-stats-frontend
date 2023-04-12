@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
       .then(response => {
         const token = response.data.token;
         localStorage.setItem('token', token);
-
+        localStorage.removeItem('userData');
         return token;
       })
       .catch(error => {
@@ -62,11 +62,10 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
   async function (_, { rejectWithValue }) {
     const response = await fetch(`${BASE_URL}${LOGOUT_PATH}`, {
       method: 'GET',
-      // headers: myHeaders,
     });
 
-    localStorage.removeItem('token');
-
+    // localStorage.removeItem('token');
+    localStorage.removeItem('userData');
 
     if (!response.ok) {
       return rejectWithValue(await response.text());

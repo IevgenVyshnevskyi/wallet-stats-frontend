@@ -93,9 +93,13 @@ const RegisterPage: React.FC = () => {
                                         value: 2,
                                         message: "Повинно бути не менше 2 символів",
                                     }
+                                    // pattern: {
+                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
+                                    //     message: "Повинно бути не менше 2 символів",
+                                    // }
                                 })} type="text" id="firstName" width="284px" />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 14px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
+                                    m="0 0 20px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="last_name" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Прізвище</Label>
                                 <Input {...register('last_name', {
@@ -104,20 +108,24 @@ const RegisterPage: React.FC = () => {
                                         value: 2,
                                         message: "Повинно бути не менше 2 символів",
                                     }
+                                    // pattern: {
+                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
+                                    //     message: "Повинно бути не менше 2 символів",
+                                    // }
                                 })} type="text" id="last_name" width="284px" />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 14px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>
+                                    m="0 0 20px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="email" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Пошта</Label>
                                 <Input {...register('email', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                                        value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                         message: "Введіть коректну електронну адресу"
                                     }
                                 })} type="email" id="email" width="284px" />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 14px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
+                                    m="0 0 20px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="password" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Пароль</Label>
                                 <Box position="relative">
@@ -142,9 +150,9 @@ const RegisterPage: React.FC = () => {
                                             },
                                         })} />
                                 </Box>
-                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 6px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
-                                <Label htmlFor="password2" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
+                                <Box color="red" textAlight="left" border="red" fz="13px" width='300px'
+                                    height="28px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
+                                <Label htmlFor="password2" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="4px"
                                     mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
@@ -170,7 +178,7 @@ const RegisterPage: React.FC = () => {
                                         })} />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 14px 0">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>
+                                    m="0 0 20px 0">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
 

@@ -15,7 +15,8 @@ import InterfaceImage from "../../../shared/assets/images/interface-image-full.p
 
 import {
     ALMOST_BLACK_FOR_TEXT,
-    GRADIENT, GREY_50,
+    GRADIENT,
+    GREY_50,
     WHITE
 } from "../../../shared/styles/variables";
 
@@ -24,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
+import { moneyAmountRegex } from "../../../shared/utils/regexes";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -36,19 +38,6 @@ const DataEntryPage: React.FC = () => {
 
     const navigate = useNavigate();
 
-    // const [cashWallet, setCashWallet] = useState<IWallet>({
-    //     title: "Готівка",
-    //     amount: null,
-    //     owner: null,
-    //     type_of_account: "cash",
-    // });
-    // const [bankWallet, setBankWallet] = useState<IWallet>({
-    //     title: null,
-    //     amount: null,
-    //     owner: null,
-    //     type_of_account: "bank",
-    // });
-
     const {
         register,
         formState: {
@@ -58,8 +47,7 @@ const DataEntryPage: React.FC = () => {
         handleSubmit,
         reset,
     } = useForm({
-        mode: "onBlur",
-        criteriaMode: "all"
+        mode: "all",
     });
 
     useEffect(() => {
@@ -74,8 +62,6 @@ const DataEntryPage: React.FC = () => {
             dispatch(getUserDetails())
         }
     }, []);
-
-    const moneyAmountRegex = /^-?\d{1,8}(?:\.\d{0,2})?$/;
 
     function handleSub(data: DataEntryFormData) {
         const resultData: DataEntryFormData = { ...data, userId }
@@ -116,7 +102,8 @@ const DataEntryPage: React.FC = () => {
                                 })} id="availableCash" type="number" step="0.01" width="290px"
                                     style={{ paddingRight: '10px' }} />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 34px 0">{errors?.availableCash && <>{errors?.availableCash?.message || 'Error!'}</>}</Box>
+                                    m="6px 0 34px 0">{errors?.availableCash && <>{errors?.availableCash?.message
+                                        || 'Введіть додаткове значення'}</>}</Box>
                                 <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Введіть назву карткового рахунку</Label>
                                 <Input {...register('cardAccountName', {
@@ -127,7 +114,8 @@ const DataEntryPage: React.FC = () => {
                                     },
                                 })} type="text" id="cardAccountName" width="284px" />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 10px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message || 'Error!'}</>}</Box>
+                                    m="6px 0 10px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message
+                                        || 'Error!'}</>}</Box>
                                 <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Введіть суму коштів на рахунку</Label>
                                 <Input {...register('amountAccount', {
@@ -140,7 +128,8 @@ const DataEntryPage: React.FC = () => {
                                 })} id="amountAccount" type="number" step="0.01" width="290px"
                                     style={{ paddingRight: '10px' }} />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 40px 0">{errors?.amountAccount && <>{errors?.amountAccount?.message || 'Error!'}</>}</Box>
+                                    m="6px 0 40px 0">{errors?.amountAccount && <>{errors?.amountAccount?.message
+                                        || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                             <Box textAlight="start" fz="14px" lh="150%" color={GREY_50}>Додаткові карткові рахунки ви
                                 зможете <br /> внести пізніше.</Box>

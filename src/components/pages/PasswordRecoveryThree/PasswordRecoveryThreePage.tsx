@@ -91,11 +91,15 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         width="265px" style={{paddingRight: '35px'}}
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
+                                            pattern: {
+                                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
+                                            },
                                         })} />
                                 </Box>
-                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                     m="2px 0 0 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
-                                <Label htmlFor="confirmPassword" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="16px"
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
+                                     m="0 0 0 4px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
+                                <Label htmlFor="confirmPassword" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="20px"
                                        mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
@@ -121,7 +125,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         })}/>
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                     m="6px 0 14px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>
+                                     m="0 0 20px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
                         <Button type="submit" disabled={!isValid} width="139px" m="44px auto 0"

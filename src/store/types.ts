@@ -5,6 +5,8 @@ export interface IUser {
   first_name: string,
   last_name: string,
   email: string,
+  is_confirm_email?: boolean,
+  token?: string;
 }
 
 export type RegisterFormData = {
@@ -23,6 +25,7 @@ export type LoginFormData = {
 export type LoginResponse = {
   email: string
 }
+
 export interface PasswordRecoveryThreeFormData {
   firstName?: string;
   surname?: string;
@@ -32,9 +35,20 @@ export interface PasswordRecoveryThreeFormData {
 }
 
 export interface DataEntryFormData {
-  firstName?: string;
-  surname?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  availableCash: string;
+  cardAccountName: string;
+  amountAccount: string;
+  userId?: number;
+}
+
+/* WALLET */
+
+export type TypeOfAccount = "cash" | "bank";
+
+export interface IWallet {
+  id?: number,
+  title: string,
+  amount: string,
+  type_of_account: TypeOfAccount,
+  owner: number,
 }

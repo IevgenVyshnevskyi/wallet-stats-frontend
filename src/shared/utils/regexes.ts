@@ -1,0 +1,1 @@
+export const moneyAmountRegex = /^-?\d{1,8}(?:\.\d{0,2})?$/;

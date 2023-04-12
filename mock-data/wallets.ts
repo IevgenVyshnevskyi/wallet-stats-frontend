@@ -1,4 +1,4 @@
-import { IWallet } from "../types/molecules";
+import { IWallet } from "../src/store/types";
 
 export const mockWallets: IWallet[] = [
   {
@@ -12,28 +12,28 @@ export const mockWallets: IWallet[] = [
     id: 1,
     title: "Приват",
     amount: "2 348,35 ₴",
-    type_of_account: "Приват",
+    type_of_account: "bank",
     owner: 0
   },
   {
     id: 2,
-    title: "Приват",
+    title: "Моно",
     amount: "2 348,35 ₴",
-    type_of_account: "Моно",
+    type_of_account: "bank",
     owner: 0
   },
   {
     id: 3,
     title: "Приват",
     amount: "2 348,35 ₴",
-    type_of_account: "Приват",
+    type_of_account: "bank",
     owner: 0
   },
   {
-    id: 3,
+    id: 4,
     title: "Приват",
     amount: "2 348,35 ₴",
-    type_of_account: "Приват",
+    type_of_account: "bank",
     owner: 0
   },
 ];

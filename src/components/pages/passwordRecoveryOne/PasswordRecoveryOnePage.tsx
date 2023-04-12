@@ -30,7 +30,7 @@ const PasswordRecoveryOnePage: React.FC = () => {
         handleSubmit,
         reset,
     } = useForm({
-        mode: "onBlur",
+        mode: "all",
     });
 
     function handleSub(data: {}) {
@@ -65,7 +65,7 @@ const PasswordRecoveryOnePage: React.FC = () => {
                                 <Input {...register('email', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: /\S+@\S+.\S+/,
+                                        value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                         message: "Введіть коректну електронну адресу"
                                     }
                                 })} type="email" id="email" width="284px" />

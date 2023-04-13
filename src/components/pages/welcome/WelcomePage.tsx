@@ -46,7 +46,7 @@ const WelcomePage = () => {
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={WHITE}>
-                <Box m="100px 0 100px 0" justifyContent="space-around" textAlign="center">
+                <Box m="auto 0" justifyContent="space-around" textAlign="center">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" textAlign="center" m="48px 0 80px 0">
                         Контролюйте свої кошти з програмою <br /> обліку персональних фінансів!

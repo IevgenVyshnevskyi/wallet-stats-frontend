@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useForm } from "react-hook-form";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from 'react-router-dom';
+import {useForm} from "react-hook-form";
 
-import { Box } from '../../atoms/box/Box.styled';
-import { Typography } from '../../atoms/typography/Typography.styled';
-import { Img } from '../../atoms/img/Img.styled';
-import { Container } from "../../atoms/container/Container.styled";
-import { Form } from "../../atoms/form/Form.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { Button } from "../../atoms/button/Button.styled";
+import {Box} from '../../atoms/box/Box.styled';
+import {Typography} from '../../atoms/typography/Typography.styled';
+import {Img} from '../../atoms/img/Img.styled';
+import {Container} from "../../atoms/container/Container.styled";
+import {Form} from "../../atoms/form/Form.styled";
+import {Label} from "../../atoms/label/Label.styled";
+import {Input} from "../../atoms/input/Input.styled";
+import {Button} from "../../atoms/button/Button.styled";
 
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
@@ -22,14 +22,14 @@ import {
 
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
-import { RegisterFormData } from "../../../store/types";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { registerUser } from '../../../store/userSlice';
+import {RegisterFormData} from "../../../store/types";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks";
+import {registerUser} from '../../../store/userSlice';
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const { registerError, isRegistered } = useAppSelector(state => state.user)
+    const {registerError, isRegistered} = useAppSelector(state => state.user)
 
     const navigate = useNavigate();
 
@@ -71,22 +71,21 @@ const RegisterPage: React.FC = () => {
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
-                <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
+                <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage"/>
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
-                background={WHITE}>
-                <Box mt="60px" alignItems="center" textAlign="center">
-                    <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
-                        m="48px 0 48px 0">
+                 background={WHITE}>
+                <Box m="auto 0" alignItems="center" textAlign="center">
+                    <Img src={logo} alt="Logo"/>
+                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
                         Реєстрація нового користувача
                     </Typography>
                     <Form onSubmit={handleSubmit(handleSub)} maxWidth="592px" textAlign="center"
-                        alignItems="end">
+                          alignItems="end">
                         <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
                             <Box mb="6px">
                                 <Label htmlFor="first_name" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Ім'я</Label>
+                                       textAlight="left">Ім'я</Label>
                                 <Input {...register('first_name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     minLength: {
@@ -97,11 +96,11 @@ const RegisterPage: React.FC = () => {
                                     //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
                                     //     message: "Повинно бути не менше 2 символів",
                                     // }
-                                })} type="text" id="firstName" width="284px" />
+                                })} type="text" id="firstName" width="284px"/>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="0 0 20px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
+                                     m="0 0 20px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="last_name" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Прізвище</Label>
+                                       textAlight="left">Прізвище</Label>
                                 <Input {...register('last_name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     minLength: {
@@ -112,36 +111,36 @@ const RegisterPage: React.FC = () => {
                                     //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
                                     //     message: "Повинно бути не менше 2 символів",
                                     // }
-                                })} type="text" id="last_name" width="284px" />
+                                })} type="text" id="last_name" width="284px"/>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="0 0 20px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>
+                                     m="0 0 20px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="email" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Пошта</Label>
+                                       textAlight="left">Пошта</Label>
                                 <Input {...register('email', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
                                         value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                         message: "Введіть коректну електронну адресу"
                                     }
-                                })} type="email" id="email" width="284px" />
+                                })} type="email" id="email" width="284px"/>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="0 0 20px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
+                                     m="0 0 20px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="password" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Пароль</Label>
+                                       textAlight="left">Пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleTogglePassword} style={{
                                         position: "absolute", top: "16px",
                                         right: "10px", cursor: "pointer"
                                     }}>{showPassword ?
-                                        <VisibilityOff />
+                                        <VisibilityOff/>
                                         :
-                                        <VisibilityOn />
-                                        }</span>
+                                        <VisibilityOn/>
+                                    }</span>
                                     <Input
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
-                                        width="265px" style={{ paddingRight: '35px' }}
+                                        width="265px" style={{paddingRight: '35px'}}
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             pattern: {
@@ -151,23 +150,23 @@ const RegisterPage: React.FC = () => {
                                         })} />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" width='300px'
-                                    height="28px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
+                                     height="28px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="password2" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="4px"
-                                    mb="6px" textAlight="left">Повторити пароль</Label>
+                                       mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
                                     <span onClick={handleToggleConfirmPassword} style={{
                                         position: "absolute", top: "16px",
                                         right: "10px", cursor: "pointer"
                                     }}>{showConfirmPassword ?
-                                        <VisibilityOff />
+                                        <VisibilityOff/>
                                         :
-                                        <VisibilityOn />
-                                        }</span>
+                                        <VisibilityOn/>
+                                    }</span>
                                     <Input
                                         type={showConfirmPassword ? "text" : "password"}
                                         id="password2"
                                         name="password2"
-                                        width="265px" style={{ paddingRight: '35px' }}
+                                        width="265px" style={{paddingRight: '35px'}}
                                         {...register("password2", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             validate: (val: string) => {
@@ -177,16 +176,16 @@ const RegisterPage: React.FC = () => {
                                             }
                                         })} />
                                 </Box>
-                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="0 0 20px 0">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>
+                                <Box color="red" textAlight="left" border="red" fz="13px"
+                                     height="14px">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>
                             </Box>
                         </Box>
 
                         {registerError && <Typography as="p">{registerError}</Typography>}
 
                         <Box display="flex" justifyContent="center">
-                            <Button type="submit" disabled={!isValid} width="204px" mt="56px"
-                                primary>Зареєструватись</Button>
+                            <Button type="submit" disabled={!isValid} width="204px" mt="6px"
+                                    primary>Зареєструватись</Button>
                         </Box>
                     </Form>
                 </Box>

@@ -1,86 +1,75 @@
-import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { DataEntryFormData, IUser, IWallet } from './types';
-import { BASE_URL, WALLET_PATH } from '../api/api';
+import { createSlice, createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
+import { DataEntryFormData, IWallet, MethodTypes } from './types';
+import { $api, WALLET_PATH } from '../api/api';
 import { UserState } from './userSlice';
-import axios from 'axios';
 
 type WalletState = {
   wallets: IWallet[];
+  activeWallet: IWallet;
   isLoading: boolean;
   error: string | null;
   isEntryDataSuccess: boolean;
+  isAddWalletSuccess: boolean;
+  isEditWalletSuccess: boolean;
+  isDeleteWalletSuccess: boolean;
   entryDataError: string | null;
+  // addWalletError: string | null;
+  // editWalletError: string | null;
+  // deleteWalletError: string | null;
 }
 
 type WalletActionOptions = {
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  data: IWallet;
+  method: MethodTypes;
+  data?: IWallet;
   id?: string;
 }
 
-export const walletAction = createAsyncThunk<IWallet[], WalletActionOptions, { rejectValue: string }>(
+export const walletAction = createAsyncThunk<
+  IWallet[],
+  WalletActionOptions,
+  { rejectValue: string }
+// { rejectValue: { errorMessage: string, errorMethod: MethodTypes } }
+>(
   'wallet/walletAction',
   async function (payload, { rejectWithValue }) {
     const { method, data, id } = payload;
 
-    const walletHeaders = {
-      // ...defaultRequestHeaders,
-      "Authorization": `Token ${localStorage.getItem('token')}`
-    }
-
-    console.log('payload', payload)
-
-    if (data && method !== "GET" && method !== "DELETE") {
-      axios({
+    if (method !== "GET") {
+      $api({
         method,
-        url: `${BASE_URL}${WALLET_PATH}${id || ''}`,
-        data: data,
-        headers: walletHeaders,
+        url: `${WALLET_PATH}${id ? id + '/' : ''}`,
+        data: data || {},
       })
-        .then(response => console.log(response.data))
+        .then(response => response?.data)
         .catch(error => {
-          const errorMessage = error.response.data;
-          return rejectWithValue(errorMessage);
+          const errorMessage = error.response?.data;
+          console.log('error in action wallet')
+          return rejectWithValue('error in action wallet');
+          // return rejectWithValue({ errorMessage, errorMethod: method });
         });
     }
 
-    const getResponse = await axios({
-      headers: walletHeaders,
-      method: "GET",
-      url: `${BASE_URL}${WALLET_PATH}`,
-    })
-      .then(res => res.data)
+    return await $api.get(WALLET_PATH)
+      .then(res => res?.data)
       .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
+        const errorMessage = error.response?.data;
+        console.log('error in get response in action wallet')
+        return rejectWithValue(`Помилка`)
       });
 
-    return (await getResponse) as IWallet[]
+    // return (await getResponse) as IWallet[]
   }
 );
 
 export const getWallets = createAsyncThunk<IWallet[], undefined, { rejectValue: string }>(
   'wallet/getWallets',
   async function (_, { rejectWithValue }) {
-    const getWalletsHeaders = {
-      // ...defaultRequestHeaders,
-      "Authorization": `Token ${localStorage.getItem('token')}`
-    }
-
-    const getResponse = await axios({
-      headers: getWalletsHeaders,
-      method: "GET",
-      url: `${BASE_URL}${WALLET_PATH}`,
-    })
-      .then(res => res.data)
+    return $api.get(WALLET_PATH)
+      .then(res => res?.data)
       .catch(error => {
         const errorMessage = error.response.data;
         return rejectWithValue(errorMessage);
       });
-
-      localStorage.setItem('userData', getResponse)
-
-    return (await getResponse) as IWallet[]
   }
 );
 
@@ -89,16 +78,10 @@ export const postEntryData = createAsyncThunk<
 >(
   'wallet/postEntryData',
   async function (data, { rejectWithValue }) {
-    const { amountAccount, availableCash, cardAccountName, userId } = data
+    const { amountAccount, availableCash, cardAccountName, userId, userToken } = data
 
     if (!userId) {
-      return rejectWithValue('Помилка при створенні рахунків. Спочатку створіть акаунт.');
-      console.log('userid false');
-    }
-
-    const postEntryDataHeaders = {
-      // ...defaultRequestHeaders,
-      "Authorization": `Token ${localStorage.getItem('token')}`
+      return rejectWithValue('Помилка при внесенні рахунків. Спочатку створіть акаунт.');
     }
 
     const cashWallet: IWallet = {
@@ -116,30 +99,20 @@ export const postEntryData = createAsyncThunk<
 
     console.log(cashWallet, bankWallet);
 
-    const postCashWalletResponsePromise = await axios({
-      method: "POST",
-      url: `${BASE_URL}${WALLET_PATH}`,
-      data: cashWallet,
-      headers: postEntryDataHeaders,
-    })
+    const postCashWalletResponsePromise = await $api.post(WALLET_PATH, cashWallet)
       .then(response => response.status)
       .catch(error => {
-        const errorMessage = error.response.data;
-        console.log('error in cash req')
-        return rejectWithValue('error message in cash wallet');
+        // const errorMessage = error.response.data;
+        console.log('error while creating a cash wallet', error)
+        return rejectWithValue('Error while creating a cash wallet');
       });
 
-    const postBankWalletResponsePromise = await axios({
-      method: "POST",
-      url: `${BASE_URL}${WALLET_PATH}`,
-      data: bankWallet,
-      headers: postEntryDataHeaders,
-    })
+    const postBankWalletResponsePromise = await $api.post(WALLET_PATH, bankWallet)
       .then(response => response.status)
       .catch(error => {
-        const errorMessage = error.response;
-        console.log('error in bank req')
-        return rejectWithValue('error message in bank wallet');
+        // const errorMessage = error.response;
+        console.log('error while creating a bank wallet', error)
+        return rejectWithValue('Error while creating a bank wallet');
       });
 
     const [postCashWalletResponse, postBankWalletResponse] = await Promise.all(
@@ -147,7 +120,7 @@ export const postEntryData = createAsyncThunk<
     );
 
     if (postCashWalletResponse !== 201 || postBankWalletResponse !== 201) {
-      return rejectWithValue('Can\'t create wallet. Server error.');
+      return rejectWithValue('Can\'t create wallets. Server error.');
     }
 
     return true;
@@ -156,29 +129,80 @@ export const postEntryData = createAsyncThunk<
 
 const initialState: WalletState = {
   wallets: [],
+  activeWallet: null,
   isLoading: false,
   error: null,
   isEntryDataSuccess: false,
+  isAddWalletSuccess: false,
+  isEditWalletSuccess: false,
+  isDeleteWalletSuccess: false,
   entryDataError: null,
+  // addWalletError: null,
+  // editWalletError: null,
+  // deleteWalletError: null,
 }
 
 const walletSlice = createSlice({
   name: 'wallet',
   initialState,
-  reducers: {},
+  reducers: {
+    resetError: (state) => {
+      state.error = null;
+    },
+    setActiveWallet: (state, action) => {
+      state.activeWallet = action.payload;
+    },
+    setSuccessStatus: (state, action) => {
+      state.isAddWalletSuccess = action.payload;
+      state.isEditWalletSuccess = action.payload;
+      state.isDeleteWalletSuccess = action.payload;
+    },
+    resetAddWalletError: (state) => {
+      // state.addWalletError = null;
+    },
+    resetEditWalletError: (state) => {
+      // state.editWalletError = null;
+    },
+    resetDeleteWalletError: (state) => {
+      // state.editWalletError = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(walletAction.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+        state.isAddWalletSuccess = false;
+        state.isEditWalletSuccess = false;
+        state.isDeleteWalletSuccess = false;
       })
       .addCase(walletAction.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.wallets = action.payload;
+        state.isLoading = false;
+        state.isAddWalletSuccess = true;
+        state.isEditWalletSuccess = true;
+        state.isDeleteWalletSuccess = true;
+        state.error = null;
+        // state.addWalletError = null;
       })
       .addCase(walletAction.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload
+        state.error = action.payload;
+
+        // switch (action.payload.errorMethod) {
+        //   case "POST":
+        //     state.addWalletError = action.payload.errorMessage;
+        //     break;
+        //   case "PUT":
+        //   case "PATCH":
+        //     state.editWalletError = action.payload.errorMessage;
+        //     break;
+        //   case "DELETE":
+        //     state.deleteWalletError = action.payload.errorMessage;
+        //     break;
+        //   default:
+        //     break;
+        // }
       })
 
       .addCase(getWallets.pending, (state) => {
@@ -188,7 +212,6 @@ const walletSlice = createSlice({
       .addCase(getWallets.fulfilled, (state, action) => {
         state.isLoading = false;
         state.wallets = action.payload;
-        // handleFulfilledgetWallets(state.wallets, action)
       })
       .addCase(getWallets.rejected, (state, action) => {
         state.isLoading = false;
@@ -201,7 +224,7 @@ const walletSlice = createSlice({
       })
       .addCase(postEntryData.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isEntryDataSuccess = true;
+        state.isEntryDataSuccess = action.payload;
       })
       .addCase(postEntryData.rejected, (state, action) => {
         state.isLoading = false;
@@ -211,5 +234,14 @@ const walletSlice = createSlice({
       })
   }
 });
+
+export const {
+  resetError,
+  setActiveWallet,
+  setSuccessStatus,
+  resetAddWalletError,
+  resetEditWalletError,
+  resetDeleteWalletError
+} = walletSlice.actions;
 
 export default walletSlice.reducer;

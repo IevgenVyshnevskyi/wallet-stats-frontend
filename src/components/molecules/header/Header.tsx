@@ -18,7 +18,7 @@ import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { useContext } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch } from "../../../store/hooks";
-import { logoutUser } from "../../../store/userSlice";
+import { logoutUser, resetUser } from "../../../store/userSlice";
 import PopupEditProfile from "../popup/PopupEditProfile";
 
 const Header: React.FC = () => {
@@ -35,8 +35,9 @@ const Header: React.FC = () => {
   };
 
   function handleLogOutClick() {
-    navigate('/');
     dispatch(logoutUser());
+    dispatch(resetUser());
+    navigate('/');
   }
 
   return (
@@ -67,6 +68,8 @@ const Header: React.FC = () => {
               <FolderCheckIcon />
               <Typography as="span">Категорії</Typography>
             </LinkMenu>
+          </ListItem>
+          <ListItem>
             <LinkMenu to="/statistics">
               <PieChartIcon />
               <Typography as="span">Статистика</Typography>
@@ -82,9 +85,10 @@ const Header: React.FC = () => {
             <LogoutIcon onClick={handleLogOutClick} />
           </ButtonTransparent>
         </Box>
-      </HeaderWrapper>
+      </HeaderWrapper >
 
-      {isEditProfilePopupOpen && <PopupEditProfile />}
+      {isEditProfilePopupOpen && <PopupEditProfile />
+      }
     </>
   );
 }

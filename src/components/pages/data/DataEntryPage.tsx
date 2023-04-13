@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Box } from '../../atoms/box/Box.styled';
@@ -20,21 +20,19 @@ import {
     WHITE
 } from "../../../shared/styles/variables";
 
-import { DataEntryFormData, IUser } from "../../../store/types";
+import { DataEntryFormData } from "../../../store/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
 import { moneyAmountRegex } from "../../../shared/utils/regexes";
+import { token, userData, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const { isEntryDataSuccess, entryDataError } = useAppSelector(state => state.wallet)
-    const { getDetailsError } = useAppSelector(state => state.user)
-
-    const userData: IUser = JSON.parse(localStorage.getItem('userData'));
-    const userId = userData?.id;
+    const { user, getDetailsError, isRegistered } = useAppSelector(state => state.user)
 
     const navigate = useNavigate();
 
@@ -58,13 +56,18 @@ const DataEntryPage: React.FC = () => {
     }, [isEntryDataSuccess]);
 
     useEffect(() => {
-        if (!localStorage.getItem('userData')) {
-            dispatch(getUserDetails())
-        }
+        // if (token && userData && isEntryDataSuccess) {
+        //     navigate('/home');
+        // }
+
+        // if (!user) {
+            dispatch(getUserDetails(token || user?.token))
+        // }
     }, []);
 
     function handleSub(data: DataEntryFormData) {
-        const resultData: DataEntryFormData = { ...data, userId }
+        const resultData: DataEntryFormData = { ...data, userId: user?.id, userToken: user.token }
+        console.log('resultData :', resultData);
 
         dispatch(postEntryData(resultData))
     }
@@ -134,9 +137,9 @@ const DataEntryPage: React.FC = () => {
                                 зможете <br /> внести пізніше.</Box>
                         </Box>
 
-                        {getDetailsError && <Typography as="p" textAlight="center">{getDetailsError}</Typography>}
+                        {getDetailsError && <Typography as="p" textAlight="center">{JSON.stringify(getDetailsError)}</Typography>}
 
-                        {entryDataError && <Typography as="p" textAlight="center">{entryDataError}</Typography>}
+                        {entryDataError && <Typography as="p" textAlight="center">{JSON.stringify(entryDataError)}</Typography>}
 
                         <Button type="submit" disabled={!isValid} width="177px" m="18px auto 8px"
                             primary>Зберегти дані</Button>

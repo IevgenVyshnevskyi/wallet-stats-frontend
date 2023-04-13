@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { Img } from '../../atoms/img/Img.styled';
@@ -10,10 +12,12 @@ import {
     GRADIENT,
     WHITE
 } from "../../../shared/styles/variables";
-import {Button} from "../../atoms/button/Button.styled";
+import { Button } from "../../atoms/button/Button.styled";
 import { useNavigate } from "react-router-dom";
+import { token } from '../../../api/api';
+import { useAppSelector } from '../../../store/hooks';
 
-function WelcomePage() {
+const WelcomePage = () => {
     const navigate = useNavigate();
 
     function handleEnterClick() {
@@ -27,6 +31,14 @@ function WelcomePage() {
     function handleChangeMainPageClick() {
         navigate('/home');
     }
+
+    const { isLoggedIn } = useAppSelector(state => state.user)
+
+    useEffect(() => {
+        if (token && isLoggedIn) {
+            navigate('/home')
+        }
+    }, []);
 
     return (
         <Container display="flex">

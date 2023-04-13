@@ -22,7 +22,7 @@ import {
     GRADIENT, PRIMARY,
     WHITE
 } from "../../../shared/styles/variables";
-import { loginUser } from "../../../store/userSlice";
+import { getUserDetails, loginUser } from "../../../store/userSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { LoginFormData } from "../../../store/types";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,10 @@ const LoginPage: React.FC = () => {
 
     const { loginError, isLoggedIn } = useAppSelector(state => state.user)
 
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     const {
         register,
         formState: {
@@ -48,12 +52,11 @@ const LoginPage: React.FC = () => {
     } = useForm({
         mode: "all",
     });
-    const handleTogglePassword = () => {
-        setShowPassword(!showPassword);
-    };
+
 
     useEffect(() => {
         if (isLoggedIn) {
+            // dispatch(getUserDetails());
             navigate('/authentication');
             reset();
         }

@@ -1,3 +1,5 @@
+export type MethodTypes = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
 /* USER */
 
 export interface IUser {
@@ -39,6 +41,7 @@ export interface DataEntryFormData {
   cardAccountName: string;
   amountAccount: string;
   userId?: number;
+  userToken?: string;
 }
 
 /* WALLET */
@@ -51,4 +54,9 @@ export interface IWallet {
   amount: string,
   type_of_account: TypeOfAccount,
   owner: number,
+}
+
+export interface WalletPopupActionsFormData {
+  name: string,
+  amount: string,
 }

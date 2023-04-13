@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
-import { $api, BASE_URL, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
+import { $api, $apiNoToken, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
-import axios from 'axios';
 
 export type UserState = {
   user: IUser;
@@ -19,12 +18,12 @@ export type UserState = {
 export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValue: string }>(
   'user/registerUser',
   async function (registerData, { rejectWithValue }) {
-    return $api.post(REGISTER_PATH, registerData)
+    return $api.post<IUser>(REGISTER_PATH, registerData)
       .then(response => {
-        const token = response.data.token;
-        localStorage.setItem('token', token);
-        localStorage.removeItem('userData');
-        return token;
+        const user = response.data;
+        localStorage.setItem('token', user.token);
+        // localStorage.removeItem('userData');
+        return user;
       })
       .catch(error => {
         const errorMessage = formatRegisterErrorMessage(error.response.data);
@@ -36,64 +35,53 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
 export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
   'user/loginUser',
   async function (loginData, { rejectWithValue }) {
-    const loginUserHeaders = {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": `Token ${localStorage.getItem('token')}`,
-    };
-
-    const response = await fetch(`${BASE_URL}${LOGIN_PATH}`, {
-      method: 'POST',
-      headers: loginUserHeaders,
-      body: JSON.stringify(loginData),
-    });
-
-    if (!response.ok) {
-      const errorMessage = formatLoginErrorMessage(await response.json());
-      return rejectWithValue(errorMessage);
-    }
-
-    return (await response.json()) as LoginResponse;
+    return $api.post(LOGIN_PATH, loginData)
+      .then(response => {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        return token;
+      })
+      .catch(error => {
+        const errorMessage = formatLoginErrorMessage(error.response.data);
+        return rejectWithValue(errorMessage);
+      });
   }
 );
 
 export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
   'user/logoutUser',
   async function (_, { rejectWithValue }) {
-    const response = await fetch(`${BASE_URL}${LOGOUT_PATH}`, {
-      method: 'GET',
-    });
-
-    // localStorage.removeItem('token');
-    localStorage.removeItem('userData');
-
-    if (!response.ok) {
-      return rejectWithValue(await response.text());
-    }
-
-    return;
+    return $api.get(LOGOUT_PATH)
+      .then(response => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userData');
+        return undefined;
+      })
+      .catch(error => {
+        const errorMessage = formatRegisterErrorMessage(error.response.data);
+        return rejectWithValue(errorMessage);
+      });
   }
 );
 
-export const getUserDetails = createAsyncThunk<IUser, undefined, { rejectValue: string }>(
+export const getUserDetails = createAsyncThunk<IUser, string, { rejectValue: string }>(
   'user/getUserDetails',
-  async function (_, { rejectWithValue }) {
-    const getUserDetailsHeaders = {
-      "Authorization": `Token ${localStorage.getItem('token')}`,
-    };
+  async function (userToken, { rejectWithValue }) {
+    console.log(userToken)
 
-    const response = await axios({
-      headers: getUserDetailsHeaders,
-      method: "GET",
-      url: `${BASE_URL}${USER_DETAILS_PATH}`,
+    return $apiNoToken.get(USER_DETAILS_PATH, {
+      headers: {
+        Authorization: `Token ${userToken}`
+      }
     })
-      .then(res =>  res.data)
+      .then(res => {
+        localStorage.setItem('userData', JSON.stringify(res.data))
+        return res.data
+      })
       .catch(error => {
         const errorMessage = error.response.data;
         return rejectWithValue(errorMessage);
       });
-
-    return (await response) as IUser;
   }
 );
 
@@ -111,7 +99,11 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser: (state) => {
+      state.user = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -119,6 +111,7 @@ const userSlice = createSlice({
         state.registerError = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
         state.isLoading = false;
         state.isRegistered = true;
       })
@@ -156,10 +149,12 @@ const userSlice = createSlice({
         state.getDetailsError = null;
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = {
+          ...state.user,
+          ...action.payload
+        };
         state.isLoading = false;
         state.getDetailsError = null;
-        localStorage.setItem('userData', JSON.stringify(action.payload))
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -167,5 +162,7 @@ const userSlice = createSlice({
       })
   }
 });
+
+export const { resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

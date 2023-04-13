@@ -1,3 +1,5 @@
+import React, { useContext, useEffect, useState } from "react";
+
 import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import Header from '../../molecules/header/Header';
@@ -9,18 +11,42 @@ import { Button } from "../../atoms/button/Button.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
-import React, { useContext } from "react";
 import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import { mockTransactions } from "../../../../mock-data/transactions";
 import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getWallets } from "../../../store/walletSlice";
+import { $api, WALLET_PATH, token } from "../../../api/api";
+import { getUserDetails } from "../../../store/userSlice";
 
 const HomePage: React.FC = () => {
+  const dispatch = useAppDispatch()
+
   const {
     isAddWalletPopupOpen,
     isEditWalletPopupOpen
   } = useContext(PopupContext);
+
+  const { isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess } = useAppSelector(state => state.wallet)
+  const { user } = useAppSelector(state => state.user)
+
+  if (!token) {
+    // navigate("/welcome") // if no token is present
+  }
+
+  useEffect(() => {
+    dispatch(getWallets());
+    dispatch(getUserDetails(user?.token || token));
+  }, []);
+
+  useEffect(() => {
+    if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {
+      dispatch(getWallets());
+    }
+
+  }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess]);
 
   return (
     <>
@@ -41,17 +67,18 @@ const HomePage: React.FC = () => {
 }
 
 const Wallets: React.FC = () => {
+  const dipsatch = useAppDispatch()
+
   const {
     setIsAddWalletPopupOpen,
-    setIsEditWalletPopupOpen
   } = useContext(PopupContext);
+
+  const { wallets } = useAppSelector(state => state.wallet)
+  const cashWallet = wallets.find((wallet) => wallet?.type_of_account === 'cash');
+  const bankWallets = wallets.filter((wallet) => wallet?.type_of_account === 'bank');
 
   const handleAddWalletClick = () => {
     setIsAddWalletPopupOpen(true);
-  };
-
-  const handleEditWalletClick = () => {
-    setIsEditWalletPopupOpen(true);
   };
 
   return (
@@ -83,9 +110,9 @@ const Wallets: React.FC = () => {
             fw="500"
             mb="20px"
           >
-            Готівка
+            {cashWallet?.title || "Готівка"}
           </Typography>
-          <Wallet wallet={mockWallets[0]} />
+          <Wallet wallet={cashWallet || mockWallets[0]} />
         </Box>
         <Box grow="1">
           <Typography
@@ -97,14 +124,18 @@ const Wallets: React.FC = () => {
             Картки
           </Typography>
           <List display="flex" direction="column" gap="8px">
-            {mockWallets.map((wallet, index) => (
-              <ListItem key={index} onClick={handleEditWalletClick}>
-                <Wallet wallet={wallet} />
-              </ListItem>
-            ))}
+            {bankWallets?.map((wallet) => (
+                <ListItem key={wallet?.id}>
+                  <Wallet wallet={wallet} />
+                </ListItem>
+              ))}
           </List>
         </Box>
-        <Button secondary onClick={handleAddWalletClick}>
+        <Button
+          disabled={wallets.length > 4}
+          secondary
+          onClick={handleAddWalletClick}
+        >
           Додати картковий рахунок
         </Button>
       </Box>

@@ -59,7 +59,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
             </Box>
             <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center" textAlign="center"
                  background={WHITE}>
-                <Box m="92.5px 0 76.5px 0" alignItems="center" textAlign="center">
+                <Box m="auto 0" alignItems="center" textAlign="center">
                     <Img src={logo} alt="Logo"/>
                     <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
                                 m="48px 0 48px 0">

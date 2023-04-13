@@ -15,7 +15,8 @@ export function buildPlugins(options: BuildOptions): webpack.WebpackPluginInstan
     }),
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
-      template: paths.html
+      template: paths.html,
+      favicon: "./src/shared/assets/icons/logo.svg"
     }),
   ]
 

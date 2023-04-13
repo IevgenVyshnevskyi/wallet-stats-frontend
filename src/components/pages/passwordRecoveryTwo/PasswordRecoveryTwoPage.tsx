@@ -24,7 +24,7 @@ const PasswordRecoveryTwoPage: React.FC = () => {
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center"
                  background={WHITE}>
-                <Box width="492px" m="150px 0 76.5px 0" alignItems="center" textAlign="center">
+                <Box m="auto 0" width="492px" alignItems="center" textAlign="center">
                     <Img src={logo} m="0 auto" alt="Logo"/>
                     <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
                                 m="48px 0 48px 0">

@@ -1,25 +1,38 @@
 import styled from "styled-components";
-import { WHITE, PRIMARY } from "../../../shared/styles/variables";
+import { WHITE, PRIMARY, PRIMARY_HOVER, ALMOST_BLACK_FOR_TEXT } from "../../../shared/styles/variables";
 import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
 import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 import { commonStyles } from "../../../shared/styles/commonStyles";
 
-export const WalletButton = styled(ButtonTransparent)/*  <{ isActive: boolean }> */`
+type WalletButtonProps = {
+  isActive: boolean;
+}
+
+export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   ${commonStyles}
+  background: ${({ isActive }) => isActive ? PRIMARY : WHITE};
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
   padding: 20px 15px;
-  background: ${WHITE};
   border-radius: 8px;
 
+  * {
+    color: ${({ isActive }) => isActive ? WHITE : ALMOST_BLACK_FOR_TEXT};
+  }
+
+  svg {
+    opacity: ${({ isActive }) => isActive && '1'};
+    ${({ isActive }) => isActive && blackSVGtoWhite};
+  }
+  
   &:hover {
-    background-color: ${PRIMARY};
+    background-color: ${PRIMARY_HOVER};
 
     * {
-      color: ${WHITE};
+      color: ${({ isActive }) => isActive ? WHITE : WHITE};
     }
 
     svg {

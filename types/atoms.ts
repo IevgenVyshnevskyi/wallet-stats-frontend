@@ -54,6 +54,7 @@ export type LinkProps = {
 
 export type ContainerProps = {
   display?: string;
+  overflowX?: string;
 }
 
 export type ImgProps = {

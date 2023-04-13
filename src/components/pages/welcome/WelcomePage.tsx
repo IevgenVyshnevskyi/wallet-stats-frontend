@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { Img } from '../../atoms/img/Img.styled';
@@ -10,10 +12,12 @@ import {
     GRADIENT,
     WHITE
 } from "../../../shared/styles/variables";
-import {Button} from "../../atoms/button/Button.styled";
+import { Button } from "../../atoms/button/Button.styled";
 import { useNavigate } from "react-router-dom";
+import { token } from '../../../api/api';
+import { useAppSelector } from '../../../store/hooks';
 
-function WelcomePage() {
+const WelcomePage = () => {
     const navigate = useNavigate();
 
     function handleEnterClick() {
@@ -28,13 +32,21 @@ function WelcomePage() {
         navigate('/home');
     }
 
+    const { isLoggedIn } = useAppSelector(state => state.user)
+
+    useEffect(() => {
+        if (token && isLoggedIn) {
+            navigate('/home')
+        }
+    }, []);
+
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={WHITE}>
-                <Box m="100px 0 100px 0" justifyContent="space-around" textAlign="center">
+                <Box m="auto 0" justifyContent="space-around" textAlign="center">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" textAlign="center" m="48px 0 80px 0">
                         Контролюйте свої кошти з програмою <br /> обліку персональних фінансів!

@@ -46,7 +46,7 @@ const PasswordRecoveryOnePage: React.FC = () => {
             </Box>
             <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center" textAlign="center"
                 background={WHITE}>
-                <Box m="100px 0 76.5px 0">
+                <Box m="auto 0">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
                         m="48px 0 48px 0">

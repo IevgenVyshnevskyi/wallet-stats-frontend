@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Box } from '../../atoms/box/Box.styled';
@@ -20,21 +20,19 @@ import {
     WHITE
 } from "../../../shared/styles/variables";
 
-import { DataEntryFormData, IUser } from "../../../store/types";
+import { DataEntryFormData } from "../../../store/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
 import { moneyAmountRegex } from "../../../shared/utils/regexes";
+import { token, userData, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const { isEntryDataSuccess, entryDataError } = useAppSelector(state => state.wallet)
-    const { getDetailsError } = useAppSelector(state => state.user)
-
-    const userData: IUser = JSON.parse(localStorage.getItem('userData'));
-    const userId = userData?.id;
+    const { user, getDetailsError, isRegistered } = useAppSelector(state => state.user)
 
     const navigate = useNavigate();
 
@@ -58,13 +56,18 @@ const DataEntryPage: React.FC = () => {
     }, [isEntryDataSuccess]);
 
     useEffect(() => {
-        if (!localStorage.getItem('userData')) {
-            dispatch(getUserDetails())
-        }
+        // if (token && userData && isEntryDataSuccess) {
+        //     navigate('/home');
+        // }
+
+        // if (!user) {
+            dispatch(getUserDetails(token || user?.token))
+        // }
     }, []);
 
     function handleSub(data: DataEntryFormData) {
-        const resultData: DataEntryFormData = { ...data, userId }
+        const resultData: DataEntryFormData = { ...data, userId: user?.id, userToken: user.token }
+        console.log('resultData :', resultData);
 
         dispatch(postEntryData(resultData))
     }
@@ -76,13 +79,12 @@ const DataEntryPage: React.FC = () => {
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
                 background={WHITE}>
-                <Box m="46px 0 46.5px 0">
+                <Box m="auto 0">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
-                        m="48px 0 48px 0">
+                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
                         Дякуємо за реєстрацію!
                     </Typography>
-                    <Typography fw="400" fz="16px" lh="24px" m="0 0 26.5px 0" color={ALMOST_BLACK_FOR_TEXT}
+                    <Typography fw="400" fz="16px" lh="24px" m="0 0 8px 0" color={ALMOST_BLACK_FOR_TEXT}
                         textAlign="center">
                         Ви можете внести актуальні дані по <br /> вашому готівковому та картковому <br /> рахунках.
                     </Typography>
@@ -90,7 +92,7 @@ const DataEntryPage: React.FC = () => {
                         alignItems="end">
                         <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
                             <Box mb="6px">
-                                <Label htmlFor="availableCash" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                <Label htmlFor="availableCash" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /*mb="6px"*/
                                     textAlight="left">Введіть суму наявної готівки</Label>
                                 <Input {...register('availableCash', {
                                     required: 'Обов\'язкове поле для заповнення',
@@ -102,9 +104,9 @@ const DataEntryPage: React.FC = () => {
                                 })} id="availableCash" type="number" step="0.01" width="290px"
                                     style={{ paddingRight: '10px' }} />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 34px 0">{errors?.availableCash && <>{errors?.availableCash?.message
+                                    m="0 0 20px 0">{errors?.availableCash && <>{errors?.availableCash?.message
                                         || 'Введіть додаткове значення'}</>}</Box>
-                                <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /*mb="6px"*/
                                     textAlight="left">Введіть назву карткового рахунку</Label>
                                 <Input {...register('cardAccountName', {
                                     required: 'Обов\'язкове поле для заповнення',
@@ -114,9 +116,9 @@ const DataEntryPage: React.FC = () => {
                                     },
                                 })} type="text" id="cardAccountName" width="284px" />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 10px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message
+                                    m="0 0 20px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message
                                         || 'Error!'}</>}</Box>
-                                <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                                <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /* mb="6px"*/
                                     textAlight="left">Введіть суму коштів на рахунку</Label>
                                 <Input {...register('amountAccount', {
                                     required: 'Обов\'язкове поле для заповнення',
@@ -128,18 +130,18 @@ const DataEntryPage: React.FC = () => {
                                 })} id="amountAccount" type="number" step="0.01" width="290px"
                                     style={{ paddingRight: '10px' }} />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                    m="6px 0 40px 0">{errors?.amountAccount && <>{errors?.amountAccount?.message
+                                    m="0 0 20px 0">{errors?.amountAccount && <>{errors?.amountAccount?.message
                                         || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                             <Box textAlight="start" fz="14px" lh="150%" color={GREY_50}>Додаткові карткові рахунки ви
                                 зможете <br /> внести пізніше.</Box>
                         </Box>
 
-                        {getDetailsError && <Typography as="p" textAlight="center">{getDetailsError}</Typography>}
+                        {getDetailsError && <Typography as="p" textAlight="center">{JSON.stringify(getDetailsError)}</Typography>}
 
-                        {entryDataError && <Typography as="p" textAlight="center">{entryDataError}</Typography>}
+                        {entryDataError && <Typography as="p" textAlight="center">{JSON.stringify(entryDataError)}</Typography>}
 
-                        <Button type="submit" disabled={!isValid} width="177px" m="48px auto 8px"
+                        <Button type="submit" disabled={!isValid} width="177px" m="18px auto 8px"
                             primary>Зберегти дані</Button>
                     </Form>
                 </Box>

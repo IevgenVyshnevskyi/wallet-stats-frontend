@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { LOCAL_STORAGE_USER_KEY } from '../consts/localStorage';
+import { IUser } from "../store/types";
 
 export const BASE_URL = "http://localhost:8000";
 
@@ -13,8 +13,12 @@ export const WALLET_PATH = "/wallet/";
 export const CATEGORY_PATH = "/wallet/category/";
 export const TRANSACTION_PATH = "/wallet/transactions/";
 
-const token = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-const authHeader = token ? { authorization: `Token ${token}` } : {};
+export const userData = localStorage.getItem('userData');
+export const userDataParsed: IUser = JSON.parse(localStorage.getItem('userData'));
+export const userId = userDataParsed?.id;
+
+export const token = localStorage.getItem('token');
+const authHeader = token ? { "Authorization": `Token ${token}` } : {};
 
 export const $api = axios.create({
   baseURL: BASE_URL,
@@ -22,5 +26,13 @@ export const $api = axios.create({
     "Content-Type": "application/json",
     "Accept": "application/json",
     ...authHeader,
+  }
+});
+
+export const $apiNoToken = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
   }
 });

@@ -10,16 +10,25 @@ import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import { PopupWrapper } from "./Popup.styled";
 import PackageSuccessIcon from "../../../shared/assets/icons/package-success.svg";
 import PackageErrorIcon from "../../../shared/assets/icons/package-error.svg";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { MessageProps } from "../../../../types/molecules";
 import { Form } from "../../atoms/form/Form.styled";
 import { moneyAmountRegex } from "../../../shared/utils/regexes";
+import { WalletPopupActionsFormData, IWallet } from "../../../store/types";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { resetError, setSuccessStatus, walletAction } from "../../../store/walletSlice";
+import { userId } from "../../../api/api";
 
 const PopupAddWallet: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const inputFileRef = useRef<HTMLInputElement>(null);
 
     const { setIsAddWalletPopupOpen } = useContext(PopupContext);
+
+    const { wallets, error, isAddWalletSuccess } = useAppSelector(state => state.wallet);
+    // const { addWalletError, isAddWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,
@@ -34,14 +43,29 @@ const PopupAddWallet: React.FC = () => {
     });
 
     const handleCloseClick = () => {
+        reset();
+        resetError();
         setIsAddWalletPopupOpen(false);
     };
 
-    function handleSub(data: {}) {
-        console.log(data);
-        //alert(JSON.stringify(data));
-        reset();
-        handleCloseClick();
+    useEffect(() => {
+        if (isAddWalletSuccess) {
+            handleCloseClick();
+            dispatch(setSuccessStatus(false));
+        }
+    }, [isAddWalletSuccess]);
+
+    function handleSub(data: WalletPopupActionsFormData) {
+        const wallet: IWallet = {
+            title: data.name,
+            amount: data.amount,
+            type_of_account: "bank",
+            owner: userId,
+        }
+
+        console.log('addwalletpopupdata', wallet)
+
+        dispatch(walletAction({ data: wallet, method: "POST" }))
     }
 
     return (
@@ -65,25 +89,25 @@ const PopupAddWallet: React.FC = () => {
                                         required: 'Обов\'язкове поле для заповнення',
                                         minLength: {
                                             value: 2,
-                                            message: "Повинно бути не менше 2 символів",
+                                            message: "Назва повинна бути не менше 2 символів",
                                         }
                                     })} type="text" id="name" width="244px" />
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                     >{errors?.name && <>{errors?.name?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="30px">
-                                    <Label htmlFor="sum" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT}
+                                    <Label htmlFor="amount" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT}
                                         textAlight="left">Введіть суму коштів на рахунку</Label>
-                                    <Input {...register('sum', {
+                                    <Input {...register('amount', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
                                             value: moneyAmountRegex,
                                             message: "Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки",
                                         }
-                                    })} id="sum" type="number" step="0.01" width="250px"
+                                    })} id="amount" type="number" step="0.01" width="250px"
                                         style={{ paddingRight: '10px' }} />
                                     <Box color="red" textAlight="left" border="red" fz="13px"
-                                        height="14px">{errors?.sum && <>{errors?.sum?.message
+                                        height="14px">{errors?.amount && <>{errors?.amount?.message
                                             || 'Введіть додаткове значення'}</>}</Box>
                                 </Box>
                             </Box>
@@ -103,10 +127,13 @@ const PopupAddWallet: React.FC = () => {
                                     ref={inputFileRef}
                                     style={{ display: "none" }}
                                 />
-                                <Message message="success" />
-                                <Message message="error" />
+                                {error && <Message message="error" />}
+                                {isAddWalletSuccess && <Message message="success" />}
                             </Box>
                         </Box>
+
+                        {/* {error && <Typography as="p" textAlight="center" color={ALERT_1}>{error}</Typography>} */}
+
                         <Box
                             display="flex"
                             justifyContent="center"
@@ -114,7 +141,12 @@ const PopupAddWallet: React.FC = () => {
                             borderTop={`2px solid ${DIVIDER}`}
                             pt="25px"
                         >
-                            <Button type="submit" primary width="296px" disabled={!isValid}>
+                            <Button
+                                type="submit"
+                                primary
+                                width="296px"
+                                disabled={!isValid || wallets.length > 4}
+                            >
                                 Зберегти
                             </Button>
                             <Button type="reset" secondary width="296px" onClick={handleCloseClick}>
@@ -123,6 +155,9 @@ const PopupAddWallet: React.FC = () => {
                         </Box>
                     </Form>
                 </Box>
+
+                {/* {addWalletError && <Typography as="p">{addWalletError}</Typography>} */}
+
                 <Button secondary onClick={handleCloseClick} p="10px 20px">
                     <CrossIcon />
                 </Button>

@@ -43,6 +43,7 @@ const LoginPage: React.FC = () => {
 
     const {
         register,
+        /*setError,*/
         formState: {
             errors,
             isValid,
@@ -63,12 +64,16 @@ const LoginPage: React.FC = () => {
     }, [isLoggedIn]);
 
     function handleSub(data: LoginFormData) {
+        /*if (data.password !== 'вірний пароль') {
+            setError("password", { type: "manual", message: "Введено невірний пароль" });
+            return;
+        }*/
         console.log(data);
         dispatch(loginUser(data));
     }
 
     return (
-        <Container display="flex" /*style={{overflowX: 'hidden'}}*/ overflowX="hidden" >
+        <Container display="flex" overflowX="hidden" >
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>

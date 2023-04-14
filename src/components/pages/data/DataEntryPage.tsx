@@ -75,7 +75,7 @@ const DataEntryPage: React.FC = () => {
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
-                <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
+                <Img src={InterfaceImage} m="0 auto" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
                 background={WHITE}>
@@ -92,7 +92,7 @@ const DataEntryPage: React.FC = () => {
                         alignItems="end">
                         <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
                             <Box mb="6px">
-                                <Label htmlFor="availableCash" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /*mb="6px"*/
+                                <Label htmlFor="availableCash" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
                                     textAlight="left">Введіть суму наявної готівки</Label>
                                 <Input {...register('availableCash', {
                                     required: 'Обов\'язкове поле для заповнення',
@@ -106,7 +106,10 @@ const DataEntryPage: React.FC = () => {
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                     m="0 0 20px 0">{errors?.availableCash && <>{errors?.availableCash?.message
                                         || 'Введіть додаткове значення'}</>}</Box>
-                                <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /*mb="6px"*/
+                                {errors.availableCash && errors.availableCash.type === "required" && <span>This is required</span>}
+
+
+                                <Label htmlFor="cardAccountName" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
                                     textAlight="left">Введіть назву карткового рахунку</Label>
                                 <Input {...register('cardAccountName', {
                                     required: 'Обов\'язкове поле для заповнення',
@@ -118,7 +121,7 @@ const DataEntryPage: React.FC = () => {
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                     m="0 0 20px 0">{errors?.cardAccountName && <>{errors?.cardAccountName?.message
                                         || 'Error!'}</>}</Box>
-                                <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT} /* mb="6px"*/
+                                <Label htmlFor="amountAccount" lh="16px" color={ALMOST_BLACK_FOR_TEXT}
                                     textAlight="left">Введіть суму коштів на рахунку</Label>
                                 <Input {...register('amountAccount', {
                                     required: 'Обов\'язкове поле для заповнення',

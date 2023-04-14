@@ -90,7 +90,7 @@ const PopupEditWallet: React.FC = () => {
                         <Box mb="25px">
                             <Box>
                                 <Label htmlFor="name" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Назва карткового рахунку</Label>
+                                    textAlight="left">Назва рахунку</Label>
                                 <Input {...register('name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     minLength: {

@@ -30,6 +30,7 @@ export type commonStylesProps = {
   fw?: string;
   position?: string;
   zIndex?: string;
+  tabindex?: string;
 }
 
 export const commonStyles = css<commonStylesProps>`
@@ -62,4 +63,5 @@ export const commonStyles = css<commonStylesProps>`
   font-weight: ${({ fw }) => fw || undefined};
   position: ${({ position }) => position || "static"};
   z-index: ${({ zIndex }) => zIndex || 0};
+  tabindex: ${({ tabindex }) => tabindex || undefined};
 `

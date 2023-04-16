@@ -13,9 +13,6 @@ type WalletState = {
   isEditWalletSuccess: boolean;
   isDeleteWalletSuccess: boolean;
   entryDataError: string | null;
-  // addWalletError: string | null;
-  // editWalletError: string | null;
-  // deleteWalletError: string | null;
 }
 
 type WalletActionOptions = {
@@ -28,7 +25,6 @@ export const walletAction = createAsyncThunk<
   IWallet[],
   WalletActionOptions,
   { rejectValue: string }
-// { rejectValue: { errorMessage: string, errorMethod: MethodTypes } }
 >(
   'wallet/walletAction',
   async function (payload, { rejectWithValue }) {
@@ -68,7 +64,7 @@ export const getWallets = createAsyncThunk<IWallet[], undefined, { rejectValue: 
       .then(res => res?.data)
       .catch(error => {
         const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
+        return rejectWithValue("error in get wallets");
       });
   }
 );
@@ -137,9 +133,6 @@ const initialState: WalletState = {
   isEditWalletSuccess: false,
   isDeleteWalletSuccess: false,
   entryDataError: null,
-  // addWalletError: null,
-  // editWalletError: null,
-  // deleteWalletError: null,
 }
 
 const walletSlice = createSlice({
@@ -156,15 +149,6 @@ const walletSlice = createSlice({
       state.isAddWalletSuccess = action.payload;
       state.isEditWalletSuccess = action.payload;
       state.isDeleteWalletSuccess = action.payload;
-    },
-    resetAddWalletError: (state) => {
-      // state.addWalletError = null;
-    },
-    resetEditWalletError: (state) => {
-      // state.editWalletError = null;
-    },
-    resetDeleteWalletError: (state) => {
-      // state.editWalletError = null;
     },
   },
   extraReducers: (builder) => {
@@ -183,26 +167,10 @@ const walletSlice = createSlice({
         state.isEditWalletSuccess = true;
         state.isDeleteWalletSuccess = true;
         state.error = null;
-        // state.addWalletError = null;
       })
       .addCase(walletAction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-
-        // switch (action.payload.errorMethod) {
-        //   case "POST":
-        //     state.addWalletError = action.payload.errorMessage;
-        //     break;
-        //   case "PUT":
-        //   case "PATCH":
-        //     state.editWalletError = action.payload.errorMessage;
-        //     break;
-        //   case "DELETE":
-        //     state.deleteWalletError = action.payload.errorMessage;
-        //     break;
-        //   default:
-        //     break;
-        // }
       })
 
       .addCase(getWallets.pending, (state) => {
@@ -231,6 +199,7 @@ const walletSlice = createSlice({
         state.entryDataError = action.payload;
         // state.entryDataError = 'Помилка при внесенні рахунків';
         console.log(action.payload);
+
       })
   }
 });
@@ -239,9 +208,6 @@ export const {
   resetError,
   setActiveWallet,
   setSuccessStatus,
-  resetAddWalletError,
-  resetEditWalletError,
-  resetDeleteWalletError
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

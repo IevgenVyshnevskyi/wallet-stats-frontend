@@ -1,6 +1,7 @@
 import { useRoutes } from "react-router-dom";
 
 import { PopupProvider } from "./contexts/PopupContext";
+import { TransactionProvider } from "./contexts/TransactionContext";
 
 import WelcomePage from "./components/pages/welcome/WelcomePage";
 import LoginPage from "./components/pages/login/LoginPage";
@@ -32,9 +33,11 @@ function App() {
   ])
 
   return (
-    <PopupProvider>
-      {elements}
-    </PopupProvider>
+    <TransactionProvider>
+      <PopupProvider>
+        {elements}
+      </PopupProvider>
+    </TransactionProvider>
   );
 }
 

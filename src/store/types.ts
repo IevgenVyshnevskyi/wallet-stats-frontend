@@ -60,3 +60,42 @@ export interface WalletPopupActionsFormData {
   name: string,
   amount: string,
 }
+
+/* TRANSACTION */
+
+export type TypeOfOutlay = "income" | "expense";
+
+export interface ITransaction {
+  id?: number;
+  owner: number;
+  wallet: number;
+  category: number;
+  amount_of_funds: string;
+  type_of_outlay: TypeOfOutlay;
+  title?: string;
+  description?: string;
+  created: string;
+}
+
+export type Transactions = {
+  [date: string]: ITransaction[];
+}
+
+export interface EditTransactionFormData {
+  name: string,
+  amount: string,
+}
+
+export interface AddTransactionFormData {
+  name: string,
+  amount: string,
+}
+
+/* CATEGORY */
+
+export interface ICategory {
+  id?: number,
+  title: string,
+  type_of_outlay: TypeOfOutlay,
+  owner: number
+}

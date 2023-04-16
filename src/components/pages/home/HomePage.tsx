@@ -17,9 +17,11 @@ import { mockTransactions } from "../../../../mock-data/transactions";
 import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getWallets } from "../../../store/walletSlice";
-import { $api, WALLET_PATH, token } from "../../../api/api";
+import { getWallets, setActiveWallet } from "../../../store/walletSlice";
+import { token } from "../../../api/api";
 import { getUserDetails } from "../../../store/userSlice";
+import { IWallet } from "../../../store/types";
+import { isDev } from "../../../consts/consts";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -32,13 +34,13 @@ const HomePage: React.FC = () => {
   const { isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess } = useAppSelector(state => state.wallet)
   const { user } = useAppSelector(state => state.user)
 
-  if (!token) {
-    // navigate("/welcome") // if no token is present
-  }
+  // if (!token) {
+  // navigate("/welcome") // if no token is present
+  // }
 
   useEffect(() => {
     dispatch(getWallets());
-    dispatch(getUserDetails(user?.token || token));
+    dispatch(getUserDetails());
   }, []);
 
   useEffect(() => {
@@ -67,18 +69,25 @@ const HomePage: React.FC = () => {
 }
 
 const Wallets: React.FC = () => {
-  const dipsatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
   const {
     setIsAddWalletPopupOpen,
+    setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
   const { wallets } = useAppSelector(state => state.wallet)
+
   const cashWallet = wallets.find((wallet) => wallet?.type_of_account === 'cash');
   const bankWallets = wallets.filter((wallet) => wallet?.type_of_account === 'bank');
 
   const handleAddWalletClick = () => {
     setIsAddWalletPopupOpen(true);
+  };
+
+  function onWalletClick(wallet: IWallet) {
+    setIsEditWalletPopupOpen(true)
+    dispatch(setActiveWallet(wallet));
   };
 
   return (
@@ -110,9 +119,11 @@ const Wallets: React.FC = () => {
             fw="500"
             mb="20px"
           >
-            {cashWallet?.title || "Готівка"}
+            {isDev ? "Готівка" : cashWallet.title}
           </Typography>
-          <Wallet wallet={cashWallet || mockWallets[0]} />
+          <Wallet
+            wallet={isDev ? mockWallets[0] : cashWallet}
+            onWalletClick={() => onWalletClick(isDev ? mockWallets[0] : cashWallet)} />
         </Box>
         <Box grow="1">
           <Typography
@@ -124,9 +135,11 @@ const Wallets: React.FC = () => {
             Картки
           </Typography>
           <List display="flex" direction="column" gap="8px">
-            {bankWallets?.map((wallet) => (
+            {(isDev
+              ? mockWallets.filter(w => w.type_of_account === "bank")
+              : bankWallets)?.map((wallet) => (
                 <ListItem key={wallet?.id}>
-                  <Wallet wallet={wallet} />
+                  <Wallet wallet={wallet} onWalletClick={() => onWalletClick(wallet)} />
                 </ListItem>
               ))}
           </List>
@@ -144,6 +157,8 @@ const Wallets: React.FC = () => {
 }
 
 const Transactions: React.FC = () => {
+  const { transactions } = useAppSelector(state => state.transaction)
+
   return (
     <Box display="flex" direction="column" grow="1">
       <Typography
@@ -155,10 +170,19 @@ const Transactions: React.FC = () => {
         Останні транзакції
       </Typography>
       <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1" p="15px">
-        {mockTransactions.map((transaction, index) => (
-          <ListItem key={index}>
-            <Transaction transaction={transaction} />
-          </ListItem>
+        {Object.keys(isDev ? mockTransactions : transactions).map((date) => (
+          <Box mb="20px" key={date}>
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
+              {date}
+            </Typography>
+            <List>
+              {(isDev ? mockTransactions : transactions)[date].map((transaction) => (
+                <ListItem key={transaction?.id}>
+                  <Transaction transaction={transaction} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         ))}
       </List>
     </Box>

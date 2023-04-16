@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
-import { $api, $apiNoToken, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
+import { $api, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
+import setCSRFToken from '../shared/utils/setCSRFToken';
 
 export type UserState = {
   user: IUser;
@@ -39,6 +40,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
       .then(response => {
         const token = response.data.token;
         localStorage.setItem('token', token);
+        setCSRFToken()
         return token;
       })
       .catch(error => {
@@ -64,18 +66,13 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
   }
 );
 
-export const getUserDetails = createAsyncThunk<IUser, string, { rejectValue: string }>(
+export const getUserDetails = createAsyncThunk<IUser, undefined, { rejectValue: string }>(
   'user/getUserDetails',
-  async function (userToken, { rejectWithValue }) {
-    console.log(userToken)
-
-    return $apiNoToken.get(USER_DETAILS_PATH, {
-      headers: {
-        Authorization: `Token ${userToken}`
-      }
-    })
+  async function (_, { rejectWithValue }) {
+    return $api.get(USER_DETAILS_PATH)
       .then(res => {
         localStorage.setItem('userData', JSON.stringify(res.data))
+        setCSRFToken();
         return res.data
       })
       .catch(error => {

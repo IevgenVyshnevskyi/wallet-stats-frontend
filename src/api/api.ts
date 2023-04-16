@@ -18,7 +18,10 @@ export const userDataParsed: IUser = JSON.parse(localStorage.getItem('userData')
 export const userId = userDataParsed?.id;
 
 export const token = localStorage.getItem('token');
+export const XCSRF_TOKEN = localStorage.getItem('X-CSRFToken');
+
 const authHeader = token ? { "Authorization": `Token ${token}` } : {};
+const XCSRFHeader = XCSRF_TOKEN ? { "X-CSRFToken": `${XCSRF_TOKEN}` } : {};
 
 export const $api = axios.create({
   baseURL: BASE_URL,
@@ -26,6 +29,7 @@ export const $api = axios.create({
     "Content-Type": "application/json",
     "Accept": "application/json",
     ...authHeader,
+    ...XCSRFHeader,
   }
 });
 

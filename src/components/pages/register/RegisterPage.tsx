@@ -63,9 +63,7 @@ const RegisterPage: React.FC = () => {
     }, [isRegistered]);
 
     async function handleSub(data: RegisterFormData) {
-        console.log(data);
         await dispatch(registerUser(data));
-        //alert(JSON.stringify(data));
     }
 
     return (

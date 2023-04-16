@@ -9,7 +9,7 @@ import TabFilter from "../../molecules/tabs/filter/TabFilter";
 import { CategoriesPageWrapper } from "./CategoriesPage.styled";
 import { mockCategories } from './../../../../mock-data/categories';
 import { Button } from "../../atoms/button/Button.styled";
-import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { mockOptions } from "../../../../mock-data/options";
@@ -17,7 +17,7 @@ import { Select } from "../../atoms/select/Select.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { Option } from "../../atoms/select/Option.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { IFilterButton, ISwitchButton } from "../../../../types/molecules";
+import { IFilterButton } from "../../../../types/molecules";
 
 const CategoriesPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -25,7 +25,7 @@ const CategoriesPage: React.FC = () => {
   // create EditContext for transactions & categories
 
   const filterOption: string | null = searchParams.get('filter');
-  console.log('filterOption in TransactionsPage', filterOption)
+  console.log('filterOption in CategoriesPage', filterOption)
 
   return (
     <CategoriesPageWrapper>
@@ -133,8 +133,8 @@ const EditCategory: React.FC = () => {
 
 const CategorySettings = () => {
   const switchButtons: ISwitchButton[] = [
-    { buttonName: 'Витрата', onClick: () => { } },
-    { buttonName: 'Надходження', onClick: () => { } },
+    // { buttonName: 'Витрата', onTabClick: () => { } },
+    // { buttonName: 'Надходження', onTabClick: () => { } },
   ];
 
   return (

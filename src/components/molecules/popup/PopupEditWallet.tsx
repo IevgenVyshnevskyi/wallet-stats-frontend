@@ -19,14 +19,11 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet, WalletPopupActionsFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
 import { userId } from "../../../api/api";
-import { ActiveElementContext } from "../../../contexts/ActiveElementContext";
-// import { ActiveElementContext } from "../../../contexts/ActiveElementContext";
 
 const PopupEditWallet: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const { setIsEditWalletPopupOpen } = useContext(PopupContext);
-    // const { activeWallet } = useContext(ActiveElementContext);
 
     const {
         error,
@@ -34,7 +31,6 @@ const PopupEditWallet: React.FC = () => {
         isDeleteWalletSuccess,
         activeWallet,
     } = useAppSelector(state => state.wallet);
-    // const { editWalletError, isEditWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,
@@ -49,9 +45,9 @@ const PopupEditWallet: React.FC = () => {
     });
 
     const handleCloseClick = () => {
-        dispatch(setActiveWallet(null));
-        resetError();
         setIsEditWalletPopupOpen(false);
+        dispatch(setActiveWallet(null));
+        dispatch(resetError());
         dispatch(setSuccessStatus(false));
     };
 
@@ -73,8 +69,6 @@ const PopupEditWallet: React.FC = () => {
             type_of_account: activeWallet.type_of_account,
             owner: userId,
         }
-
-        console.log('edit wallet popup data', wallet)
 
         dispatch(walletAction({ data: wallet, method: "PUT", id: String(activeWallet.id) }))
     }

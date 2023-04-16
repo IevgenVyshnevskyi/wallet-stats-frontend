@@ -1,36 +1,42 @@
 import { Typography } from "../../atoms/typography/Typography.styled";
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
-import { DARK_FOR_TEXT, GREEN, WHITE, DIVIDER, ALERT_1 } from './../../../shared/styles/variables';
+import { DARK_FOR_TEXT, GREEN, WHITE, ALERT_1, PRIMARY } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
 import { TransactionProps } from "../../../../types/molecules";
+import { useAppSelector } from '../../../store/hooks';
+import { TransactionWrapper } from './TransactionWrapper';
 
 const Transaction: React.FC<TransactionProps> = ({ transaction }) => {
+  const { activeTransaction } = useAppSelector(state => state.transaction)
+
+  const pathTransactions = window.location.pathname === '/transactions';
+
+  const isActive = transaction?.id === activeTransaction?.id;
+  const isIncome = transaction?.type_of_outlay === "income";
+
   return (
-    <Box
-      display="flex"
-      gap="16px"
-      borderRadius="8px"
-      bgColor={WHITE}
-      p="16px"
-      m="0 0 8px 0"
+    <TransactionWrapper
+      bgColor={pathTransactions && isActive ? PRIMARY : WHITE}
+      width={pathTransactions ? "100%" : undefined}
     >
       <Box grow="1">
         <Typography
           as="h4"
           fw="500"
           fz="14px"
-          color={DARK_FOR_TEXT}
+          color={pathTransactions && isActive ? WHITE : DARK_FOR_TEXT}
           m="0 0 16px 0"
         >
-          {transaction.wallet.type_of_account}
+          {transaction?.wallet}
         </Typography>
         <Typography
           as="h5"
           fw="600"
           fz="16px"
+          color={pathTransactions && isActive ? WHITE : DARK_FOR_TEXT}
         >
-          Назва категорії
+          {transaction?.category}
         </Typography>
       </Box>
 
@@ -39,29 +45,27 @@ const Transaction: React.FC<TransactionProps> = ({ transaction }) => {
         display="flex"
         direction="column"
         alignItems="flex-end"
-        borderLeft={`2px solid ${DIVIDER}`}
-        p="0 0 0 50px"
+        // borderLeft={`2px solid ${DIVIDER}`}
+        pl="50px"
       >
-        <Box display="flex" alignItems="center" m="0 0 15px 0">
+        <Box
+          display="flex"
+          alignItems="center"
+          p="3px 6px"
+          mb="9px"
+          bgColor={WHITE}
+          gap="4px"
+          borderRadius="6px"
+        >
           <Typography
             as="span"
-            color={transaction.category.type_of_outlay === "income"
-              ? GREEN
-              : ALERT_1
-            }
+            color={isIncome ? GREEN : ALERT_1}
             textAlign="right"
             fw="600"
-            m="0 6px 0 0"
           >
-            {transaction.category.type_of_outlay === "income"
-              ? "Надходження"
-              : "Витрата"
-            }
+            {isIncome ? "Надходження" : "Витрата"}
           </Typography>
-          {transaction.category.type_of_outlay === "income"
-            ? <IncomeIcon />
-            : <ExpenseIcon />
-          }
+          {isIncome ? <IncomeIcon /> : <ExpenseIcon />}
         </Box>
 
         <Typography
@@ -69,11 +73,12 @@ const Transaction: React.FC<TransactionProps> = ({ transaction }) => {
           textAlign="right"
           fz="16px"
           fw="600"
+          color={pathTransactions && isActive ? WHITE : DARK_FOR_TEXT}
         >
-          1 265,35 ₴
+          {transaction?.amount_of_funds} ₴
         </Typography>
       </Box>
-    </Box>
+    </TransactionWrapper>
   );
 }
 

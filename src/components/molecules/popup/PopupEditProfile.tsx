@@ -46,8 +46,6 @@ const PopupEditProfile: React.FC = () => {
     };
 
     function handleSub(data: {}) {
-        console.log(data);
-        //alert(JSON.stringify(data));
         reset();
         handleCloseClick();
     }

@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            // dispatch(getUserDetails());
+            dispatch(getUserDetails());
             navigate('/authentication');
             reset();
         }

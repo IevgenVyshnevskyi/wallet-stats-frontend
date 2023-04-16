@@ -3,28 +3,32 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import { WalletButton } from "./Wallet.styled";
 import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
-import { WalletProps } from "../../../../types/molecules";
 import { useContext } from 'react';
 import { PopupContext } from "../../../contexts/PopupContext";
-import { setActiveWallet } from "../../../store/walletSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { IWallet } from "../../../store/types";
 
-const Wallet: React.FC<WalletProps> = ({ wallet }) => {
+export type WalletProps = {
+  wallet: IWallet;
+  onWalletClick: () => void;
+}
+
+const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick }) => {
   const { setIsEditWalletPopupOpen } = useContext(PopupContext)
-  const dispatch = useAppDispatch()
 
   const { activeWallet } = useAppSelector(state => state.wallet)
+  const { activeTransactionWallet } = useAppSelector(state => state.transaction)
 
-  const handleEditWalletClick = () => {
-    if (window.location.pathname === '/home') {
-      setIsEditWalletPopupOpen(true)
-    }
-
-    dispatch(setActiveWallet(wallet));
-  };
+  const homePath = window.location.pathname === '/home'
+  const transactionPath = window.location.pathname === '/transactions'
 
   return (
-    <WalletButton isActive={activeWallet?.id === wallet.id} onClick={handleEditWalletClick}>
+    <WalletButton
+      isActive={
+        (activeWallet?.id === wallet.id && homePath) ||
+        (activeTransactionWallet?.id === wallet.id && transactionPath)
+      }
+      onClick={onWalletClick}>
       <Box
         display="flex"
         direction="column"

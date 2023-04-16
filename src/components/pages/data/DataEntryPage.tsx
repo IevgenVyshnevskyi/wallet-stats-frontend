@@ -61,7 +61,7 @@ const DataEntryPage: React.FC = () => {
         // }
 
         // if (!user) {
-            dispatch(getUserDetails(token || user?.token))
+            dispatch(getUserDetails())
         // }
     }, []);
 

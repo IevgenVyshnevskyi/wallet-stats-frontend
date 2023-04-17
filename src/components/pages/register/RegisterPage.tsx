@@ -25,6 +25,7 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {RegisterFormData} from "../../../store/types";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {registerUser} from '../../../store/userSlice';
+import {lettersRegex} from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -88,14 +89,10 @@ const RegisterPage: React.FC = () => {
                                        textAlight="left">Ім'я</Label>
                                 <Input {...register('first_name', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    minLength: {
-                                        value: 2,
-                                        message: "Повинно бути не менше 2 символів",
-                                    }
-                                    // pattern: {
-                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
-                                    //     message: "Повинно бути не менше 2 символів",
-                                    // }
+                                    pattern: {
+                                        value: lettersRegex,
+                                        message: "Назва повинна бути не менше 2 літер",
+                                    },
                                 })} type="text" id="firstName" width="284px"/>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
@@ -103,14 +100,10 @@ const RegisterPage: React.FC = () => {
                                        textAlight="left">Прізвище</Label>
                                 <Input {...register('last_name', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    minLength: {
-                                        value: 2,
+                                    pattern: {
+                                        value: lettersRegex,
                                         message: "Повинно бути не менше 2 символів",
-                                    }
-                                    // pattern: {
-                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
-                                    //     message: "Повинно бути не менше 2 символів",
-                                    // }
+                                    },
                                 })} type="text" id="last_name" width="284px"/>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>

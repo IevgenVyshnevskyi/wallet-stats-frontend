@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
@@ -18,18 +18,24 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets } from "../../../store/walletSlice";
-import { $api, WALLET_PATH, token } from "../../../api/api";
+import { token } from "../../../api/api";
 import { getUserDetails } from "../../../store/userSlice";
+import PopupDeleteAccount from "../../molecules/popup/PopupDeleteAccount";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const {
     isAddWalletPopupOpen,
-    isEditWalletPopupOpen
+    isEditWalletPopupOpen,
+    isDeleteAccountPopupOpen
   } = useContext(PopupContext);
 
-  const { isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess } = useAppSelector(state => state.wallet)
+  const {
+    isAddWalletSuccess,
+    isEditWalletSuccess,
+    isDeleteWalletSuccess,
+  } = useAppSelector(state => state.wallet)
   const { user } = useAppSelector(state => state.user)
 
   if (!token) {
@@ -62,6 +68,7 @@ const HomePage: React.FC = () => {
 
       {isAddWalletPopupOpen && <PopupAddWallet />}
       {isEditWalletPopupOpen && <PopupEditWallet />}
+      {isDeleteAccountPopupOpen && <PopupDeleteAccount />}
     </>
   );
 }
@@ -125,10 +132,10 @@ const Wallets: React.FC = () => {
           </Typography>
           <List display="flex" direction="column" gap="8px">
             {bankWallets?.map((wallet) => (
-                <ListItem key={wallet?.id}>
-                  <Wallet wallet={wallet} />
-                </ListItem>
-              ))}
+              <ListItem key={wallet?.id}>
+                <Wallet wallet={wallet} />
+              </ListItem>
+            ))}
           </List>
         </Box>
         <Button

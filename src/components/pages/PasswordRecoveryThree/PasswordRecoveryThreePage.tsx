@@ -22,6 +22,7 @@ import {
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {PasswordRecoveryThreeFormData} from "../../../store/types";
+import {passwordRegex} from "../../../shared/utils/regexes";
 
 const PasswordRecoveryThreePage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -92,7 +93,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             pattern: {
-                                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                value: passwordRegex,
                                                 message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
                                             },
                                         })} />

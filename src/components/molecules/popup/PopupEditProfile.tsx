@@ -13,7 +13,7 @@ import {useForm} from "react-hook-form";
 import {Form} from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
-import {lettersRegex} from "../../../shared/utils/regexes";
+import {lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
 
 const PopupEditProfile: React.FC = () => {
     const {
@@ -139,7 +139,7 @@ const PopupEditProfile: React.FC = () => {
                                             {...register("oldPassword", {
                                                 required: 'Обов\'язкове поле для заповнення',
                                                 pattern: {
-                                                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                    value: passwordRegex,
                                                     message: `Пароль повинен містити не менше 8 символів,
                                                                 1 літеру, 1 цифру та 1 спеціальний символ`
                                                 },
@@ -169,7 +169,7 @@ const PopupEditProfile: React.FC = () => {
                                             {...register("password", {
                                                 required: 'Обов\'язкове поле для заповнення',
                                                 pattern: {
-                                                    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                    value: passwordRegex,
                                                     message: `Пароль повинен містити не менше 8 символів,
                                                                 1 літеру, 1 цифру та 1 спеціальний символ`
                                                 },

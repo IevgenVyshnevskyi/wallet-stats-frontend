@@ -25,7 +25,7 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {RegisterFormData} from "../../../store/types";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {registerUser} from '../../../store/userSlice';
-import {lettersRegex} from "../../../shared/utils/regexes";
+import {lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -135,7 +135,7 @@ const RegisterPage: React.FC = () => {
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             pattern: {
-                                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                value: passwordRegex,
                                                 message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
                                             },
                                         })} />

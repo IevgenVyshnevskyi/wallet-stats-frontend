@@ -15,6 +15,7 @@ import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 
 import { PopupProvider } from "./contexts/PopupContext";
 
+
 function App() {
   const elements = useRoutes([
     { path: '/', element: <WelcomePage /> },

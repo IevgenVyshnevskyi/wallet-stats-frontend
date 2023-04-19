@@ -26,6 +26,7 @@ import { getUserDetails, loginUser } from "../../../store/userSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { LoginFormData } from "../../../store/types";
 import { useNavigate } from "react-router-dom";
+import {passwordRegex} from "../../../shared/utils/regexes";
 
 
 const LoginPage: React.FC = () => {
@@ -118,7 +119,7 @@ const LoginPage: React.FC = () => {
                                     {...register("password", {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                            value: passwordRegex,
                                             message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
                                         },
                                     })} />

@@ -1,17 +1,42 @@
+import { useEffect } from "react";
+
 import { BASE_2, DARK_FOR_TEXT, DIVIDER, WHITE } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Header from '../../molecules/header/Header';
-import TabFilter from "../../molecules/tabs/filter/TabFilter";
+import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 import { StatisticsPageWrapper } from "./StatisticsPage.styled";
 import DoughnutChart from './../../molecules/charts/DoughnutChart';
-import { mockOptions } from "../../../../mock-data/options";
 import { Select } from "../../atoms/select/Select.styled";
 import { Option } from "../../atoms/select/Option.styled";
 import LineChart from "../../molecules/charts/LineChart";
-import { IFilterButton } from "../../../../types/molecules";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getFilteredTransactions } from "../../../store/transactionSlice";
+import { mockCategories } from "../../../../mock-data/categories";
+import { setActiveCategory, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
+import { isDev } from "../../../consts/consts";
+import { getFilteredCategories } from "../../../store/categorySlice";
+import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
+import { mockTransactions } from "../../../../mock-data/transactions";
 
 const StatisticsPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const { incomesChart } = useAppSelector(state => state.statistics);
+  const { categories } = useAppSelector(state => state.category);
+
+  useEffect(() => {
+    if (incomesChart.categories.length === 0) {
+      dispatch(getFilteredCategories("?type_of_outlay=income"))
+      dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    }
+
+    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"))
+    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"))
+
+    dispatch(getFilteredTransactions(`?category=${categories?.all[0]}`))
+  }, []);
+
   return (
     <StatisticsPageWrapper>
       <Header />
@@ -28,12 +53,44 @@ const StatisticsPage: React.FC = () => {
 }
 
 const StatisticsHeader: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const {
+    filterByDays,
+  } = useAppSelector(state => state.statistics);
+
   const filterButtons: IFilterButton[] = [
-    { buttonName: '1 місяць', filterBy: '?filter=1month' },
-    { buttonName: '3 місяці', filterBy: '?filter=3months' },
-    { buttonName: 'Півроку', filterBy: '?filter=6months' },
+    {
+      buttonName: '1 місяць',
+      filterBy: "?days=30",
+      onTabClick: () => {
+        dispatch(setFilterByDays("30"));
+        dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+        dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
+      },
+      isActive: filterByDays === "30"
+    },
+    {
+      buttonName: "3 місяці",
+      filterBy: '?days=90',
+      onTabClick: () => {
+        dispatch(setFilterByDays("90"));
+        dispatch(getFilteredTransactions("?type_of_outlay=expense&days=90"));
+        dispatch(getFilteredTransactions("?type_of_outlay=income&days=90"));
+      },
+      isActive: filterByDays === "90"
+    },
+    {
+      buttonName: "Півроку",
+      filterBy: '?days=180',
+      onTabClick: () => {
+        dispatch(setFilterByDays("180"));
+        dispatch(getFilteredTransactions("?type_of_outlay=expense&days=180"));
+        dispatch(getFilteredTransactions("?type_of_outlay=income&days=180"));
+      },
+      isActive: filterByDays === "180"
+    },
   ];
-  // create context for filters
 
   return (
     <Box display="flex" alignItems="center" mb="20px">
@@ -55,6 +112,51 @@ const StatisticsHeader: React.FC = () => {
 }
 
 const DoughnutChartsSection: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const {
+    incomesChart,
+    expensesChart,
+    filterByDays
+  } = useAppSelector(state => state.statistics);
+
+  const incomesData: string[] = Object.values(incomesChart[filterByDays]?.transactions)
+    .flatMap(transactionsArr => transactionsArr.map(transaction => (
+      transaction.amount_of_funds
+    )));
+  const expensesData: string[] = Object.values(expensesChart[filterByDays]?.transactions)
+    .flatMap(transactionsArr => transactionsArr.map(transaction => (
+      transaction.amount_of_funds
+    )));
+
+  const incomesLabels: string[] = incomesChart.categories.map(c => c.title);
+  const expensesLabels: string[] = expensesChart.categories.map(c => c.title);
+
+  useEffect(() => {
+    const totalIncomesAmount: string = Object.values(
+      incomesChart[filterByDays]?.transactions
+    )
+      .map((transactionsArr) =>
+        transactionsArr.reduce((sum, transaction) =>
+          (sum += parseFloat(transaction.amount_of_funds)), 0
+        )
+      )
+      .reduce((sum, t) => sum + t, 0).toFixed(2);
+
+    const totalExpensesAmount: string = Object.values(
+      expensesChart[filterByDays]?.transactions
+    )
+      .map((transactionsArr) =>
+        transactionsArr.reduce((sum, transaction) =>
+          (sum += parseFloat(transaction.amount_of_funds)), 0
+        )
+      )
+      .reduce((sum, t) => sum + t, 0).toFixed(2);
+
+    dispatch(setTotalIncomes(totalIncomesAmount))
+    dispatch(setTotalExpenses(totalExpensesAmount))
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -74,10 +176,13 @@ const DoughnutChartsSection: React.FC = () => {
             Витрати:
           </Typography>
           <Typography as="span" fz="16px" fw="600">
-            32 450,67 ₴
+            {isDev ? "32450.67" : expensesChart.totalExpenses} ₴
           </Typography>
         </Box>
-        <DoughnutChart />
+        <DoughnutChart
+          data={isDev ? mockData : expensesData}
+          labels={isDev ? mockLabels : expensesLabels}
+        />
       </Box>
       <Box
         display="flex"
@@ -90,25 +195,44 @@ const DoughnutChartsSection: React.FC = () => {
             Надходження:
           </Typography>
           <Typography as="span" fz="16px" fw="600">
-            128 531,31 ₴
+            {isDev ? "128531.31" : incomesChart.totalIncomes} ₴
           </Typography>
         </Box>
-        <DoughnutChart />
+        <DoughnutChart
+          data={isDev ? mockData : incomesData}
+          labels={isDev ? mockLabels : incomesLabels}
+        />
       </Box>
     </Box>
   );
 }
 
 const LineChartSection: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const { categories } = useAppSelector(state => state.category);
+  const { filterByDays } = useAppSelector(state => state.statistics);
+
+  function onChangeCategory(e: React.ChangeEvent<HTMLSelectElement>) {
+    dispatch(setActiveCategory(e.target.value))
+    dispatch(getFilteredTransactions(
+      `?category=${e.target.value}&days=${filterByDays}`
+    ))
+  }
+
   return (
     <Box display="flex" direction="column">
       <Box display="flex" alignItems="center" gap="16px" mb="16px">
         <Typography as="h3" fz="16px" fw="500">
           Витрати або надходження за категорією
         </Typography>
-        <Select width="450px">
-          {mockOptions.map(({ value, label }, index) => (
-            <Option key={index} value={value}>{label}</Option>
+        <Select
+          width="450px"
+          defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
+          onChange={(e) => onChangeCategory(e)}
+        >
+          {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
+            <Option key={id} value={id}>{title}</Option>
           ))}
         </Select>
       </Box>

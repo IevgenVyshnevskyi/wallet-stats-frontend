@@ -1,5 +1,7 @@
 export type MethodTypes = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
+export type FilterByDaysOptions = "30" | "90" | "180";
+
 /* USER */
 
 export interface IUser {

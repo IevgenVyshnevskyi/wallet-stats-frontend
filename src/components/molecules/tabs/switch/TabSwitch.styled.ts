@@ -19,15 +19,16 @@ export const TabSwitchWrapper = styled(Box)`
     ${ListItem} {
       display: flex;
       align-items: center;
+      border-radius: 16px;
 
       > ${ButtonTransparent} {
         line-height: 15px;
         color: ${ALMOST_BLACK_FOR_TEXT};
         text-decoration: none;
         font-size: 13px;
-        border-radius: 16px;
         padding: 8px 16px;
-        
+        border-radius: 16px;
+
         &:hover {
           background-color: ${BASE_1};
         }

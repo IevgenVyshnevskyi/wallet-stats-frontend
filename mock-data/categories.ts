@@ -2,31 +2,31 @@ import { ICategory } from "../src/store/types";
 
 export const mockCategories: ICategory[] = [
   {
-    id: 1,
+    id: 0,
     title: "Подарунки та благодійність (подарунки родичам та друзям, пожертвування)",
     type_of_outlay: "income",
     owner: 1
   },
   {
-    id: 2,
+    id: 1,
     title: "Розваги (кінотеатри, концерти, музеї, ігри)",
     type_of_outlay: "expense",
     owner: 1
   },
   {
-    id: 3,
+    id: 2,
     title: "Техніка та електроніка (комп\'ютери, смартфони, планшети)",
     type_of_outlay: "expense",
     owner: 1
   },
   {
-    id: 4,
+    id: 3,
     title: "Їжа та напої (ресторани, кав\'ярні, супермаркети)",
     type_of_outlay: "income",
     owner: 1
   },
   {
-    id: 5,
+    id: 4,
     title: "Охорона здоров\'я та краса (лікарські засоби, косметика, зубні послуги)",
     type_of_outlay: "expense",
     owner: 1

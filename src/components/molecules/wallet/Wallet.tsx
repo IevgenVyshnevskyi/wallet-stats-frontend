@@ -3,45 +3,32 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import { WalletButton } from "./Wallet.styled";
 import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
-import { useContext } from 'react';
-import { PopupContext } from "../../../contexts/PopupContext";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet } from "../../../store/types";
 
 export type WalletProps = {
   wallet: IWallet;
   onWalletClick: () => void;
+  isActive: boolean;
 }
 
-const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick }) => {
-  const { setIsEditWalletPopupOpen } = useContext(PopupContext)
-
-  const { activeWallet } = useAppSelector(state => state.wallet)
-  const { activeTransactionWallet } = useAppSelector(state => state.transaction)
-
-  const homePath = window.location.pathname === '/home'
-  const transactionPath = window.location.pathname === '/transactions'
+const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick, isActive }) => {
+  const homePath = window.location.pathname === "/home";
 
   return (
-    <WalletButton
-      isActive={
-        (activeWallet?.id === wallet.id && homePath) ||
-        (activeTransactionWallet?.id === wallet.id && transactionPath)
-      }
-      onClick={onWalletClick}>
+    <WalletButton isActive={isActive} onClick={onWalletClick}>
       <Box
         display="flex"
         direction="column"
         alignItems="start"
-        m={!wallet?.title && "10px 0"}
+        p={homePath && wallet?.type_of_account === "cash" && "10px 0"}
       >
-        {window.location.pathname === "/home" ? (
+        {homePath ? (
           wallet?.type_of_account === "bank" && (
             <Typography
               as="h4"
               fw="500"
               color={DARK_FOR_TEXT}
-              m="0 0 10px 0"
+              mb="10px"
             >
               {wallet?.title}
             </Typography>
@@ -51,7 +38,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick }) => {
             as="h4"
             fw="500"
             color={DARK_FOR_TEXT}
-            m="0 0 10px 0"
+            mb="10px"
           >
             {wallet?.title}
           </Typography>
@@ -66,7 +53,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick }) => {
         </Typography>
       </Box>
 
-      {window.location.pathname === "/home" && <SettingsWalletIcon opacity=".2" />}
+      {homePath && <SettingsWalletIcon opacity=".2" />}
     </WalletButton>
   );
 }

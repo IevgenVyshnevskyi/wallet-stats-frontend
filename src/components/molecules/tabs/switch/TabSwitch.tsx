@@ -1,15 +1,13 @@
 import { WHITE } from "../../../../shared/styles/variables";
-import { TypeOfOutlay } from "../../../../store/types";
 import { ButtonTransparent } from "../../../atoms/button/ButtonTransparent.styled";
 import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
 import { TabSwitchWrapper } from "./TabSwitch.styled";
-import { useAppSelector } from '../../../../store/hooks';
 
 export interface ISwitchButton {
   buttonName: string;
   onTabClick: () => void;
-  typeOfOutlay: TypeOfOutlay;
+  isActive: boolean;
 };
 
 export type TabSwitchProps = {
@@ -17,16 +15,16 @@ export type TabSwitchProps = {
 };
 
 const TabSwitch: React.FC<TabSwitchProps> = ({ switchButtons }) => {
-  const { activeTransactionTypeOfOutlay } = useAppSelector(state => state.transaction)
-
   return (
     <TabSwitchWrapper>
       <List>
-        {switchButtons.map(({ buttonName, onTabClick, typeOfOutlay }, index) => (
-          <ListItem key={index}>
+        {switchButtons.map(({ buttonName, onTabClick, isActive }, index) => (
+          <ListItem
+            key={index}
+            bgColor={isActive ? WHITE : "transparent"}
+          >
             <ButtonTransparent
-              bgColor={activeTransactionTypeOfOutlay === typeOfOutlay ? WHITE : "red"}
-              color="red"
+              fw={isActive ? "700" : "400"}
               onClick={onTabClick}
             >
               {buttonName}

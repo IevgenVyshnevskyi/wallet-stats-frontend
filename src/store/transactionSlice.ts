@@ -1,13 +1,18 @@
 import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
-import { ITransaction, IWallet, MethodTypes, Transactions, TypeOfOutlay } from './types';
+import { ITransaction, MethodTypes, Transactions } from './types';
 import { $api, TRANSACTION_PATH } from '../api/api';
 import { getUserDetails } from './userSlice';
 
+export type FilterByTypeOfOutlayOptions = "all" | "income" | "expense";
+
 type TransactionState = {
-  transactions: Transactions;
+  filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
+  transactions: {
+    all: Transactions;
+    income: Transactions;
+    expense: Transactions;
+  };
   activeTransaction: ITransaction;
-  activeTransactionTypeOfOutlay: TypeOfOutlay;
-  activeTransactionWallet: IWallet;
   addTransactionData: ITransaction;
   editTransactionData: ITransaction;
   isLoading: boolean;
@@ -16,6 +21,7 @@ type TransactionState = {
   isAddTransactionSuccess: boolean;
   isEditTransactionSuccess: boolean;
   isDeleteTransactionSuccess: boolean;
+  isEditTransactionOpen: boolean;
 }
 
 type TransactionActionOptions = {
@@ -55,7 +61,11 @@ export const transactionAction = createAsyncThunk<
   }
 );
 
-export const getTransactions = createAsyncThunk<Transactions, undefined, { rejectValue: string }>(
+export const getTransactions = createAsyncThunk<
+  Transactions,
+  undefined,
+  { rejectValue: string }
+>(
   'transaction/getTransactions',
   async function (_, { rejectWithValue }) {
     return $api.get(TRANSACTION_PATH)
@@ -67,11 +77,32 @@ export const getTransactions = createAsyncThunk<Transactions, undefined, { rejec
   }
 );
 
+export const getFilteredTransactions = createAsyncThunk<
+  { data: Transactions, params: string },
+  string,
+  { rejectValue: string }
+>(
+  'transaction/getFilteredTransactions',
+  async function (params, { rejectWithValue }) {
+    try {
+      const res = await $api.get(`${TRANSACTION_PATH}${params}`);
+      const data = res?.data;
+      return { data, params };
+    } catch (error) {
+      const errorMessage = error.response.data;
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 const initialState: TransactionState = {
-  transactions: {},
+  filterByTypeOfOutlay: "all",
+  transactions: {
+    all: {},
+    income: {},
+    expense: {},
+  },
   activeTransaction: null,
-  activeTransactionTypeOfOutlay: null,
-  activeTransactionWallet: null,
   addTransactionData: null,
   editTransactionData: null,
   isLoading: false,
@@ -80,6 +111,7 @@ const initialState: TransactionState = {
   isAddTransactionSuccess: false,
   isEditTransactionSuccess: false,
   isDeleteTransactionSuccess: false,
+  isEditTransactionOpen: false,
 }
 
 const transactionSlice = createSlice({
@@ -96,11 +128,8 @@ const transactionSlice = createSlice({
     setActiveTransaction: (state, action) => {
       state.activeTransaction = action.payload;
     },
-    setActiveTransactionTypeOfOutlay: (state, action) => {
-      state.activeTransactionTypeOfOutlay = action.payload;
-    },
-    setActiveTransactionWallet: (state, action) => {
-      state.activeTransactionWallet = action.payload;
+    setFilterByTypeOfOutlay: (state, action) => {
+      state.filterByTypeOfOutlay = action.payload;
     },
     setOwnerId: (state, action) => {
       state.ownerId = action.payload;
@@ -123,7 +152,11 @@ const transactionSlice = createSlice({
       state.isEditTransactionSuccess = action.payload;
       state.isDeleteTransactionSuccess = action.payload;
     },
+    setIsEditTransactionOpen: (state, action) => {
+      state.isEditTransactionOpen = action.payload;
+    },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(transactionAction.pending, (state) => {
@@ -134,7 +167,7 @@ const transactionSlice = createSlice({
         state.isDeleteTransactionSuccess = false;
       })
       .addCase(transactionAction.fulfilled, (state, action) => {
-        state.transactions = action.payload;
+        state.transactions.all = action.payload;
         state.isLoading = false;
         state.isAddTransactionSuccess = true;
         state.isEditTransactionSuccess = true;
@@ -152,9 +185,35 @@ const transactionSlice = createSlice({
       })
       .addCase(getTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.transactions = action.payload;
+        state.transactions.all = action.payload;
       })
       .addCase(getTransactions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(getFilteredTransactions.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getFilteredTransactions.fulfilled, (state, action) => {
+        const { data, params } = action.payload;
+        switch (params) {
+          case "":
+            state.transactions.all = data;
+            break;
+          case "?type_of_outlay=income":
+            state.transactions.income = data;
+            break;
+          case "?type_of_outlay=expense":
+            state.transactions.expense = data;
+            break;
+          default:
+            break;
+        }
+        state.isLoading = false;
+      })
+      .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -178,12 +237,12 @@ export const {
   resetError,
   resetActiveTransactionState,
   setActiveTransaction,
-  setActiveTransactionTypeOfOutlay,
-  setActiveTransactionWallet,
+  setFilterByTypeOfOutlay,
   setOwnerId,
   setAddTransactionData,
   setEditTransactionData,
   setSuccessStatus,
+  setIsEditTransactionOpen
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

@@ -3,7 +3,12 @@ import { Chart } from "chart.js/auto";
 import { Box } from "../../atoms/box/Box.styled";
 import { WHITE } from "../../../shared/styles/variables";
 
-const DoughnutChart: React.FC = () => {
+type DoughnutChartProps = {
+  data: string[];
+  labels: string[];
+}
+
+const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
   const chartRef = useRef(null);
   const chart = useRef(null);
 
@@ -17,17 +22,10 @@ const DoughnutChart: React.FC = () => {
     chart.current = new Chart(myDoughnutChartRef, {
       type: "doughnut",
       data: {
-        labels: [
-          "Подарунки та благодійність",
-          "Охорона здоров'я та краса",
-          "Їжа та напої",
-          "Електроніка та техніка",
-          "Комунальні послуги"
-        ],
+        labels: labels,
         datasets: [
           {
-            // data: [12314, 5125, 2150, 335, 51255],
-            data: [30, 25, 20, 15, 10],
+            data: data,
             backgroundColor: [
               "#7380F0",
               "#5DD9AD",

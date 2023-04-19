@@ -63,7 +63,6 @@ const LoginPage: React.FC = () => {
     }, [isLoggedIn]);
 
     function handleSub(data: LoginFormData) {
-        console.log(data);
         dispatch(loginUser(data));
     }
 

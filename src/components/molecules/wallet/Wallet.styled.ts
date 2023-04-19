@@ -8,6 +8,8 @@ type WalletButtonProps = {
   isActive: boolean;
 }
 
+const transactionsPath = window.location.pathname === "/transactions";
+
 export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   ${commonStyles}
   background: ${({ isActive }) => isActive ? PRIMARY : WHITE};
@@ -16,7 +18,7 @@ export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
-  padding: 20px 15px;
+  padding: ${transactionsPath ? '15px' : '20px 15px'};
   border-radius: 8px;
 
   * {

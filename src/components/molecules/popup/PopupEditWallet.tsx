@@ -117,13 +117,15 @@ const PopupEditWallet: React.FC = () => {
                                         || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                         </Box>
+                    {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+
                         <Box
                             display="flex"
                             width="320px"
                             justifyContent="space-between"
                             borderTop={`2px solid ${DIVIDER}`}
                             pt="25px"
-                            mb="25px"
+                            mb={activeWallet?.type_of_account === "bank" && "25px"}
                         >
                             <Button type="submit" width="148px" primary disabled={!isValid}>
                                 Зберегти
@@ -133,8 +135,6 @@ const PopupEditWallet: React.FC = () => {
                             </Button>
                         </Box>
                     </Form>
-
-                    {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
 
                     {activeWallet?.type_of_account === "bank" && (
                         <Box display="flex" justifyContent="flex-end" onClick={handleDeleteWallet}>

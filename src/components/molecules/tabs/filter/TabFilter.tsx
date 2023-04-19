@@ -1,16 +1,40 @@
-import { Link } from "react-router-dom";
 import { TabFilterWrapper } from "./TabFilter.styled";
 import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
-import { TabFilterProps } from "../../../../../types/molecules";
+import { WHITE } from "../../../../shared/styles/variables";
+import { Typography } from "../../../atoms/typography/Typography.styled";
+import { Link } from './../../../atoms/link/Link.styled';
+
+export interface IFilterButton {
+  filterBy: string;
+  onTabClick: () => void;
+  buttonName: string;
+  isActive: boolean;
+};
+
+type TabFilterProps = {
+  filterButtons: IFilterButton[];
+};
 
 const TabFilter: React.FC<TabFilterProps> = ({ filterButtons }) => {
   return (
     <TabFilterWrapper>
       <List>
-        {filterButtons.map(({ filterBy, buttonName }, index) => (
-          <ListItem key={index}>
-            <Link to={filterBy}>{buttonName}</Link>
+        {filterButtons.map((
+          { filterBy, onTabClick, buttonName, isActive },
+          index
+        ) => (
+          <ListItem
+            key={index}
+            bgColor={isActive ? WHITE : "transparent"}
+          >
+            <Link
+              to={filterBy}
+              fw={isActive ? "700" : "400"}
+              onClick={onTabClick}
+            >
+              {buttonName}
+            </Link>
           </ListItem>
         ))}
       </List>

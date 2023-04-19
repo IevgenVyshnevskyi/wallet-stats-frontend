@@ -28,7 +28,6 @@ const PopupAddWallet: React.FC = () => {
     const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
     const { wallets, error, isAddWalletSuccess } = useAppSelector(state => state.wallet);
-    // const { addWalletError, isAddWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,

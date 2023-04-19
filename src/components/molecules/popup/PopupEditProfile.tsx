@@ -16,7 +16,10 @@ import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
 import {lettersRegex} from "../../../shared/utils/regexes";
 
 const PopupEditProfile: React.FC = () => {
-    const {setIsEditProfilePopupOpen} = useContext(PopupContext);
+    const {
+        setIsEditProfilePopupOpen,
+        setIsDeleteAccountPopupOpen
+    } = useContext(PopupContext);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -47,10 +50,12 @@ const PopupEditProfile: React.FC = () => {
     };
 
     function handleSub(data: {}) {
-        console.log(data);
-        //alert(JSON.stringify(data));
         reset();
         handleCloseClick();
+    }
+
+    function onDeleteAccountClick() {
+        setIsDeleteAccountPopupOpen(true);
     }
 
     return (
@@ -225,7 +230,7 @@ const PopupEditProfile: React.FC = () => {
                         </Box>
                     </Form>
                     <Box display="flex" justifyContent="flex-end">
-                        <ButtonLink>Видалити аккаунт</ButtonLink>
+                        <ButtonLink onClick={onDeleteAccountClick}>Видалити аккаунт</ButtonLink>
                     </Box>
                 </Box>
                 <Button secondary onClick={handleCloseClick} p="10px 20px">

@@ -9,7 +9,6 @@ export const Box = styled.div<BoxProps>`
   border-right: ${({ borderRight }) => borderRight || undefined};
   border-bottom: ${({ borderBottom }) => borderBottom || undefined};
   border-left: ${({ borderLeft }) => borderLeft || undefined};
-  border-radius: ${({ borderRadius }) => borderRadius || undefined};
 
   max-width: ${({ maxWidth }) => maxWidth || undefined};
   max-height: ${({ maxHeight }) => maxHeight || undefined};
@@ -21,5 +20,4 @@ export const Box = styled.div<BoxProps>`
   flex-direction: ${({ flexDirection }) => flexDirection || undefined};
   flex: ${({ flex }) => flex || undefined};                               //
   flex-basis: ${({ flexBasis }) => flexBasis || undefined};
-  overflow: ${({ overflow }) => overflow || undefined};     //
 `

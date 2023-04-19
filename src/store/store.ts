@@ -1,11 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
 import walletReducer from './walletSlice';
+import transactionReducer from './transactionSlice';
+import categoryReducer from './categorySlice';
+import statisticsReducer from './statisticsSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     wallet: walletReducer,
+    transaction: transactionReducer,
+    category: categoryReducer,
+    statistics: statisticsReducer,
   },
 });
 

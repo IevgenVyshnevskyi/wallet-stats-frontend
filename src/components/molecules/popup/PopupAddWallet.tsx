@@ -28,7 +28,6 @@ const PopupAddWallet: React.FC = () => {
     const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
     const { wallets, error, isAddWalletSuccess } = useAppSelector(state => state.wallet);
-    // const { addWalletError, isAddWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,
@@ -44,7 +43,7 @@ const PopupAddWallet: React.FC = () => {
 
     const handleCloseClick = () => {
         reset();
-        resetError();
+        dispatch(resetError());
         setIsAddWalletPopupOpen(false);
     };
 
@@ -62,8 +61,6 @@ const PopupAddWallet: React.FC = () => {
             type_of_account: "bank",
             owner: userId,
         }
-
-        console.log('addwalletpopupdata', wallet)
 
         dispatch(walletAction({ data: wallet, method: "POST" }))
     }

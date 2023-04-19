@@ -4,6 +4,7 @@ import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
 import { ALMOST_BLACK_FOR_TEXT, BASE_1 } from "../../../../shared/styles/variables";
 import { tabWrapperStyles } from "../tabWrapperStyles";
+import { Link } from "../../../atoms/link/Link.styled";
 
 export const TabFilterWrapper = styled(Box)`
   ${tabWrapperStyles}
@@ -16,13 +17,13 @@ export const TabFilterWrapper = styled(Box)`
     ${ListItem} {
       display: flex;
       align-items: center;
+      border-radius: 16px;
 
-      > a {
+      > ${Link} {
         line-height: 15px;
         color: ${ALMOST_BLACK_FOR_TEXT};
         text-decoration: none;
         font-size: 13px;
-        border-radius: 16px;
         padding: 8px 16px;
 
         &:hover {

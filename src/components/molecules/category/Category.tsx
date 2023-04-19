@@ -1,18 +1,26 @@
 import { Typography } from "../../atoms/typography/Typography.styled";
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
-import { GREEN, WHITE, ALERT_1 } from './../../../shared/styles/variables';
+import { GREEN, WHITE, ALERT_1, PRIMARY, DARK_FOR_TEXT } from './../../../shared/styles/variables';
 import { Box } from "../../atoms/box/Box.styled";
 import { CategoryProps } from "../../../../types/molecules";
+import { useAppSelector } from "../../../store/hooks";
+import { CategoryWrapper } from "./CategoryWrapper";
 
 const Category: React.FC<CategoryProps> = ({ category }) => {
+  const { activeCategory } = useAppSelector(state => state.category)
+
+  const isActive = category?.id === activeCategory?.id;
+  const isIncome = category?.type_of_outlay === "income";
+
   return (
-    <Box
+    <CategoryWrapper
       display="flex"
       alignItems="center"
       gap="16px"
       borderRadius="8px"
-      bgColor={WHITE}
+      bgColor={isActive ? PRIMARY : WHITE}
+      width="100%"
       p="16px"
       mb="8px"
     >
@@ -21,6 +29,7 @@ const Category: React.FC<CategoryProps> = ({ category }) => {
           as="h5"
           fw="600"
           fz="16px"
+          color={isActive ? WHITE : DARK_FOR_TEXT}
         >
           {category.title}
         </Typography>
@@ -30,31 +39,25 @@ const Category: React.FC<CategoryProps> = ({ category }) => {
         display="flex"
         direction="column"
         alignItems="center"
+        p="3px 6px"
+        bgColor={WHITE}
+        borderRadius="6px"
       >
         <Box display="flex" alignItems="center">
           <Typography
             as="span"
-            color={category.type_of_outlay === "income"
-              ? GREEN
-              : ALERT_1
-            }
+            color={isIncome ? GREEN : ALERT_1}
             textAlign="right"
             fz="14px"
             fw="600"
             mr="6px"
           >
-            {category.type_of_outlay === "income"
-              ? "Надходження"
-              : "Витрата"
-            }
+            {isIncome ? "Надходження" : "Витрата"}
           </Typography>
-          {category.type_of_outlay === "income"
-            ? <IncomeIcon />
-            : <ExpenseIcon />
-          }
+          {isIncome ? <IncomeIcon /> : <ExpenseIcon />}
         </Box>
       </Box>
-    </Box>
+    </CategoryWrapper>
   );
 }
 

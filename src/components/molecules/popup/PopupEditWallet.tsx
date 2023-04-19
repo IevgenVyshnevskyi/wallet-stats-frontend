@@ -19,14 +19,11 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet, WalletPopupActionsFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
 import { userId } from "../../../api/api";
-import { ActiveElementContext } from "../../../contexts/ActiveElementContext";
-// import { ActiveElementContext } from "../../../contexts/ActiveElementContext";
 
 const PopupEditWallet: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const { setIsEditWalletPopupOpen } = useContext(PopupContext);
-    // const { activeWallet } = useContext(ActiveElementContext);
 
     const {
         error,
@@ -34,7 +31,6 @@ const PopupEditWallet: React.FC = () => {
         isDeleteWalletSuccess,
         activeWallet,
     } = useAppSelector(state => state.wallet);
-    // const { editWalletError, isEditWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,
@@ -49,9 +45,9 @@ const PopupEditWallet: React.FC = () => {
     });
 
     const handleCloseClick = () => {
-        dispatch(setActiveWallet(null));
-        resetError();
         setIsEditWalletPopupOpen(false);
+        dispatch(setActiveWallet(null));
+        dispatch(resetError());
         dispatch(setSuccessStatus(false));
     };
 
@@ -73,8 +69,6 @@ const PopupEditWallet: React.FC = () => {
             type_of_account: activeWallet.type_of_account,
             owner: userId,
         }
-
-        console.log('edit wallet popup data', wallet)
 
         dispatch(walletAction({ data: wallet, method: "PUT", id: String(activeWallet.id) }))
     }
@@ -127,13 +121,15 @@ const PopupEditWallet: React.FC = () => {
                                         || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                         </Box>
+                    {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+
                         <Box
                             display="flex"
                             width="320px"
                             justifyContent="space-between"
                             borderTop={`2px solid ${DIVIDER}`}
                             pt="25px"
-                            mb="25px"
+                            mb={activeWallet?.type_of_account === "bank" && "25px"}
                         >
                             <Button type="submit" width="148px" primary disabled={!isValid}>
                                 Зберегти
@@ -143,8 +139,6 @@ const PopupEditWallet: React.FC = () => {
                             </Button>
                         </Box>
                     </Form>
-
-                    {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
 
                     {activeWallet?.type_of_account === "bank" && (
                         <Box display="flex" justifyContent="flex-end" onClick={handleDeleteWallet}>

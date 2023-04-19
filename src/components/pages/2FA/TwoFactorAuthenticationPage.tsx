@@ -20,8 +20,11 @@ import {
     WHITE
 } from "../../../shared/styles/variables";
 import {ButtonLink} from "../../atoms/button/ButtonLink";
+import { getUserDetails } from "../../../store/userSlice";
+import { useAppDispatch } from "../../../store/hooks";
 
 const TwoFactorAuthenticationPage: React.FC = () => {
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -45,6 +48,8 @@ const TwoFactorAuthenticationPage: React.FC = () => {
     const intervalRef = useRef(null);
 
     useEffect(() => {
+        dispatch(getUserDetails())
+        
         intervalRef.current = setInterval(() => {
             setCount(count => count - 1);
         }, 1000);

@@ -32,6 +32,7 @@ export type commonStylesProps = {
   zIndex?: string;
   overflow?: string;
   borderRadius?: string;
+  tabindex?: string;
 }
 
 export const commonStyles = css<commonStylesProps>`
@@ -66,4 +67,5 @@ export const commonStyles = css<commonStylesProps>`
   z-index: ${({ zIndex }) => zIndex || 0};
   overflow: ${({ overflow }) => overflow || undefined};
   border-radius: ${({ borderRadius }) => borderRadius || undefined};
+  tabindex: ${({ tabindex }) => tabindex || undefined};
 `

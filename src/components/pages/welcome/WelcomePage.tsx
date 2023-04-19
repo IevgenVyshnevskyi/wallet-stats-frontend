@@ -56,7 +56,7 @@ const WelcomePage = () => {
                     </Typography>
                     <Button m="0 auto" primary onClick={handleRegisterClick}>Почати реєстрацію</Button>
                     <Typography fw="400" fz="16px" lh="19px" m="32px 0 16px 0" textAlign="center">
-                        Ви маєте аккаунт?
+                        Вже маєте аккаунт?
                     </Typography>
                     <Box display='flex' direction='column' justifyContent='center' alignItems='center' gap="100px">
                         <Button secondary onClick={handleEnterClick}>Увійти</Button>

@@ -1,7 +1,5 @@
 import { useRoutes } from "react-router-dom";
 
-import { PopupProvider } from "./contexts/PopupContext";
-
 import WelcomePage from "./components/pages/welcome/WelcomePage";
 import LoginPage from "./components/pages/login/LoginPage";
 import RegisterPage from "./components/pages/register/RegisterPage";
@@ -14,6 +12,8 @@ import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/
 import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
+
+import { PopupProvider } from "./contexts/PopupContext";
 
 function App() {
   const elements = useRoutes([

@@ -20,6 +20,7 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch } from "../../../store/hooks";
 import { logoutUser, resetUser } from "../../../store/userSlice";
 import PopupEditProfile from "../popup/PopupEditProfile";
+import PopupDeleteAccount from "../popup/PopupDeleteAccount";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -27,7 +28,8 @@ const Header: React.FC = () => {
 
   const {
     isEditProfilePopupOpen,
-    setIsEditProfilePopupOpen
+    setIsEditProfilePopupOpen,
+    isDeleteAccountPopupOpen,
   } = useContext(PopupContext);
 
   const handleEditProfileClick = () => {
@@ -85,10 +87,10 @@ const Header: React.FC = () => {
             <LogoutIcon onClick={handleLogOutClick} />
           </ButtonTransparent>
         </Box>
-      </HeaderWrapper >
+      </HeaderWrapper>
 
-      {isEditProfilePopupOpen && <PopupEditProfile />
-      }
+      {isEditProfilePopupOpen && <PopupEditProfile />}
+      {isDeleteAccountPopupOpen && <PopupDeleteAccount />}
     </>
   );
 }

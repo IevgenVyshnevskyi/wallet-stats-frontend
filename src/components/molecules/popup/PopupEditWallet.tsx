@@ -14,7 +14,7 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Form } from "../../atoms/form/Form.styled";
-import { moneyAmountRegex } from "../../../shared/utils/regexes";
+import {lettersRegex, moneyAmountRegex} from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet, WalletPopupActionsFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
@@ -84,13 +84,13 @@ const PopupEditWallet: React.FC = () => {
                         <Box mb="25px">
                             <Box>
                                 <Label htmlFor="name" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                    textAlight="left">Назва карткового рахунку</Label>
+                                    textAlight="left">Назва рахунку</Label>
                                 <Input {...register('name', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    minLength: {
-                                        value: 2,
-                                        message: "Назва повинна бути не менше 2 символів",
-                                    }
+                                    pattern: {
+                                        value: lettersRegex,
+                                        message: "Назва повинна бути не менше 2 літер",
+                                    },
                                 })}
                                     type="text" id="name" width="284px"
                                     defaultValue={activeWallet?.title}
@@ -106,13 +106,17 @@ const PopupEditWallet: React.FC = () => {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
                                         value: moneyAmountRegex,
-                                        message: "Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки",
-                                    }
-                                })} id="amount" type="number" step="0.01" width="290px"
+                                        message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
+                                    },
+                                    min: {
+                                        value: 0.00,
+                                        message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки' /*'Мінімальне значення суми повинно бути не менше 0.01'*/
+                                    },
+                                })} id="amount" type="text" step="0.01" width="290px"
                                     style={{ paddingRight: '10px' }}
                                     defaultValue={activeWallet?.amount}
                                 />
-                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width="320px"
                                     m="6px 0 10px 0">{errors?.amount && <>{errors?.amount?.message
                                         || 'Введіть додаткове значення'}</>}</Box>
                             </Box>

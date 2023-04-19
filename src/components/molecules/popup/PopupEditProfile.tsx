@@ -13,9 +13,13 @@ import {useForm} from "react-hook-form";
 import {Form} from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
+import {lettersRegex} from "../../../shared/utils/regexes";
 
 const PopupEditProfile: React.FC = () => {
-    const {setIsEditProfilePopupOpen} = useContext(PopupContext);
+    const {
+        setIsEditProfilePopupOpen,
+        setIsDeleteAccountPopupOpen
+    } = useContext(PopupContext);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -50,6 +54,10 @@ const PopupEditProfile: React.FC = () => {
         handleCloseClick();
     }
 
+    function onDeleteAccountClick() {
+        setIsDeleteAccountPopupOpen(true);
+    }
+
     return (
         <PopupWrapper zIndex="5">
             <Box>
@@ -70,10 +78,10 @@ const PopupEditProfile: React.FC = () => {
                                            textAlight="left">Ім'я</Label>
                                     <Input {...register('firstName', {
                                         required: 'Обов\'язкове поле для заповнення',
-                                        minLength: {
-                                            value: 2,
-                                            message: "Повинно бути не менше 2 символів",
-                                        }
+                                        pattern: {
+                                            value: lettersRegex,
+                                            message: "Назва повинна бути не менше 2 літер",
+                                        },
                                     })} type="text" id="firstName" width="284px"/>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.firstName && <>{errors?.firstName?.message || 'Error!'}</>}</Box>
@@ -83,10 +91,10 @@ const PopupEditProfile: React.FC = () => {
                                            textAlight="left">Прізвище</Label>
                                     <Input {...register('lastName', {
                                         required: 'Обов\'язкове поле для заповнення',
-                                        minLength: {
-                                            value: 2,
-                                            message: "Повинно бути не менше 2 символів",
-                                        }
+                                        pattern: {
+                                            value: lettersRegex,
+                                            message: "Назва повинна бути не менше 2 літер",
+                                        },
                                     })} type="text" id="lastName" width="284px"/>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.lastName && <>{errors?.lastName?.message || 'Error!'}</>}</Box>
@@ -137,7 +145,8 @@ const PopupEditProfile: React.FC = () => {
                                                 },
                                             })} />
                                     </Box>
-                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
+                                    <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
+                                         width='300px'
                                          m="0px 0 20px 0">{errors?.oldPassword && <>{errors?.oldPassword?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="10px">
@@ -198,7 +207,9 @@ const PopupEditProfile: React.FC = () => {
                                             })}/>
                                     </Box>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                         m="0px 0 20px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Обов\'язкове поле для заповнення'}</>}</Box>
+                                         m="0px 0 20px 0">{errors?.confirmPassword
+                                        && <>{errors?.confirmPassword?.message
+                                            || 'Обов\'язкове поле для заповнення'}</>}</Box>
                                 </Box>
                             </Box>
                         </Box>
@@ -219,7 +230,7 @@ const PopupEditProfile: React.FC = () => {
                         </Box>
                     </Form>
                     <Box display="flex" justifyContent="flex-end">
-                        <ButtonLink>Видалити аккаунт</ButtonLink>
+                        <ButtonLink onClick={onDeleteAccountClick}>Видалити аккаунт</ButtonLink>
                     </Box>
                 </Box>
                 <Button secondary onClick={handleCloseClick} p="10px 20px">

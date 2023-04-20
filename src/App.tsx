@@ -14,7 +14,8 @@ import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 
 import { PopupProvider } from "./contexts/PopupContext";
-
+import PopupEditWallet from "./components/molecules/popup/PopupEditWallet";
+import PopupEditProfile from "./components/molecules/popup/PopupEditProfile";
 
 function App() {
   const elements = useRoutes([
@@ -30,6 +31,8 @@ function App() {
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },
     { path: '/statistics', element: <StatisticsPage /> },
+
+    { path: '/popup', element: <PopupEditProfile /> },
   ])
 
   return (

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PRIMARY, PRIMARY_2 } from './../../../shared/styles/variables';
+import {ALERT_1, ALERT_2, PRIMARY, PRIMARY_2} from './../../../shared/styles/variables';
 import { commonStyles } from '../../../shared/styles/commonStyles';
 
 export const Input = styled.input`
@@ -14,5 +14,10 @@ export const Input = styled.input`
   &:focus {
     border-color: ${PRIMARY};
     outline: none;
+  }
+  
+  &.error {
+    border: 2px solid ${ALERT_1};
+    background-color: ${ALERT_2};
   }
 `;

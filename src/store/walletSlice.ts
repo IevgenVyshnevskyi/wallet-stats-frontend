@@ -33,7 +33,7 @@ export const walletAction = createAsyncThunk<
     if (method !== "GET") {
       $api({
         method,
-        url: `${WALLET_PATH}${id ? id + '/' : ''}`,
+        url: `${WALLET_PATH}${id ? (id + '/') : ''}`,
         data: data || {},
       })
         .then(response => response?.data)

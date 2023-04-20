@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { mockCategories } from "../../../../mock-data/categories";
 import { mockWallets } from "../../../../mock-data/wallets";
 import { isDev } from "../../../consts/consts";
@@ -41,7 +41,7 @@ const AddTransaction: React.FC = () => {
 
   const [startDate, setStartDate] = useState(new Date());
 
-  const isValid = Object.keys(addTransactionData || {}).length >= 5
+  const isValid = Object.keys(addTransactionData || {}).length >= 6
     && addTransactionData?.amount_of_funds !== "";
 
   const switchButtons: ISwitchButton[] = [
@@ -89,6 +89,10 @@ const AddTransaction: React.FC = () => {
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({ data: addTransactionData, method: "POST" }))
   }
+
+  useEffect(() => {
+    dispatch(setAddTransactionData({ created: formatTransactionDateToUTC(startDate) }))
+  }, []);
 
   return (
     <Box display="flex" direction="column" width="540px">

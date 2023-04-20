@@ -1,33 +1,33 @@
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import {ALERT_1, ALMOST_BLACK_FOR_TEXT, DIVIDER, SUCCESS} from "../../../shared/styles/variables";
-import {Box} from "../../atoms/box/Box.styled";
-import {Button} from '../../atoms/button/Button.styled';
-import {Input} from "../../atoms/input/Input.styled";
-import {Label} from "../../atoms/label/Label.styled";
-import {Typography} from "../../atoms/typography/Typography.styled";
+import { ALERT_1, ALMOST_BLACK_FOR_TEXT, DIVIDER, SUCCESS } from "../../../shared/styles/variables";
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from '../../atoms/button/Button.styled';
+import { Input } from "../../atoms/input/Input.styled";
+import { Label } from "../../atoms/label/Label.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
-import {PopupWrapper} from "./Popup.styled";
+import { PopupWrapper } from "./Popup.styled";
 import PackageSuccessIcon from "../../../shared/assets/icons/package-success.svg";
 import PackageErrorIcon from "../../../shared/assets/icons/package-error.svg";
-import React, {useContext, useEffect, useRef} from "react";
-import {PopupContext} from "../../../contexts/PopupContext";
-import {MessageProps} from "../../../../types/molecules";
-import {Form} from "../../atoms/form/Form.styled";
-import {lettersRegex, moneyAmountRegex} from "../../../shared/utils/regexes";
-import {WalletPopupActionsFormData, IWallet} from "../../../store/types";
-import {useAppDispatch, useAppSelector} from "../../../store/hooks";
-import {resetError, setSuccessStatus, walletAction} from "../../../store/walletSlice";
-import {userId} from "../../../api/api";
+import React, { useContext, useEffect, useRef } from "react";
+import { PopupContext } from "../../../contexts/PopupContext";
+import { MessageProps } from "../../../../types/molecules";
+import { Form } from "../../atoms/form/Form.styled";
+import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
+import { WalletPopupActionsFormData, IWallet } from "../../../store/types";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { resetError, setSuccessStatus, walletAction } from "../../../store/walletSlice";
+import { userId } from "../../../api/api";
 
 const PopupAddWallet: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const inputFileRef = useRef<HTMLInputElement>(null);
 
-    const {setIsAddWalletPopupOpen} = useContext(PopupContext);
+    const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
-    const {wallets, error, isAddWalletSuccess} = useAppSelector(state => state.wallet);
+    const { wallets, error, isAddWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
         register,
@@ -56,13 +56,13 @@ const PopupAddWallet: React.FC = () => {
 
     function handleSub(data: WalletPopupActionsFormData) {
         const wallet: IWallet = {
-            title: data.name,
-            amount: data.amount,
+            title: data?.name,
+            amount: data?.amount,
             type_of_account: "bank",
             owner: userId,
         }
 
-        dispatch(walletAction({data: wallet, method: "POST"}))
+        dispatch(walletAction({ data: wallet, method: "POST" }))
     }
 
     return (
@@ -80,22 +80,22 @@ const PopupAddWallet: React.FC = () => {
                             >
                                 <Box mb="16px">
                                     <Label htmlFor="name" lh="16px" fz="13px"
-                                           color={ALMOST_BLACK_FOR_TEXT}
-                                           textAlight="left">Введіть назву карткового рахунку</Label>
-                                    <Input {...register('cardAccountName', {
+                                        color={ALMOST_BLACK_FOR_TEXT}
+                                        textAlight="left">Введіть назву карткового рахунку</Label>
+                                    <Input {...register('name', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
                                             value: lettersRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         }
-                                    })} type="text" id="cardAccountName" width="244px"/>
+                                    })} type="text" id="name" width="244px" />
                                     <Box color="red" textAlight="left" border="red" fz="13px" width="250px"
-                                         height="14px">{errors?.cardAccountName && <>{errors?.cardAccountName?.message || 'Error!'}</>}</Box>
+                                        height="14px">{errors?.name && <>{errors?.name?.message || 'Error!'}</>}</Box>
                                 </Box>
                                 <Box mb="30px">
                                     <Label htmlFor="amount" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT}
-                                           textAlight="left">Введіть суму коштів на рахунку</Label>
-                                    <Input {...register('amountAccount', {
+                                        textAlight="left">Введіть суму коштів на рахунку</Label>
+                                    <Input {...register('amount', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
                                             value: moneyAmountRegex,
@@ -105,16 +105,16 @@ const PopupAddWallet: React.FC = () => {
                                             value: 0.00,
                                             message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
                                         },
-                                    })} id="amountAccount" type="text" step="0.01" width="250px"
-                                           style={{paddingRight: '10px'}}/>
+                                    })} id="amount" type="text" step="0.01" width="250px"
+                                        style={{ paddingRight: '10px' }} />
                                     <Box color="red" textAlight="left" border="red" fz="13px" width="250px"
-                                         height="14px">{errors?.amountAccount && <>{errors?.amountAccount?.message
-                                        || 'Введіть додаткове значення'}</>}</Box>
+                                        height="14px">{errors?.amount && <>{errors?.amount?.message
+                                            || 'Введіть додаткове значення'}</>}</Box>
                                 </Box>
                             </Box>
                             <Box basis="50%" ml="32px">
                                 <Typography as="h3" fz="16px" lh="150%" mb="24px" color={ALMOST_BLACK_FOR_TEXT}>
-                                    Або ви можете завантажити дані <br/> вашого рахунку з банку
+                                    Або ви можете завантажити дані <br /> вашого рахунку з банку
                                 </Typography>
                                 <Button
                                     primary
@@ -126,10 +126,10 @@ const PopupAddWallet: React.FC = () => {
                                 <Input
                                     type="file"
                                     ref={inputFileRef}
-                                    style={{display: "none"}}
+                                    style={{ display: "none" }}
                                 />
-                                {error && <Message message="error"/>}
-                                {isAddWalletSuccess && <Message message="success"/>}
+                                {error && <Message message="error" />}
+                                {isAddWalletSuccess && <Message message="success" />}
                             </Box>
                         </Box>
 
@@ -160,20 +160,20 @@ const PopupAddWallet: React.FC = () => {
                 {/* {addWalletError && <Typography as="p">{addWalletError}</Typography>} */}
 
                 <Button secondary onClick={handleCloseClick} p="10px 20px">
-                    <CrossIcon/>
+                    <CrossIcon />
                 </Button>
             </Box>
         </PopupWrapper>
     );
 }
 
-const Message: React.FC<MessageProps> = ({message}) => {
+const Message: React.FC<MessageProps> = ({ message }) => {
     return (
         <Box display="flex" alignItems="center" gap="10px" mt="24px">
             {message === "success" ? (
-                <PackageSuccessIcon/>
+                <PackageSuccessIcon />
             ) : (
-                <PackageErrorIcon/>
+                <PackageErrorIcon />
             )}
             <Typography
                 as="span"

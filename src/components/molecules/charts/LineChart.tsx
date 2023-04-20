@@ -36,8 +36,6 @@ const LineChart: React.FC = () => {
     setLabels(newLabels)
     setMockArr(newMockArr)
 
-    console.log('newLabels', newLabels)
-
     switch (filterByDays) {
       case "30":
         setPointHitRadiusValue(30)

@@ -51,7 +51,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
               label: (context) => {
                 const label = context.dataset.label || '';
                 const value = context.formattedValue;
-                return `${label} ${value}$`;
+                return `${label} ${value}₴`;
               },
             },
           },

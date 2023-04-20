@@ -18,13 +18,13 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { token } from "../../../api/api";
 import { getUserDetails } from "../../../store/userSlice";
 import { IWallet } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
 import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
-import PopupDeleteAccount from "../../molecules/popup/PopupDeleteAccount";
+import { getTransactions } from "../../../store/transactionSlice";
+import { getCategories } from "../../../store/categorySlice";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -47,12 +47,16 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(getWallets());
+    dispatch(getTransactions());
+    dispatch(getCategories());
     dispatch(getUserDetails());
   }, []);
 
   useEffect(() => {
     if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {
       dispatch(getWallets());
+      dispatch(getTransactions());
+      dispatch(getCategories());
     }
 
   }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess]);

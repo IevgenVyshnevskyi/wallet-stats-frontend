@@ -15,11 +15,12 @@ export type UserState = {
     getDetailsError: string | null;
     registerError: string | null;
     deleteUserAccountError: string | null;
+    confirmEmailError: string | null;
 }
 
 export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValue: string }>(
     'user/registerUser',
-    async function (registerData, {rejectWithValue}) {
+    async function (registerData, { rejectWithValue }) {
         return $api.post<IUser>(REGISTER_PATH, registerData)
             .then(response => {
                 const user = response.data;
@@ -35,25 +36,25 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
 );
 
 export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
-  'user/loginUser',
-  async function (loginData, { rejectWithValue }) {
-    return $api.post(LOGIN_PATH, loginData)
-      .then(response => {
-        const token = response.data.token;
-        localStorage.setItem('token', token);
-        setCSRFToken()
-        return token;
-      })
-      .catch(error => {
-        const errorMessage = formatLoginErrorMessage(error.response.data);
-        return rejectWithValue(errorMessage);
-      });
-  }
+    'user/loginUser',
+    async function (loginData, { rejectWithValue }) {
+        return $api.post(LOGIN_PATH, loginData)
+            .then(response => {
+                const token = response.data.token;
+                localStorage.setItem('token', token);
+                setCSRFToken()
+                return token;
+            })
+            .catch(error => {
+                const errorMessage = formatLoginErrorMessage(error.response.data);
+                return rejectWithValue(errorMessage);
+            });
+    }
 );
 
 export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
     'user/logoutUser',
-    async function (_, {rejectWithValue}) {
+    async function (_, { rejectWithValue }) {
         return $api.get(LOGOUT_PATH)
             .then(response => {
                 localStorage.removeItem('token');
@@ -67,44 +68,36 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
     }
 );
 
-// export const getUserDetails = createAsyncThunk<IUser, string, { rejectValue: string }>(
-//     'user/getUserDetails',
-//     async function (userToken, {rejectWithValue}) {
-//         console.log(userToken)
-
-//         return $apiNoToken.get(USER_DETAILS_PATH, {
-//             headers: {
-//                 Authorization: `Token ${userToken}`
-//             }
-//         })
-//             .then(res => {
-//                 localStorage.setItem('userData', JSON.stringify(res.data))
-//                 return res.data
-//             })
-//             .catch(error => {
-//                 const errorMessage = error.response.data;
-//                 return rejectWithValue(errorMessage);
-//             });
-//     }
 export const getUserDetails = createAsyncThunk<IUser, undefined, { rejectValue: string }>(
-  'user/getUserDetails',
-  async function (_, { rejectWithValue }) {
-    return $api.get(USER_DETAILS_PATH)
-      .then(res => {
-        localStorage.setItem('userData', JSON.stringify(res.data))
-        setCSRFToken();
-        return res.data
-      })
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
-  }
+    'user/getUserDetails',
+    async function (_, { rejectWithValue }) {
+        return $api.get(USER_DETAILS_PATH)
+            .then(res => {
+                localStorage.setItem('userData', JSON.stringify(res.data))
+                return res.data
+            })
+            .catch(error => {
+                const errorMessage = error.response.data;
+                return rejectWithValue(errorMessage);
+            });
+    }
 );
 
 export const deleteUserAccount = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
     'user/deleteUserAccount',
-    async function (_, {rejectWithValue}) {
+    async function (_, { rejectWithValue }) {
+        return $api.delete(USER_DETAILS_PATH)
+            .then(res => res.data)
+            .catch(error => {
+                const errorMessage = error.response.data;
+                return rejectWithValue(errorMessage);
+            });
+    }
+);
+
+export const confirmEmail = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
+    'user/confirmEmail',
+    async function (_, { rejectWithValue }) {
         return $api.delete(USER_DETAILS_PATH)
             .then(res => res.data)
             .catch(error => {
@@ -124,6 +117,7 @@ const initialState: UserState = {
     logoutError: null,
     getDetailsError: null,
     deleteUserAccountError: null,
+    confirmEmailError: null,
 }
 
 const userSlice = createSlice({
@@ -193,6 +187,7 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.getDetailsError = action.payload;
             })
+
             .addCase(deleteUserAccount.pending, (state) => {
                 state.isLoading = true;
             })
@@ -203,9 +198,20 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.deleteUserAccountError = action.payload;
             })
+
+            .addCase(confirmEmail.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(confirmEmail.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(confirmEmail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.confirmEmailError = action.payload;
+            })
     }
 });
 
-export const {resetUser, resetDeleteUserAccountError} = userSlice.actions;
+export const { resetUser, resetDeleteUserAccountError } = userSlice.actions;
 
 export default userSlice.reducer;

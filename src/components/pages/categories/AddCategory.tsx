@@ -1,4 +1,4 @@
-import { BASE_2 } from "../../../shared/styles/variables";
+import { BASE_2, WHITE } from "../../../shared/styles/variables";
 import { categoryAction, setActiveCategory } from "../../../store/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setAddCategoryData } from "../../../store/categorySlice";
@@ -7,15 +7,14 @@ import { Button } from "../../atoms/button/Button.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { Label } from "../../atoms/label/Label.styled";
-import { Select } from "../../atoms/select/Select.styled";
-import { mockCategories } from "../../../../mock-data/categories";
-import { Option } from "../../atoms/select/Option.styled";
 import { isDev } from "../../../consts/consts";
+import { Input } from "../../atoms/input/Input.styled";
+import { userId } from "../../../api/api";
 
 const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { categories, addCategoryData } = useAppSelector(state => state.category);
+  const { addCategoryData } = useAppSelector(state => state.category);
 
   const isValid = Object.keys(addCategoryData || {}).length >= 3;
 
@@ -41,8 +40,11 @@ const AddCategory: React.FC = () => {
     dispatch(categoryAction({ data: addCategoryData, method: "POST" }))
   }
 
-  function onChangeCategory(e: React.ChangeEvent<HTMLSelectElement>) {
-    dispatch(setAddCategoryData({ category: parseInt(e.target.value) }))
+  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    dispatch(setAddCategoryData({
+      title: e.target.value,
+      owner: userId,
+    }))
   }
 
   return (
@@ -70,16 +72,8 @@ const AddCategory: React.FC = () => {
             <TabSwitch switchButtons={switchButtons} />
           </Box>
           <Box mb="25px">
-            <Label fw="500" mb="12px">Назва категорії</Label>
-            <Select
-              width="100%"
-              defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
-              onChange={(e) => onChangeCategory(e)}
-            >
-              {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
-                <Option key={id} value={id}>{title}</Option>
-              ))}
-            </Select>
+            <Label fw="500" htmlFor="name" mb="12px">Назва категорії</Label>
+            <Input type="text" id="name" onChange={onInputChange} width="93%" bgColor={WHITE} />
           </Box>
         </Box>
         <Box>

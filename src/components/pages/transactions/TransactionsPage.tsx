@@ -8,6 +8,8 @@ import { getTransactions } from "../../../store/transactionSlice";
 import EditTransaction from "./EditTransaction";
 import Transactions from "./Transactions";
 import AddTransaction from "./AddTransaction";
+import { getWallets } from "../../../store/walletSlice";
+import { getCategories } from "../../../store/categorySlice";
 
 const TransactionsPage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -22,6 +24,9 @@ const TransactionsPage: React.FC = () => {
   useEffect(() => {
     dispatch(getUserDetails());
     dispatch(getTransactions());
+    dispatch(getWallets());
+    dispatch(getCategories());
+
     // dispatch(setAddTransactionData({ owner: user?.id }))
   }, []);
 

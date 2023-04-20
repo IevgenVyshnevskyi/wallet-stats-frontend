@@ -1,4 +1,4 @@
-import { MENU_BUTTON_HOVER } from "../../../shared/styles/variables";
+import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
@@ -7,9 +7,6 @@ import { Label } from "../../atoms/label/Label.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { isDev } from "../../../consts/consts";
-import { mockCategories } from "../../../../mock-data/categories";
-import { Select } from "../../atoms/select/Select.styled";
-import { Option } from "../../atoms/select/Option.styled";
 
 import {
   categoryAction,
@@ -18,6 +15,7 @@ import {
   setEditCategoryData,
   setIsEditCategoryOpen
 } from "../../../store/categorySlice";
+import { Input } from "../../atoms/input/Input.styled";
 
 const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -75,8 +73,8 @@ const EditCategory: React.FC = () => {
     dispatch(setActiveCategory({}));
   }
 
-  function onChangeCategory(e: React.ChangeEvent<HTMLSelectElement>) {
-    dispatch(setEditCategoryData({ category: parseInt(e.target.value) }))
+  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    dispatch(setEditCategoryData({ title: e.target.value }))
   }
 
   return (
@@ -104,16 +102,8 @@ const EditCategory: React.FC = () => {
             <TabSwitch switchButtons={switchButtons} />
           </Box>
           <Box mb="25px">
-            <Label fw="500" mb="12px">Назва категорії</Label>
-            <Select
-              width="100%"
-              defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
-              onChange={(e) => onChangeCategory(e)}
-            >
-              {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
-                <Option key={id} value={id}>{title}</Option>
-              ))}
-            </Select>
+            <Label fw="500" htmlFor="name" mb="12px">Назва категорії</Label>
+            <Input type="text" id="name" onChange={onInputChange} width="93%" bgColor={WHITE} />
           </Box>
         </Box>
         <Box display="flex" gap="8px" mb="27px">

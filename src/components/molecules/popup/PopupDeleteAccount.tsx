@@ -1,4 +1,4 @@
-import React, { useContext/*, useEffect*/ } from "react";
+import React, {useContext, useEffect/*, useEffect*/} from "react";
 import { useForm } from "react-hook-form";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -32,6 +32,18 @@ const PopupDeleteAccount: React.FC = () => {
         setIsDeleteAccountPopupOpen(false);
     };
 
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
+        }
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
     /*useEffect(() => {
         if (isEditWalletSuccess || isDeleteWalletSuccess) {
             handleCloseClick()
@@ -45,8 +57,8 @@ const PopupDeleteAccount: React.FC = () => {
     }
 
     return (
-        <PopupWrapper zIndex="6">
-            <Box>
+        <PopupWrapper zIndex="6"  onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="600" fz="22px" mb="25px">
                         Видалення аккаунту

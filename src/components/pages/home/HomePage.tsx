@@ -25,6 +25,7 @@ import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
 import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
 import { getTransactions } from "../../../store/transactionSlice";
 import { getCategories } from "../../../store/categorySlice";
+import PopupAddAccount from "../../molecules/popup/PopupAddAccount";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -73,7 +74,7 @@ const HomePage: React.FC = () => {
         </Box>
       </HomePageWrapper>
 
-      {isAddWalletPopupOpen && <PopupAddWallet />}
+      {isAddWalletPopupOpen && <PopupAddAccount /> /*<PopupAddWallet />*/}
       {isEditWalletPopupOpen && <PopupEditWallet />}
     </>
   );

@@ -5,7 +5,7 @@ import {Input} from "../../atoms/input/Input.styled";
 import {Label} from "../../atoms/label/Label.styled";
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import {PopupWrapper} from "./Popup.styled";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {PopupContext} from "../../../contexts/PopupContext";
 import {Typography} from '../../atoms/typography/Typography.styled';
 import {ButtonLink} from "../../atoms/button/ButtonLink";
@@ -58,9 +58,21 @@ const PopupEditProfile: React.FC = () => {
         setIsDeleteAccountPopupOpen(true);
     }
 
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
+        }
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
     return (
-        <PopupWrapper zIndex="5">
-            <Box>
+        <PopupWrapper zIndex="5" onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="500" fz="22px" mb="25px">
                         Налаштування профілю

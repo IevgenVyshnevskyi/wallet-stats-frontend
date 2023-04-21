@@ -65,9 +65,23 @@ const PopupAddWallet: React.FC = () => {
         dispatch(walletAction({data: wallet, method: "POST"}))
     }
 
+
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
+        }
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
+
     return (
-        <PopupWrapper>
-            <Box>
+        <PopupWrapper onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="500" fz="22px" mb="25px">
                         Додати картковий рахунок

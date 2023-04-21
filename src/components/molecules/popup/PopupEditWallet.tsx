@@ -62,6 +62,18 @@ const PopupEditWallet: React.FC = () => {
         dispatch(walletAction({method: "DELETE", id: String(activeWallet.id)}));
     };
 
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
+        }
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
     function handleSub(data: WalletPopupActionsFormData) {
         const wallet: IWallet = {
             title: data.name,
@@ -74,8 +86,8 @@ const PopupEditWallet: React.FC = () => {
     }
 
     return (
-        <PopupWrapper>
-            <Box>
+        <PopupWrapper onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="500" fz="22px" mb="25px">
                         Редагування рахунку

@@ -1,5 +1,7 @@
 export type MethodTypes = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
+export type FilterByDaysOptions = "30" | "90" | "180";
+
 /* USER */
 
 export interface IUser {
@@ -41,7 +43,6 @@ export interface DataEntryFormData {
   cardAccountName: string;
   amountAccount: string;
   userId?: number;
-  userToken?: string;
 }
 
 /* WALLET */
@@ -59,4 +60,43 @@ export interface IWallet {
 export interface WalletPopupActionsFormData {
   name: string,
   amount: string,
+}
+
+/* TRANSACTION */
+
+export type TypeOfOutlay = "income" | "expense";
+
+export interface ITransaction {
+  id?: number;
+  owner: number;
+  wallet: number;
+  category: number;
+  amount_of_funds: string;
+  type_of_outlay: TypeOfOutlay;
+  title?: string;
+  description?: string;
+  created: string;
+}
+
+export type Transactions = {
+  [date: string]: ITransaction[];
+}
+
+export interface EditTransactionFormData {
+  name: string,
+  amount: string,
+}
+
+export interface AddTransactionFormData {
+  name: string,
+  amount: string,
+}
+
+/* CATEGORY */
+
+export interface ICategory {
+  id?: number,
+  title: string,
+  type_of_outlay: TypeOfOutlay,
+  owner: number
 }

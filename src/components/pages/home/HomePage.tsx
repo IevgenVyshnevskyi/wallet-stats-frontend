@@ -17,42 +17,64 @@ import { mockTransactions } from "../../../../mock-data/transactions";
 import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getWallets } from "../../../store/walletSlice";
-import { $api, WALLET_PATH, token } from "../../../api/api";
-import { getUserDetails } from "../../../store/userSlice";
+import { getWallets, setActiveWallet } from "../../../store/walletSlice";
+import { IWallet } from "../../../store/types";
+import { isDev } from "../../../consts/consts";
+import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
+import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
+import { getTransactions } from "../../../store/transactionSlice";
+import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
+import { token } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     isAddWalletPopupOpen,
-    isEditWalletPopupOpen
+    isEditWalletPopupOpen,
   } = useContext(PopupContext);
 
-  const { isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess } = useAppSelector(state => state.wallet)
-  const { user } = useAppSelector(state => state.user)
+  const {
+    isAddWalletSuccess,
+    isEditWalletSuccess,
+    isDeleteWalletSuccess,
+    isLoading: isWalletActionLoading
+  } = useAppSelector(state => state.wallet)
 
-  if (!token) {
-    // navigate("/welcome") // if no token is present
+  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+
+  if (!token && !isRegistered && !isLoggedIn) {
+    navigate("/")
   }
 
   useEffect(() => {
     dispatch(getWallets());
-    dispatch(getUserDetails(user?.token || token));
+    dispatch(getTransactions());
+    dispatch(getCategories());
+    dispatch(getFilteredCategories('?type_of_outlay=income'));
+    dispatch(getFilteredCategories('?type_of_outlay=expense'));
   }, []);
+
+  useEffect(() => {
+    if (isWalletActionLoading === false) {
+      dispatch(getWallets());
+    }
+  }, [isWalletActionLoading]);
 
   useEffect(() => {
     if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {
       dispatch(getWallets());
+      dispatch(getTransactions());
+      dispatch(getCategories());
     }
-
   }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess]);
 
   return (
     <>
       <HomePageWrapper>
         <Header />
-
         <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
           <Wallets />
           <Transactions />
@@ -64,21 +86,32 @@ const HomePage: React.FC = () => {
       {isEditWalletPopupOpen && <PopupEditWallet />}
     </>
   );
-}
+};
 
 const Wallets: React.FC = () => {
-  const dipsatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
   const {
     setIsAddWalletPopupOpen,
+    setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
-  const { wallets } = useAppSelector(state => state.wallet)
-  const cashWallet = wallets.find((wallet) => wallet?.type_of_account === 'cash');
-  const bankWallets = wallets.filter((wallet) => wallet?.type_of_account === 'bank');
+  const { wallets, activeWallet } = useAppSelector(state => state.wallet)
+
+  const cashWallet = wallets?.find(
+    (wallet) => wallet?.type_of_account === 'cash'
+  );
+  const bankWallets = wallets?.filter(
+    (wallet) => wallet?.type_of_account === 'bank'
+  );
 
   const handleAddWalletClick = () => {
     setIsAddWalletPopupOpen(true);
+  };
+
+  function onWalletClick(wallet: IWallet) {
+    setIsEditWalletPopupOpen(true)
+    dispatch(setActiveWallet(wallet));
   };
 
   return (
@@ -110,9 +143,13 @@ const Wallets: React.FC = () => {
             fw="500"
             mb="20px"
           >
-            {cashWallet?.title || "Готівка"}
+            {isDev ? "Готівка" : cashWallet?.title || "Готівка"}
           </Typography>
-          <Wallet wallet={cashWallet || mockWallets[0]} />
+          <Wallet
+            wallet={isDev ? mockWallets[0] : cashWallet}
+            onWalletClick={() => onWalletClick(isDev ? mockWallets[0] : cashWallet)}
+            isActive={activeWallet?.id === (isDev ? mockWallets[0] : cashWallet)?.id}
+          />
         </Box>
         <Box grow="1">
           <Typography
@@ -124,15 +161,21 @@ const Wallets: React.FC = () => {
             Картки
           </Typography>
           <List display="flex" direction="column" gap="8px">
-            {bankWallets?.map((wallet) => (
-                <ListItem key={wallet?.id}>
-                  <Wallet wallet={wallet} />
+            {(isDev
+              ? mockWallets.filter(w => w.type_of_account === "bank")
+              : bankWallets).map((wallet) => (
+                <ListItem key={wallet.id}>
+                  <Wallet
+                    wallet={wallet}
+                    onWalletClick={() => onWalletClick(wallet)}
+                    isActive={activeWallet?.id === wallet.id}
+                  />
                 </ListItem>
               ))}
           </List>
         </Box>
         <Button
-          disabled={wallets.length > 4}
+          disabled={wallets?.length > 4}
           secondary
           onClick={handleAddWalletClick}
         >
@@ -144,6 +187,8 @@ const Wallets: React.FC = () => {
 }
 
 const Transactions: React.FC = () => {
+  const { transactions } = useAppSelector(state => state.transaction)
+
   return (
     <Box display="flex" direction="column" grow="1">
       <Typography
@@ -154,18 +199,88 @@ const Transactions: React.FC = () => {
       >
         Останні транзакції
       </Typography>
-      <List display="flex" direction="column" gap="8px" bgColor={BASE_2} grow="1" p="15px">
-        {mockTransactions.map((transaction, index) => (
-          <ListItem key={index}>
-            <Transaction transaction={transaction} />
-          </ListItem>
-        ))}
+      <List
+        display="flex"
+        direction="column"
+        grow="1"
+        gap="8px"
+        overflow="auto"
+        height="100px"
+        bgColor={BASE_2}
+        p="15px"
+      >
+        {Object.keys(isDev
+          ? mockTransactions
+          : transactions.all)?.map((date) => (
+            <Box mb="20px" key={date}>
+              <Typography as="h3" fz="16px" fw="500" mb="20px">
+                {formatTransactionDateToHours(date)}
+              </Typography>
+              <List>
+                {(isDev
+                  ? mockTransactions
+                  : transactions.all)[date]?.map((transaction) => (
+                    <ListItem key={transaction?.id}>
+                      <Transaction
+                        transaction={transaction}
+                        isTransactionsPage={false}
+                      />
+                    </ListItem>
+                  ))}
+              </List>
+            </Box>
+          ))}
       </List>
     </Box>
   );
 }
 
 const Statistics: React.FC = () => {
+  const { categories } = useAppSelector(state => state.category);
+  const { transactions } = useAppSelector(state => state.transaction);
+
+  const [incomesLabels, setIncomesLabels] = useState<string[]>();
+  const [expensesLabels, setExpensesLabels] = useState<string[]>([]);
+
+  const incomesData: string[] = Object.values(transactions?.income)
+    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
+      transaction.amount_of_funds
+    )));
+  const expensesData: string[] = Object.values(transactions?.expense)
+    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
+      transaction.amount_of_funds
+    )));
+  useEffect(() => {
+    setIncomesLabels(categories.income?.map(c => c.title))
+  }, [categories.income])
+
+  useEffect(() => {
+    setExpensesLabels(categories.expense?.map(c => c.title))
+  }, [categories.expense])
+
+  const [totalIncomesAmount, setTotalIncomesAmount] = useState<string>('');
+
+  useEffect(() => {
+    if (Object.keys(transactions.income)?.length > 0) {
+      setTotalIncomesAmount(Object.values(transactions?.income)
+        .map((transactionsArr) =>
+          transactionsArr.reduce((sum, transaction) =>
+            (sum += parseFloat(transaction.amount_of_funds)), 0
+          )
+        )
+        .reduce((sum, t) => sum + t, 0)
+        .toFixed(2))
+    }
+  }, [transactions.income]);
+
+  const totalExpensesAmount: string = Object.values(transactions?.expense)
+    .map((transactionsArr) =>
+      transactionsArr.reduce((sum, transaction) =>
+        (sum += parseFloat(transaction.amount_of_funds)), 0
+      )
+    )
+    .reduce((sum, t) => sum + t, 0).toFixed(2);
+
   return (
     <Box display="flex" direction="column" width="600px">
       <Typography
@@ -199,11 +314,15 @@ const Statistics: React.FC = () => {
               fw="500"
               mb="20px"
             >
-              32 450,67 ₴
+              {isDev ? "32450.67" : totalExpensesAmount} ₴
             </Typography>
           </Box>
           <Box>
-            <DoughnutChart />
+            <DoughnutChart
+              data={isDev ? mockData : expensesData}
+              labels={isDev ? mockLabels : expensesLabels}
+              chartType="expense"
+            />
           </Box>
         </Box>
         <Box mb="20px">
@@ -222,11 +341,15 @@ const Statistics: React.FC = () => {
               fw="500"
               mb="20px"
             >
-              128 531,31 ₴
+              {isDev ? "128531.31" : totalIncomesAmount} ₴
             </Typography>
           </Box>
           <Box>
-            <DoughnutChart />
+            <DoughnutChart
+              data={isDev ? mockData : incomesData}
+              labels={isDev ? mockLabels : incomesLabels}
+              chartType="income"
+            />
           </Box>
         </Box>
       </Box>

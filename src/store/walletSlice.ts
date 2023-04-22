@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataEntryFormData, IWallet, MethodTypes } from './types';
 import { $api, WALLET_PATH } from '../api/api';
 import { UserState } from './userSlice';
@@ -13,9 +13,6 @@ type WalletState = {
   isEditWalletSuccess: boolean;
   isDeleteWalletSuccess: boolean;
   entryDataError: string | null;
-  // addWalletError: string | null;
-  // editWalletError: string | null;
-  // deleteWalletError: string | null;
 }
 
 type WalletActionOptions = {
@@ -28,7 +25,6 @@ export const walletAction = createAsyncThunk<
   IWallet[],
   WalletActionOptions,
   { rejectValue: string }
-// { rejectValue: { errorMessage: string, errorMethod: MethodTypes } }
 >(
   'wallet/walletAction',
   async function (payload, { rejectWithValue }) {
@@ -37,7 +33,7 @@ export const walletAction = createAsyncThunk<
     if (method !== "GET") {
       $api({
         method,
-        url: `${WALLET_PATH}${id ? id + '/' : ''}`,
+        url: `${WALLET_PATH}${id ? (id + '/') : ''}`,
         data: data || {},
       })
         .then(response => response?.data)
@@ -68,17 +64,19 @@ export const getWallets = createAsyncThunk<IWallet[], undefined, { rejectValue: 
       .then(res => res?.data)
       .catch(error => {
         const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
+        return rejectWithValue("error in get wallets");
       });
   }
 );
 
 export const postEntryData = createAsyncThunk<
-  any, DataEntryFormData, { rejectValue: string, state: { user: UserState } }
+  undefined,
+  DataEntryFormData,
+  { rejectValue: string, state: { user: UserState } }
 >(
   'wallet/postEntryData',
   async function (data, { rejectWithValue }) {
-    const { amountAccount, availableCash, cardAccountName, userId, userToken } = data
+    const { amountAccount, availableCash, cardAccountName, userId } = data
 
     if (!userId) {
       return rejectWithValue('Помилка при внесенні рахунків. Спочатку створіть акаунт.');
@@ -97,9 +95,10 @@ export const postEntryData = createAsyncThunk<
       type_of_account: "bank",
     }
 
-    console.log(cashWallet, bankWallet);
-
-    const postCashWalletResponsePromise = await $api.post(WALLET_PATH, cashWallet)
+    const postCashWalletResponsePromise = await $api.post(
+      WALLET_PATH,
+      cashWallet,
+    )
       .then(response => response.status)
       .catch(error => {
         // const errorMessage = error.response.data;
@@ -107,7 +106,10 @@ export const postEntryData = createAsyncThunk<
         return rejectWithValue('Error while creating a cash wallet');
       });
 
-    const postBankWalletResponsePromise = await $api.post(WALLET_PATH, bankWallet)
+    const postBankWalletResponsePromise = await $api.post(
+      WALLET_PATH,
+      bankWallet,
+    )
       .then(response => response.status)
       .catch(error => {
         // const errorMessage = error.response;
@@ -123,7 +125,7 @@ export const postEntryData = createAsyncThunk<
       return rejectWithValue('Can\'t create wallets. Server error.');
     }
 
-    return true;
+    localStorage.setItem("isDataEntrySuccess", "true");
   }
 );
 
@@ -137,15 +139,15 @@ const initialState: WalletState = {
   isEditWalletSuccess: false,
   isDeleteWalletSuccess: false,
   entryDataError: null,
-  // addWalletError: null,
-  // editWalletError: null,
-  // deleteWalletError: null,
 }
 
 const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
+    resetWalletState: (state) => {
+      return initialState;
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -156,15 +158,6 @@ const walletSlice = createSlice({
       state.isAddWalletSuccess = action.payload;
       state.isEditWalletSuccess = action.payload;
       state.isDeleteWalletSuccess = action.payload;
-    },
-    resetAddWalletError: (state) => {
-      // state.addWalletError = null;
-    },
-    resetEditWalletError: (state) => {
-      // state.editWalletError = null;
-    },
-    resetDeleteWalletError: (state) => {
-      // state.editWalletError = null;
     },
   },
   extraReducers: (builder) => {
@@ -183,38 +176,19 @@ const walletSlice = createSlice({
         state.isEditWalletSuccess = true;
         state.isDeleteWalletSuccess = true;
         state.error = null;
-        // state.addWalletError = null;
       })
       .addCase(walletAction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-
-        // switch (action.payload.errorMethod) {
-        //   case "POST":
-        //     state.addWalletError = action.payload.errorMessage;
-        //     break;
-        //   case "PUT":
-        //   case "PATCH":
-        //     state.editWalletError = action.payload.errorMessage;
-        //     break;
-        //   case "DELETE":
-        //     state.deleteWalletError = action.payload.errorMessage;
-        //     break;
-        //   default:
-        //     break;
-        // }
       })
 
       .addCase(getWallets.pending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addCase(getWallets.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.wallets = action.payload;
       })
       .addCase(getWallets.rejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload
       })
 
@@ -222,26 +196,23 @@ const walletSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(postEntryData.fulfilled, (state, action) => {
+      .addCase(postEntryData.fulfilled, (state) => {
         state.isLoading = false;
-        state.isEntryDataSuccess = action.payload;
+        state.isEntryDataSuccess = true;
       })
       .addCase(postEntryData.rejected, (state, action) => {
         state.isLoading = false;
         state.entryDataError = action.payload;
         // state.entryDataError = 'Помилка при внесенні рахунків';
-        console.log(action.payload);
       })
   }
 });
 
 export const {
   resetError,
+  resetWalletState,
   setActiveWallet,
   setSuccessStatus,
-  resetAddWalletError,
-  resetEditWalletError,
-  resetDeleteWalletError
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

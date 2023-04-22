@@ -15,6 +15,7 @@ import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
+    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
     GRADIENT,
     WHITE
@@ -25,6 +26,7 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {RegisterFormData} from "../../../store/types";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {registerUser} from '../../../store/userSlice';
+import {lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -63,9 +65,7 @@ const RegisterPage: React.FC = () => {
     }, [isRegistered]);
 
     async function handleSub(data: RegisterFormData) {
-        console.log(data);
         await dispatch(registerUser(data));
-        //alert(JSON.stringify(data));
     }
 
     return (
@@ -88,30 +88,26 @@ const RegisterPage: React.FC = () => {
                                        textAlight="left">Ім'я</Label>
                                 <Input {...register('first_name', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    minLength: {
-                                        value: 2,
-                                        message: "Повинно бути не менше 2 символів",
-                                    }
-                                    // pattern: {
-                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
-                                    //     message: "Повинно бути не менше 2 символів",
-                                    // }
-                                })} type="text" id="firstName" width="284px"/>
+                                    pattern: {
+                                        value: lettersRegex,
+                                        message: "Назва повинна бути не менше 2 літер",
+                                    },
+                                })} type="text" id="first_name" width="284px"
+                                       className={errors.first_name && 'error'}
+                                />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.first_name && <>{errors?.first_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="last_name" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                        textAlight="left">Прізвище</Label>
                                 <Input {...register('last_name', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    minLength: {
-                                        value: 2,
+                                    pattern: {
+                                        value: lettersRegex,
                                         message: "Повинно бути не менше 2 символів",
-                                    }
-                                    // pattern: {
-                                    //     value: /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{2,}$/,
-                                    //     message: "Повинно бути не менше 2 символів",
-                                    // }
-                                })} type="text" id="last_name" width="284px"/>
+                                    },
+                                })} type="text" id="last_name" width="284px"
+                                       className={errors.last_name && 'error'}
+                                />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.last_name && <>{errors?.last_name?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="email" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
@@ -122,7 +118,9 @@ const RegisterPage: React.FC = () => {
                                         value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                         message: "Введіть коректну електронну адресу"
                                     }
-                                })} type="email" id="email" width="284px"/>
+                                })} type="email" id="email" width="284px"
+                                       className={errors.email && 'error'}
+                                />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                                 <Label htmlFor="password" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
@@ -144,10 +142,12 @@ const RegisterPage: React.FC = () => {
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             pattern: {
-                                                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                                                value: passwordRegex,
                                                 message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
                                             },
-                                        })} />
+                                        })}
+                                        className={errors.password && 'error'}
+                                    />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" width='300px'
                                      height="28px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
@@ -174,7 +174,8 @@ const RegisterPage: React.FC = () => {
                                                     return "Паролі не співпадають";
                                                 }
                                             }
-                                        })} />
+                                        })}
+                                        className={errors.password2 && 'error'}/>
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px"
                                      height="14px">{errors?.password2 && <>{errors?.password2?.message || 'Error!'}</>}</Box>

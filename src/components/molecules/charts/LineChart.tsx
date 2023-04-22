@@ -1,18 +1,57 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { PRIMARY } from './../../../shared/styles/variables';
+import { useAppSelector } from "../../../store/hooks";
+import { isDev } from "../../../consts/consts";
+import { mockData } from "../../../../mock-data/doughnutCharts";
 
 const LineChart: React.FC = () => {
+  const {
+    filterByDays,
+    allOutlaysChart
+  } = useAppSelector(state => state.statistics)
+
   const chartRef = useRef(null);
   const chart = useRef(null);
 
-  const labels: string[] = [];
-  const chartData: number[] = [];
+  const [labels, setLabels] = useState<string[]>([]);
+  const [mockArr, setMockArr] = useState<number[]>([]);
 
-  for (let i = 1; i < 31; i++) {
-    labels.push(`${i}д.`)
-    chartData.push(Math.floor(Math.random() * 100000))
-  }
+  const chartData: number[] = Object.values(
+    allOutlaysChart.categoryTransactions
+  )
+    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
+      parseInt(transaction.amount_of_funds)
+    )));
+
+  useEffect(() => {
+    const newLabels: string[] = [];
+    const newMockArr: number[] = [];
+
+    for (let i = 0; i < (parseInt(filterByDays)); i++) {
+      newLabels.push(`${i + 1}д.`);
+      isDev ? newMockArr.push(Math.floor(Math.random() * 10000)) : undefined;
+    }
+
+    setLabels(newLabels)
+    setMockArr(newMockArr)
+
+    switch (filterByDays) {
+      case "30":
+        setPointHitRadiusValue(30)
+        break;
+      case "90":
+        setPointHitRadiusValue(15)
+        break;
+      case "180":
+        setPointHitRadiusValue(10)
+        break;
+      default:
+        break;
+    }
+  }, [filterByDays]);
+
+  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -26,15 +65,15 @@ const LineChart: React.FC = () => {
       data: {
         labels: labels,
         datasets: [{
-          label: 'My First Dataset',
-          data: chartData,
+          label: 'Витрати або надходження за категорією',
+          data: isDev ? mockArr : chartData,
           fill: false,
           borderColor: PRIMARY,
           tension: 0.4,
           // pointBackgroundColor: "#ffffff11",
           pointBackgroundColor: PRIMARY,
           pointBorderWidth: 4,
-          pointHitRadius: 30,
+          pointHitRadius: pointHitRadiusValue,
         }]
       },
       options: {
@@ -43,7 +82,7 @@ const LineChart: React.FC = () => {
             callbacks: {
               label: (context) => {
                 const value = context.formattedValue;
-                return `${value}$`;
+                return `${value}₴`;
               },
             },
           },
@@ -82,7 +121,7 @@ const LineChart: React.FC = () => {
         chart.current.destroy();
       }
     };
-  }, []);
+  }, [labels]);
 
   return (
     <canvas id="myLineChart" height="270px" ref={chartRef} />

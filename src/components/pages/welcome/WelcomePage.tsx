@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { Img } from '../../atoms/img/Img.styled';
@@ -8,14 +6,9 @@ import { Container } from "../../atoms/container/Container.styled";
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
-import {
-    GRADIENT,
-    WHITE
-} from "../../../shared/styles/variables";
+import { GRADIENT, WHITE } from "../../../shared/styles/variables";
 import { Button } from "../../atoms/button/Button.styled";
 import { useNavigate } from "react-router-dom";
-import { token } from '../../../api/api';
-import { useAppSelector } from '../../../store/hooks';
 
 const WelcomePage = () => {
     const navigate = useNavigate();
@@ -27,18 +20,6 @@ const WelcomePage = () => {
     function handleRegisterClick() {
         navigate('/register');
     }
-
-    function handleChangeMainPageClick() {
-        navigate('/home');
-    }
-
-    const { isLoggedIn } = useAppSelector(state => state.user)
-
-    useEffect(() => {
-        if (token && isLoggedIn) {
-            navigate('/home')
-        }
-    }, []);
 
     return (
         <Container display="flex">
@@ -56,11 +37,10 @@ const WelcomePage = () => {
                     </Typography>
                     <Button m="0 auto" primary onClick={handleRegisterClick}>Почати реєстрацію</Button>
                     <Typography fw="400" fz="16px" lh="19px" m="32px 0 16px 0" textAlign="center">
-                        Ви маєте аккаунт?
+                        Вже маєте аккаунт?
                     </Typography>
-                    <Box display='flex' direction='column' justifyContent='center' alignItems='center' gap="100px">
+                    <Box display='flex' justifyContent='center'>
                         <Button secondary onClick={handleEnterClick}>Увійти</Button>
-                        <Button secondary onClick={handleChangeMainPageClick}>Перейти на головну сторінку</Button>
                     </Box>
                 </Box>
             </Box>

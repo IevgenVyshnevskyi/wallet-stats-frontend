@@ -14,14 +14,19 @@ import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
+    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
     DISABLED,
     GRADIENT, PRIMARY,
     WHITE
 } from "../../../shared/styles/variables";
-import {ButtonLink} from "../../atoms/button/ButtonLink";
+import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { getUserDetails } from "../../../store/userSlice";
+import { useAppDispatch } from "../../../store/hooks";
+import { token } from "../../../api/api";
 
 const TwoFactorAuthenticationPage: React.FC = () => {
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -45,6 +50,8 @@ const TwoFactorAuthenticationPage: React.FC = () => {
     const intervalRef = useRef(null);
 
     useEffect(() => {
+        dispatch(getUserDetails())
+
         intervalRef.current = setInterval(() => {
             setCount(count => count - 1);
         }, 1000);
@@ -85,7 +92,10 @@ const TwoFactorAuthenticationPage: React.FC = () => {
                                 <Input {...register('authentication', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     min: 0,
-                                })} type="number" id="authentication" width="290px" style={{paddingRight: '10px'}}/>
+                                })} type="number" id="authentication" width="290px"
+                                       style={{paddingRight: '10px'}}
+                                       className={errors.authentication && 'error'}
+                                />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="6px 0 6px 0">{errors?.authentication && <>{errors?.authentication?.message
                                     || 'Введіть додаткове значення'}</>}</Box>

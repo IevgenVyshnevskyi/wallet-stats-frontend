@@ -2,10 +2,26 @@ import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import { Box } from "../../atoms/box/Box.styled";
 import { WHITE } from "../../../shared/styles/variables";
+import { useAppSelector } from "../../../store/hooks";
 
-const DoughnutChart: React.FC = () => {
+type DoughnutChartProps = {
+  data: string[];
+  labels: string[];
+  handleUpdate?: () => void;
+  chartType: "income" | "expense";
+}
+
+const DoughnutChart: React.FC<DoughnutChartProps> = ({
+  data,
+  labels,
+  handleUpdate,
+  chartType
+}) => {
   const chartRef = useRef(null);
   const chart = useRef(null);
+
+  const { categories } = useAppSelector(state => state.category);
+  const { transactions } = useAppSelector(state => state.transaction);
 
   useEffect(() => {
     const myDoughnutChartRef = chartRef.current.getContext("2d");
@@ -17,17 +33,10 @@ const DoughnutChart: React.FC = () => {
     chart.current = new Chart(myDoughnutChartRef, {
       type: "doughnut",
       data: {
-        labels: [
-          "Подарунки та благодійність",
-          "Охорона здоров'я та краса",
-          "Їжа та напої",
-          "Електроніка та техніка",
-          "Комунальні послуги"
-        ],
+        labels: labels,
         datasets: [
           {
-            // data: [12314, 5125, 2150, 335, 51255],
-            data: [30, 25, 20, 15, 10],
+            data: data,
             backgroundColor: [
               "#7380F0",
               "#5DD9AD",
@@ -51,9 +60,9 @@ const DoughnutChart: React.FC = () => {
           tooltip: {
             callbacks: {
               label: (context) => {
-                const label = context.dataset.label || '';
-                const value = context.formattedValue;
-                return `${label} ${value}$`;
+                const label = context?.dataset?.label || '';
+                const value = context?.formattedValue;
+                return `${label} ${value}₴`;
               },
             },
           },
@@ -75,7 +84,21 @@ const DoughnutChart: React.FC = () => {
         chart.current.destroy();
       }
     };
+
   }, []);
+
+  // if (chartType === "income") {
+  useEffect(() => {
+    if (categories[chartType]?.length > 0 || Object.keys(transactions[chartType])?.length > 0) {
+      chart.current.data.labels = labels || [];
+      chart.current.data.datasets.data = data || [];
+      chart.current.update();
+    }
+
+  }, [categories[chartType], transactions[chartType]]);
+  // } else {
+
+  // }
 
   return (
     <Box bgColor={WHITE} borderRadius="8px" p="5px 0">

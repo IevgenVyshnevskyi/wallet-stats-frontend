@@ -16,7 +16,7 @@ import InterfaceImage from "../../../shared/assets/images/interface-image-full.p
 import {
     ALMOST_BLACK_FOR_TEXT,
     GRADIENT,
-    GREY_50, PRIMARY,
+    GREY_50,
     WHITE
 } from "../../../shared/styles/variables";
 
@@ -26,15 +26,18 @@ import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
 import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
-import { token, userData, userId } from "../../../api/api";
+import { localStorageIsDataEntrySuccess, token, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate();
 
-    const { isEntryDataSuccess, entryDataError } = useAppSelector(state => state.wallet)
+    const { isEntryDataSuccess, entryDataError, isLoading } = useAppSelector(state => state.wallet)
     const { user, getDetailsError, isRegistered } = useAppSelector(state => state.user)
 
-    const navigate = useNavigate();
+    if (!isRegistered && localStorageIsDataEntrySuccess) {
+        navigate("/home")
+    }
 
     const {
         register,
@@ -53,27 +56,26 @@ const DataEntryPage: React.FC = () => {
             reset();
             navigate('/home');
         }
+    }, []);
+
+    useEffect(() => {
+        if (isEntryDataSuccess) {
+            reset();
+            navigate('/home');
+        }
     }, [isEntryDataSuccess]);
 
     useEffect(() => {
-        // if (token && userData && isEntryDataSuccess) {
-        //     navigate('/home');
-        // }
-
-        dispatch(getUserDetails())
-
-        // if (!user) {
-        // dispatch(getUserDetails())
-        // }
-    }, []);
+        if (user?.token !== "" || token) {
+            dispatch(getUserDetails())
+        }
+    }, [user?.token]);
 
     function handleSub(data: DataEntryFormData) {
         const resultData: DataEntryFormData = {
             ...data,
             userId: user?.id || userId,
-            userToken: user?.token || token
         }
-        console.log('resultData :', resultData);
 
         dispatch(postEntryData(resultData))
     }
@@ -154,7 +156,7 @@ const DataEntryPage: React.FC = () => {
                         {entryDataError &&
                             <Typography as="p" textAlight="center">{JSON.stringify(entryDataError)}</Typography>}
 
-                        <Button type="submit" disabled={!isValid} width="177px" m="18px auto 8px"
+                        <Button type="submit" disabled={!isValid || isLoading} width="177px" m="18px auto 8px"
                             primary>Зберегти дані</Button>
                     </Form>
                 </Box>

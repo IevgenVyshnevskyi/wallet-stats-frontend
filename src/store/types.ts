@@ -43,7 +43,6 @@ export interface DataEntryFormData {
   cardAccountName: string;
   amountAccount: string;
   userId?: number;
-  userToken?: string;
 }
 
 /* WALLET */

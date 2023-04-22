@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getCategories } from "../../../store/categorySlice";
-import { getUserDetails } from '../../../store/userSlice';
 
 import { Box } from "../../atoms/box/Box.styled";
 import { CategoriesPageWrapper } from "./CategoriesPage.styled";
@@ -11,28 +10,41 @@ import Header from '../../molecules/header/Header';
 import Categories from './Caregories';
 import EditCategory from './EditCategory';
 import AddCategory from './AddCategory';
+import { token } from '../../../api/api';
+import { useNavigate } from 'react-router-dom';
 
 const CategoriesPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
 
   const {
     isAddCategorySuccess,
     isEditCategorySuccess,
     isDeleteCategorySuccess,
-    isEditCategoryOpen
+    isEditCategoryOpen,
+    isLoading
   } = useAppSelector(state => state.category);
 
+  const { isLoggedIn, isRegistered, user } = useAppSelector(state => state.user);
+
+  if (!token && !isRegistered && !isLoggedIn) {
+    navigate("/")
+  }
+
   useEffect(() => {
-    dispatch(getUserDetails());
     dispatch(getCategories());
-    // dispatch(setAddTransactionData({ owner: user?.id }))
   }, []);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      dispatch(getCategories());
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (isAddCategorySuccess || isEditCategorySuccess || isDeleteCategorySuccess) {
       dispatch(getCategories());
     }
-
   }, [isAddCategorySuccess, isEditCategorySuccess, isDeleteCategorySuccess]);
 
   return (

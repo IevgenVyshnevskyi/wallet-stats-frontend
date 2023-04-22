@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
@@ -18,39 +18,50 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { getUserDetails } from "../../../store/userSlice";
 import { IWallet } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
 import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
 import { getTransactions } from "../../../store/transactionSlice";
-import { getCategories } from "../../../store/categorySlice";
+import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
+import { token } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     isAddWalletPopupOpen,
     isEditWalletPopupOpen,
-    isDeleteAccountPopupOpen
   } = useContext(PopupContext);
 
   const {
     isAddWalletSuccess,
     isEditWalletSuccess,
-    isDeleteWalletSuccess
+    isDeleteWalletSuccess,
+    isLoading: isWalletActionLoading
   } = useAppSelector(state => state.wallet)
 
-  // if (!token) {
-  //   navigate("/welcome")
-  // }
+  const { isLoggedIn, isRegistered, user } = useAppSelector(state => state.user);
+
+  if (!token && !isRegistered && !isLoggedIn) {
+    navigate("/")
+  }
 
   useEffect(() => {
     dispatch(getWallets());
     dispatch(getTransactions());
     dispatch(getCategories());
-    dispatch(getUserDetails());
+    dispatch(getFilteredCategories('?type_of_outlay=income'));
+    dispatch(getFilteredCategories('?type_of_outlay=expense'));
   }, []);
+
+  useEffect(() => {
+    if (isWalletActionLoading === false) {
+      dispatch(getWallets());
+    }
+  }, [isWalletActionLoading]);
 
   useEffect(() => {
     if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {
@@ -58,24 +69,25 @@ const HomePage: React.FC = () => {
       dispatch(getTransactions());
       dispatch(getCategories());
     }
-
   }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess]);
 
   return (
-    <>
-      <HomePageWrapper>
-        <Header />
+    !user && !token ? (
+      <></>
+    ) :
+      <>
+        <HomePageWrapper>
+          <Header />
+          <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
+            <Wallets />
+            <Transactions />
+            <Statistics />
+          </Box>
+        </HomePageWrapper>
 
-        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
-          <Wallets />
-          <Transactions />
-          <Statistics />
-        </Box>
-      </HomePageWrapper>
-
-      {isAddWalletPopupOpen && <PopupAddWallet />}
-      {isEditWalletPopupOpen && <PopupEditWallet />}
-    </>
+        {isAddWalletPopupOpen && <PopupAddWallet />}
+        {isEditWalletPopupOpen && <PopupEditWallet />}
+      </>
   );
 };
 
@@ -166,7 +178,7 @@ const Wallets: React.FC = () => {
           </List>
         </Box>
         <Button
-          disabled={wallets.length > 4}
+          disabled={wallets?.length > 4}
           secondary
           onClick={handleAddWalletClick}
         >
@@ -230,25 +242,39 @@ const Statistics: React.FC = () => {
   const { categories } = useAppSelector(state => state.category);
   const { transactions } = useAppSelector(state => state.transaction);
 
+  const [incomesLabels, setIncomesLabels] = useState<string[]>();
+  const [expensesLabels, setExpensesLabels] = useState<string[]>([]);
+
   const incomesData: string[] = Object.values(transactions?.income)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => (
+    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
       transaction.amount_of_funds
     )));
   const expensesData: string[] = Object.values(transactions?.expense)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => (
+    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
       transaction.amount_of_funds
     )));
+  useEffect(() => {
+    setIncomesLabels(categories.income?.map(c => c.title))
+  }, [categories.income])
 
-  const incomesLabels: string[] = categories.income.map(c => c.title);
-  const expensesLabels: string[] = categories.expense.map(c => c.title);
+  useEffect(() => {
+    setExpensesLabels(categories.expense?.map(c => c.title))
+  }, [categories.expense])
 
-  const totalIncomesAmount: string = Object.values(transactions?.income)
-    .map((transactionsArr) =>
-      transactionsArr.reduce((sum, transaction) =>
-        (sum += parseFloat(transaction.amount_of_funds)), 0
-      )
-    )
-    .reduce((sum, t) => sum + t, 0).toFixed(2);
+  const [totalIncomesAmount, setTotalIncomesAmount] = useState<string>('');
+
+  useEffect(() => {
+    if (Object.keys(transactions.income)?.length > 0) {
+      setTotalIncomesAmount(Object.values(transactions?.income)
+        .map((transactionsArr) =>
+          transactionsArr.reduce((sum, transaction) =>
+            (sum += parseFloat(transaction.amount_of_funds)), 0
+          )
+        )
+        .reduce((sum, t) => sum + t, 0)
+        .toFixed(2))
+    }
+  }, [transactions.income]);
 
   const totalExpensesAmount: string = Object.values(transactions?.expense)
     .map((transactionsArr) =>
@@ -298,6 +324,7 @@ const Statistics: React.FC = () => {
             <DoughnutChart
               data={isDev ? mockData : expensesData}
               labels={isDev ? mockLabels : expensesLabels}
+              chartType="expense"
             />
           </Box>
         </Box>
@@ -324,6 +351,7 @@ const Statistics: React.FC = () => {
             <DoughnutChart
               data={isDev ? mockData : incomesData}
               labels={isDev ? mockLabels : incomesLabels}
+              chartType="income"
             />
           </Box>
         </Box>

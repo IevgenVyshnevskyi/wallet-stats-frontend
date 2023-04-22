@@ -1,4 +1,4 @@
-import React, { useContext/*, useEffect*/ } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -8,40 +8,44 @@ import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import { PopupWrapper } from "./Popup.styled";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { Form } from "../../atoms/form/Form.styled";
-import { deleteUserAccount, resetDeleteUserAccountError } from "../../../store/userSlice";
+import { deleteUserAccount, resetDeleteUserAccountError, resetUserState } from "../../../store/userSlice";
 import { useNavigate } from 'react-router-dom';
-
+import { resetWalletState } from "../../../store/walletSlice";
+import { resetCategoryState } from "../../../store/categorySlice";
+import { resetTransactionState } from "../../../store/transactionSlice";
+import { resetStatisticsState } from "../../../store/statisticsSlice";
 
 const PopupDeleteAccount: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { setIsDeleteAccountPopupOpen } = useContext(PopupContext);
-
-    const {
-        /*deleteUserAccountError,*/
-
-    } = useAppSelector(state => state.user);
+    const { setIsDeleteAccountPopupOpen, setIsEditProfilePopupOpen } = useContext(PopupContext);
+    const { isAccountDeleted } = useAppSelector(state => state.user)
 
     const {
         handleSubmit,
     } = useForm();
 
-    const handleCloseClick = () => {
+    useEffect(() => {
+        if (isAccountDeleted) {
+            dispatch(resetWalletState());
+            dispatch(resetCategoryState());
+            dispatch(resetTransactionState());
+            dispatch(resetStatisticsState());
+            dispatch(resetUserState());
+            handleCloseClick();
+            setIsEditProfilePopupOpen(false);
+            navigate('/');
+        }
+    }, [isAccountDeleted]);
+
+    function handleCloseClick() {
         dispatch(resetDeleteUserAccountError());
         setIsDeleteAccountPopupOpen(false);
-    };
-
-    /*useEffect(() => {
-        if (isEditWalletSuccess || isDeleteWalletSuccess) {
-            handleCloseClick()
-        }
-    }, [isEditWalletSuccess, isDeleteWalletSuccess]);*/
+    }
 
     function handleSub() {
         dispatch(deleteUserAccount());
-        setIsDeleteAccountPopupOpen(false);
-        navigate('/')
     }
 
     return (

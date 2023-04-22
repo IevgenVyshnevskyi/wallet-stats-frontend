@@ -14,7 +14,7 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Form } from "../../atoms/form/Form.styled";
-import {lettersRegex, moneyAmountRegex} from "../../../shared/utils/regexes";
+import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet, WalletPopupActionsFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
@@ -31,6 +31,8 @@ const PopupEditWallet: React.FC = () => {
         isDeleteWalletSuccess,
         activeWallet,
     } = useAppSelector(state => state.wallet);
+
+    const { user } = useAppSelector(state => state.user);
 
     const {
         register,
@@ -59,7 +61,10 @@ const PopupEditWallet: React.FC = () => {
 
     const handleDeleteWallet = () => {
         dispatch(setSuccessStatus(false));
-        dispatch(walletAction({ method: "DELETE", id: String(activeWallet.id) }));
+        dispatch(walletAction({
+            method: "DELETE",
+            id: String(activeWallet.id)
+        }));
     };
 
     function handleSub(data: WalletPopupActionsFormData) {
@@ -67,10 +72,14 @@ const PopupEditWallet: React.FC = () => {
             title: data.name,
             amount: data.amount,
             type_of_account: activeWallet.type_of_account,
-            owner: userId,
+            owner: user?.id || userId,
         }
 
-        dispatch(walletAction({ data: wallet, method: "PUT", id: String(activeWallet.id) }))
+        dispatch(walletAction({
+            data: wallet,
+            method: "PUT",
+            id: String(activeWallet.id)
+        }))
     }
 
     return (
@@ -121,7 +130,7 @@ const PopupEditWallet: React.FC = () => {
                                         || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                         </Box>
-                    {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+                        {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
 
                         <Box
                             display="flex"

@@ -21,7 +21,6 @@ const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const {
-    categories,
     activeCategory,
     editCategoryData,
   } = useAppSelector(state => state.category)
@@ -66,7 +65,6 @@ const EditCategory: React.FC = () => {
   function handleDeleteCategory() {
     dispatch(setIsEditCategoryOpen(false));
     dispatch(categoryAction({
-      data: activeCategory,
       method: "DELETE",
       id: String(activeCategory?.id)
     }));

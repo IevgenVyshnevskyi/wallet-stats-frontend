@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataEntryFormData, IWallet, MethodTypes } from './types';
 import { $api, WALLET_PATH } from '../api/api';
 import { UserState } from './userSlice';
@@ -70,11 +70,13 @@ export const getWallets = createAsyncThunk<IWallet[], undefined, { rejectValue: 
 );
 
 export const postEntryData = createAsyncThunk<
-  any, DataEntryFormData, { rejectValue: string, state: { user: UserState } }
+  undefined,
+  DataEntryFormData,
+  { rejectValue: string, state: { user: UserState } }
 >(
   'wallet/postEntryData',
   async function (data, { rejectWithValue }) {
-    const { amountAccount, availableCash, cardAccountName, userId, userToken } = data
+    const { amountAccount, availableCash, cardAccountName, userId } = data
 
     if (!userId) {
       return rejectWithValue('Помилка при внесенні рахунків. Спочатку створіть акаунт.');
@@ -93,9 +95,10 @@ export const postEntryData = createAsyncThunk<
       type_of_account: "bank",
     }
 
-    console.log(cashWallet, bankWallet);
-
-    const postCashWalletResponsePromise = await $api.post(WALLET_PATH, cashWallet)
+    const postCashWalletResponsePromise = await $api.post(
+      WALLET_PATH,
+      cashWallet,
+    )
       .then(response => response.status)
       .catch(error => {
         // const errorMessage = error.response.data;
@@ -103,7 +106,10 @@ export const postEntryData = createAsyncThunk<
         return rejectWithValue('Error while creating a cash wallet');
       });
 
-    const postBankWalletResponsePromise = await $api.post(WALLET_PATH, bankWallet)
+    const postBankWalletResponsePromise = await $api.post(
+      WALLET_PATH,
+      bankWallet,
+    )
       .then(response => response.status)
       .catch(error => {
         // const errorMessage = error.response;
@@ -119,7 +125,7 @@ export const postEntryData = createAsyncThunk<
       return rejectWithValue('Can\'t create wallets. Server error.');
     }
 
-    return true;
+    localStorage.setItem("isDataEntrySuccess", "true");
   }
 );
 
@@ -139,6 +145,9 @@ const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
+    resetWalletState: (state) => {
+      return initialState;
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -174,15 +183,12 @@ const walletSlice = createSlice({
       })
 
       .addCase(getWallets.pending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addCase(getWallets.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.wallets = action.payload;
       })
       .addCase(getWallets.rejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload
       })
 
@@ -190,22 +196,21 @@ const walletSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(postEntryData.fulfilled, (state, action) => {
+      .addCase(postEntryData.fulfilled, (state) => {
         state.isLoading = false;
-        state.isEntryDataSuccess = action.payload;
+        state.isEntryDataSuccess = true;
       })
       .addCase(postEntryData.rejected, (state, action) => {
         state.isLoading = false;
         state.entryDataError = action.payload;
         // state.entryDataError = 'Помилка при внесенні рахунків';
-        console.log(action.payload);
-
       })
   }
 });
 
 export const {
   resetError,
+  resetWalletState,
   setActiveWallet,
   setSuccessStatus,
 } = walletSlice.actions;

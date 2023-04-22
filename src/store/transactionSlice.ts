@@ -17,7 +17,6 @@ type TransactionState = {
   editTransactionData: ITransaction;
   isLoading: boolean;
   error: string | null;
-  ownerId: number;
   isAddTransactionSuccess: boolean;
   isEditTransactionSuccess: boolean;
   isDeleteTransactionSuccess: boolean;
@@ -107,7 +106,6 @@ const initialState: TransactionState = {
   editTransactionData: null,
   isLoading: false,
   error: null,
-  ownerId: 0,
   isAddTransactionSuccess: false,
   isEditTransactionSuccess: false,
   isDeleteTransactionSuccess: false,
@@ -118,6 +116,9 @@ const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
+    resetTransactionState: (state) => {
+      return initialState;
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -131,14 +132,10 @@ const transactionSlice = createSlice({
     setFilterByTypeOfOutlay: (state, action) => {
       state.filterByTypeOfOutlay = action.payload;
     },
-    setOwnerId: (state, action) => {
-      state.ownerId = action.payload;
-    },
     setAddTransactionData: (state, action) => {
       state.addTransactionData = {
         ...state.addTransactionData,
         ...action.payload,
-        owner: state.ownerId
       }
     },
     setEditTransactionData: (state, action) => {
@@ -167,12 +164,12 @@ const transactionSlice = createSlice({
         state.isDeleteTransactionSuccess = false;
       })
       .addCase(transactionAction.fulfilled, (state, action) => {
-        state.transactions.all = action.payload;
         state.isLoading = false;
+        state.error = null;
+        state.transactions.all = action.payload;
         state.isAddTransactionSuccess = true;
         state.isEditTransactionSuccess = true;
         state.isDeleteTransactionSuccess = true;
-        state.error = null;
       })
       .addCase(transactionAction.rejected, (state, action) => {
         state.isLoading = false;
@@ -180,15 +177,12 @@ const transactionSlice = createSlice({
       })
 
       .addCase(getTransactions.pending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addCase(getTransactions.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.transactions.all = action.payload;
       })
       .addCase(getTransactions.rejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload;
       })
 
@@ -222,9 +216,8 @@ const transactionSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getUserDetails.fulfilled, (state, action) => {
+      .addCase(getUserDetails.fulfilled, (state) => {
         state.isLoading = false;
-        state.ownerId = action.payload.id;
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -234,11 +227,11 @@ const transactionSlice = createSlice({
 });
 
 export const {
+  resetTransactionState,
   resetError,
   resetActiveTransactionState,
   setActiveTransaction,
   setFilterByTypeOfOutlay,
-  setOwnerId,
   setAddTransactionData,
   setEditTransactionData,
   setSuccessStatus,

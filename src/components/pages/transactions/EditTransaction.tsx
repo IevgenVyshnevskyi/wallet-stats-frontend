@@ -113,7 +113,6 @@ const EditTransaction: React.FC = () => {
   function handleDeleteTransaction() {
     dispatch(setIsEditTransactionOpen(false));
     dispatch(transactionAction({
-      data: activeTransaction,
       method: "DELETE",
       id: String(activeTransaction?.id)
     }));

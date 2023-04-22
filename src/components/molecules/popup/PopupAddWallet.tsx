@@ -27,6 +27,7 @@ const PopupAddWallet: React.FC = () => {
 
     const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
+    const { user } = useAppSelector(state => state.user);
     const { wallets, error, isAddWalletSuccess } = useAppSelector(state => state.wallet);
 
     const {
@@ -59,7 +60,7 @@ const PopupAddWallet: React.FC = () => {
             title: data?.name,
             amount: data?.amount,
             type_of_account: "bank",
-            owner: userId,
+            owner: user?.id || userId
         }
 
         dispatch(walletAction({ data: wallet, method: "POST" }))
@@ -146,7 +147,7 @@ const PopupAddWallet: React.FC = () => {
                                 type="submit"
                                 primary
                                 width="296px"
-                                disabled={!isValid || wallets.length > 4}
+                                disabled={!isValid || wallets?.length > 4}
                             >
                                 Зберегти
                             </Button>

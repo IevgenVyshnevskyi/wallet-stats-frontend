@@ -27,6 +27,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { LoginFormData } from "../../../store/types";
 import { useNavigate } from "react-router-dom";
 import {passwordRegex} from "../../../shared/utils/regexes";
+import { token } from "../../../api/api";
 
 
 const LoginPage: React.FC = () => {
@@ -58,17 +59,13 @@ const LoginPage: React.FC = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            dispatch(getUserDetails());
+            dispatch(getUserDetails())
             navigate('/authentication');
             reset();
         }
     }, [isLoggedIn]);
 
     function handleSub(data: LoginFormData) {
-        /*if (data.password !== 'вірний пароль') {
-            setError("password", { type: "manual", message: "Введено невірний пароль" });
-            return;
-        }*/
         console.log(data);
         dispatch(loginUser(data));
     }

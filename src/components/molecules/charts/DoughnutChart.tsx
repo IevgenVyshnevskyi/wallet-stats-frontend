@@ -2,15 +2,26 @@ import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import { Box } from "../../atoms/box/Box.styled";
 import { WHITE } from "../../../shared/styles/variables";
+import { useAppSelector } from "../../../store/hooks";
 
 type DoughnutChartProps = {
   data: string[];
   labels: string[];
+  handleUpdate?: () => void;
+  chartType: "income" | "expense";
 }
 
-const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
+const DoughnutChart: React.FC<DoughnutChartProps> = ({
+  data,
+  labels,
+  handleUpdate,
+  chartType
+}) => {
   const chartRef = useRef(null);
   const chart = useRef(null);
+
+  const { categories } = useAppSelector(state => state.category);
+  const { transactions } = useAppSelector(state => state.transaction);
 
   useEffect(() => {
     const myDoughnutChartRef = chartRef.current.getContext("2d");
@@ -49,8 +60,8 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
           tooltip: {
             callbacks: {
               label: (context) => {
-                const label = context.dataset.label || '';
-                const value = context.formattedValue;
+                const label = context?.dataset?.label || '';
+                const value = context?.formattedValue;
                 return `${label} ${value}₴`;
               },
             },
@@ -73,7 +84,21 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({ data, labels }) => {
         chart.current.destroy();
       }
     };
+
   }, []);
+
+  // if (chartType === "income") {
+  useEffect(() => {
+    if (categories[chartType]?.length > 0 || Object.keys(transactions[chartType])?.length > 0) {
+      chart.current.data.labels = labels || [];
+      chart.current.data.datasets.data = data || [];
+      chart.current.update();
+    }
+
+  }, [categories[chartType], transactions[chartType]]);
+  // } else {
+
+  // }
 
   return (
     <Box bgColor={WHITE} borderRadius="8px" p="5px 0">

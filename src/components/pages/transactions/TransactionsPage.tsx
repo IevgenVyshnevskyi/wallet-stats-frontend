@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Box } from "../../atoms/box/Box.styled";
 import { TransactionsPageWrapper } from "./TransactionsPage.styled";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -10,31 +10,43 @@ import Transactions from "./Transactions";
 import AddTransaction from "./AddTransaction";
 import { getWallets } from "../../../store/walletSlice";
 import { getCategories } from "../../../store/categorySlice";
+import { token } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const TransactionsPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
 
   const {
     isAddTransactionSuccess,
     isEditTransactionSuccess,
     isDeleteTransactionSuccess,
-    isEditTransactionOpen
+    isEditTransactionOpen,
+    isLoading
   } = useAppSelector(state => state.transaction);
 
+  const { isLoggedIn, isRegistered, user } = useAppSelector(state => state.user);
+
+  if (!token && !isRegistered && !isLoggedIn) {
+    navigate("/")
+  }
+
   useEffect(() => {
-    dispatch(getUserDetails());
     dispatch(getTransactions());
     dispatch(getWallets());
     dispatch(getCategories());
-
-    // dispatch(setAddTransactionData({ owner: user?.id }))
   }, []);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      dispatch(getTransactions());
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (isAddTransactionSuccess || isEditTransactionSuccess || isDeleteTransactionSuccess) {
       dispatch(getTransactions());
     }
-
   }, [isAddTransactionSuccess, isEditTransactionSuccess, isDeleteTransactionSuccess]);
 
   return (

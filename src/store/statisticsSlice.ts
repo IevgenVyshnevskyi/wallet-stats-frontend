@@ -3,27 +3,23 @@ import { getFilteredTransactions } from './transactionSlice';
 import { FilterByDaysOptions, ICategory, Transactions } from './types';
 import { getFilteredCategories } from './categorySlice';
 
-type ChartData = {
-  [key in FilterByDaysOptions]: { transactions: Transactions }
-};
-
-type AllOutlaysChart = {
-  [key in FilterByDaysOptions]: { transactions: Transactions }
+type BasicDoughnutChartData = {
+  transactions: Transactions;
+  categories: ICategory[];
 };
 
 type StatisticsState = {
   filterByDays: FilterByDaysOptions;
-  incomesChart: ChartData & {
+  incomesChart: BasicDoughnutChartData & {
     totalIncomes: string,
-    categories: ICategory[],
   };
-  expensesChart: ChartData & {
+  expensesChart: BasicDoughnutChartData & {
     totalExpenses: string,
-    categories: ICategory[],
   };
-  allOutlaysChart: AllOutlaysChart & {
-    activeCategory: number,
-    categoryTransactions: Transactions,
+  allOutlaysChart: {
+    transactions: Transactions;
+    activeCategory: number;
+    categoryTransactions: Transactions;
   };
   isLoading: boolean;
   error: string | null;
@@ -32,23 +28,17 @@ type StatisticsState = {
 const initialState: StatisticsState = {
   filterByDays: "30",
   incomesChart: {
-    "30": { transactions: {} },
-    "90": { transactions: {} },
-    "180": { transactions: {} },
+    transactions: {},
     categories: [],
     totalIncomes: "",
   },
   expensesChart: {
-    "30": { transactions: {} },
-    "90": { transactions: {} },
-    "180": { transactions: {} },
+    transactions: {},
     categories: [],
     totalExpenses: "",
   },
   allOutlaysChart: {
-    "30": { transactions: {} },
-    "90": { transactions: {} },
-    "180": { transactions: {} },
+    transactions: {},
     activeCategory: 0,
     categoryTransactions: {},
   },
@@ -56,11 +46,13 @@ const initialState: StatisticsState = {
   error: null,
 };
 
-
 const statisticsSlice = createSlice({
   name: 'statistics',
   initialState,
   reducers: {
+    resetStatisticsState: (state) => {
+      return initialState;
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -110,34 +102,12 @@ const statisticsSlice = createSlice({
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         const { data, params } = action.payload;
 
-        const expense = "?type_of_outlay=expense";
-        const income = "?type_of_outlay=income";
-
         if (params.startsWith('?category=')) {
           state.allOutlaysChart.categoryTransactions = data;
-        }
-
-        switch (params) {
-          case `${expense}&days=30`:
-            state.expensesChart[30].transactions = data;
-            break;
-          case `${expense}&days=90`:
-            state.expensesChart[90].transactions = data;
-            break;
-          case `${expense}&days=180`:
-            state.expensesChart[180].transactions = data;
-            break;
-          case `${income}&days=30`:
-            state.incomesChart[30].transactions = data;
-            break;
-          case `${income}&days=90`:
-            state.incomesChart[90].transactions = data;
-            break;
-          case `${income}&days=180`:
-            state.incomesChart[180].transactions = data;
-            break;
-          default:
-            break;
+        } else if (params.startsWith('?type_of_outlay=income')) {
+          state.incomesChart.transactions = data;
+        } else if (params.startsWith('?type_of_outlay=expense')) {
+          state.expensesChart.transactions = data;
         }
 
         state.isLoading = false;
@@ -150,6 +120,7 @@ const statisticsSlice = createSlice({
 });
 
 export const {
+  resetStatisticsState,
   resetError,
   setFilterByDays,
   setTotalIncomes,

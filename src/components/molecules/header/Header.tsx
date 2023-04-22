@@ -15,12 +15,16 @@ import { HeaderWrapper } from './Header.styled';
 import { List } from './../../atoms/list/List.styled';
 import { ListItem } from './../../atoms/list/ListItem.styled';
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
-import { useAppDispatch } from "../../../store/hooks";
-import { logoutUser, resetUser } from "../../../store/userSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { logoutUser, resetUserState } from "../../../store/userSlice";
 import PopupEditProfile from "../popup/PopupEditProfile";
 import PopupDeleteAccount from "../popup/PopupDeleteAccount";
+import { resetWalletState } from "../../../store/walletSlice";
+import { resetCategoryState } from "../../../store/categorySlice";
+import { resetTransactionState } from "../../../store/transactionSlice";
+import { resetStatisticsState } from "../../../store/statisticsSlice";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -32,14 +36,25 @@ const Header: React.FC = () => {
     isDeleteAccountPopupOpen,
   } = useContext(PopupContext);
 
-  const handleEditProfileClick = () => {
+  const { isLoggedOut } = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    if (isLoggedOut) {
+      dispatch(resetUserState());
+      dispatch(resetWalletState());
+      dispatch(resetCategoryState());
+      dispatch(resetTransactionState());
+      dispatch(resetStatisticsState());
+      navigate('/');
+    }
+  }, [isLoggedOut]);
+
+  function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   };
 
   function handleLogOutClick() {
     dispatch(logoutUser());
-    dispatch(resetUser());
-    navigate('/');
   }
 
   return (

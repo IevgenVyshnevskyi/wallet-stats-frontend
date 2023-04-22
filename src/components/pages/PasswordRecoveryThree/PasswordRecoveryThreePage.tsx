@@ -14,6 +14,7 @@ import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
+    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
     GRADIENT,
     WHITE
@@ -89,14 +90,17 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
-                                        width="265px" style={{paddingRight: '35px'}}
+                                        width="265px"
                                         {...register("password", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             pattern: {
                                                 value: passwordRegex,
                                                 message: "Пароль повинен містити не менше 8 символів, 1 літеру, 1 цифру та 1 спеціальний символ"
                                             },
-                                        })} />
+                                        })}
+                                        style={{paddingRight: '35px'}}
+                                        className={errors.password && 'error'}
+                                    />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
                                      m="0 0 0 4px">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
@@ -115,7 +119,7 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                         type={showConfirmPassword ? "text" : "password"}
                                         id="confirmPassword"
                                         name="confirmPassword"
-                                        width="265px" style={{paddingRight: '35px'}}
+                                        width="265px"
                                         {...register("confirmPassword", {
                                             required: 'Обов\'язкове поле для заповнення',
                                             validate: (val: string) => {
@@ -123,7 +127,10 @@ const PasswordRecoveryThreePage: React.FC = () => {
                                                     return "Паролі не співпадають";
                                                 }
                                             }
-                                        })}/>
+                                        })}
+                                        style={{paddingRight: '35px'}}
+                                        className={errors.confirmPassword && 'error'}
+                                    />
                                 </Box>
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                      m="0 0 20px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>

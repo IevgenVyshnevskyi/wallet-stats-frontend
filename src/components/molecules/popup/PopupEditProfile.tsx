@@ -1,11 +1,11 @@
-import {ALMOST_BLACK_FOR_TEXT, DIVIDER} from "../../../shared/styles/variables";
+import {ALERT_1, ALERT_2, ALMOST_BLACK_FOR_TEXT, DIVIDER} from "../../../shared/styles/variables";
 import {Box} from "../../atoms/box/Box.styled";
 import {Button} from '../../atoms/button/Button.styled';
 import {Input} from "../../atoms/input/Input.styled";
 import {Label} from "../../atoms/label/Label.styled";
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import {PopupWrapper} from "./Popup.styled";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {PopupContext} from "../../../contexts/PopupContext";
 import {Typography} from '../../atoms/typography/Typography.styled';
 import {ButtonLink} from "../../atoms/button/ButtonLink";
@@ -58,9 +58,21 @@ const PopupEditProfile: React.FC = () => {
         setIsDeleteAccountPopupOpen(true);
     }
 
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
+        }
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
     return (
-        <PopupWrapper zIndex="5">
-            <Box>
+        <PopupWrapper zIndex="5" onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="500" fz="22px" mb="25px">
                         Налаштування профілю
@@ -82,7 +94,9 @@ const PopupEditProfile: React.FC = () => {
                                             value: lettersRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
-                                    })} type="text" id="firstName" width="284px"/>
+                                    })} type="text" id="firstName" width="284px"
+                                           className={errors.firstName && 'error'}
+                                    />
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.firstName && <>{errors?.firstName?.message || 'Error!'}</>}</Box>
                                 </Box>
@@ -95,7 +109,9 @@ const PopupEditProfile: React.FC = () => {
                                             value: lettersRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
-                                    })} type="text" id="lastName" width="284px"/>
+                                    })} type="text" id="lastName" width="284px"
+                                           className={errors.lastName && 'error'}
+                                    />
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.lastName && <>{errors?.lastName?.message || 'Error!'}</>}</Box>
                                 </Box>
@@ -108,7 +124,9 @@ const PopupEditProfile: React.FC = () => {
                                             value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
                                             message: "Введіть коректну електронну адресу"
                                         }
-                                    })} type="email" id="email" width="284px"/>
+                                    })} type="email" id="email" width="284px"
+                                           className={errors.email && 'error'}
+                                    />
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
                                 </Box>
@@ -135,7 +153,7 @@ const PopupEditProfile: React.FC = () => {
                                             type={showOldPassword ? "text" : "password"}
                                             id="oldPassword"
                                             name="oldPassword"
-                                            width="265px" style={{paddingRight: '35px'}}
+                                            width="265px"
                                             {...register("oldPassword", {
                                                 required: 'Обов\'язкове поле для заповнення',
                                                 pattern: {
@@ -143,7 +161,10 @@ const PopupEditProfile: React.FC = () => {
                                                     message: `Пароль повинен містити не менше 8 символів,
                                                                 1 літеру, 1 цифру та 1 спеціальний символ`
                                                 },
-                                            })} />
+                                            })}
+                                            style={{paddingRight: '35px'}}
+                                            className={errors.oldPassword && 'error'}
+                                        />
                                     </Box>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          width='300px'
@@ -165,7 +186,7 @@ const PopupEditProfile: React.FC = () => {
                                             type={showPassword ? "text" : "password"}
                                             id="password"
                                             name="password"
-                                            width="265px" style={{paddingRight: '35px'}}
+                                            width="265px"
                                             {...register("password", {
                                                 required: 'Обов\'язкове поле для заповнення',
                                                 pattern: {
@@ -173,7 +194,10 @@ const PopupEditProfile: React.FC = () => {
                                                     message: `Пароль повинен містити не менше 8 символів,
                                                                 1 літеру, 1 цифру та 1 спеціальний символ`
                                                 },
-                                            })} />
+                                            })}
+                                            style={{paddingRight: '35px'}}
+                                            className={errors.password && 'error'}
+                                        />
                                     </Box>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          width='300px'
@@ -196,7 +220,7 @@ const PopupEditProfile: React.FC = () => {
                                             type={showConfirmPassword ? "text" : "password"}
                                             id="confirmPassword"
                                             name="confirmPassword"
-                                            width="265px" style={{paddingRight: '35px'}}
+                                            width="265px"
                                             {...register("confirmPassword", {
                                                 required: true,
                                                 validate: (val: string) => {
@@ -204,7 +228,10 @@ const PopupEditProfile: React.FC = () => {
                                                         return "Паролі не співпадають";
                                                     }
                                                 }
-                                            })}/>
+                                            })}
+                                            style={{paddingRight: '35px'}}
+                                            className={errors.confirmPassword && 'error'}
+                                        />
                                     </Box>
                                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
                                          m="0px 0 20px 0">{errors?.confirmPassword

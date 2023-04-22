@@ -49,8 +49,8 @@ const PopupDeleteAccount: React.FC = () => {
     }
 
     return (
-        <PopupWrapper zIndex="6">
-            <Box>
+        <PopupWrapper zIndex="6"  onClick={handleCloseClick}>
+            <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="600" fz="22px" mb="25px">
                         Видалення аккаунту

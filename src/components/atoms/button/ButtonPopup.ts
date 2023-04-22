@@ -12,4 +12,5 @@ export const ButtonPopup = styled.button`
   background: ${BASE_1};
   border: none;
   border-bottom: 2px solid ${DIVIDER};
+  cursor: pointer;
 `

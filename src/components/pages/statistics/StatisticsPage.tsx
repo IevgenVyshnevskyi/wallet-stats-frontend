@@ -11,31 +11,46 @@ import { Select } from "../../atoms/select/Select.styled";
 import { Option } from "../../atoms/select/Option.styled";
 import LineChart from "../../molecules/charts/LineChart";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getFilteredTransactions } from "../../../store/transactionSlice";
+import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
 import { mockCategories } from "../../../../mock-data/categories";
 import { setActiveCategory, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 import { isDev } from "../../../consts/consts";
-import { getFilteredCategories } from "../../../store/categorySlice";
+import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
 import { mockTransactions } from "../../../../mock-data/transactions";
+import { token } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const StatisticsPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { incomesChart } = useAppSelector(state => state.statistics);
   const { categories } = useAppSelector(state => state.category);
+  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+
+  if (!token && !isRegistered && !isLoggedIn) {
+    navigate("/")
+  }
 
   useEffect(() => {
-    if (incomesChart.categories.length === 0) {
-      dispatch(getFilteredCategories("?type_of_outlay=income"))
-      dispatch(getFilteredCategories("?type_of_outlay=expense"))
-    }
+    dispatch(getCategories())
+    dispatch(getTransactions())
 
-    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"))
-    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"))
+    // if (incomesChart.categories.length === 0) {
+    dispatch(getFilteredCategories("?type_of_outlay=income"))
+    dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    // }
 
-    dispatch(getFilteredTransactions(`?category=${categories?.all[0]}`))
+    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
+
+  useEffect(() => {
+    if (categories.all?.length > 0) {
+      dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
+    }
+  }, [categories.all]);
 
   return (
     <StatisticsPageWrapper>
@@ -55,9 +70,7 @@ const StatisticsPage: React.FC = () => {
 const StatisticsHeader: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    filterByDays,
-  } = useAppSelector(state => state.statistics);
+  const { filterByDays } = useAppSelector(state => state.statistics);
 
   const filterButtons: IFilterButton[] = [
     {
@@ -117,44 +130,43 @@ const DoughnutChartsSection: React.FC = () => {
   const {
     incomesChart,
     expensesChart,
-    filterByDays
   } = useAppSelector(state => state.statistics);
 
-  const incomesData: string[] = Object.values(incomesChart[filterByDays]?.transactions)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => (
-      transaction.amount_of_funds
-    )));
-  const expensesData: string[] = Object.values(expensesChart[filterByDays]?.transactions)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => (
-      transaction.amount_of_funds
-    )));
+  const incomesData: string[] = Object.values(incomesChart?.transactions)
+    .flatMap(transactionsArr => transactionsArr.map(transaction => {
+      return transaction.amount_of_funds
+    }));
+  const expensesData: string[] = Object.values(expensesChart?.transactions)
+    .flatMap(transactionsArr => transactionsArr.map(transaction => {
+      return transaction.amount_of_funds
+    }));
 
-  const incomesLabels: string[] = incomesChart.categories.map(c => c.title);
-  const expensesLabels: string[] = expensesChart.categories.map(c => c.title);
+  const incomesLabels: string[] = incomesChart.categories?.map(c => c.title);
+  const expensesLabels: string[] = expensesChart.categories?.map(c => c.title);
 
   useEffect(() => {
-    const totalIncomesAmount: string = Object.values(
-      incomesChart[filterByDays]?.transactions
-    )
-      .map((transactionsArr) =>
-        transactionsArr.reduce((sum, transaction) =>
-          (sum += parseFloat(transaction.amount_of_funds)), 0
-        )
-      )
-      .reduce((sum, t) => sum + t, 0).toFixed(2);
+    const totalIncomesAmount: string = Object.values(incomesChart?.transactions)
+      .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
+        console.log('transaction in totalIncomesAmount', totalIncomesAmount)
+        return sum += parseFloat(transaction.amount_of_funds)
+      }, 0))
+      .reduce((sum, t) => sum + t, 0)
+      .toFixed(2);
+    console.log(totalIncomesAmount)
 
-    const totalExpensesAmount: string = Object.values(
-      expensesChart[filterByDays]?.transactions
-    )
-      .map((transactionsArr) =>
-        transactionsArr.reduce((sum, transaction) =>
-          (sum += parseFloat(transaction.amount_of_funds)), 0
-        )
-      )
-      .reduce((sum, t) => sum + t, 0).toFixed(2);
+    const totalExpensesAmount: string = Object.values(expensesChart?.transactions)
+      .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
+        return sum += parseFloat(transaction.amount_of_funds)
+      }, 0))
+      .reduce((sum, t) => sum + t, 0)
+      .toFixed(2);
 
     dispatch(setTotalIncomes(totalIncomesAmount))
     dispatch(setTotalExpenses(totalExpensesAmount))
+  }, []);
+
+  useEffect(() => {
+    // if ()
   }, []);
 
   return (
@@ -182,6 +194,7 @@ const DoughnutChartsSection: React.FC = () => {
         <DoughnutChart
           data={isDev ? mockData : expensesData}
           labels={isDev ? mockLabels : expensesLabels}
+          chartType="expense"
         />
       </Box>
       <Box
@@ -201,6 +214,7 @@ const DoughnutChartsSection: React.FC = () => {
         <DoughnutChart
           data={isDev ? mockData : incomesData}
           labels={isDev ? mockLabels : incomesLabels}
+          chartType="income"
         />
       </Box>
     </Box>

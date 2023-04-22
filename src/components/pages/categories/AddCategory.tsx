@@ -7,7 +7,6 @@ import { Button } from "../../atoms/button/Button.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { Label } from "../../atoms/label/Label.styled";
-import { isDev } from "../../../consts/consts";
 import { Input } from "../../atoms/input/Input.styled";
 import { userId } from "../../../api/api";
 
@@ -15,8 +14,9 @@ const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const { addCategoryData } = useAppSelector(state => state.category);
+  const { user } = useAppSelector(state => state.user);
 
-  const isValid = Object.keys(addCategoryData || {}).length >= 3;
+  const isValid = Object.keys(addCategoryData || {})?.length >= 2;
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -37,14 +37,19 @@ const AddCategory: React.FC = () => {
 
   function handleAddCategory() {
     dispatch(setActiveCategory({}));
-    dispatch(categoryAction({ data: addCategoryData, method: "POST" }))
+    dispatch(categoryAction({
+      data: {
+        ...addCategoryData,
+        owner: user?.id || userId,
+      },
+      method: "POST"
+    }))
   }
 
+  console.log('userId', userId)
+
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(setAddCategoryData({
-      title: e.target.value,
-      owner: userId,
-    }))
+    dispatch(setAddCategoryData({ title: e.target.value }))
   }
 
   return (

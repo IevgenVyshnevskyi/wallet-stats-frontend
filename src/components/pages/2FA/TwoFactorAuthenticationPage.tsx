@@ -20,9 +20,10 @@ import {
     GRADIENT, PRIMARY,
     WHITE
 } from "../../../shared/styles/variables";
-import {ButtonLink} from "../../atoms/button/ButtonLink";
-import {getUserDetails} from "../../../store/userSlice";
-import {useAppDispatch} from "../../../store/hooks";
+import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { getUserDetails } from "../../../store/userSlice";
+import { useAppDispatch } from "../../../store/hooks";
+import { token } from "../../../api/api";
 
 const TwoFactorAuthenticationPage: React.FC = () => {
     const dispatch = useAppDispatch();

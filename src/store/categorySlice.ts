@@ -11,12 +11,13 @@ type CategoryState = {
     income: ICategory[];
     expense: ICategory[];
   };
+  totalIncomes: string;
+  totalExpenses: string;
   activeCategory: ICategory;
   addCategoryData: ICategory;
   editCategoryData: ICategory;
   isLoading: boolean;
   error: string | null;
-  ownerId: number;
   isAddCategorySuccess: boolean;
   isEditCategorySuccess: boolean;
   isDeleteCategorySuccess: boolean;
@@ -44,7 +45,7 @@ export const categoryAction = createAsyncThunk<
         url: `${CATEGORY_PATH}${id ? (id + '/') : ''}`,
         data: data || {},
       })
-        .then(response => response?.data)
+        .then(res => res?.data)
         .catch(error => {
           console.log('error in action category');
           return rejectWithValue('error in action category');
@@ -101,12 +102,13 @@ const initialState: CategoryState = {
     income: [],
     expense: [],
   },
+  totalIncomes: "0",
+  totalExpenses: "0",
   activeCategory: null,
   addCategoryData: null,
   editCategoryData: null,
   isLoading: false,
   error: null,
-  ownerId: 0,
   isAddCategorySuccess: false,
   isEditCategorySuccess: false,
   isDeleteCategorySuccess: false,
@@ -117,6 +119,9 @@ const categorySlice = createSlice({
   name: 'category',
   initialState,
   reducers: {
+    resetCategoryState: (state) => {
+      return initialState;
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -127,17 +132,19 @@ const categorySlice = createSlice({
     setActiveCategory: (state, action) => {
       state.activeCategory = action.payload;
     },
+    setTotalIncomes: (state, action) => {
+      state.totalIncomes = action.payload;
+    },
+    setTotalExpenses: (state, action) => {
+      state.totalExpenses = action.payload;
+    },
     setFilterByTypeOfOutlay: (state, action) => {
       state.filterByTypeOfOutlay = action.payload;
-    },
-    setOwnerId: (state, action) => {
-      state.ownerId = action.payload;
     },
     setAddCategoryData: (state, action) => {
       state.addCategoryData = {
         ...state.addCategoryData,
         ...action.payload,
-        owner: state.ownerId
       }
     },
     setEditCategoryData: (state, action) => {
@@ -179,15 +186,12 @@ const categorySlice = createSlice({
       })
 
       .addCase(getCategories.pending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addCase(getCategories.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.categories.all = action.payload;
       })
       .addCase(getCategories.rejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload;
       })
 
@@ -223,7 +227,6 @@ const categorySlice = createSlice({
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.ownerId = action.payload.id;
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -233,11 +236,13 @@ const categorySlice = createSlice({
 });
 
 export const {
+  resetCategoryState,
   resetError,
   resetActiveCategoryState,
   setActiveCategory,
+  setTotalIncomes,
+  setTotalExpenses,
   setFilterByTypeOfOutlay,
-  setOwnerId,
   setAddCategoryData,
   setEditCategoryData,
   setSuccessStatus,

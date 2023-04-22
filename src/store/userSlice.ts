@@ -1,15 +1,16 @@
-import { createSlice, PayloadAction, createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
 import { $api, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
-import setCSRFToken from '../shared/utils/setCSRFToken';
 
 export type UserState = {
     user: IUser;
     isLoading: boolean;
     isLoggedIn: boolean;
+    isLoggedOut: boolean;
     isRegistered: boolean;
+    isAccountDeleted: boolean;
     loginError: string | null;
     logoutError: string | null;
     getDetailsError: string | null;
@@ -22,10 +23,11 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
     'user/registerUser',
     async function (registerData, { rejectWithValue }) {
         return $api.post<IUser>(REGISTER_PATH, registerData)
-            .then(response => {
-                const user = response.data;
+            .then(res => {
+                const user = res.data;
+                localStorage.clear();
                 localStorage.setItem('token', user.token);
-                // localStorage.removeItem('userData');
+                localStorage.setItem('userData', JSON.stringify(user));
                 return user;
             })
             .catch(error => {
@@ -39,10 +41,9 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
     'user/loginUser',
     async function (loginData, { rejectWithValue }) {
         return $api.post(LOGIN_PATH, loginData)
-            .then(response => {
-                const token = response.data.token;
+            .then(res => {
+                const token = res.data.token;
                 localStorage.setItem('token', token);
-                setCSRFToken()
                 return token;
             })
             .catch(error => {
@@ -56,9 +57,8 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
     'user/logoutUser',
     async function (_, { rejectWithValue }) {
         return $api.get(LOGOUT_PATH)
-            .then(response => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('userData');
+            .then(res => {
+                localStorage.clear();
                 return undefined;
             })
             .catch(error => {
@@ -87,7 +87,10 @@ export const deleteUserAccount = createAsyncThunk<undefined, undefined, { reject
     'user/deleteUserAccount',
     async function (_, { rejectWithValue }) {
         return $api.delete(USER_DETAILS_PATH)
-            .then(res => res.data)
+            .then(res => {
+                localStorage.clear();
+                return undefined;
+            })
             .catch(error => {
                 const errorMessage = error.response.data;
                 return rejectWithValue(errorMessage);
@@ -112,6 +115,8 @@ const initialState: UserState = {
     isLoading: false,
     isRegistered: false,
     isLoggedIn: false,
+    isLoggedOut: false,
+    isAccountDeleted: false,
     registerError: null,
     loginError: null,
     logoutError: null,
@@ -124,8 +129,8 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        resetUser: (state) => {
-            state.user = null;
+        resetUserState: (state) => {
+            return initialState;
         },
         resetDeleteUserAccountError: (state) => {
             state.deleteUserAccountError = null;
@@ -140,6 +145,8 @@ const userSlice = createSlice({
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.user = action.payload;
                 state.isLoading = false;
+                state.isLoggedOut = false;
+                state.isAccountDeleted = false;
                 state.isRegistered = true;
             })
             .addCase(registerUser.rejected, (state, action) => {
@@ -152,6 +159,8 @@ const userSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state) => {
                 state.isLoading = false;
+                state.isLoggedOut = false;
+                state.isAccountDeleted = false;
                 state.isLoggedIn = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
@@ -165,6 +174,8 @@ const userSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isLoading = false;
                 state.isLoggedIn = false;
+                state.isLoggedOut = true;
+                state.user = null;
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -193,6 +204,9 @@ const userSlice = createSlice({
             })
             .addCase(deleteUserAccount.fulfilled, (state) => {
                 state.isLoading = false;
+                state.isLoggedIn = false;
+                state.isRegistered = false;
+                state.isAccountDeleted = true;
             })
             .addCase(deleteUserAccount.rejected, (state, action) => {
                 state.isLoading = false;
@@ -212,6 +226,9 @@ const userSlice = createSlice({
     }
 });
 
-export const { resetUser, resetDeleteUserAccountError } = userSlice.actions;
+export const {
+    resetUserState,
+    resetDeleteUserAccountError
+} = userSlice.actions;
 
 export default userSlice.reducer;

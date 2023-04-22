@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { mockCategories } from "../../../../mock-data/categories";
 import { mockWallets } from "../../../../mock-data/wallets";
 import { isDev } from "../../../consts/consts";
@@ -31,6 +31,7 @@ import {
 } from "../../../store/transactionSlice";
 
 import { formatTransactionDateToUTC } from '../../../shared/utils/formatTransactionDate';
+import { userId } from '../../../api/api';
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -38,10 +39,12 @@ const AddTransaction: React.FC = () => {
   const { addTransactionData } = useAppSelector(state => state.transaction);
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
+  const { user } = useAppSelector(state => state.user);
 
   const [startDate, setStartDate] = useState(new Date());
+  const selectRef = useRef(null);
 
-  const isValid = Object.keys(addTransactionData || {}).length >= 6
+  const isValid = Object.keys(addTransactionData || {})?.length >= 5
     && addTransactionData?.amount_of_funds !== "";
 
   const switchButtons: ISwitchButton[] = [
@@ -87,11 +90,18 @@ const AddTransaction: React.FC = () => {
 
   function handleAddTransaction() {
     dispatch(setActiveTransaction(null));
-    dispatch(transactionAction({ data: addTransactionData, method: "POST" }))
+    dispatch(transactionAction({
+      data: {
+      ...addTransactionData,
+        owner: user?.id || userId,
+      },
+      method: "POST"
+    }))
   }
 
   useEffect(() => {
     dispatch(setAddTransactionData({ created: formatTransactionDateToUTC(startDate) }))
+    dispatch(setAddTransactionData({ category: selectRef.current.value }))
   }, []);
 
   return (
@@ -165,6 +175,7 @@ const AddTransaction: React.FC = () => {
           <Label fw="500" mb="12px">Категорія</Label>
           <Select
             width="100%"
+            ref={selectRef}
             defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
             onChange={(e) => onCategoryChange(e)}
           >

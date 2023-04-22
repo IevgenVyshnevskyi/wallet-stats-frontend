@@ -49,7 +49,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick, isActive }) => {
           fw="600"
           fz="22px"
         >
-          {wallet?.amount} ₴
+          {wallet?.amount && wallet?.amount + " ₴"}
         </Typography>
       </Box>
 

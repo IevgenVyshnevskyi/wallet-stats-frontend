@@ -14,11 +14,6 @@ import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 
 import { PopupProvider } from "./contexts/PopupContext";
-import PopupEditWallet from "./components/molecules/popup/PopupEditWallet";
-import PopupEditProfile from "./components/molecules/popup/PopupEditProfile";
-import PopupAddWallet from "./components/molecules/popup/PopupAddWallet";
-import PopupAddAccount from "./components/molecules/popup/PopupAddAccount";
-import PopupDeleteAccount from "./components/molecules/popup/PopupDeleteAccount";
 
 function App() {
   const elements = useRoutes([
@@ -34,12 +29,6 @@ function App() {
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },
     { path: '/statistics', element: <StatisticsPage /> },
-
-    { path: '/popup', element: <PopupEditWallet /> },
-
-    { path: '/popupAdd', element: <PopupAddAccount /> },
-
-    { path: '/popupAdd2', element: <PopupAddWallet /> },
   ])
 
   return (

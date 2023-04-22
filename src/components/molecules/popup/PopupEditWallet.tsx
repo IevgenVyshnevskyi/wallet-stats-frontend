@@ -1,29 +1,27 @@
-import {useState} from "react";
+import { useForm } from "react-hook-form";
 
-import {useForm} from "react-hook-form";
-
-import {ALERT_1, ALERT_2, ALMOST_BLACK_FOR_TEXT, DIVIDER} from "../../../shared/styles/variables";
-import {Box} from "../../atoms/box/Box.styled";
-import {Button} from '../../atoms/button/Button.styled';
-import {Input} from "../../atoms/input/Input.styled";
-import {Label} from "../../atoms/label/Label.styled";
+import { ALERT_1, ALMOST_BLACK_FOR_TEXT, DIVIDER } from "../../../shared/styles/variables";
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from '../../atoms/button/Button.styled';
+import { Input } from "../../atoms/input/Input.styled";
+import { Label } from "../../atoms/label/Label.styled";
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
-import {PopupWrapper} from "./Popup.styled";
-import React, {useContext, useEffect} from "react";
-import {PopupContext} from "../../../contexts/PopupContext";
-import {Typography} from '../../atoms/typography/Typography.styled';
-import {ButtonLink} from "../../atoms/button/ButtonLink";
-import {Form} from "../../atoms/form/Form.styled";
-import {lettersRegex, moneyAmountRegex} from "../../../shared/utils/regexes";
-import {useAppDispatch, useAppSelector} from "../../../store/hooks";
-import {IWallet, WalletPopupActionsFormData} from "../../../store/types";
-import {resetError, setActiveWallet, setSuccessStatus, walletAction} from "../../../store/walletSlice";
-import {userId} from "../../../api/api";
+import { PopupWrapper } from "./Popup.styled";
+import React, { useContext, useEffect } from "react";
+import { PopupContext } from "../../../contexts/PopupContext";
+import { Typography } from '../../atoms/typography/Typography.styled';
+import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { Form } from "../../atoms/form/Form.styled";
+import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { IWallet, WalletPopupActionsFormData } from "../../../store/types";
+import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
+import { userId } from "../../../api/api";
 
 const PopupEditWallet: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const {setIsEditWalletPopupOpen} = useContext(PopupContext);
+    const { setIsEditWalletPopupOpen } = useContext(PopupContext);
 
     const {
         error,
@@ -31,6 +29,8 @@ const PopupEditWallet: React.FC = () => {
         isDeleteWalletSuccess,
         activeWallet,
     } = useAppSelector(state => state.wallet);
+
+    const { user } = useAppSelector(state => state.user);
 
     const {
         register,
@@ -59,7 +59,10 @@ const PopupEditWallet: React.FC = () => {
 
     const handleDeleteWallet = () => {
         dispatch(setSuccessStatus(false));
-        dispatch(walletAction({method: "DELETE", id: String(activeWallet.id)}));
+        dispatch(walletAction({
+            method: "DELETE",
+            id: String(activeWallet.id)
+        }));
     };
 
     useEffect(() => {
@@ -79,10 +82,14 @@ const PopupEditWallet: React.FC = () => {
             title: data.name,
             amount: data.amount,
             type_of_account: activeWallet.type_of_account,
-            owner: userId,
+            owner: user?.id || userId,
         }
 
-        dispatch(walletAction({data: wallet, method: "PUT", id: String(activeWallet.id)}))
+        dispatch(walletAction({
+            data: wallet,
+            method: "PUT",
+            id: String(activeWallet.id)
+        }))
     }
 
     return (
@@ -96,7 +103,7 @@ const PopupEditWallet: React.FC = () => {
                         <Box mb="25px">
                             <Box>
                                 <Label htmlFor="name" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                       textAlight="left">Назва рахунку</Label>
+                                    textAlight="left">Назва рахунку</Label>
                                 <Input {...register('name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
@@ -104,17 +111,17 @@ const PopupEditWallet: React.FC = () => {
                                         message: "Назва повинна бути не менше 2 літер",
                                     },
                                 })}
-                                       type="text" id="name" width="284px"
-                                       className={errors.name && 'error'}
-                                       defaultValue={activeWallet?.title}
+                                    type="text" id="name" width="284px"
+                                    className={errors.name && 'error'}
+                                    defaultValue={activeWallet?.title}
 
                                 />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                                     m="6px 0 10px 0">{errors?.name && <>{errors?.name?.message || 'Error!'}</>}</Box>
+                                    m="6px 0 10px 0">{errors?.name && <>{errors?.name?.message || 'Error!'}</>}</Box>
                             </Box>
                             <Box mb="30px">
                                 <Label htmlFor="amount" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                                       textAlight="left">Сума коштів на рахунку</Label>
+                                    textAlight="left">Сума коштів на рахунку</Label>
                                 <Input {...register('amount', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
@@ -126,12 +133,12 @@ const PopupEditWallet: React.FC = () => {
                                         message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки' /*'Мінімальне значення суми повинно бути не менше 0.01'*/
                                     },
                                 })} id="amount" type="text" step="0.01" width="284px" pr="10px"
-                                       className={errors.amount && 'error'}
-                                       defaultValue={activeWallet?.amount}
+                                    className={errors.amount && 'error'}
+                                    defaultValue={activeWallet?.amount}
                                 />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width="320px"
-                                     m="6px 0 10px 0">{errors?.amount && <>{errors?.amount?.message
-                                    || 'Введіть додаткове значення'}</>}</Box>
+                                    m="6px 0 10px 0">{errors?.amount && <>{errors?.amount?.message
+                                        || 'Введіть додаткове значення'}</>}</Box>
                             </Box>
                         </Box>
                         {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
@@ -161,7 +168,7 @@ const PopupEditWallet: React.FC = () => {
 
                 </Box>
                 <Button secondary onClick={handleCloseClick} p="10px 20px">
-                    <CrossIcon/>
+                    <CrossIcon />
                 </Button>
             </Box>
         </PopupWrapper>

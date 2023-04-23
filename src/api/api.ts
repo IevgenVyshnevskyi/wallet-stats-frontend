@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { IUser } from "../store/types";
 
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "http://129.153.197.29:8000";
 export const REGISTER_PATH = "/acounts/register/";
 export const LOGIN_PATH = "/acounts/login/";
 export const LOGOUT_PATH = "/acounts/logout/";

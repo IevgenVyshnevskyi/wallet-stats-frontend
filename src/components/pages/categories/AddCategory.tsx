@@ -9,6 +9,7 @@ import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch"
 import { Label } from "../../atoms/label/Label.styled";
 import { Input } from "../../atoms/input/Input.styled";
 import { userId } from "../../../api/api";
+import { useEffect } from "react";
 
 const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -16,7 +17,8 @@ const AddCategory: React.FC = () => {
   const { addCategoryData } = useAppSelector(state => state.category);
   const { user } = useAppSelector(state => state.user);
 
-  const isValid = Object.keys(addCategoryData || {})?.length >= 2;
+  const isValid = Object.keys(addCategoryData || {})?.length >= 2
+    && addCategoryData?.title !== "";
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -46,7 +48,9 @@ const AddCategory: React.FC = () => {
     }))
   }
 
-  console.log('userId', userId)
+  useEffect(() => {
+    dispatch(setAddCategoryData({ type_of_outlay: "expense" }))
+  }, []);
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(setAddCategoryData({ title: e.target.value }))

@@ -43,7 +43,8 @@ const EditTransaction: React.FC = () => {
 
   const {
     activeTransaction,
-    editTransactionData
+    editTransactionData,
+    filterByTypeOfOutlay
   } = useAppSelector(state => state.transaction)
 
   const [startDate, setStartDate] = useState(new Date());
@@ -192,17 +193,16 @@ const EditTransaction: React.FC = () => {
         <Box mb="20px">
           <Label fw="500" mb="12px">Категорія</Label>
 
-          {/* <Typography as="p">{editTransactionData.category}</Typography>
-          <Typography as="p">{mockCategories[editTransactionData.category].title}</Typography> */}
-
           <Select
             width="100%"
             defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
             onChange={(e) => onCategoryChange(e)}
           >
-            {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
-              <Option key={id} value={id}>{title}</Option>
-            ))}
+            {(filterByTypeOfOutlay === "expense"
+              ? categories.expense
+              : categories.income)?.map(({ title, id }) => (
+                <Option key={id} value={id}>{title}</Option>
+              ))}
           </Select>
         </Box>
         <Box mb="20px">
@@ -231,7 +231,8 @@ const EditTransaction: React.FC = () => {
           <Button
             secondary
             width="100%"
-            onClick={handleCancelEditTransaction}>
+            onClick={handleCancelEditTransaction}
+          >
             Скасувати
           </Button>
         </Box>

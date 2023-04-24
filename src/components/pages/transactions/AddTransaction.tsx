@@ -32,11 +32,15 @@ import {
 
 import { formatTransactionDateToUTC } from '../../../shared/utils/formatTransactionDate';
 import { userId } from '../../../api/api';
+import { getFilteredCategories } from '../../../store/categorySlice';
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { addTransactionData } = useAppSelector(state => state.transaction);
+  const {
+    addTransactionData,
+    filterByTypeOfOutlay
+  } = useAppSelector(state => state.transaction);
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
   const { user } = useAppSelector(state => state.user);
@@ -92,7 +96,7 @@ const AddTransaction: React.FC = () => {
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({
       data: {
-      ...addTransactionData,
+        ...addTransactionData,
         owner: user?.id || userId,
       },
       method: "POST"
@@ -100,8 +104,13 @@ const AddTransaction: React.FC = () => {
   }
 
   useEffect(() => {
-    dispatch(setAddTransactionData({ created: formatTransactionDateToUTC(startDate) }))
-    dispatch(setAddTransactionData({ category: selectRef.current.value }))
+    dispatch(getFilteredCategories("?type_of_outlay=income"))
+    dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    dispatch(setAddTransactionData({
+      created: formatTransactionDateToUTC(startDate),
+      type_of_outlay: "expense",
+      category: selectRef.current.value
+    }))
   }, []);
 
   return (
@@ -179,9 +188,11 @@ const AddTransaction: React.FC = () => {
             defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
             onChange={(e) => onCategoryChange(e)}
           >
-            {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
-              <Option key={id} value={id}>{title}</Option>
-            ))}
+            {(addTransactionData?.type_of_outlay === "expense"
+              ? categories.expense
+              : categories.income)?.map(({ title, id }) => (
+                <Option key={id} value={id}>{title}</Option>
+              ))}
           </Select>
         </Box>
         <Box mb="20px">

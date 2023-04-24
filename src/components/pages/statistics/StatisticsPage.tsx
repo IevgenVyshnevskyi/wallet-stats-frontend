@@ -30,7 +30,7 @@ const StatisticsPage: React.FC = () => {
   const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/")
+    navigate("/welcome")
   }
 
   useEffect(() => {

@@ -1,1 +1,1 @@
-export const isDev: boolean = false;
+export const isDev: boolean = true;

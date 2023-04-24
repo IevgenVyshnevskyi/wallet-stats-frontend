@@ -39,19 +39,27 @@ const LineChart: React.FC = () => {
     switch (filterByDays) {
       case "30":
         setPointHitRadiusValue(30)
+        setPointBorderWidth(4);
+        setHoverBorderWidth(5);
         break;
       case "90":
         setPointHitRadiusValue(15)
+        setPointBorderWidth(3);
+        setHoverBorderWidth(4);
         break;
       case "180":
         setPointHitRadiusValue(10)
+        setPointBorderWidth(2);
+        setHoverBorderWidth(3);
         break;
       default:
         break;
     }
   }, [filterByDays]);
 
-  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
+  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(30);
+  const [pointBorderWidth, setPointBorderWidth] = useState<number>(4);
+  const [hoverBorderWidth, setHoverBorderWidth] = useState<number>(5);
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -70,9 +78,8 @@ const LineChart: React.FC = () => {
           fill: false,
           borderColor: PRIMARY,
           tension: 0.4,
-          // pointBackgroundColor: "#ffffff11",
           pointBackgroundColor: PRIMARY,
-          pointBorderWidth: 4,
+          pointBorderWidth: pointBorderWidth,
           pointHitRadius: pointHitRadiusValue,
         }]
       },
@@ -110,7 +117,7 @@ const LineChart: React.FC = () => {
         maintainAspectRatio: false,
         elements: {
           point: {
-            hoverBorderWidth: 5,
+            hoverBorderWidth: hoverBorderWidth,
           },
         },
       },

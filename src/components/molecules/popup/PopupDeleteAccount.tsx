@@ -27,17 +27,29 @@ const PopupDeleteAccount: React.FC = () => {
     } = useForm();
 
     useEffect(() => {
-        if (isAccountDeleted) {
-            dispatch(resetWalletState());
-            dispatch(resetCategoryState());
-            dispatch(resetTransactionState());
-            dispatch(resetStatisticsState());
-            dispatch(resetUserState());
-            handleCloseClick();
-            setIsEditProfilePopupOpen(false);
-            navigate('/');
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
         }
-    }, [isAccountDeleted]);
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+    
+    // useEffect(() => {
+    //     if (isAccountDeleted) {
+    //         dispatch(resetWalletState());
+    //         dispatch(resetCategoryState());
+    //         dispatch(resetTransactionState());
+    //         dispatch(resetStatisticsState());
+    //         dispatch(resetUserState());
+    //         handleCloseClick();
+    //         setIsEditProfilePopupOpen(false);
+    //         navigate('/');
+    //     }
+    // }, [isAccountDeleted]);
 
     function handleCloseClick() {
         dispatch(resetDeleteUserAccountError());
@@ -51,11 +63,12 @@ const PopupDeleteAccount: React.FC = () => {
     }, [isEditWalletSuccess, isDeleteWalletSuccess]);*/
 
     function handleSub() {
-        dispatch(deleteUserAccount());
+        // dispatch(deleteUserAccount());
+        navigate('/');
     }
 
     return (
-        <PopupWrapper zIndex="6"  onClick={handleCloseClick}>
+        <PopupWrapper zIndex="6" onClick={handleCloseClick}>
             <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="600" fz="22px" mb="25px">

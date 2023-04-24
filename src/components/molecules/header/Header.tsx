@@ -38,23 +38,23 @@ const Header: React.FC = () => {
 
   const { isLoggedOut } = useAppSelector(state => state.user)
 
-  useEffect(() => {
-    if (isLoggedOut) {
-      dispatch(resetUserState());
-      dispatch(resetWalletState());
-      dispatch(resetCategoryState());
-      dispatch(resetTransactionState());
-      dispatch(resetStatisticsState());
-      navigate('/');
-    }
-  }, [isLoggedOut]);
+  // useEffect(() => {
+  //   if (isLoggedOut) {
+  //     dispatch(resetUserState());
+  //     dispatch(resetWalletState());
+  //     dispatch(resetCategoryState());
+  //     dispatch(resetTransactionState());
+  //     dispatch(resetStatisticsState());
+  //   }
+  // }, [isLoggedOut]);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   };
 
   function handleLogOutClick() {
-    dispatch(logoutUser());
+    // dispatch(logoutUser());
+    navigate('/');
   }
 
   return (

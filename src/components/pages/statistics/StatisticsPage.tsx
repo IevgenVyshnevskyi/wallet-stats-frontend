@@ -29,9 +29,9 @@ const StatisticsPage: React.FC = () => {
   const { categories } = useAppSelector(state => state.category);
   const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
 
-  if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/")
-  }
+  // if (!token && !isRegistered && !isLoggedIn) {
+  //   navigate("/")
+  // }
 
   useEffect(() => {
     dispatch(getCategories())

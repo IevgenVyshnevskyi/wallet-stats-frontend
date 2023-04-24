@@ -188,11 +188,13 @@ const AddTransaction: React.FC = () => {
             defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
             onChange={(e) => onCategoryChange(e)}
           >
-            {(addTransactionData?.type_of_outlay === "expense"
-              ? categories.expense
-              : categories.income)?.map(({ title, id }) => (
-                <Option key={id} value={id}>{title}</Option>
-              ))}
+            {(isDev
+              ? mockCategories
+              : addTransactionData?.type_of_outlay === "expense"
+                ? categories.expense
+                : categories.income)?.map(({ title, id }) => (
+                  <Option key={id} value={id}>{title}</Option>
+                ))}
           </Select>
         </Box>
         <Box mb="20px">

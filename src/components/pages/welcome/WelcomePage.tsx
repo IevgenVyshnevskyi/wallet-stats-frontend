@@ -21,6 +21,10 @@ const WelcomePage = () => {
         navigate('/register');
     }
 
+    function handleChangeMainPageClick() {
+        navigate('/home');
+    }
+
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
@@ -39,8 +43,9 @@ const WelcomePage = () => {
                     <Typography fw="400" fz="16px" lh="19px" m="32px 0 16px 0" textAlign="center">
                         Вже маєте аккаунт?
                     </Typography>
-                    <Box display='flex' justifyContent='center'>
+                    <Box display='flex' direction='column' justifyContent='center' alignItems='center' gap="100px">
                         <Button secondary onClick={handleEnterClick}>Увійти</Button>
+                        <Button secondary onClick={handleChangeMainPageClick}>Перейти на головну сторінку</Button>
                     </Box>
                 </Box>
             </Box>

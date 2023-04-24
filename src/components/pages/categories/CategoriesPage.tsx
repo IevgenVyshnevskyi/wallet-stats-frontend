@@ -28,7 +28,7 @@ const CategoriesPage: React.FC = () => {
   const { isLoggedIn, isRegistered, user } = useAppSelector(state => state.user);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/")
+    navigate("/welcome")
   }
 
   useEffect(() => {

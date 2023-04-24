@@ -1,4 +1,6 @@
-import { useRoutes } from "react-router-dom";
+import { useRoutes, Navigate } from "react-router-dom";
+
+import { PopupProvider } from "./contexts/PopupContext";
 
 import WelcomePage from "./components/pages/welcome/WelcomePage";
 import LoginPage from "./components/pages/login/LoginPage";
@@ -13,11 +15,10 @@ import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthent
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 
-import { PopupProvider } from "./contexts/PopupContext";
-
 function App() {
   const elements = useRoutes([
-    { path: '/', element: <WelcomePage /> },
+    { path: '/', element: <Navigate to="/home" replace /> },
+    { path: '/welcome', element: <WelcomePage /> },
     { path: '/register', element: <RegisterPage /> },
     { path: '/data-entry', element: <DataEntryPage /> },
     { path: '/login', element: <LoginPage /> },

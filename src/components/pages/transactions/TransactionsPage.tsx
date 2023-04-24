@@ -25,10 +25,10 @@ const TransactionsPage: React.FC = () => {
     isLoading
   } = useAppSelector(state => state.transaction);
 
-  const { isLoggedIn, isRegistered, user } = useAppSelector(state => state.user);
+  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/")
+    navigate("/welcome")
   }
 
   useEffect(() => {

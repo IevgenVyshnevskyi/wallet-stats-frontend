@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
@@ -44,12 +44,18 @@ const EditTransaction: React.FC = () => {
   const {
     activeTransaction,
     editTransactionData,
-    filterByTypeOfOutlay
   } = useAppSelector(state => state.transaction)
+
+  const amountInputValue = useRef<string>(editTransactionData?.amount_of_funds);
 
   const [startDate, setStartDate] = useState(new Date());
 
-  const CustomInput = forwardRef<HTMLButtonElement, any>(({ value, onClick }, ref) => (
+  amountInputValue.current = editTransactionData?.amount_of_funds;
+
+  const CustomDateInput = forwardRef<HTMLButtonElement, any>((
+    { value, onClick },
+    ref
+  ) => (
     <DateInput onClick={onClick} ref={ref}>
       {value}
     </DateInput>
@@ -164,7 +170,7 @@ const EditTransaction: React.FC = () => {
             showTimeSelect
             timeFormat="p"
             timeCaption="Час"
-            customInput={<CustomInput />}
+            customInput={<CustomDateInput />}
           />
         </Box>
         <Box mb="20px">
@@ -198,7 +204,7 @@ const EditTransaction: React.FC = () => {
             defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
             onChange={(e) => onCategoryChange(e)}
           >
-            {(filterByTypeOfOutlay === "expense"
+            {(editTransactionData.type_of_outlay === "expense"
               ? categories.expense
               : categories.income)?.map(({ title, id }) => (
                 <Option key={id} value={id}>{title}</Option>
@@ -210,13 +216,13 @@ const EditTransaction: React.FC = () => {
             Сума
           </Label>
           <Input
-            fz="22px"
             type="number"
-            defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
+            onChange={(e) => onInputChange(e)}
+            value={amountInputValue.current}
+            fz="22px"
             id="sum"
             width="270px"
             bgColor={WHITE}
-            onChange={(e) => onInputChange(e)}
           />
         </Box>
         <Box display="flex" gap="8px" mb="20px">

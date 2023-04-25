@@ -37,10 +37,7 @@ import { getFilteredCategories } from '../../../store/categorySlice';
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const {
-    addTransactionData,
-    filterByTypeOfOutlay
-  } = useAppSelector(state => state.transaction);
+  const { addTransactionData } = useAppSelector(state => state.transaction);
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
   const { user } = useAppSelector(state => state.user);
@@ -68,7 +65,10 @@ const AddTransaction: React.FC = () => {
     },
   ];
 
-  const CustomInput = forwardRef<HTMLButtonElement, any>(({ value, onClick }, ref) => (
+  const CustomDateInput = forwardRef<HTMLButtonElement, any>((
+    { value, onClick },
+    ref
+  ) => (
     <DateInput onClick={onClick} ref={ref}>
       {value}
     </DateInput>
@@ -154,7 +154,7 @@ const AddTransaction: React.FC = () => {
             showTimeSelect
             timeFormat="p"
             timeCaption="Час"
-            customInput={<CustomInput />}
+            customInput={<CustomDateInput />}
           />
         </Box>
         <Box mb="20px">

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Box } from "../../atoms/box/Box.styled";
@@ -6,7 +7,6 @@ import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Label } from "../../atoms/label/Label.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
-import { isDev } from "../../../consts/consts";
 
 import {
   categoryAction,
@@ -24,6 +24,9 @@ const EditCategory: React.FC = () => {
     activeCategory,
     editCategoryData,
   } = useAppSelector(state => state.category)
+
+  const titleInputValue = useRef<string>(editCategoryData?.title);
+  titleInputValue.current = editCategoryData?.title;
 
   const isValid = Object.keys(editCategoryData)?.length >= 3
 
@@ -100,8 +103,17 @@ const EditCategory: React.FC = () => {
             <TabSwitch switchButtons={switchButtons} />
           </Box>
           <Box mb="25px">
-            <Label fw="500" htmlFor="name" mb="12px">Назва категорії</Label>
-            <Input type="text" id="name" onChange={onInputChange} width="93%" bgColor={WHITE} />
+            <Label fw="500" htmlFor="name" mb="12px">
+              Назва категорії
+            </Label>
+            <Input
+              type="text"
+              value={titleInputValue.current}
+              onChange={onInputChange}
+              id="name"
+              width="93%"
+              bgColor={WHITE}
+            />
           </Box>
         </Box>
         <Box display="flex" gap="8px" mb="27px">

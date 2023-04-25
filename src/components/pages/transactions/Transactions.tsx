@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
@@ -114,12 +113,13 @@ const Transactions: React.FC = () => {
             <Typography as="h3" fz="16px" fw="500" mb="20px">
               {formatTransactionDateToHours(date)}
             </Typography>
-            <List>
+            <List display="flex" direction="column" gap="8px">
               {transactionsData()[date]?.map((transaction) => (
                 <ListItem key={transaction?.id}>
                   <ButtonTransparent
                     width="100%"
                     onClick={() => onTransactionClick(transaction)}
+                    borderRadius="8px"
                   >
                     <Transaction transaction={transaction} isTransactionsPage />
                   </ButtonTransparent>

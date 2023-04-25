@@ -105,12 +105,13 @@ const Categories: React.FC = () => {
         height="100px"
         p="15px"
       >
-        <List gap="8px">
+        <List gap="8px" display="flex" direction="column">
           {categoriesData()?.map((category, index) => (
             <ListItem key={index}>
               <ButtonTransparent
                 width="100%"
                 onClick={() => onCategoryClick(category)}
+                borderRadius="8px"
               >
                 <Category category={category} />
               </ButtonTransparent>

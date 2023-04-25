@@ -11,7 +11,6 @@ export const TransactionWrapper = styled(Box)<TransactionWrapperProps>`
   gap: 5px;
   border-radius: 8px;
   padding: 17px;
-  margin-bottom: 8px;
 
   ${({ isTransactionsPage }) => isTransactionsPage && `
     &:hover {

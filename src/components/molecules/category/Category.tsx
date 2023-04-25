@@ -14,16 +14,7 @@ const Category: React.FC<CategoryProps> = ({ category }) => {
   const isIncome = category?.type_of_outlay === "income";
 
   return (
-    <CategoryWrapper
-      display="flex"
-      alignItems="center"
-      gap="16px"
-      borderRadius="8px"
-      bgColor={isActive ? PRIMARY : WHITE}
-      width="100%"
-      p="16px"
-      mb="8px"
-    >
+    <CategoryWrapper bgColor={isActive ? PRIMARY : WHITE}>
       <Box grow="1">
         <Typography
           as="h5"

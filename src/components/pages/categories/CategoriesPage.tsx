@@ -7,7 +7,7 @@ import { Box } from "../../atoms/box/Box.styled";
 import { CategoriesPageWrapper } from "./CategoriesPage.styled";
 import Header from '../../molecules/header/Header';
 
-import Categories from './Caregories';
+import Categories from './Categories';
 import EditCategory from './EditCategory';
 import AddCategory from './AddCategory';
 import { token } from '../../../api/api';

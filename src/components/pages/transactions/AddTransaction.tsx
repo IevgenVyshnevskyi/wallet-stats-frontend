@@ -1,5 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import { mockCategories } from "../../../../mock-data/categories";
+import { useEffect, useRef, useState } from 'react';
 import { mockWallets } from "../../../../mock-data/wallets";
 import { isDev } from "../../../consts/consts";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -9,20 +8,12 @@ import { Input } from "../../atoms/input/Input.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { List } from "../../atoms/list/List.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
-import { Select } from "../../atoms/select/Select.styled";
+import Select from "../../molecules/select/Select";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import Wallet from "../../molecules/wallet/Wallet";
-import { Option } from "../../atoms/select/Option.styled";
 import { BASE_2, WHITE } from "../../../shared/styles/variables";
 import { IWallet } from "../../../store/types";
-
-import { DateInput } from "../../atoms/input/InputDate.styled";
-
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import uk from 'date-fns/locale/uk';
-registerLocale('uk', uk)
 
 import {
   setActiveTransaction,
@@ -33,6 +24,7 @@ import {
 import { formatTransactionDateToUTC } from '../../../shared/utils/formatTransactionDate';
 import { userId } from '../../../api/api';
 import { getFilteredCategories } from '../../../store/categorySlice';
+import DatePicker from './DatePicker';
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -42,17 +34,34 @@ const AddTransaction: React.FC = () => {
   const { wallets } = useAppSelector(state => state.wallet);
   const { user } = useAppSelector(state => state.user);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const selectRef = useRef(null);
-
   const isValid = Object.keys(addTransactionData || {})?.length >= 5
     && addTransactionData?.amount_of_funds !== "";
+
+  const selectedCategory = categories.all.find((c) => c.id === addTransactionData?.category)
+
+  const [selectedCategoryValues, setSelectedCategoryValues] = useState<
+    { value: number, label: string }
+  >({
+    value: selectedCategory?.id,
+    label: selectedCategory?.title,
+  });
+
+  const options: any = (addTransactionData?.type_of_outlay === "expense"
+    ? categories.expense
+    : categories.income
+  )?.map(({ id, title }) => {
+    return { value: id, label: title }
+  })
 
   const switchButtons: ISwitchButton[] = [
     {
       buttonName: 'Витрата',
       onTabClick: () => {
         dispatch(setAddTransactionData({ type_of_outlay: "expense" }));
+        setSelectedCategoryValues({
+          value: categories.expense[0]?.id,
+          label: categories.expense[0]?.title
+        })
       },
       isActive: addTransactionData?.type_of_outlay === "expense"
     },
@@ -60,32 +69,42 @@ const AddTransaction: React.FC = () => {
       buttonName: 'Надходження',
       onTabClick: () => {
         dispatch(setAddTransactionData({ type_of_outlay: "income" }));
+        setSelectedCategoryValues({
+          value: categories.income[0]?.id,
+          label: categories.income[0]?.title
+        })
       },
       isActive: addTransactionData?.type_of_outlay === "income"
     },
   ];
 
-  const CustomDateInput = forwardRef<HTMLButtonElement, any>((
-    { value, onClick },
-    ref
-  ) => (
-    <DateInput onClick={onClick} ref={ref}>
-      {value}
-    </DateInput>
-  ));
+  useEffect(() => {
+    dispatch(getFilteredCategories("?type_of_outlay=income"))
+    dispatch(getFilteredCategories("?type_of_outlay=expense"))
+  }, []);
 
-  function onDateChange(date: Date) {
-    console.log(date);
-    setStartDate(date);
-    dispatch(setAddTransactionData({ created: formatTransactionDateToUTC(date) }))
-  }
+  useEffect(() => {
+    setSelectedCategoryValues({
+      value: categories.expense[0]?.id,
+      label: categories.expense[0]?.title
+    })
+    dispatch(setAddTransactionData({
+      created: formatTransactionDateToUTC(new Date()),
+      type_of_outlay: "expense",
+      category: categories.expense[0]?.id
+    }))
+  }, [categories.expense]);
 
   function onWalletClick(wallet: IWallet) {
     dispatch(setAddTransactionData({ wallet: wallet.id }));
   };
 
-  function onCategoryChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    dispatch(setAddTransactionData({ category: parseInt(e.target.value) }))
+  function onCategoryChange(e: any): void {
+    dispatch(setAddTransactionData({ category: e?.value }));
+    setSelectedCategoryValues({
+      value: e?.value,
+      label: e?.label
+    });
   }
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -102,16 +121,6 @@ const AddTransaction: React.FC = () => {
       method: "POST"
     }))
   }
-
-  useEffect(() => {
-    dispatch(getFilteredCategories("?type_of_outlay=income"))
-    dispatch(getFilteredCategories("?type_of_outlay=expense"))
-    dispatch(setAddTransactionData({
-      created: formatTransactionDateToUTC(startDate),
-      type_of_outlay: "expense",
-      category: selectRef.current.value
-    }))
-  }, []);
 
   return (
     <Box display="flex" direction="column" width="540px">
@@ -145,17 +154,7 @@ const AddTransaction: React.FC = () => {
           >
             Час транзакції
           </Typography>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => onDateChange(date)}
-            dateFormat="EEEE, d MMMM, HH:mm"
-            timeIntervals={1}
-            locale="uk"
-            showTimeSelect
-            timeFormat="p"
-            timeCaption="Час"
-            customInput={<CustomDateInput />}
-          />
+          <DatePicker />
         </Box>
         <Box mb="20px">
           <Typography
@@ -183,17 +182,10 @@ const AddTransaction: React.FC = () => {
         <Box mb="20px">
           <Label fw="500" mb="12px">Категорія</Label>
           <Select
-            width="100%"
-            ref={selectRef}
-            defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
-            onChange={(e) => onCategoryChange(e)}
-          >
-            {(addTransactionData?.type_of_outlay === "expense"
-              ? categories.expense
-              : categories.income)?.map(({ title, id }) => (
-                <Option key={id} value={id}>{title}</Option>
-              ))}
-          </Select>
+            value={selectedCategoryValues}
+            options={options}
+            onCategoryChange={onCategoryChange}
+          />
         </Box>
         <Box mb="20px">
           <Label fw="500" htmlFor="sum" mb="12px">Сума</Label>

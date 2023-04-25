@@ -1,25 +1,16 @@
-import { forwardRef, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"
-import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 import { List } from "../../atoms/list/List.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
 import Wallet from "../../molecules/wallet/Wallet";
 import { Label } from "../../atoms/label/Label.styled";
-import { Select } from "../../atoms/select/Select.styled";
-import { mockCategories } from "../../../../mock-data/categories";
-import { Option } from "../../atoms/select/Option.styled";
 import { IWallet } from "../../../store/types";
-
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import uk from 'date-fns/locale/uk';
-registerLocale('uk', uk)
 
 import {
   resetActiveTransactionState,
@@ -32,34 +23,35 @@ import {
 import { isDev } from "../../../consts/consts";
 import { mockWallets } from "../../../../mock-data/wallets";
 import { Input } from './../../atoms/input/Input.styled';
-import { DateInput } from "../../atoms/input/InputDate.styled";
-import { formatTransactionDateToString, formatTransactionDateToUTC } from '../../../shared/utils/formatTransactionDate';
+import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
+import Select from "../../molecules/select/Select";
+import DatePicker from "./DatePicker";
 
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { wallets } = useAppSelector(state => state.wallet);
+  const { editTransactionData } = useAppSelector(state => state.transaction)
   const { categories } = useAppSelector(state => state.category);
-
-  const {
-    activeTransaction,
-    editTransactionData,
-  } = useAppSelector(state => state.transaction)
+  const { wallets } = useAppSelector(state => state.wallet);
 
   const amountInputValue = useRef<string>(editTransactionData?.amount_of_funds);
-
-  const [startDate, setStartDate] = useState(new Date());
-
   amountInputValue.current = editTransactionData?.amount_of_funds;
 
-  const CustomDateInput = forwardRef<HTMLButtonElement, any>((
-    { value, onClick },
-    ref
-  ) => (
-    <DateInput onClick={onClick} ref={ref}>
-      {value}
-    </DateInput>
-  ));
+  const selectedCategory = categories.all.find((c) => c.id === editTransactionData?.category)
+
+  const [selectedCategoryValues, setSelectedCategoryValues] = useState<
+    { value: number, label: string }
+  >({
+    value: selectedCategory?.id,
+    label: selectedCategory?.title,
+  });
+
+  const options: any = (editTransactionData.type_of_outlay === "expense"
+    ? categories.expense
+    : categories.income
+  )?.map(({ id, title }) => {
+    return { value: id, label: title }
+  })
 
   const isValid = Object.keys(editTransactionData)?.length >= 5
     && editTransactionData?.amount_of_funds !== "";
@@ -68,31 +60,51 @@ const EditTransaction: React.FC = () => {
     {
       buttonName: 'Витрата',
       onTabClick: () => {
-        dispatch(setEditTransactionData({ type_of_outlay: "expense" }));
+        dispatch(setEditTransactionData({
+          type_of_outlay: "expense",
+          category: categories.expense[0]?.id
+        }));
+        setSelectedCategoryValues({
+          value: categories.expense[0]?.id,
+          label: categories.expense[0]?.title
+        })
       },
       isActive: editTransactionData?.type_of_outlay === "expense"
     },
     {
       buttonName: 'Надходження',
       onTabClick: () => {
-        dispatch(setEditTransactionData({ type_of_outlay: "income" }));
+        dispatch(setEditTransactionData({
+          type_of_outlay: "income",
+          category: categories.income[0]?.id
+        }));
+        setSelectedCategoryValues({
+          value: categories.income[0]?.id,
+          label: categories.income[0]?.title
+        })
       },
       isActive: editTransactionData?.type_of_outlay === "income"
     },
   ];
 
-  function onDateChange(date: Date) {
-    setStartDate(date);
-    dispatch(setEditTransactionData({ created: formatTransactionDateToUTC(date) }))
-  }
-
   function onWalletClick(wallet: IWallet) {
-    dispatch(setEditTransactionData({ wallet: wallet.id }));
+    dispatch(setEditTransactionData({ wallet: wallet?.id }));
   };
 
-  function onCategoryChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    dispatch(setEditTransactionData({ category: parseInt(e.target.value) }))
+  function onCategoryChange(e: any): void {
+    dispatch(setEditTransactionData({ category: e?.value }));
+    setSelectedCategoryValues({
+      value: e?.value,
+      label: e?.label
+    });
   }
+
+  useEffect(() => {
+    setSelectedCategoryValues({
+      value: selectedCategory?.id,
+      label: selectedCategory?.title,
+    });
+  }, [editTransactionData.category]);
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(setEditTransactionData({ amount_of_funds: e.target.value }))
@@ -121,7 +133,7 @@ const EditTransaction: React.FC = () => {
     dispatch(setIsEditTransactionOpen(false));
     dispatch(transactionAction({
       method: "DELETE",
-      id: String(activeTransaction?.id)
+      id: String(editTransactionData?.id)
     }));
     dispatch(setActiveTransaction({}));
   }
@@ -158,20 +170,7 @@ const EditTransaction: React.FC = () => {
           >
             Час транзакції
           </Typography>
-          <DatePicker
-            selected={editTransactionData?.created
-              ? formatTransactionDateToString(editTransactionData?.created)
-              : startDate
-            }
-            onChange={(date) => onDateChange(date)}
-            dateFormat="EEEE, d MMMM, HH:mm"
-            timeIntervals={1}
-            locale="uk"
-            showTimeSelect
-            timeFormat="p"
-            timeCaption="Час"
-            customInput={<CustomDateInput />}
-          />
+          <DatePicker />
         </Box>
         <Box mb="20px">
           <Typography
@@ -198,18 +197,11 @@ const EditTransaction: React.FC = () => {
         </Box>
         <Box mb="20px">
           <Label fw="500" mb="12px">Категорія</Label>
-
           <Select
-            width="100%"
-            defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
-            onChange={(e) => onCategoryChange(e)}
-          >
-            {(editTransactionData.type_of_outlay === "expense"
-              ? categories.expense
-              : categories.income)?.map(({ title, id }) => (
-                <Option key={id} value={id}>{title}</Option>
-              ))}
-          </Select>
+            value={selectedCategoryValues}
+            options={options}
+            onCategoryChange={onCategoryChange}
+          />
         </Box>
         <Box mb="20px">
           <Label fw="500" htmlFor="sum" mb="12px">

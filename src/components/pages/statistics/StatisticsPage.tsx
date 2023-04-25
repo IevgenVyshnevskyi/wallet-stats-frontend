@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { BASE_2, DARK_FOR_TEXT, DIVIDER, WHITE } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
@@ -7,17 +7,14 @@ import Header from '../../molecules/header/Header';
 import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 import { StatisticsPageWrapper } from "./StatisticsPage.styled";
 import DoughnutChart from './../../molecules/charts/DoughnutChart';
-import { Select } from "../../atoms/select/Select.styled";
-import { Option } from "../../atoms/select/Option.styled";
+import Select from "../../molecules/select/Select";
 import LineChart from "../../molecules/charts/LineChart";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
-import { mockCategories } from "../../../../mock-data/categories";
 import { setActiveCategory, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 import { isDev } from "../../../consts/consts";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
-import { mockTransactions } from "../../../../mock-data/transactions";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +22,6 @@ const StatisticsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { incomesChart } = useAppSelector(state => state.statistics);
   const { categories } = useAppSelector(state => state.category);
   const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
 
@@ -36,20 +32,16 @@ const StatisticsPage: React.FC = () => {
   useEffect(() => {
     dispatch(getCategories())
     dispatch(getTransactions())
-
-    // if (incomesChart.categories.length === 0) {
     dispatch(getFilteredCategories("?type_of_outlay=income"))
     dispatch(getFilteredCategories("?type_of_outlay=expense"))
-    // }
-
     dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
     dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
 
   useEffect(() => {
-    if (categories.all?.length > 0) {
-      dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
-    }
+    // if (categories.all?.length > 0) {
+    dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
+    // }
   }, [categories.all]);
 
   return (
@@ -165,10 +157,6 @@ const DoughnutChartsSection: React.FC = () => {
     dispatch(setTotalExpenses(totalExpensesAmount))
   }, []);
 
-  useEffect(() => {
-    // if ()
-  }, []);
-
   return (
     <Box
       display="flex"
@@ -224,31 +212,43 @@ const DoughnutChartsSection: React.FC = () => {
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const {
+    filterByDays,
+    allOutlaysChart
+  } = useAppSelector(state => state.statistics);
   const { categories } = useAppSelector(state => state.category);
-  const { filterByDays } = useAppSelector(state => state.statistics);
 
-  function onChangeCategory(e: React.ChangeEvent<HTMLSelectElement>) {
-    dispatch(setActiveCategory(e.target.value))
+  const selectedCategory = categories.all.find((c) => c.id === allOutlaysChart.activeCategory)
+
+  const [selectedCategoryValues, setSelectedCategoryValues] = useState<any>({
+    value: selectedCategory?.id,
+    label: selectedCategory?.title,
+  });
+
+  const options: any = categories.all?.map(({ id, title }) => {
+    return { value: id, label: title }
+  })
+
+  function onCategoryChange(e: any): void {
+    dispatch(setActiveCategory(e.value))
+    setSelectedCategoryValues({ value: e.value, label: e.label })
     dispatch(getFilteredTransactions(
-      `?category=${e.target.value}&days=${filterByDays}`
+      `?category=${e.value}&days=${filterByDays}`
     ))
   }
 
   return (
     <Box display="flex" direction="column">
-      <Box display="flex" alignItems="center" gap="16px" mb="16px">
+      <Box display="flex" alignItems="center" gap="16px" mb="16px" zIndex="7">
         <Typography as="h3" fz="16px" fw="500">
           Витрати або надходження за категорією
         </Typography>
         <Select
           width="450px"
-          defaultValue={(isDev ? mockCategories[0] : categories.all[0])?.title}
-          onChange={(e) => onChangeCategory(e)}
-        >
-          {(isDev ? mockCategories : categories.all)?.map(({ title, id }) => (
-            <Option key={id} value={id}>{title}</Option>
-          ))}
-        </Select>
+          options={options}
+          value={selectedCategoryValues}
+          onCategoryChange={onCategoryChange}
+        />
       </Box>
       <Box borderRadius="8px" bgColor={WHITE} p="15px" grow="1">
         <LineChart />

@@ -124,7 +124,7 @@ const LineChart: React.FC = () => {
   }, [labels]);
 
   return (
-    <canvas id="myLineChart" height="270px" ref={chartRef} />
+    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="270px" ref={chartRef} />
   );
 };
 

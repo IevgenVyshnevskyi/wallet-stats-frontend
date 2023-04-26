@@ -208,6 +208,7 @@ const Transactions: React.FC = () => {
         height="100px"
         bgColor={BASE_2}
         p="15px"
+        borderRadius="16px"
       >
         {Object.keys(isDev
           ? mockTransactions
@@ -216,7 +217,7 @@ const Transactions: React.FC = () => {
               <Typography as="h3" fz="16px" fw="500" mb="20px">
                 {formatTransactionDateToHours(date)}
               </Typography>
-              <List>
+              <List display="flex" direction="column" gap="8px">
                 {(isDev
                   ? mockTransactions
                   : transactions.all)[date]?.map((transaction) => (

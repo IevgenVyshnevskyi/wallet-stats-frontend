@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
@@ -26,16 +26,16 @@ import { Input } from './../../atoms/input/Input.styled';
 import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 import Select from "../../molecules/select/Select";
 import DatePicker from "./DatePicker";
+import { Form } from "../../atoms/form/Form.styled";
+import { useForm } from "react-hook-form";
+import { moneyAmountRegex } from "../../../shared/utils/regexes";
 
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { editTransactionData } = useAppSelector(state => state.transaction)
+  const { editTransactionData, isLoading } = useAppSelector(state => state.transaction)
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
-
-  const amountInputValue = useRef<string>(editTransactionData?.amount_of_funds);
-  amountInputValue.current = editTransactionData?.amount_of_funds;
 
   const selectedCategory = categories.all.find((c) => c.id === editTransactionData?.category)
 
@@ -55,6 +55,16 @@ const EditTransaction: React.FC = () => {
 
   const isValid = Object.keys(editTransactionData)?.length >= 5
     && editTransactionData?.amount_of_funds !== "";
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    reset,
+  } = useForm({
+    mode: "all",
+  });
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -87,41 +97,32 @@ const EditTransaction: React.FC = () => {
     },
   ];
 
-  function onWalletClick(wallet: IWallet) {
-    dispatch(setEditTransactionData({ wallet: wallet?.id }));
-  };
-
-  function onCategoryChange(e: any): void {
-    dispatch(setEditTransactionData({ category: e?.value }));
-    setSelectedCategoryValues({
-      value: e?.value,
-      label: e?.label
-    });
-  }
-
   useEffect(() => {
     setSelectedCategoryValues({
       value: selectedCategory?.id,
       label: selectedCategory?.title,
     });
-  }, [editTransactionData.category]);
+  }, [editTransactionData?.category]);
 
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(setEditTransactionData({ amount_of_funds: e.target.value }))
+  useEffect(() => {
+    setValue('amount', editTransactionData?.amount_of_funds);
+  }, [editTransactionData?.amount_of_funds]);
+
+  function onWalletClick(wallet: IWallet) {
+    dispatch(setEditTransactionData({ wallet: wallet?.id }));
+  };
+
+  function onCategoryChange(selectedValue: any): void {
+    dispatch(setEditTransactionData({ category: selectedValue?.value }));
+    setSelectedCategoryValues({
+      value: selectedValue?.value,
+      label: selectedValue?.label
+    });
   }
 
-  function handleEditTransaction() {
-    const editTransactionDataNoId = { ...editTransactionData }
-    delete editTransactionDataNoId?.id;
-
-    dispatch(setIsEditTransactionOpen(false));
-    dispatch(resetActiveTransactionState({}))
-    dispatch(transactionAction({
-      data: editTransactionDataNoId,
-      method: "PUT",
-      id: String(editTransactionData?.id)
-    }));
-  }
+  // function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   dispatch(setEditTransactionData({ amount_of_funds: e.target.value }));
+  // }
 
   function handleCancelEditTransaction() {
     dispatch(setIsEditTransactionOpen(false));
@@ -136,6 +137,23 @@ const EditTransaction: React.FC = () => {
       id: String(editTransactionData?.id)
     }));
     dispatch(setActiveTransaction({}));
+  }
+
+  function handleSub(data: { amount: string }) {
+    const editTransactionDataNoId = {
+      ...editTransactionData,
+      amount_of_funds: data?.amount
+    }
+    delete editTransactionDataNoId?.id;
+    console.log(editTransactionDataNoId)
+
+    dispatch(setIsEditTransactionOpen(false));
+    dispatch(resetActiveTransactionState({}))
+    dispatch(transactionAction({
+      data: editTransactionDataNoId,
+      method: "PUT",
+      id: String(editTransactionData?.id)
+    }));
   }
 
   return (
@@ -203,42 +221,66 @@ const EditTransaction: React.FC = () => {
             onCategoryChange={onCategoryChange}
           />
         </Box>
-        <Box mb="20px">
-          <Label fw="500" htmlFor="sum" mb="12px">
-            Сума
-          </Label>
-          <Input
-            type="number"
-            onChange={(e) => onInputChange(e)}
-            value={amountInputValue.current}
-            fz="22px"
-            id="sum"
-            width="270px"
-            bgColor={WHITE}
-          />
-        </Box>
-        <Box display="flex" gap="8px" mb="20px">
-          <Button
-            primary
-            width="100%"
-            onClick={handleEditTransaction}
-            disabled={!isValid}
-          >
-            Зберегти
-          </Button>
-          <Button
-            secondary
-            width="100%"
-            onClick={handleCancelEditTransaction}
-          >
-            Скасувати
-          </Button>
-        </Box>
-        <Box display="flex" justifyContent="flex-end">
-          <ButtonLink onClick={handleDeleteTransaction}>
-            Видалити транзакцію
-          </ButtonLink>
-        </Box>
+        <Form onSubmit={handleSubmit(handleSub)}>
+          <Box mb="20px">
+            <Label fw="500" htmlFor="amount" mb="12px">
+              Сума
+            </Label>
+            <Input
+              type="text"
+              inputMode="numeric"
+              // onChange={(e) => onInputChange(e)}
+              fz="22px"
+              id="amount"
+              width="270px"
+              bgColor={WHITE}
+              {...register('amount', {
+                required: 'Обов\'язкове поле для заповнення',
+                pattern: {
+                  value: moneyAmountRegex,
+                  message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
+                },
+                min: {
+                  value: 0.00,
+                  message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
+                },
+              })}
+              className={errors.amount && 'error'}
+            />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.amount && <>{errors?.amount?.message || 'Error!'}</>}
+            </Box>
+          </Box>
+          <Box display="flex" gap="8px" mb="20px">
+            <Button
+              primary
+              width="100%"
+              type="submit"
+              disabled={!isValid || !!errors?.amount || isLoading}
+            >
+              Зберегти
+            </Button>
+            <Button
+              secondary
+              width="100%"
+              onClick={handleCancelEditTransaction}
+            >
+              Скасувати
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="flex-end">
+            <ButtonLink onClick={handleDeleteTransaction}>
+              Видалити транзакцію
+            </ButtonLink>
+          </Box>
+        </Form>
       </Box>
     </Box>
   );

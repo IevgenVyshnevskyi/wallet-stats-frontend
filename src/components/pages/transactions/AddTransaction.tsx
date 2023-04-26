@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { mockWallets } from "../../../../mock-data/wallets";
 import { isDev } from "../../../consts/consts";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -25,17 +25,17 @@ import { formatTransactionDateToUTC } from '../../../shared/utils/formatTransact
 import { userId } from '../../../api/api';
 import { getFilteredCategories } from '../../../store/categorySlice';
 import DatePicker from './DatePicker';
+import { Form } from '../../atoms/form/Form.styled';
+import { moneyAmountRegex } from '../../../shared/utils/regexes';
+import { useForm } from 'react-hook-form';
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { addTransactionData } = useAppSelector(state => state.transaction);
+  const { addTransactionData, isLoading } = useAppSelector(state => state.transaction);
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
   const { user } = useAppSelector(state => state.user);
-
-  const isValid = Object.keys(addTransactionData || {})?.length >= 5
-    && addTransactionData?.amount_of_funds !== "";
 
   const selectedCategory = categories.all.find((c) => c.id === addTransactionData?.category)
 
@@ -53,11 +53,25 @@ const AddTransaction: React.FC = () => {
     return { value: id, label: title }
   })
 
+  const isValid = Object.keys(addTransactionData || {})?.length >= 4;
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm({
+    mode: "all",
+  });
+
   const switchButtons: ISwitchButton[] = [
     {
       buttonName: 'Витрата',
       onTabClick: () => {
-        dispatch(setAddTransactionData({ type_of_outlay: "expense" }));
+        dispatch(setAddTransactionData({
+          type_of_outlay: "expense",
+          category: categories.expense[0]?.id
+        }));
         setSelectedCategoryValues({
           value: categories.expense[0]?.id,
           label: categories.expense[0]?.title
@@ -68,7 +82,10 @@ const AddTransaction: React.FC = () => {
     {
       buttonName: 'Надходження',
       onTabClick: () => {
-        dispatch(setAddTransactionData({ type_of_outlay: "income" }));
+        dispatch(setAddTransactionData({
+          type_of_outlay: "income",
+          category: categories.income[0]?.id
+        }));
         setSelectedCategoryValues({
           value: categories.income[0]?.id,
           label: categories.income[0]?.title
@@ -81,6 +98,12 @@ const AddTransaction: React.FC = () => {
   useEffect(() => {
     dispatch(getFilteredCategories("?type_of_outlay=income"))
     dispatch(getFilteredCategories("?type_of_outlay=expense"))
+
+    dispatch(setAddTransactionData({
+      created: formatTransactionDateToUTC(new Date()),
+      type_of_outlay: "expense",
+      category: categories.expense[0]?.id
+    }))
   }, []);
 
   useEffect(() => {
@@ -95,27 +118,28 @@ const AddTransaction: React.FC = () => {
     }))
   }, [categories.expense]);
 
+  // useEffect(() => {
+  //   setValue('amount', addTransactionData?.amount_of_funds);
+  // }, [addTransactionData?.amount_of_funds]);
+
   function onWalletClick(wallet: IWallet) {
     dispatch(setAddTransactionData({ wallet: wallet.id }));
   };
 
-  function onCategoryChange(e: any): void {
-    dispatch(setAddTransactionData({ category: e?.value }));
+  function onCategoryChange(selectedValue: any): void {
+    dispatch(setAddTransactionData({ category: selectedValue?.value }));
     setSelectedCategoryValues({
-      value: e?.value,
-      label: e?.label
+      value: selectedValue?.value,
+      label: selectedValue?.label
     });
   }
 
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(setAddTransactionData({ amount_of_funds: e.target.value }))
-  }
-
-  function handleAddTransaction() {
+  function handleSub(data: { amount: string }) {
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({
       data: {
         ...addTransactionData,
+        amount_of_funds: data?.amount,
         owner: user?.id || userId,
       },
       method: "POST"
@@ -187,27 +211,53 @@ const AddTransaction: React.FC = () => {
             onCategoryChange={onCategoryChange}
           />
         </Box>
-        <Box mb="20px">
-          <Label fw="500" htmlFor="sum" mb="12px">Сума</Label>
-          <Input
-            fz="22px"
-            type="number"
-            id="sum"
-            width="270px"
-            bgColor={WHITE}
-            onChange={(e) => onInputChange(e)}
-          />
-        </Box>
-        <Box>
-          <Button
-            disabled={!isValid}
-            primary
-            width="100%"
-            onClick={handleAddTransaction}
-          >
-            Зберегти
-          </Button>
-        </Box>
+        <Form onSubmit={handleSubmit(handleSub)}>
+          <Box mb="20px">
+            <Label fw="500" htmlFor="amount" mb="12px">
+              Сума
+            </Label>
+            <Input
+              type="text"
+              inputMode="numeric"
+              fz="22px"
+              id="amount"
+              width="270px"
+              bgColor={WHITE}
+              {...register('amount', {
+                required: 'Обов\'язкове поле для заповнення',
+                pattern: {
+                  value: moneyAmountRegex,
+                  message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
+                },
+                min: {
+                  value: 0.00,
+                  message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
+                },
+              })}
+              className={errors.amount && 'error'}
+            />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.amount && <>{errors?.amount?.message || 'Error!'}</>}
+            </Box>
+          </Box>
+          <Box>
+            <Button
+              primary
+              width="100%"
+              type="submit"
+              disabled={!isValid || !!errors?.amount || isLoading}
+            >
+              Зберегти
+            </Button>
+          </Box>
+        </Form>
       </Box>
     </Box>
   );

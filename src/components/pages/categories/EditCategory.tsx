@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Box } from "../../atoms/box/Box.styled";
@@ -16,6 +15,10 @@ import {
   setIsEditCategoryOpen
 } from "../../../store/categorySlice";
 import { Input } from "../../atoms/input/Input.styled";
+import { useForm } from "react-hook-form";
+import { Form } from "../../atoms/form/Form.styled";
+import { lettersRegex } from "../../../shared/utils/regexes";
+import { useEffect } from "react";
 
 const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -23,12 +26,26 @@ const EditCategory: React.FC = () => {
   const {
     activeCategory,
     editCategoryData,
+    isLoading
   } = useAppSelector(state => state.category)
 
-  const titleInputValue = useRef<string>(editCategoryData?.title);
-  titleInputValue.current = editCategoryData?.title;
+  const isValid = Object.keys(editCategoryData || {})?.length >= 2;
 
-  const isValid = Object.keys(editCategoryData)?.length >= 3
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    clearErrors,
+    reset,
+  } = useForm({
+    mode: "all",
+  });
+
+  useEffect(() => {
+    clearErrors('title')
+    setValue('title', editCategoryData?.title)
+  }, [editCategoryData?.title]);
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -47,19 +64,6 @@ const EditCategory: React.FC = () => {
     },
   ];
 
-  function handleEditCategory() {
-    const editCategoryDataNoId = { ...editCategoryData };
-    delete editCategoryDataNoId.id;
-
-    dispatch(setIsEditCategoryOpen(false));
-    dispatch(resetActiveCategoryState({}))
-    dispatch(categoryAction({
-      data: editCategoryDataNoId,
-      method: "PUT",
-      id: String(editCategoryData?.id)
-    }));
-  }
-
   function handleCancelEditCategory() {
     dispatch(setIsEditCategoryOpen(false));
     dispatch(resetActiveCategoryState({}));
@@ -74,8 +78,20 @@ const EditCategory: React.FC = () => {
     dispatch(setActiveCategory({}));
   }
 
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(setEditCategoryData({ title: e.target.value }))
+  function handleSub(data: { title: string }) {
+    const editCategoryDataNoId = {
+      ...editCategoryData,
+      title: data?.title
+    };
+    delete editCategoryDataNoId.id;
+
+    dispatch(setIsEditCategoryOpen(false));
+    dispatch(resetActiveCategoryState({}))
+    dispatch(categoryAction({
+      data: editCategoryDataNoId,
+      method: "PUT",
+      id: String(editCategoryData?.id)
+    }));
   }
 
   return (
@@ -89,49 +105,71 @@ const EditCategory: React.FC = () => {
       >
         Редагування категорії
       </Typography>
-      <Box bgColor={MENU_BUTTON_HOVER} borderRadius="16px" p="15px">
-        <Box display="flex" direction="column">
+      <Box
+        bgColor={MENU_BUTTON_HOVER}
+        display="flex"
+        direction="column"
+        borderRadius="16px"
+        p="15px"
+      >
+        <Box mb="25px">
+          <Typography
+            as="h3"
+            fz="16px"
+            fw="500"
+            mb="12px"
+          >
+            Тип категорії
+          </Typography>
+          <TabSwitch switchButtons={switchButtons} />
+        </Box>
+        <Form onSubmit={handleSubmit(handleSub)}>
           <Box mb="25px">
-            <Typography
-              as="h3"
-              fz="16px"
-              fw="500"
-              mb="12px"
-            >
-              Тип категорії
-            </Typography>
-            <TabSwitch switchButtons={switchButtons} />
-          </Box>
-          <Box mb="25px">
-            <Label fw="500" htmlFor="name" mb="12px">
+            <Label fw="500" htmlFor="title" mb="12px">
               Назва категорії
             </Label>
             <Input
               type="text"
-              value={titleInputValue.current}
-              onChange={onInputChange}
-              id="name"
+              id="title"
               width="93%"
               bgColor={WHITE}
+              className={errors.title && 'error'}
+              {...register('title', {
+                required: 'Обов\'язкове поле для заповнення',
+                validate: {
+                  hasTwoSymbols: (value) => /^.{2,}$/.test(value) || 'Повинно бути не менше 2 символів',
+                  hasTwoLetters: (value) => /^[A-Za-zА-Яа-яІіЇїЄєҐґ]+$/.test(value) || 'Повинно бути не менше 2 літер',
+                }
+              })}
             />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
+            </Box>
           </Box>
-        </Box>
-        <Box display="flex" gap="8px" mb="27px">
-          <Button
-            primary
-            width="100%"
-            disabled={!isValid}
-            onClick={handleEditCategory}
-          >
-            Зберегти
-          </Button>
-          <Button
-            secondary
-            width="100%"
-            onClick={handleCancelEditCategory}>
-            Скасувати
-          </Button>
-        </Box>
+          <Box display="flex" gap="8px" mb="27px">
+            <Button
+              primary
+              width="100%"
+              type="submit"
+              disabled={!isValid || !!errors?.title || isLoading}
+            >
+              Зберегти
+            </Button>
+            <Button
+              secondary
+              width="100%"
+              onClick={handleCancelEditCategory}>
+              Скасувати
+            </Button>
+          </Box>
+        </Form>
         <Box display="flex" justifyContent="flex-end">
           <ButtonLink onClick={handleDeleteCategory}>
             Видалити категорію

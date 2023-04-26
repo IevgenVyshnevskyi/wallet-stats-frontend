@@ -61,6 +61,7 @@ const EditTransaction: React.FC = () => {
     formState: { errors },
     handleSubmit,
     setValue,
+    clearErrors,
     reset,
   } = useForm({
     mode: "all",
@@ -105,6 +106,7 @@ const EditTransaction: React.FC = () => {
   }, [editTransactionData?.category]);
 
   useEffect(() => {
+    clearErrors('amount')
     setValue('amount', editTransactionData?.amount_of_funds);
   }, [editTransactionData?.amount_of_funds]);
 
@@ -119,10 +121,6 @@ const EditTransaction: React.FC = () => {
       label: selectedValue?.label
     });
   }
-
-  // function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   dispatch(setEditTransactionData({ amount_of_funds: e.target.value }));
-  // }
 
   function handleCancelEditTransaction() {
     dispatch(setIsEditTransactionOpen(false));
@@ -229,7 +227,6 @@ const EditTransaction: React.FC = () => {
             <Input
               type="text"
               inputMode="numeric"
-              // onChange={(e) => onInputChange(e)}
               fz="22px"
               id="amount"
               width="270px"

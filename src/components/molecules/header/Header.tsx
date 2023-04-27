@@ -40,12 +40,12 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedOut) {
-      dispatch(resetUserState());
       dispatch(resetWalletState());
       dispatch(resetCategoryState());
       dispatch(resetTransactionState());
       dispatch(resetStatisticsState());
-      navigate('/');
+      dispatch(resetUserState());
+      navigate('/welcome');
     }
   }, [isLoggedOut]);
 

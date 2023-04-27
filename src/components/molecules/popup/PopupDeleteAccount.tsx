@@ -35,7 +35,7 @@ const PopupDeleteAccount: React.FC = () => {
             dispatch(resetUserState());
             handleCloseClick();
             setIsEditProfilePopupOpen(false);
-            navigate('/');
+            navigate('/welcome');
         }
     }, [isAccountDeleted]);
 

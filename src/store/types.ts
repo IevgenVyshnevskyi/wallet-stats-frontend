@@ -27,7 +27,9 @@ export type LoginFormData = {
 }
 
 export type LoginResponse = {
-  email: string
+  user_id: string;
+  email: string;
+  token: string;
 }
 
 export interface DataEntryFormData {

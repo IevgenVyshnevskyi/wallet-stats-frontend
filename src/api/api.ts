@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { IUser } from "../store/types";
 import { Store } from '@reduxjs/toolkit';
 
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://prod.wallet.cloudns.ph:8800";
 export const REGISTER_PATH = "/acounts/register/";
 export const LOGIN_PATH = "/acounts/login/";
 export const LOGOUT_PATH = "/acounts/logout/";

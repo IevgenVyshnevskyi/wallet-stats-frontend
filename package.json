@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.tsx",
   "scripts": {
-    "dev": "webpack serve --env mode=development",
+    "dev": "webpack serve --env mode=development --https",
     "build:dev": "webpack --env mode=development",
     "build:prod": "webpack --env mode=production",
     "prepare": "husky install"

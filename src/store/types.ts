@@ -27,15 +27,9 @@ export type LoginFormData = {
 }
 
 export type LoginResponse = {
-  email: string
-}
-
-export interface PasswordRecoveryThreeFormData {
-  firstName?: string;
-  surname?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  user_id: string;
+  email: string;
+  token: string;
 }
 
 export interface DataEntryFormData {
@@ -43,6 +37,12 @@ export interface DataEntryFormData {
   cardAccountName: string;
   amountAccount: string;
   userId?: number;
+}
+
+export type NewPasswordFormData = {
+  uuid: string;
+  token: string;
+  password: string;
 }
 
 /* WALLET */

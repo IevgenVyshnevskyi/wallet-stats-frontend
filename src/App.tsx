@@ -8,9 +8,7 @@ import RegisterPage from "./components/pages/register/RegisterPage";
 import HomePage from "./components/pages/home/HomePage";
 import TransactionsPage from './components/pages/transactions/TransactionsPage';
 import DataEntryPage from "./components/pages/data/DataEntryPage";
-import PasswordRecoveryOnePage from "./components/pages/passwordRecoveryOne/PasswordRecoveryOnePage";
-import PasswordRecoveryTwoPage from "./components/pages/passwordRecoveryTwo/PasswordRecoveryTwoPage";
-import PasswordRecoveryThreePage from "./components/pages/PasswordRecoveryThree/PasswordRecoveryThreePage";
+import PasswordRecovery from "./components/pages/password-recovery/PasswordRecovery";
 import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
@@ -23,9 +21,7 @@ function App() {
     { path: '/data-entry', element: <DataEntryPage /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
-    { path: '/recoveryOne', element: <PasswordRecoveryOnePage /> },
-    { path: '/recoveryTwo', element: <PasswordRecoveryTwoPage /> },
-    { path: '/recoveryThree', element: <PasswordRecoveryThreePage /> },
+    { path: '/password-recovery', element: <PasswordRecovery /> },
     { path: '/home', element: <HomePage /> },
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },

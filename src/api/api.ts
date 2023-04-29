@@ -1,12 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { IUser } from "../store/types";
+import { Store } from '@reduxjs/toolkit';
 
 export const BASE_URL = "http://localhost:8000";
 export const REGISTER_PATH = "/acounts/register/";
 export const LOGIN_PATH = "/acounts/login/";
 export const LOGOUT_PATH = "/acounts/logout/";
 export const USER_DETAILS_PATH = "/acounts/get-details/";
+export const PASSWORD_RESET_REQUEST_PATH = "/acounts/password-reset-request/";
+export const PASSWORD_RESET_CONFIRM_PATH = "/acounts/password-reset-confirm/";
 export const WALLET_PATH = "/wallet/";
 export const CATEGORY_PATH = "/wallet/category/";
 export const TRANSACTION_PATH = "/wallet/transactions/";
@@ -18,9 +21,9 @@ export const userId = userDataParsed?.id;
 
 export const token = localStorage.getItem('token');
 
-let store: any;
+let store: Store;
 
-export const injectStore = (_store: any) => {
+export const injectStore = (_store: Store) => {
   store = _store
 }
 

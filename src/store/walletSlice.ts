@@ -15,7 +15,7 @@ type WalletState = {
   entryDataError: string | null;
 }
 
-type WalletActionOptions = {
+type WalletActionPayload = {
   method: MethodTypes;
   data?: IWallet;
   id?: string;
@@ -23,7 +23,7 @@ type WalletActionOptions = {
 
 export const walletAction = createAsyncThunk<
   IWallet[],
-  WalletActionOptions,
+  WalletActionPayload,
   { rejectValue: string }
 >(
   'wallet/walletAction',

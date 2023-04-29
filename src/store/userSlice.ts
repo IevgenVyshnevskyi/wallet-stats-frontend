@@ -40,15 +40,15 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
 export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
     'user/loginUser',
     async function (loginData, { rejectWithValue }) {
-        return $api.post(LOGIN_PATH, loginData)
+        return $api.post<LoginResponse>(LOGIN_PATH, loginData)
             .then(res => {
-                const token = res.data.token;
-                localStorage.setItem('token', token);
-                return token;
+                const userInfo = res.data;
+                localStorage.setItem('token', userInfo.token);
+                return userInfo;
             })
             .catch(error => {
                 const errorMessage = formatLoginErrorMessage(error.response.data);
-                return rejectWithValue(errorMessage);
+                return rejectWithValue('Будь ласка, перевірте введені дані та спробуйте знову.');
             });
     }
 );
@@ -157,7 +157,11 @@ const userSlice = createSlice({
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(loginUser.fulfilled, (state) => {
+            .addCase(loginUser.fulfilled, (state, action) => {
+                state.user = {
+                    ...state.user,
+                    ...action.payload
+                }
                 state.isLoading = false;
                 state.isLoggedOut = false;
                 state.isAccountDeleted = false;
@@ -174,8 +178,9 @@ const userSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isLoading = false;
                 state.isLoggedIn = false;
-                state.isLoggedOut = true;
+                state.isRegistered = false;
                 state.user = null;
+                state.isLoggedOut = true;
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.isLoading = false;

@@ -13,7 +13,7 @@ import {useForm} from "react-hook-form";
 import {Form} from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
-import {lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
+import {emailRegex, lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
 
 const PopupEditProfile: React.FC = () => {
     const {
@@ -121,7 +121,7 @@ const PopupEditProfile: React.FC = () => {
                                     <Input {...register('email', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+                                            value: emailRegex,
                                             message: "Введіть коректну електронну адресу"
                                         }
                                     })} type="email" id="email" width="284px"

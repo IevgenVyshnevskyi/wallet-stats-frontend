@@ -24,7 +24,7 @@ type CategoryState = {
   isEditCategoryOpen: boolean;
 }
 
-type CategoryActionOptions = {
+type CategoryActionPayload = {
   method: MethodTypes;
   data?: ICategory;
   id?: string;
@@ -32,7 +32,7 @@ type CategoryActionOptions = {
 
 export const categoryAction = createAsyncThunk<
   ICategory[],
-  CategoryActionOptions,
+  CategoryActionPayload,
   { rejectValue: string }
 >(
   'category/categoryAction',

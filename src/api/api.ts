@@ -13,6 +13,7 @@ export const PASSWORD_RESET_CONFIRM_PATH = "/acounts/password-reset-confirm/";
 export const WALLET_PATH = "/wallet/";
 export const CATEGORY_PATH = "/wallet/category/";
 export const TRANSACTION_PATH = "/wallet/transactions/";
+export const BANK_DATA_PATH = "/bankdata/";
 
 export const localStorageIsDataEntrySuccess = localStorage.getItem("isDataEntrySuccess")
 export const userData = localStorage.getItem('userData');

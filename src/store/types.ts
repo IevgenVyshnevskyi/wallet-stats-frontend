@@ -100,3 +100,10 @@ export interface ICategory {
   type_of_outlay: TypeOfOutlay,
   owner: number
 }
+
+export interface IBankData {
+  id?: number;
+  owner: number;
+  wallettitle: string;
+  file: string;
+}

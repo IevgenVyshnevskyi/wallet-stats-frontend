@@ -40,7 +40,7 @@ export const confirmPasswordReset = createAsyncThunk<
   'passwordRecovery/confirmPasswordReset',
   async function (payload, { rejectWithValue }) {
     return $api.post(PASSWORD_RESET_REQUEST_PATH, payload)
-      .then(res => res.data)
+      .then(res => res?.data)
       .catch(error => {
         const errorMessage = error.response.data;
         return rejectWithValue(errorMessage);

@@ -23,7 +23,7 @@ type TransactionState = {
   isEditTransactionOpen: boolean;
 }
 
-type TransactionActionOptions = {
+type TransactionActionPayload = {
   method: MethodTypes;
   data?: ITransaction;
   id?: string;
@@ -31,7 +31,7 @@ type TransactionActionOptions = {
 
 export const transactionAction = createAsyncThunk<
   Transactions,
-  TransactionActionOptions,
+  TransactionActionPayload,
   { rejectValue: string }
 >(
   'transaction/transactionAction',

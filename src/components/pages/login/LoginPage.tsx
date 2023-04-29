@@ -27,7 +27,7 @@ import {getUserDetails, loginUser} from "../../../store/userSlice";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {LoginFormData} from "../../../store/types";
 import {useNavigate} from "react-router-dom";
-import {passwordRegex} from "../../../shared/utils/regexes";
+import {emailRegex, passwordRegex} from "../../../shared/utils/regexes";
 import { token } from "../../../api/api";
 
 
@@ -91,7 +91,7 @@ const LoginPage: React.FC = () => {
                             <Input {...register('email', {
                                 required: 'Обов\'язкове поле для заповнення',
                                 pattern: {
-                                    value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+                                    value: emailRegex,
                                     message: "Введіть коректну електронну адресу"
                                 }
                             })} type="email" id="email" width="284px"

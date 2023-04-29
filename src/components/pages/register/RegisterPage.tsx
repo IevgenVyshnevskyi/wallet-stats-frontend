@@ -26,7 +26,7 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import {RegisterFormData} from "../../../store/types";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {registerUser} from '../../../store/userSlice';
-import {lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
+import {emailRegex, lettersRegex, passwordRegex} from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -115,7 +115,7 @@ const RegisterPage: React.FC = () => {
                                 <Input {...register('email', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+                                        value: emailRegex,
                                         message: "Введіть коректну електронну адресу"
                                     }
                                 })} type="email" id="email" width="284px"

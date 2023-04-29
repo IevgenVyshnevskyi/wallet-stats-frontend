@@ -44,11 +44,17 @@ const PopupDeleteAccount: React.FC = () => {
         setIsDeleteAccountPopupOpen(false);
     };
 
-    /*useEffect(() => {
-        if (isEditWalletSuccess || isDeleteWalletSuccess) {
-            handleCloseClick()
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                handleCloseClick()
+            }
         }
-    }, [isEditWalletSuccess, isDeleteWalletSuccess]);*/
+        window.addEventListener('keydown', handleKeyPress)
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     function handleSub() {
         dispatch(deleteUserAccount());

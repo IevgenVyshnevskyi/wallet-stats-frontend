@@ -8,7 +8,7 @@ export interface IUser {
   id?: number,
   first_name: string,
   last_name: string,
-  email: string,
+  email?: string,
   is_confirm_email?: boolean,
   token?: string;
 }

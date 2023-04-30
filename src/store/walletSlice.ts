@@ -170,8 +170,8 @@ const walletSlice = createSlice({
         state.isDeleteWalletSuccess = false;
       })
       .addCase(walletAction.fulfilled, (state, action) => {
-        state.wallets = action.payload;
         state.isLoading = false;
+        state.wallets = action.payload;
         state.isAddWalletSuccess = true;
         state.isEditWalletSuccess = true;
         state.isDeleteWalletSuccess = true;

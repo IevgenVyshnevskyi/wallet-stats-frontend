@@ -28,6 +28,7 @@ const PopupEditWallet: React.FC = () => {
         isEditWalletSuccess,
         isDeleteWalletSuccess,
         activeWallet,
+        isLoading
     } = useAppSelector(state => state.wallet);
 
     const { user } = useAppSelector(state => state.user);
@@ -151,7 +152,7 @@ const PopupEditWallet: React.FC = () => {
                             pt="25px"
                             mb={activeWallet?.type_of_account === "bank" && "25px"}
                         >
-                            <Button type="submit" width="148px" primary disabled={!isValid}>
+                            <Button type="submit" width="148px" primary disabled={!isValid || isLoading}>
                                 Зберегти
                             </Button>
                             <Button type="reset" width="148px" secondary onClick={handleCloseClick}>
@@ -162,7 +163,7 @@ const PopupEditWallet: React.FC = () => {
 
                     {activeWallet?.type_of_account === "bank" && (
                         <Box display="flex" justifyContent="flex-end" onClick={handleDeleteWallet}>
-                            <ButtonLink>Видалити рахунок</ButtonLink>
+                            <ButtonLink disabled={isLoading}>Видалити рахунок</ButtonLink>
                         </Box>
                     )}
 

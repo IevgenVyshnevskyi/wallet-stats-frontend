@@ -26,7 +26,7 @@ const PopupEditProfile: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { isProfileChanged } = useAppSelector(state => state.user);
+    const { isProfileChanged, isLoading } = useAppSelector(state => state.user);
 
     const {
         register,
@@ -257,7 +257,7 @@ const PopupEditProfile: React.FC = () => {
                             pt="24px"
                             mb="24px"
                         >
-                            <Button type="submit" disabled={!isValid} primary width="100%">
+                            <Button type="submit" disabled={!isValid || isLoading} primary width="100%">
                                 Зберегти
                             </Button>
                             <Button type="reset" secondary width="100%" onClick={handleCloseClick}>

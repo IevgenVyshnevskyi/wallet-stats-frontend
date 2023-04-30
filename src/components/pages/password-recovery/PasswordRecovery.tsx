@@ -46,6 +46,7 @@ const PasswordRecovery: React.FC = () => {
 
 const EmailStep: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector(state => state.passwordRecovery)
 
   const {
     register,
@@ -95,7 +96,7 @@ const EmailStep: React.FC = () => {
                   m="6px 0 58px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
               </Box>
             </Box>
-            <Button type="submit" disabled={!isValid} width="100px" m="0 auto" mt="56px"
+            <Button type="submit" disabled={!isValid || isLoading} width="100px" m="0 auto" mt="56px"
               primary>Далі</Button>
           </Form>
         </Box>
@@ -146,8 +147,9 @@ const ResetLinkStep: React.FC = () => {
 
 const NewPasswordStep: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isNewPasswordSet } = useAppSelector(state => state.passwordRecovery)
   const navigate = useNavigate();
+
+  const { isNewPasswordSet, isLoading } = useAppSelector(state => state.passwordRecovery)
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -266,7 +268,7 @@ const NewPasswordStep: React.FC = () => {
                   m="0 0 20px 0">{errors?.confirmPassword && <>{errors?.confirmPassword?.message || 'Error!'}</>}</Box>
               </Box>
             </Box>
-            <Button type="submit" disabled={!isValid} width="139px" m="44px auto 0"
+            <Button type="submit" disabled={!isValid || isLoading} width="139px" m="44px auto 0"
               primary>Зберегти</Button>
           </Form>
         </Box>

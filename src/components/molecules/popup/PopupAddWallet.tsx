@@ -116,7 +116,8 @@ const AddWalletTab: React.FC = () => {
     const {
         error,
         activeWallet,
-        isAddWalletSuccess
+        isAddWalletSuccess,
+        isLoading
     } = useAppSelector(state => state.wallet);
 
     const { user } = useAppSelector(state => state.user);
@@ -142,7 +143,6 @@ const AddWalletTab: React.FC = () => {
     useEffect(() => {
         if (isAddWalletSuccess) {
             handleCloseClick();
-            dispatch(setSuccessStatus(false));
         }
     }, [isAddWalletSuccess]);
 
@@ -225,7 +225,7 @@ const AddWalletTab: React.FC = () => {
                 pt="51px"
                 mb="25px"
             >
-                <Button type="submit" width="176px" primary disabled={!isValid}>
+                <Button type="submit" width="176px" primary disabled={!isValid || isLoading}>
                     Зберегти
                 </Button>
                 <Button type="reset" width="176px" secondary onClick={handleCloseClick}>
@@ -246,7 +246,8 @@ const AddBankDataTab: React.FC = () => {
     const {
         error,
         activeWallet,
-        isAddWalletSuccess
+        isAddWalletSuccess,
+        isLoading
     } = useAppSelector(state => state.wallet);
 
     const { isAddBankDataSuccess } = useAppSelector(state => state.bankData);
@@ -346,7 +347,7 @@ const AddBankDataTab: React.FC = () => {
                     type="submit"
                     width="176px"
                     primary
-                    disabled={!isValid || (inputFileRef.current && inputFileRef.current.value === '')}
+                    disabled={!isValid || (inputFileRef.current && inputFileRef.current.value === '') || isLoading}
                 >
                     Зберегти
                 </Button>

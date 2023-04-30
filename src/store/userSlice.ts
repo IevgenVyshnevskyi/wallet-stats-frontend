@@ -46,6 +46,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
             .then(res => {
                 const userInfo = res.data;
                 localStorage.setItem('token', userInfo.token);
+                localStorage.setItem("isDataEntrySuccess", "true");
                 return userInfo;
             })
             .catch(error => {

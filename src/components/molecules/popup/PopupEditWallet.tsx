@@ -12,7 +12,7 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Form } from "../../atoms/form/Form.styled";
-import { moneyAmountRegex, titleRegex } from "../../../shared/utils/regexes";
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { IWallet, WalletFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
@@ -107,10 +107,10 @@ const PopupEditWallet: React.FC = () => {
                                     textAlight="left">Назва рахунку</Label>
                                 <Input {...register('title', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    pattern: {
-                                        value: titleRegex,
-                                        message: "Назва повинна бути не менше 2 літер",
-                                    },
+                                    validate: {
+                                        hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                                        hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
+                                    }
                                 })}
                                     type="text" id="title" width="284px"
                                     className={errors.title && 'error'}

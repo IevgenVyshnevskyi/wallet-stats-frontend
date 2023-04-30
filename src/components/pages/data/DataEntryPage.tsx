@@ -26,7 +26,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
-import { moneyAmountRegex, titleRegex } from "../../../shared/utils/regexes";
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 import { localStorageIsDataEntrySuccess, token, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
@@ -124,11 +124,12 @@ const DataEntryPage: React.FC = () => {
                                        textAlight="left">Введіть назву карткового рахунку</Label>
                                 <Input {...register('cardAccountName', {
                                     required: 'Обов\'язкове поле для заповнення',
-                                    pattern: {
-                                        value: titleRegex,
-                                        message: "Назва повинна бути не менше 2 літер",
-                                    },
-                                })} type="text" id="cardAccountName" width="284px"
+                                    validate: {
+                                        hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                                        hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
+                                    }
+                                })}
+                                type="text" id="cardAccountName" width="284px"
                                        className={errors.cardAccountName && 'error'}
                                 />
                                 <Box color="red" textAlight="left" border="red" fz="13px" height="14px"

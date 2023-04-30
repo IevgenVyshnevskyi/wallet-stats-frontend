@@ -157,7 +157,7 @@ const AddTransaction: React.FC = () => {
       >
         Додати транзакцію
       </Typography>
-      <Box bgColor={BASE_2} borderRadius="16px" grow="1" p="15px">
+      <Box overflow='auto' height="100px" bgColor={BASE_2} borderRadius="16px" grow="1" p="15px">
         <Box mb="20px">
           <Typography
             as="h3"

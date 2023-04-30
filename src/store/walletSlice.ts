@@ -203,7 +203,6 @@ const walletSlice = createSlice({
       .addCase(postEntryData.rejected, (state, action) => {
         state.isLoading = false;
         state.entryDataError = action.payload;
-        // state.entryDataError = 'Помилка при внесенні рахунків';
       })
   }
 });

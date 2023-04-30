@@ -40,8 +40,11 @@ export const $api = axios.create({
 $api.interceptors.request.use((config: AxiosRequestConfig): any => {
   const userState = store.getState().user?.user;
 
-  const currentToken = userState?.token ||
-    (!(userState?.isAccountDeleted || userState?.isLoggedOut) ? token : undefined);
+  const currentToken = (
+    (userState?.isAccountDeleted === true || userState?.isLoggedOut === true)
+      ? undefined
+      : (userState?.token || token)
+  );
 
   if (currentToken) {
     config.headers.Authorization = `Token ${currentToken}`;

@@ -301,10 +301,10 @@ const AddBankDataTab: React.FC = () => {
                         textAlight="left">Введіть назву карткового рахунку</Label>
                     <Input {...register('wallettitle', {
                         required: 'Обов\'язкове поле для заповнення',
-                        pattern: {
-                            value: titleRegex,
-                            message: "Назва повинна бути не менше 2 літер",
-                        },
+                        validate: {
+                            hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                            hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
+                        }
                     })}
                         type="text" id="wallettitle" width="340px"
                         className={errors.wallettitle && 'error'}

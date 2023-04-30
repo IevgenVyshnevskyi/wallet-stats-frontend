@@ -289,7 +289,7 @@ const AddBankDataTab: React.FC = () => {
     }, []);
 
     function handleSubmitBankData(data: IBankData) {
-        dispatch(sendBankData(data))
+        // dispatch(sendBankData(data))
     }
 
     return (

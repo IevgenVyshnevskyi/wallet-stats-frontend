@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
-import { emailRegex, lettersRegex, passwordRegex } from "../../../shared/utils/regexes";
+import { emailRegex, nameRegex, passwordRegex } from "../../../shared/utils/regexes";
 import { useAppSelector } from "../../../store/hooks";
 import { changeUserProfile } from "../../../store/userSlice";
 
@@ -26,7 +26,7 @@ const PopupEditProfile: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { isProfileChanged } = useAppSelector(state => state.user);
+    const { isProfileChanged, isLoading } = useAppSelector(state => state.user);
 
     const {
         register,
@@ -100,7 +100,7 @@ const PopupEditProfile: React.FC = () => {
                                     <Input {...register('firstName', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: lettersRegex,
+                                            value: nameRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
                                     })} type="text" id="firstName" width="284px"
@@ -115,7 +115,7 @@ const PopupEditProfile: React.FC = () => {
                                     <Input {...register('lastName', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: lettersRegex,
+                                            value: nameRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
                                     })} type="text" id="lastName" width="284px"
@@ -257,7 +257,7 @@ const PopupEditProfile: React.FC = () => {
                             pt="24px"
                             mb="24px"
                         >
-                            <Button type="submit" disabled={!isValid} primary width="100%">
+                            <Button type="submit" disabled={!isValid || isLoading} primary width="100%">
                                 Зберегти
                             </Button>
                             <Button type="reset" secondary width="100%" onClick={handleCloseClick}>

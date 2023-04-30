@@ -20,7 +20,7 @@ const PopupDeleteAccount: React.FC = () => {
     const navigate = useNavigate();
 
     const { setIsDeleteAccountPopupOpen, setIsEditProfilePopupOpen } = useContext(PopupContext);
-    const { isAccountDeleted } = useAppSelector(state => state.user)
+    const { isAccountDeleted, isLoading } = useAppSelector(state => state.user)
 
     const {
         handleSubmit,
@@ -80,7 +80,7 @@ const PopupDeleteAccount: React.FC = () => {
                             justifyContent="space-between"
                             pt="25px"
                         >
-                            <Button type="submit" width="262px" primary onClick={handleSub}>
+                            <Button type="submit" width="262px" primary onClick={handleSub} disabled={isLoading} >
                                 Видалити аккаунт
                             </Button>
                             <Button type="reset" width="262px" secondary onClick={handleCloseClick}>

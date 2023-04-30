@@ -301,8 +301,10 @@ const Statistics: React.FC = () => {
         display="flex"
         direction="column"
         bgColor={BASE_2}
-        p="15px"
         borderRadius="16px"
+        overflow="auto"
+        height="100px"
+        p="15px"
       >
         <Box mb="20px">
           <Box display="flex" justifyContent="space-between">

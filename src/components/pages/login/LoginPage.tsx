@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const { loginError, isLoggedIn } = useAppSelector(state => state.user)
+    const { loginError, isLoggedIn, isLoading } = useAppSelector(state => state.user)
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
@@ -56,7 +56,6 @@ const LoginPage: React.FC = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            // dispatch(getUserDetails())
             navigate('/home');
             reset();
         }
@@ -123,15 +122,33 @@ const LoginPage: React.FC = () => {
                                 />
                             </Box>
                             <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
-                                m="0 0 14px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
-                            <Box width="320px" p="0 0 0 50%"><Link to="/recoveryOne" fz="14px" outline="none"
-                                color={PRIMARY}>
-                                Забули пароль?</Link></Box>
+                                m="0 0 10px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
+                            <Box width="320px" display="flex" justifyContent="end">
+                                <Link
+                                    to="/password-recovery"
+                                    fz="14px"
+                                    fw="600"
+                                    lh="17px"
+                                    color={PRIMARY}
+                                >
+                                    Забули пароль?
+                                </Link>
+                            </Box>
+
+                            {loginError && <Typography
+                                as="p"
+                                color="red"
+                                fz="16px"
+                                textAlight="center"
+                                mt="30px"
+                                textAlign="center"
+                            >
+                                {loginError}
+                            </Typography>
+                            }
                         </Box>
 
-                        {loginError && <Typography as="p" color="red" textAlight="center">{loginError}</Typography>}
-
-                        <Button type="submit" disabled={!isValid} m="56px auto 0" primary>Увійти</Button>
+                        <Button type="submit" disabled={!isValid || isLoading} m="50px auto 0" primary>Увійти</Button>
                     </Form>
                 </Box>
             </Box>

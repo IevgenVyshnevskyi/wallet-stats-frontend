@@ -101,7 +101,7 @@ const Wallets: React.FC = () => {
     setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
-  const { wallets, activeWallet } = useAppSelector(state => state.wallet)
+  const { wallets, activeWallet, isLoading } = useAppSelector(state => state.wallet)
 
   const cashWallet = wallets?.find(
     (wallet) => wallet?.type_of_account === 'cash'
@@ -180,7 +180,7 @@ const Wallets: React.FC = () => {
           </List>
         </Box>
         <Button
-          disabled={wallets?.length > 4}
+          disabled={wallets?.length > 4 || isLoading}
           secondary
           onClick={handleAddWalletClick}
         >

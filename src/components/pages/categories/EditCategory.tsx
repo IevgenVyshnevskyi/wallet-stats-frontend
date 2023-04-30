@@ -17,7 +17,7 @@ import {
 import { Input } from "../../atoms/input/Input.styled";
 import { useForm } from "react-hook-form";
 import { Form } from "../../atoms/form/Form.styled";
-import { lettersRegex } from "../../../shared/utils/regexes";
+import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 import { useEffect } from "react";
 
 const EditCategory: React.FC = () => {
@@ -137,8 +137,8 @@ const EditCategory: React.FC = () => {
               {...register('title', {
                 required: 'Обов\'язкове поле для заповнення',
                 validate: {
-                  hasTwoSymbols: (value) => /^.{2,}$/.test(value) || 'Повинно бути не менше 2 символів',
-                  hasTwoLetters: (value) => /^[A-Za-zА-Яа-яІіЇїЄєҐґ]+$/.test(value) || 'Повинно бути не менше 2 літер',
+                  hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                  hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
                 }
               })}
             />
@@ -171,7 +171,7 @@ const EditCategory: React.FC = () => {
           </Box>
         </Form>
         <Box display="flex" justifyContent="flex-end">
-          <ButtonLink onClick={handleDeleteCategory}>
+          <ButtonLink disabled={isLoading} onClick={handleDeleteCategory}>
             Видалити категорію
           </ButtonLink>
         </Box>

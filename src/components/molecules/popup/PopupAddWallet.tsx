@@ -20,9 +20,9 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonPopup } from "../../atoms/button/ButtonPopup";
 import { Form } from "../../atoms/form/Form.styled";
-import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { IBankData, IWallet } from "../../../store/types";
+import { IBankData, IWallet, WalletFormData } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
 import { userId } from "../../../api/api";
 import { MessageProps } from "../../../../types/molecules";
@@ -158,7 +158,7 @@ const AddWalletTab: React.FC = () => {
         };
     }, []);
 
-    function handleSubmitWallet(data: { title: string, amount: string }) {
+    function handleSubmitWallet(data: WalletFormData) {
         const wallet: IWallet = {
             title: data.title,
             amount: data.amount,
@@ -180,10 +180,10 @@ const AddWalletTab: React.FC = () => {
                         textAlight="left">Введіть назву карткового рахунку</Label>
                     <Input {...register('title', {
                         required: 'Обов\'язкове поле для заповнення',
-                        pattern: {
-                            value: lettersRegex,
-                            message: "Назва повинна бути не менше 2 літер",
-                        },
+                        validate: {
+                            hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                            hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
+                        }
                     })}
                         type="text" id="title" width="340px"
                         className={errors.title && 'error'}
@@ -302,7 +302,7 @@ const AddBankDataTab: React.FC = () => {
                     <Input {...register('wallettitle', {
                         required: 'Обов\'язкове поле для заповнення',
                         pattern: {
-                            value: lettersRegex,
+                            value: titleRegex,
                             message: "Назва повинна бути не менше 2 літер",
                         },
                     })}
@@ -334,7 +334,9 @@ const AddBankDataTab: React.FC = () => {
                     </Box>
                 </Box>
             </Box>
+
             {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+
             <Box
                 display="flex"
                 width="376px"

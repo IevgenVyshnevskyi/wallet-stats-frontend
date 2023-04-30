@@ -26,7 +26,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
-import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
+import { moneyAmountRegex, titleRegex } from "../../../shared/utils/regexes";
 import { localStorageIsDataEntrySuccess, token, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
@@ -125,7 +125,7 @@ const DataEntryPage: React.FC = () => {
                                 <Input {...register('cardAccountName', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: lettersRegex,
+                                        value: titleRegex,
                                         message: "Назва повинна бути не менше 2 літер",
                                     },
                                 })} type="text" id="cardAccountName" width="284px"

@@ -19,11 +19,10 @@ import {
   GRADIENT,
   WHITE
 } from "../../../shared/styles/variables";
-import { emailRegex } from "../../../shared/utils/regexes";
+import { emailRegex, passwordRegex } from "../../../shared/utils/regexes";
 
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
-import { passwordRegex } from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { confirmPasswordReset, requestPasswordReset } from "../../../store/passwordRecoverySlice";
 import { ButtonLink } from "../../atoms/button/ButtonLink";

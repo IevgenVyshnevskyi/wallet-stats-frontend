@@ -25,7 +25,7 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import { RegisterFormData } from "../../../store/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { registerUser } from '../../../store/userSlice';
-import { emailRegex, lettersRegex, passwordRegex } from "../../../shared/utils/regexes";
+import { emailRegex, nameRegex, passwordRegex } from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -88,7 +88,7 @@ const RegisterPage: React.FC = () => {
                                 <Input {...register('first_name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: lettersRegex,
+                                        value: nameRegex,
                                         message: "Назва повинна бути не менше 2 літер",
                                     },
                                 })} type="text" id="first_name" width="284px"
@@ -101,7 +101,7 @@ const RegisterPage: React.FC = () => {
                                 <Input {...register('last_name', {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
-                                        value: lettersRegex,
+                                        value: nameRegex,
                                         message: "Повинно бути не менше 2 символів",
                                     },
                                 })} type="text" id="last_name" width="284px"

@@ -57,8 +57,8 @@ export interface IWallet {
   owner: number,
 }
 
-export interface WalletPopupActionsFormData {
-  name: string,
+export interface WalletFormData {
+  title: string,
   amount: string,
 }
 

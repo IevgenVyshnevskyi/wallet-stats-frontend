@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "../../atoms/form/Form.styled";
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
-import { emailRegex, lettersRegex, passwordRegex } from "../../../shared/utils/regexes";
+import { emailRegex, nameRegex, passwordRegex } from "../../../shared/utils/regexes";
 import { useAppSelector } from "../../../store/hooks";
 import { changeUserProfile } from "../../../store/userSlice";
 
@@ -100,7 +100,7 @@ const PopupEditProfile: React.FC = () => {
                                     <Input {...register('firstName', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: lettersRegex,
+                                            value: nameRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
                                     })} type="text" id="firstName" width="284px"
@@ -115,7 +115,7 @@ const PopupEditProfile: React.FC = () => {
                                     <Input {...register('lastName', {
                                         required: 'Обов\'язкове поле для заповнення',
                                         pattern: {
-                                            value: lettersRegex,
+                                            value: nameRegex,
                                             message: "Назва повинна бути не менше 2 літер",
                                         },
                                     })} type="text" id="lastName" width="284px"

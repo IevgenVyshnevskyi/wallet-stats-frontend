@@ -8,7 +8,7 @@ export interface IUser {
   id?: number,
   first_name: string,
   last_name: string,
-  email: string,
+  email?: string,
   is_confirm_email?: boolean,
   token?: string;
 }
@@ -57,8 +57,8 @@ export interface IWallet {
   owner: number,
 }
 
-export interface WalletPopupActionsFormData {
-  name: string,
+export interface WalletFormData {
+  title: string,
   amount: string,
 }
 
@@ -99,4 +99,11 @@ export interface ICategory {
   title: string,
   type_of_outlay: TypeOfOutlay,
   owner: number
+}
+
+export interface IBankData {
+  id?: number;
+  owner: number;
+  wallettitle: string;
+  file: string;
 }

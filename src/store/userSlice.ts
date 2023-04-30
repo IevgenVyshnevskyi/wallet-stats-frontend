@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
-import { $api, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH } from '../api/api';
+import { $api, CHANGE_USER_INFO_PATH, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH, userDataParsed } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
 
@@ -11,12 +11,14 @@ export type UserState = {
     isLoggedOut: boolean;
     isRegistered: boolean;
     isAccountDeleted: boolean;
+    isProfileChanged: boolean;
     loginError: string | null;
     logoutError: string | null;
     getDetailsError: string | null;
     registerError: string | null;
     deleteUserAccountError: string | null;
     confirmEmailError: string | null;
+    userProfileError: string | null;
 }
 
 export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValue: string }>(
@@ -48,7 +50,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
             })
             .catch(error => {
                 const errorMessage = formatLoginErrorMessage(error.response.data);
-                return rejectWithValue('Будь ласка, перевірте введені дані та спробуйте знову.');
+                return rejectWithValue('Будь ласка, введіть дані, вказані при реєстрації');
             });
     }
 );
@@ -98,14 +100,19 @@ export const deleteUserAccount = createAsyncThunk<undefined, undefined, { reject
     }
 );
 
-export const confirmEmail = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
-    'user/confirmEmail',
-    async function (_, { rejectWithValue }) {
-        return $api.delete(USER_DETAILS_PATH)
-            .then(res => res.data)
+export const changeUserProfile = createAsyncThunk<IUser, IUser, { rejectValue: string }>(
+    'user/changeUserProfile',
+    async function (payload, { rejectWithValue }) {
+        return $api.put<IUser>(CHANGE_USER_INFO_PATH, payload)
+            .then(newUserInfo => {
+                localStorage.setItem('userData', JSON.stringify({
+                    ...userDataParsed,
+                    ...newUserInfo.data
+                }));
+                return newUserInfo.data;
+            })
             .catch(error => {
-                const errorMessage = error.response.data;
-                return rejectWithValue(errorMessage);
+                return rejectWithValue('Помилка');
             });
     }
 );
@@ -117,12 +124,14 @@ const initialState: UserState = {
     isLoggedIn: false,
     isLoggedOut: false,
     isAccountDeleted: false,
+    isProfileChanged: false,
     registerError: null,
     loginError: null,
     logoutError: null,
     getDetailsError: null,
     deleteUserAccountError: null,
     confirmEmailError: null,
+    userProfileError: null,
 }
 
 const userSlice = createSlice({
@@ -134,6 +143,12 @@ const userSlice = createSlice({
         },
         resetDeleteUserAccountError: (state) => {
             state.deleteUserAccountError = null;
+        },
+        setIsLoggedOut: (state, action) => {
+            state.isLoggedOut = action.payload;
+        },
+        setIsAccountDeleted: (state, action) => {
+            state.isAccountDeleted = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -218,22 +233,27 @@ const userSlice = createSlice({
                 state.deleteUserAccountError = action.payload;
             })
 
-            .addCase(confirmEmail.pending, (state) => {
+            .addCase(changeUserProfile.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(confirmEmail.fulfilled, (state) => {
-                state.isLoading = false;
+            .addCase(changeUserProfile.fulfilled, (state, action) => {
+                state.user = {
+                    ...state.user,
+                    ...action.payload
+                };
+                state.isProfileChanged = true;
             })
-            .addCase(confirmEmail.rejected, (state, action) => {
-                state.isLoading = false;
-                state.confirmEmailError = action.payload;
+            .addCase(changeUserProfile.rejected, (state, action) => {
+                state.userProfileError = action.payload
             })
     }
 });
 
 export const {
     resetUserState,
-    resetDeleteUserAccountError
+    resetDeleteUserAccountError,
+    setIsLoggedOut,
+    setIsAccountDeleted,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -26,6 +26,7 @@ import { getTransactions } from "../../../store/transactionSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../../store/userSlice";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,10 @@ const HomePage: React.FC = () => {
   }
 
   useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getUserDetails())
+    }
+
     dispatch(getWallets());
     dispatch(getTransactions());
     dispatch(getCategories());
@@ -96,7 +101,7 @@ const Wallets: React.FC = () => {
     setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
-  const { wallets, activeWallet } = useAppSelector(state => state.wallet)
+  const { wallets, activeWallet, isLoading } = useAppSelector(state => state.wallet)
 
   const cashWallet = wallets?.find(
     (wallet) => wallet?.type_of_account === 'cash'
@@ -175,7 +180,7 @@ const Wallets: React.FC = () => {
           </List>
         </Box>
         <Button
-          disabled={wallets?.length > 4}
+          disabled={wallets?.length > 4 || isLoading}
           secondary
           onClick={handleAddWalletClick}
         >
@@ -296,8 +301,10 @@ const Statistics: React.FC = () => {
         display="flex"
         direction="column"
         bgColor={BASE_2}
-        p="15px"
         borderRadius="16px"
+        overflow="auto"
+        height="100px"
+        p="15px"
       >
         <Box mb="20px">
           <Box display="flex" justifyContent="space-between">

@@ -12,6 +12,7 @@ import { userId } from "../../../api/api";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "../../atoms/form/Form.styled";
+import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 
 const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -107,8 +108,8 @@ const AddCategory: React.FC = () => {
               {...register('title', {
                 required: 'Обов\'язкове поле для заповнення',
                 validate: {
-                  hasTwoSymbols: (value) => /^.{2,}$/.test(value) || 'Повинно бути не менше 2 символів',
-                  hasTwoLetters: (value) => /^[A-Za-zА-Яа-яІіЇїЄєҐґ]+$/.test(value) || 'Повинно бути не менше 2 літер',
+                  hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
+                  hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
                 }
               })}
             />

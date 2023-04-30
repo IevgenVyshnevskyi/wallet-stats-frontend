@@ -26,6 +26,7 @@ import { getTransactions } from "../../../store/transactionSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../../store/userSlice";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,10 @@ const HomePage: React.FC = () => {
   }
 
   useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getUserDetails())
+    }
+
     dispatch(getWallets());
     dispatch(getTransactions());
     dispatch(getCategories());

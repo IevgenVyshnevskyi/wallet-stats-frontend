@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, RegisterFormData } from './types';
-import { $api, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH, userDataParsed } from '../api/api';
+import { $api, CHANGE_USER_INFO_PATH, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH, userDataParsed } from '../api/api';
 import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
 import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
 
@@ -50,7 +50,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
             })
             .catch(error => {
                 const errorMessage = formatLoginErrorMessage(error.response.data);
-                return rejectWithValue('Будь ласка, перевірте введені дані та спробуйте знову.');
+                return rejectWithValue('Будь ласка, введіть дані, вказані при реєстрації');
             });
     }
 );
@@ -103,7 +103,7 @@ export const deleteUserAccount = createAsyncThunk<undefined, undefined, { reject
 export const changeUserProfile = createAsyncThunk<IUser, IUser, { rejectValue: string }>(
     'user/changeUserProfile',
     async function (payload, { rejectWithValue }) {
-        return $api.put<IUser>(USER_DETAILS_PATH, payload)
+        return $api.put<IUser>(CHANGE_USER_INFO_PATH, payload)
             .then(newUserInfo => {
                 localStorage.setItem('userData', JSON.stringify({
                     ...userDataParsed,
@@ -116,7 +116,6 @@ export const changeUserProfile = createAsyncThunk<IUser, IUser, { rejectValue: s
             });
     }
 );
-
 
 const initialState: UserState = {
     user: null,
@@ -144,6 +143,12 @@ const userSlice = createSlice({
         },
         resetDeleteUserAccountError: (state) => {
             state.deleteUserAccountError = null;
+        },
+        setIsLoggedOut: (state, action) => {
+            state.isLoggedOut = action.payload;
+        },
+        setIsAccountDeleted: (state, action) => {
+            state.isAccountDeleted = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -246,7 +251,9 @@ const userSlice = createSlice({
 
 export const {
     resetUserState,
-    resetDeleteUserAccountError
+    resetDeleteUserAccountError,
+    setIsLoggedOut,
+    setIsAccountDeleted,
 } = userSlice.actions;
 
 export default userSlice.reducer;

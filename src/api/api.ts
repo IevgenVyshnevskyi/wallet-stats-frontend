@@ -8,6 +8,7 @@ export const REGISTER_PATH = "/acounts/register/";
 export const LOGIN_PATH = "/acounts/login/";
 export const LOGOUT_PATH = "/acounts/logout/";
 export const USER_DETAILS_PATH = "/acounts/get-details/";
+export const CHANGE_USER_INFO_PATH = "/acounts/change-info/";
 export const PASSWORD_RESET_REQUEST_PATH = "/acounts/password-reset-request/";
 export const PASSWORD_RESET_CONFIRM_PATH = "/acounts/password-reset-confirm/";
 export const WALLET_PATH = "/wallet/";
@@ -37,7 +38,10 @@ export const $api = axios.create({
 });
 
 $api.interceptors.request.use((config: AxiosRequestConfig): any => {
-  const currentToken = store.getState().user?.user?.token || token;
+  const userState = store.getState().user?.user;
+
+  const currentToken = userState?.token ||
+    (!(userState?.isAccountDeleted || userState?.isLoggedOut) ? token : undefined);
 
   if (currentToken) {
     config.headers.Authorization = `Token ${currentToken}`;

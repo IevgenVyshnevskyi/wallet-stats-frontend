@@ -22,7 +22,7 @@ import { ButtonPopup } from "../../atoms/button/ButtonPopup";
 import { Form } from "../../atoms/form/Form.styled";
 import { lettersRegex, moneyAmountRegex } from "../../../shared/utils/regexes";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { IBankData, IWallet, WalletPopupActionsFormData } from "../../../store/types";
+import { IBankData, IWallet } from "../../../store/types";
 import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
 import { userId } from "../../../api/api";
 import { MessageProps } from "../../../../types/molecules";
@@ -38,8 +38,6 @@ const PopupAddWallet: React.FC = () => {
     const [isAddWalletManuallyOpen, setIsAddWalletManuallyOpen] = useState(true);
 
     const { isAddWalletSuccess } = useAppSelector(state => state.wallet);
-
-    const { isAddBankDataSuccess } = useAppSelector(state => state.bankData);
 
     const handleCloseClick = () => {
         dispatch(setActiveWallet(null));
@@ -160,9 +158,9 @@ const AddWalletTab: React.FC = () => {
         };
     }, []);
 
-    function handleSubmitWallet(data: WalletPopupActionsFormData) {
+    function handleSubmitWallet(data: { title: string, amount: string }) {
         const wallet: IWallet = {
-            title: data.name,
+            title: data.title,
             amount: data.amount,
             type_of_account: "bank",
             owner: user?.id || userId,
@@ -178,21 +176,21 @@ const AddWalletTab: React.FC = () => {
         <Form onSubmit={handleSubmit(handleSubmitWallet)}>
             <Box mb="25px">
                 <Box>
-                    <Label htmlFor="name" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
+                    <Label htmlFor="title" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                         textAlight="left">Введіть назву карткового рахунку</Label>
-                    <Input {...register('name', {
+                    <Input {...register('title', {
                         required: 'Обов\'язкове поле для заповнення',
                         pattern: {
                             value: lettersRegex,
                             message: "Назва повинна бути не менше 2 літер",
                         },
                     })}
-                        type="text" id="name" width="340px"
-                        className={errors.name && 'error'}
+                        type="text" id="title" width="340px"
+                        className={errors.title && 'error'}
                         defaultValue={activeWallet?.title}
                     />
                     <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                        m="6px 0 10px 0">{errors?.name && <>{errors?.name?.message || 'Error!'}</>}</Box>
+                        m="6px 0 10px 0">{errors?.title && <>{errors?.title?.message || 'Error!'}</>}</Box>
                 </Box>
                 <Box mb="30px">
                     <Label htmlFor="amount" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT}
@@ -344,7 +342,12 @@ const AddBankDataTab: React.FC = () => {
                 pt="51px"
                 mb="25px"
             >
-                <Button type="submit" width="176px" primary disabled={!isValid}>
+                <Button
+                    type="submit"
+                    width="176px"
+                    primary
+                    disabled={!isValid || (inputFileRef.current && inputFileRef.current.value === '')}
+                >
                     Зберегти
                 </Button>
                 <Button type="reset" width="176px" secondary onClick={handleCloseClick}>

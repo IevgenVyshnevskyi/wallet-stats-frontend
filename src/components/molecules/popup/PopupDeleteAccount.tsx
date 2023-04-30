@@ -8,7 +8,7 @@ import CrossIcon from './../../../shared/assets/icons/cross.svg';
 import { PopupWrapper } from "./Popup.styled";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { Form } from "../../atoms/form/Form.styled";
-import { deleteUserAccount, resetDeleteUserAccountError, resetUserState } from "../../../store/userSlice";
+import { deleteUserAccount, resetDeleteUserAccountError, resetUserState, setIsAccountDeleted } from "../../../store/userSlice";
 import { useNavigate } from 'react-router-dom';
 import { resetWalletState } from "../../../store/walletSlice";
 import { resetCategoryState } from "../../../store/categorySlice";
@@ -33,6 +33,7 @@ const PopupDeleteAccount: React.FC = () => {
             dispatch(resetTransactionState());
             dispatch(resetStatisticsState());
             dispatch(resetUserState());
+            dispatch(setIsAccountDeleted(true));
             handleCloseClick();
             setIsEditProfilePopupOpen(false);
             navigate('/welcome');
@@ -61,7 +62,7 @@ const PopupDeleteAccount: React.FC = () => {
     }
 
     return (
-        <PopupWrapper zIndex="6"  onClick={handleCloseClick}>
+        <PopupWrapper zIndex="6" onClick={handleCloseClick}>
             <Box onClick={event => event.stopPropagation()}>
                 <Box>
                     <Typography as="h2" fw="600" fz="22px" mb="25px">

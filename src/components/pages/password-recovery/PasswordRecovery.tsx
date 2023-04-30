@@ -55,7 +55,7 @@ const EmailStep: React.FC = () => {
   } = useForm({ mode: "all" });
 
   function handleSub(data: { email: string }) {
-    dispatch(requestPasswordReset(data?.email));
+    dispatch(requestPasswordReset(data));
   }
 
   return (
@@ -110,7 +110,7 @@ const ResetLinkStep: React.FC = () => {
   const { email } = useAppSelector(state => state.passwordRecovery);
 
   function sendRequestAgain() {
-    dispatch(requestPasswordReset(email));
+    dispatch(requestPasswordReset({ email }));
   }
 
   return (
@@ -131,13 +131,15 @@ const ResetLinkStep: React.FC = () => {
             Посилання для скидання пароля надіслано на вашу <br /> електронну адресу. Якщо посилання не
             прийшло, то ви <br /> можете надіслати його знову.
           </Typography>
-          <ButtonLink
-            onClick={sendRequestAgain}
-            fz="14px"
-            m="0 auto"
-          >
-            Надіслати знову
-          </ButtonLink>
+          <Box display="flex" justifyContent="center">
+            <ButtonLink
+              onClick={sendRequestAgain}
+              fz="14px"
+              m="0 auto"
+            >
+              Надіслати знову
+            </ButtonLink>
+          </Box>
         </Box>
       </Box>
     </Container>

@@ -59,7 +59,8 @@ const AddTransaction: React.FC = () => {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
+    setValue,
+    clearErrors,
   } = useForm({
     mode: "all",
   });
@@ -96,6 +97,11 @@ const AddTransaction: React.FC = () => {
   ];
 
   useEffect(() => {
+    clearErrors('category');
+    setValue('category', addTransactionData?.category);
+  }, [addTransactionData?.category]);
+
+  useEffect(() => {
     dispatch(getFilteredCategories("?type_of_outlay=income"))
     dispatch(getFilteredCategories("?type_of_outlay=expense"))
 
@@ -116,11 +122,8 @@ const AddTransaction: React.FC = () => {
       type_of_outlay: "expense",
       category: categories.expense[0]?.id
     }))
+    setValue('category', selectedCategoryValues)
   }, [categories.expense]);
-
-  // useEffect(() => {
-  //   setValue('amount', addTransactionData?.amount_of_funds);
-  // }, [addTransactionData?.amount_of_funds]);
 
   function onWalletClick(wallet: IWallet) {
     dispatch(setAddTransactionData({ wallet: wallet.id }));
@@ -134,7 +137,7 @@ const AddTransaction: React.FC = () => {
     });
   }
 
-  function handleSub(data: { amount: string }) {
+  function handleSub(data: { amount: string, category: number }) {
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({
       data: {
@@ -147,7 +150,7 @@ const AddTransaction: React.FC = () => {
   }
 
   return (
-    <Box display="flex" direction="column" width="540px">
+    <Box display="flex" direction="column" width="555px">
       <Typography
         as="h2"
         fw="600"
@@ -203,15 +206,29 @@ const AddTransaction: React.FC = () => {
             </List>
           </Box>
         </Box>
-        <Box mb="20px">
-          <Label fw="500" mb="12px">Категорія</Label>
-          <Select
-            value={selectedCategoryValues}
-            options={options}
-            onCategoryChange={onCategoryChange}
-          />
-        </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
+          <Box mb="20px">
+            <Label fw="500" mb="12px">Категорія</Label>
+            <Select
+              value={selectedCategoryValues}
+              options={options}
+              onCategoryChange={onCategoryChange}
+              {...register('category', {
+                required: 'Обов\'язкове поле для заповнення',
+              })}
+              isError={errors?.category}
+            />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.category && <>{errors?.category?.message || 'Error!'}</>}
+            </Box>
+          </Box>
           <Box mb="20px">
             <Label fw="500" htmlFor="amount" mb="12px">
               Сума

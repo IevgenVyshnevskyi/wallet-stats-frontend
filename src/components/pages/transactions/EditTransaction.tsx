@@ -103,6 +103,8 @@ const EditTransaction: React.FC = () => {
       value: selectedCategory?.id,
       label: selectedCategory?.title,
     });
+    clearErrors('category');
+    setValue('category', editTransactionData?.category);
   }, [editTransactionData?.category]);
 
   useEffect(() => {
@@ -155,7 +157,7 @@ const EditTransaction: React.FC = () => {
   }
 
   return (
-    <Box display="flex" direction="column" width="540px">
+    <Box display="flex" direction="column" width="555px">
       <Typography
         as="h2"
         fw="600"
@@ -165,7 +167,7 @@ const EditTransaction: React.FC = () => {
       >
         Редагування транзакції
       </Typography>
-      <Box bgColor={MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px">
+      <Box bgColor={MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px" overflow="auto" height="100px">
         <Box mb="20px">
           <Typography
             as="h3"
@@ -211,15 +213,19 @@ const EditTransaction: React.FC = () => {
             </List>
           </Box>
         </Box>
-        <Box mb="20px">
-          <Label fw="500" mb="12px">Категорія</Label>
-          <Select
-            value={selectedCategoryValues}
-            options={options}
-            onCategoryChange={onCategoryChange}
-          />
-        </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
+          <Box mb="20px">
+            <Label fw="500" mb="12px">Категорія</Label>
+            <Select
+              value={selectedCategoryValues}
+              options={options}
+              onCategoryChange={onCategoryChange}
+              {...register('category', {
+                required: 'Обов\'язкове поле для заповнення',
+              })}
+              isError={errors?.category}
+            />
+          </Box>
           <Box mb="20px">
             <Label fw="500" htmlFor="amount" mb="12px">
               Сума

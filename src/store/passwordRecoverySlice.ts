@@ -11,14 +11,14 @@ export type PasswordRecoveryState = {
 }
 
 export const requestPasswordReset = createAsyncThunk<
-  string,
-  string,
+  undefined,
+  { email: string },
   { rejectValue: any }
 >(
   'passwordRecovery/requestPasswordReset',
-  async function (email, { rejectWithValue }) {
-    return $api.post(PASSWORD_RESET_REQUEST_PATH, email)
-      .then(res => email)
+  async function (payload, { rejectWithValue }) {
+    return $api.post(PASSWORD_RESET_REQUEST_PATH, payload)
+      .then(res => res.data)
       .catch(error => {
         const errorMessage = error.response.data;
         return rejectWithValue(errorMessage);

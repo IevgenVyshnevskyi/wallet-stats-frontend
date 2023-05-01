@@ -107,7 +107,6 @@ const PopupAddWallet: React.FC = () => {
 	);
 }
 
-
 const AddWalletTab: React.FC = () => {
 	const dispatch = useAppDispatch()
 

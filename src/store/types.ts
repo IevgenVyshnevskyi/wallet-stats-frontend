@@ -107,3 +107,10 @@ export interface IBankData {
   wallettitle: string;
   file: string;
 }
+
+export interface PasswordChangeFormData {
+  old_password: string;
+  new_password: string;
+  new_password_2: string;
+}
+

@@ -240,7 +240,10 @@ const AddBankDataTab: React.FC = () => {
 
 	const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
+	const [fileValue, setFileValue] = useState<any>();
+
 	const inputFileRef = useRef<HTMLInputElement>(null);
+	const submitButtonRef = useRef<HTMLButtonElement>(null);
 
 	const {
 		error,
@@ -248,7 +251,7 @@ const AddBankDataTab: React.FC = () => {
 		isAddWalletSuccess,
 		isLoading
 	} = useAppSelector(state => state.wallet);
-
+	const { user } = useAppSelector(state => state.user);
 	const { isAddBankDataSuccess } = useAppSelector(state => state.bankData);
 
 	const {
@@ -256,9 +259,7 @@ const AddBankDataTab: React.FC = () => {
 		formState: { errors, isValid },
 		handleSubmit,
 		reset
-	} = useForm({
-		mode: "all",
-	});
+	} = useForm({ mode: "all" });
 
 	const handleCloseClick = () => {
 		reset();
@@ -289,7 +290,12 @@ const AddBankDataTab: React.FC = () => {
 	}, []);
 
 	function handleSubmitBankData(data: IBankData) {
-		// dispatch(sendBankData(data))
+		const formData: any = new FormData();
+		formData.append('file', fileValue);
+		formData.append('owner', user?.id || userId);
+		formData.append('wallettitle', data.wallettitle);
+
+		dispatch(sendBankData(formData));
 	}
 
 	return (
@@ -317,14 +323,18 @@ const AddBankDataTab: React.FC = () => {
 						primary
 						onClick={() => inputFileRef.current.click()}
 						width="376px"
+						type="button"
 					>
 						Вибрати файл даних
 					</Button>
 
-					<Input height="100px"
+					<Input
+						height="100px"
 						type="file"
 						accept=".xls"
 						ref={inputFileRef}
+						onChange={(e) => setFileValue(e.target.files[0])}
+						multiple={false}
 						style={{ display: "none" }}
 					/>
 					<Box height="55px">
@@ -347,8 +357,9 @@ const AddBankDataTab: React.FC = () => {
 				<Button
 					type="submit"
 					width="176px"
+					ref={submitButtonRef}
 					primary
-					disabled={!isValid || (inputFileRef.current && inputFileRef.current.value === '') || isLoading}
+					disabled={!isValid || !fileValue || isLoading}
 				>
 					Зберегти
 				</Button>
@@ -374,7 +385,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
 				color={message === "success" ? SUCCESS : ALERT_1}
 			>
 				{message === "success" ? (
-					"Дані успішно додано"
+					"Файл успішно додано"
 				) : (
 					"Виникла помилка"
 				)}

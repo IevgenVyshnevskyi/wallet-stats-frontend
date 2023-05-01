@@ -22,8 +22,12 @@ export const getBankData = createAsyncThunk<IBankData[], undefined, { rejectValu
 
 export const sendBankData = createAsyncThunk<undefined, IBankData, { rejectValue: any }>(
   'bankData/sendBankData',
-  async function (_, { rejectWithValue }) {
-    return $api.post(BANK_DATA_PATH)
+  async function (payload, { rejectWithValue }) {
+    return $api.post(BANK_DATA_PATH, payload, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      }
+    })
       .then(res => res?.data)
       .catch(error => {
         return rejectWithValue('Помилка');

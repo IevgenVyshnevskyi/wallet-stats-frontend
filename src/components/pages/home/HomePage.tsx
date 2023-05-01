@@ -43,8 +43,8 @@ const HomePage: React.FC = () => {
     isDeleteWalletSuccess,
     isLoading: isWalletActionLoading
   } = useAppSelector(state => state.wallet)
-
   const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+  const { isLoading: isBankDataLoading } = useAppSelector(state => state.bankData);
 
   if (!token && !isRegistered && !isLoggedIn) {
     navigate("/welcome")
@@ -63,10 +63,12 @@ const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isWalletActionLoading === false) {
+    if (isWalletActionLoading === false || isBankDataLoading === false) {
       dispatch(getWallets());
+      dispatch(getTransactions());
+      dispatch(getCategories());
     }
-  }, [isWalletActionLoading]);
+  }, [isWalletActionLoading, isBankDataLoading]);
 
   useEffect(() => {
     if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {

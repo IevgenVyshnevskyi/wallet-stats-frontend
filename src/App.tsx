@@ -12,6 +12,7 @@ import PasswordRecovery from "./components/pages/password-recovery/PasswordRecov
 import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
+import NotFoundPage from "./components/pages/not-found/NotFoundPage";
 
 function App() {
   const elements = useRoutes([
@@ -21,11 +22,12 @@ function App() {
     { path: '/data-entry', element: <DataEntryPage /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
-    { path: '/password-recovery', element: <PasswordRecovery /> },
+    { path: '/password-recovery/:uid?/:resetToken?', element: <PasswordRecovery /> },
     { path: '/home', element: <HomePage /> },
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },
     { path: '/statistics', element: <StatisticsPage /> },
+    { path: '*', element: <NotFoundPage /> },
   ])
 
   return (

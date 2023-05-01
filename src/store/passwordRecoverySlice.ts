@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { $api, PASSWORD_RESET_REQUEST_PATH } from '../api/api';
+import { $api, PASSWORD_RESET_CONFIRM_PATH, PASSWORD_RESET_REQUEST_PATH } from '../api/api';
 
 export type PasswordRecoveryState = {
   email: string;
   isLoading: boolean;
   error: string | null;
   isResetLinkStepOpen: boolean;
-  isNewPasswordStepOpen: boolean;
   isNewPasswordSet: boolean;
 }
 
@@ -39,7 +38,7 @@ export const confirmPasswordReset = createAsyncThunk<
 >(
   'passwordRecovery/confirmPasswordReset',
   async function (payload, { rejectWithValue }) {
-    return $api.post(PASSWORD_RESET_REQUEST_PATH, payload)
+    return $api.post(PASSWORD_RESET_CONFIRM_PATH, payload)
       .then(res => res?.data)
       .catch(error => {
         const errorMessage = error.response.data;
@@ -53,7 +52,6 @@ const initialState: PasswordRecoveryState = {
   isLoading: false,
   error: null,
   isResetLinkStepOpen: false,
-  isNewPasswordStepOpen: false,
   isNewPasswordSet: false,
 }
 

@@ -26,20 +26,19 @@ import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { confirmPasswordReset, requestPasswordReset } from "../../../store/passwordRecoverySlice";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PasswordRecovery: React.FC = () => {
-  const {
-    isResetLinkStepOpen,
-    isNewPasswordStepOpen
-  } = useAppSelector(state => state.passwordRecovery);
+  const { uid, resetToken } = useParams<{ uid: string, resetToken: string }>();
+
+  const { isResetLinkStepOpen } = useAppSelector(state => state.passwordRecovery);
 
   return (
-    <>
-      {!isResetLinkStepOpen && <EmailStep />}
-      {isResetLinkStepOpen && <ResetLinkStep />}
-      {isNewPasswordStepOpen && <NewPasswordStep />}
-    </>
+    (uid && resetToken) ? (
+      <NewPasswordStep uid={uid} resetToken={resetToken} />
+    ) : (
+      !isResetLinkStepOpen ? <EmailStep /> : <ResetLinkStep />
+    )
   );
 }
 
@@ -146,7 +145,7 @@ const ResetLinkStep: React.FC = () => {
   )
 }
 
-const NewPasswordStep: React.FC = () => {
+const NewPasswordStep: React.FC<{ uid: string, resetToken: string }> = ({ uid, resetToken }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -159,7 +158,6 @@ const NewPasswordStep: React.FC = () => {
     register,
     formState: { errors, isValid },
     handleSubmit,
-    reset,
     watch,
   } = useForm({ mode: "all" });
 
@@ -177,14 +175,12 @@ const NewPasswordStep: React.FC = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  function handleSub(data: { passowrd: string, confirmPassowrd: string }) {
-    const newData = {
-      uid: "",
-      token: "",
-      new_password: data?.passowrd,
-    }
-
-    dispatch(confirmPasswordReset(newData))
+  function handleSub(data: { password: string, confirmPassword: string }) {
+    dispatch(confirmPasswordReset({
+      uid,
+      token: resetToken,
+      new_password: data?.password,
+    }))
   }
 
   return (

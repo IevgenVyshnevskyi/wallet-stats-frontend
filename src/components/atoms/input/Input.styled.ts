@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {ALERT_1, ALERT_2, PRIMARY, PRIMARY_2} from './../../../shared/styles/variables';
+import { ALERT_1, ALERT_2, PRIMARY, PRIMARY_2 } from './../../../shared/styles/variables';
 import { commonStyles } from '../../../shared/styles/commonStyles';
 
 export const Input = styled.input`
@@ -19,5 +19,10 @@ export const Input = styled.input`
   &.error {
     border: 2px solid ${ALERT_1};
     background-color: ${ALERT_2};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;

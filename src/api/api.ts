@@ -9,6 +9,7 @@ export const LOGIN_PATH = "/acounts/login/";
 export const LOGOUT_PATH = "/acounts/logout/";
 export const USER_DETAILS_PATH = "/acounts/get-details/";
 export const CHANGE_USER_INFO_PATH = "/acounts/change-info/";
+export const CHANGE_USER_PASSWORD_PATH = "/acounts/password-reset-for-login-user/";
 export const PASSWORD_RESET_REQUEST_PATH = "/acounts/password-reset-request/";
 export const PASSWORD_RESET_CONFIRM_PATH = "/acounts/password-reset-confirm/";
 export const WALLET_PATH = "/wallet/";

@@ -80,7 +80,7 @@ const HomePage: React.FC = () => {
     <>
       <HomePageWrapper>
         <Header />
-        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
+        <Box m="0 36px 24px" display="flex" grow="1" gap="25px">
           <Wallets />
           <Transactions />
           <Statistics />
@@ -124,7 +124,7 @@ const Wallets: React.FC = () => {
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Рахунки
@@ -136,6 +136,8 @@ const Wallets: React.FC = () => {
         p="15px"
         borderRadius="16px"
         grow="1"
+        overflow="auto"
+        height="100px"
       >
         <Box
           p="0 0 20px 0"
@@ -156,7 +158,7 @@ const Wallets: React.FC = () => {
             isActive={activeWallet?.id === (isDev ? mockWallets[0] : cashWallet)?.id}
           />
         </Box>
-        <Box grow="1">
+        <Box grow="1" mb="20px">
           <Typography
             as="h3"
             fz="16px"
@@ -199,7 +201,7 @@ const Transactions: React.FC = () => {
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Останні транзакції
@@ -292,7 +294,7 @@ const Statistics: React.FC = () => {
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Статистика за останній місяць

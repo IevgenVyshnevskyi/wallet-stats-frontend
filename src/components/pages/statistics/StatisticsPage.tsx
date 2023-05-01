@@ -48,7 +48,7 @@ const StatisticsPage: React.FC = () => {
     <StatisticsPageWrapper>
       <Header />
 
-      <Box m="0 20px 36px" display="flex" grow="1" direction="column">
+      <Box m="0 36px 24px" display="flex" grow="1" direction="column">
         <StatisticsHeader />
         <Box p="15px" bgColor={BASE_2} borderRadius="16px" grow="1">
           <DoughnutChartsSection />

@@ -187,8 +187,8 @@ const userSlice = createSlice({
 				state.user = action.payload;
 				state.isLoading = false;
 				state.isLoggedOut = false;
-				state.isAccountDeleted = false;
 				state.isRegistered = true;
+				state.isAccountDeleted = false;
 			})
 			.addCase(registerUser.rejected, (state, action) => {
 				state.registerError = action.payload;
@@ -219,9 +219,9 @@ const userSlice = createSlice({
 			.addCase(logoutUser.fulfilled, (state) => {
 				state.isLoading = false;
 				state.isLoggedIn = false;
+				state.isLoggedOut = true;
 				state.isRegistered = false;
 				state.user = null;
-				state.isLoggedOut = true;
 			})
 			.addCase(logoutUser.rejected, (state, action) => {
 				state.isLoading = false;

@@ -18,15 +18,16 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { IWallet } from "../../../store/types";
+import { IWallet, Transactions } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
-import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
 import { getTransactions } from "../../../store/transactionSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails } from "../../../store/userSlice";
+import { filterTransactions } from "../../../shared/utils/filterTransactions";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -198,6 +199,12 @@ const Wallets: React.FC = () => {
 const Transactions: React.FC = () => {
   const { transactions } = useAppSelector(state => state.transaction)
 
+  const transactionsData = (): Transactions => {
+    let filteredTransactions: Transactions = transactions.all;
+
+    return filterTransactions(filteredTransactions)
+  };
+
   return (
     <Box display="flex" direction="column" grow="1">
       <Typography
@@ -219,27 +226,21 @@ const Transactions: React.FC = () => {
         p="15px"
         borderRadius="16px"
       >
-        {Object.keys(isDev
-          ? mockTransactions
-          : transactions.all)?.map((date) => (
-            <Box mb="20px" key={date}>
-              <Typography as="h3" fz="16px" fw="500" mb="20px">
-                {formatTransactionDateToHours(date)}
-              </Typography>
-              <List display="flex" direction="column" gap="8px">
-                {(isDev
-                  ? mockTransactions
-                  : transactions.all)[date]?.map((transaction) => (
-                    <ListItem key={transaction?.id}>
-                      <Transaction
-                        transaction={transaction}
-                        isTransactionsPage={false}
-                      />
-                    </ListItem>
-                  ))}
-              </List>
-            </Box>
-          ))}
+        {Object.entries(transactionsData()).map(([date, transactions]) => (
+          <Box mb="20px" key={date}>
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
+              {formatTransactionDateToFullDate(date)}
+            </Typography>
+            <List display="flex" direction="column" gap="8px">
+              {transactions.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+                .map((transaction) => (
+                  <ListItem key={transaction?.id}>
+                    <Transaction transaction={transaction} isTransactionsPage={false} />
+                  </ListItem>
+                ))}
+            </List>
+          </Box>
+        ))}
       </List>
     </Box>
   );

@@ -18,7 +18,8 @@ import {
   setFilterByTypeOfOutlay,
   setIsEditTransactionOpen
 } from "../../../store/transactionSlice";
-import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
+import { filterTransactions } from "../../../shared/utils/filterTransactions";
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -65,18 +66,18 @@ const Transactions: React.FC = () => {
   }
 
   const transactionsData = (): Transactions => {
-    if (isDev) {
-      return mockTransactions;
-    } else {
-      if (filterByTypeOfOutlay === "all") {
-        return transactions.all;
-      } else if (filterByTypeOfOutlay === "expense") {
-        return transactions.expense;
-      } else if (filterByTypeOfOutlay === "income") {
-        return transactions.income;
-      }
+    let filteredTransactions: Transactions = {};
+    if (filterByTypeOfOutlay === "all") {
+      filteredTransactions = transactions.all;
+    } else if (filterByTypeOfOutlay === "expense") {
+      filteredTransactions = transactions.expense;
+    } else if (filterByTypeOfOutlay === "income") {
+      filteredTransactions = transactions.income;
     }
-  }
+
+    return filterTransactions(filteredTransactions)
+  };
+
 
   return (
     <Box grow="1" display="flex" direction="column">
@@ -108,26 +109,28 @@ const Transactions: React.FC = () => {
         overflow="auto"
         height="100px"
       >
-        {Object.keys(transactionsData())?.map((date) => (
+        {Object.entries(transactionsData()).map(([date, transactions]) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
-              {formatTransactionDateToHours(date)}
+              {formatTransactionDateToFullDate(date)}
             </Typography>
             <List display="flex" direction="column" gap="8px">
-              {transactionsData()[date]?.map((transaction) => (
-                <ListItem key={transaction?.id}>
-                  <ButtonTransparent
-                    width="100%"
-                    onClick={() => onTransactionClick(transaction)}
-                    borderRadius="8px"
-                  >
-                    <Transaction transaction={transaction} isTransactionsPage />
-                  </ButtonTransparent>
-                </ListItem>
-              ))}
+              {transactions.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+                .map((transaction) => (
+                  <ListItem key={transaction?.id}>
+                    <ButtonTransparent
+                      width="100%"
+                      onClick={() => onTransactionClick(transaction)}
+                      borderRadius="8px"
+                    >
+                      <Transaction transaction={transaction} isTransactionsPage />
+                    </ButtonTransparent>
+                  </ListItem>
+                ))}
             </List>
           </Box>
         ))}
+
       </Box>
     </Box>
   );

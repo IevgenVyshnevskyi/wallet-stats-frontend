@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-
 import { IUser } from "../store/types";
 import { Store } from '@reduxjs/toolkit';
 
@@ -21,7 +20,6 @@ export const localStorageIsDataEntrySuccess = localStorage.getItem("isDataEntryS
 export const userData = localStorage.getItem('userData');
 export const userDataParsed: IUser = JSON.parse(localStorage.getItem('userData'));
 export const userId = userDataParsed?.id;
-
 export const token = localStorage.getItem('token');
 
 let store: Store;
@@ -39,13 +37,14 @@ export const $api = axios.create({
 });
 
 $api.interceptors.request.use((config: AxiosRequestConfig): any => {
-  const userState = store.getState().user?.user;
+  const userState = store.getState().user;
+  let currentToken: string | undefined;
 
-  const currentToken = (
-    (userState?.isAccountDeleted === true || userState?.isLoggedOut === true)
-      ? undefined
-      : (userState?.token || token)
-  );
+  if (userState?.isAccountDeleted === true || userState?.isLoggedOut === true) {
+    currentToken = undefined
+  } else {
+    currentToken = userState?.user?.token || token
+  }
 
   if (currentToken) {
     config.headers.Authorization = `Token ${currentToken}`;

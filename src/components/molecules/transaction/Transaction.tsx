@@ -6,10 +6,8 @@ import { Box } from "../../atoms/box/Box.styled";
 import { useAppSelector } from '../../../store/hooks';
 import { TransactionWrapper } from './TransactionWrapper';
 import { ITransaction } from "../../../store/types";
-import { isDev } from "../../../consts/consts";
-import { mockCategories } from "../../../../mock-data/categories";
-import { mockWallets } from "../../../../mock-data/wallets";
 import formatTransactionTime from "../../../shared/utils/formatTransactionTime";
+import { useEffect, useRef } from "react";
 
 export type TransactionProps = {
   transaction: ITransaction;
@@ -25,10 +23,10 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
   const isActive = transaction?.id === activeTransaction?.id;
   const isIncome = transaction?.type_of_outlay === "income";
 
-  const transactionCategoryTitle: string = (isDev ? mockCategories : categories.all)
+  const transactionCategoryTitle: string = (categories.all)
     ?.find(category => category.id === transaction.category)?.title;
 
-  const transactionWalletTitle: string = (isDev ? mockWallets : wallets)
+  const transactionWalletTitle: string = (wallets)
     ?.find(wallet => wallet.id === transaction.wallet)?.title;
 
   return (
@@ -55,7 +53,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
             color={isTransactionsPage && isActive ? WHITE : DISABLED}
             m="0 0 16px 0"
           >
-            {formatTransactionTime(transaction?.created)}
+            ({formatTransactionTime(transaction?.created)})
           </Typography>
         </Box>
         <Typography
@@ -73,7 +71,6 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
         display="flex"
         direction="column"
         alignItems="flex-end"
-        // borderLeft={`2px solid ${DIVIDER}`}
         pl="50px"
       >
         <Box

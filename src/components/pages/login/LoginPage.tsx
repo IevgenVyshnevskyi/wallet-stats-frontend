@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
                 background={WHITE}>
-                <Box m="auto 0">
+                <Box m="auto 0" justifyContent="center">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
                         m="48px 0 48px 0">
@@ -123,7 +123,7 @@ const LoginPage: React.FC = () => {
                             </Box>
                             <Box color="red" textAlight="left" border="red" fz="13px" height="14px" width='300px'
                                 m="0 0 10px 0">{errors?.password && <>{errors?.password?.message || 'Error!'}</>}</Box>
-                            <Box width="320px" display="flex" justifyContent="end">
+                            <Box width="320px" display="flex" justifyContent="end" mt="25px">
                                 <Link
                                     to="/password-recovery"
                                     fz="14px"
@@ -135,18 +135,19 @@ const LoginPage: React.FC = () => {
                                 </Link>
                             </Box>
 
-                            {loginError && <Typography
-                                as="p"
-                                color="red"
-                                fz="16px"
-                                textAlight="center"
-                                mt="30px"
-                                textAlign="center"
-                            >
-                                {loginError}
-                            </Typography>
-                            }
                         </Box>
+
+                        {loginError && <Typography
+                            as="p"
+                            color="red"
+                            fz="16px"
+                            textAlight="center"
+                            mt="30px"
+                            textAlign="center"
+                        >
+                            {loginError}
+                        </Typography>
+                        }
 
                         <Button type="submit" disabled={!isValid || isLoading} m="50px auto 0" primary>Увійти</Button>
                     </Form>

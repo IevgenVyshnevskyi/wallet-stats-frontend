@@ -61,9 +61,7 @@ const AddTransaction: React.FC = () => {
     handleSubmit,
     setValue,
     clearErrors,
-  } = useForm({
-    mode: "all",
-  });
+  } = useForm({ mode: "all" });
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -181,7 +179,7 @@ const AddTransaction: React.FC = () => {
           >
             Час транзакції
           </Typography>
-          <DatePicker />
+          <DatePicker isEditTrapsactionOpen={false} />
         </Box>
         <Box mb="20px">
           <Typography

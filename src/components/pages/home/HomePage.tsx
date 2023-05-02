@@ -21,7 +21,7 @@ import { getWallets, setActiveWallet } from "../../../store/walletSlice";
 import { IWallet } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
-import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
 import { getTransactions } from "../../../store/transactionSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
@@ -224,7 +224,7 @@ const Transactions: React.FC = () => {
           : transactions.all)?.map((date) => (
             <Box mb="20px" key={date}>
               <Typography as="h3" fz="16px" fw="500" mb="20px">
-                {formatTransactionDateToHours(date)}
+                {formatTransactionDateToFullDate(date)}
               </Typography>
               <List display="flex" direction="column" gap="8px">
                 {(isDev

@@ -18,7 +18,7 @@ import {
   setFilterByTypeOfOutlay,
   setIsEditTransactionOpen
 } from "../../../store/transactionSlice";
-import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -65,16 +65,12 @@ const Transactions: React.FC = () => {
   }
 
   const transactionsData = (): Transactions => {
-    if (isDev) {
-      return mockTransactions;
-    } else {
-      if (filterByTypeOfOutlay === "all") {
-        return transactions.all;
-      } else if (filterByTypeOfOutlay === "expense") {
-        return transactions.expense;
-      } else if (filterByTypeOfOutlay === "income") {
-        return transactions.income;
-      }
+    if (filterByTypeOfOutlay === "all") {
+      return transactions.all;
+    } else if (filterByTypeOfOutlay === "expense") {
+      return transactions.expense;
+    } else if (filterByTypeOfOutlay === "income") {
+      return transactions.income;
     }
   }
 
@@ -111,7 +107,7 @@ const Transactions: React.FC = () => {
         {Object.keys(transactionsData())?.map((date) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
-              {formatTransactionDateToHours(date)}
+              {formatTransactionDateToFullDate(date)}
             </Typography>
             <List display="flex" direction="column" gap="8px">
               {transactionsData()[date]?.map((transaction) => (

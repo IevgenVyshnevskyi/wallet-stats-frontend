@@ -116,7 +116,7 @@ const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
-    resetTransactionState: (state) => {
+    resetTransactionState: () => {
       return initialState;
     },
     resetError: (state) => {
@@ -191,6 +191,7 @@ const transactionSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
         const { data, params } = action.payload;
         switch (params) {
           case "":
@@ -205,7 +206,6 @@ const transactionSlice = createSlice({
           default:
             break;
         }
-        state.isLoading = false;
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;

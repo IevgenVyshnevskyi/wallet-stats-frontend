@@ -33,7 +33,7 @@ import { moneyAmountRegex } from "../../../shared/utils/regexes";
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { editTransactionData, isLoading } = useAppSelector(state => state.transaction)
+  const { editTransactionData, isLoading, isEditTransactionOpen } = useAppSelector(state => state.transaction)
   const { categories } = useAppSelector(state => state.category);
   const { wallets } = useAppSelector(state => state.wallet);
 
@@ -188,7 +188,7 @@ const EditTransaction: React.FC = () => {
           >
             Час транзакції
           </Typography>
-          <DatePicker />
+          <DatePicker isEditTrapsactionOpen={isEditTransactionOpen} />
         </Box>
         <Box mb="20px">
           <Typography

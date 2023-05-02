@@ -194,7 +194,7 @@ const NewPasswordStep: React.FC<{ uid: string, resetToken: string }> = ({ uid, r
           <Img src={logo} alt="Logo" />
           <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
             m="48px 0 48px 0">
-            Відновлення пароля
+            Створення нового пароля
           </Typography>
           <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={ALMOST_BLACK_FOR_TEXT}
             textAlign="center">

@@ -267,17 +267,26 @@ const LineChartSection: React.FC = () => {
   const [chartData, setChartData] = useState<number[]>([]);
 
   useEffect(() => {
-    setChartData(Object.values(
-      allOutlaysChart.categoryTransactions
-    )
-      ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
-        parseInt(transaction.amount_of_funds)
-      ))));
+    const newChartData: number[] = new Array(parseInt(filterByDays)).fill(0);
+
+    Object.entries(allOutlaysChart.categoryTransactions)?.forEach(([dateStr, transactionsArr]) => {
+      const targetDate = new Date(dateStr);
+      const currentDate = new Date();
+
+      const diffInTime = targetDate.getTime() - currentDate.getTime();
+      const diffInDays = Math.abs(Math.ceil(diffInTime / (1000 * 60 * 60 * 24)));
+
+      const totalAmount = transactionsArr.reduce((acc, transaction) => acc + parseInt(transaction.amount_of_funds), 0);
+      newChartData[diffInDays] = totalAmount;
+    });
+
+    setChartData(newChartData);
   }, [allOutlaysChart?.categoryTransactions]);
+
+  console.log(chartData)
 
   useEffect(() => {
     if (!allOutlaysChart?.activeCategoryId) {
-      console.log('if (!allOutlaysChart?.activeCategoryId) {', allOutlaysChart?.activeCategoryId)
       setSelectedCategoryValues({
         value: categories.all[0]?.id,
         label: categories.all[0]?.title

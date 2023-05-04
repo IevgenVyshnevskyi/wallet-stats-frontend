@@ -82,7 +82,10 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
           },
         },
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000,
+        },
       },
     });
 

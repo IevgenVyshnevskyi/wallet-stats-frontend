@@ -2,8 +2,6 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
-import { isDev } from "../../../consts/consts";
-import { mockTransactions } from "../../../../mock-data/transactions";
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
 import { List } from "../../atoms/list/List.styled";

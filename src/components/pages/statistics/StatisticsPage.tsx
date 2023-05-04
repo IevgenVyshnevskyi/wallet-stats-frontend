@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { BASE_2, DARK_FOR_TEXT, DIVIDER, WHITE } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
@@ -11,10 +11,8 @@ import Select from "../../molecules/select/Select";
 import LineChart from "../../molecules/charts/LineChart";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
-import { setActiveCategory, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
-import { isDev } from "../../../consts/consts";
+import { getFilteredCategoryTransactions, setActiveCategory, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
-import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 
@@ -39,9 +37,9 @@ const StatisticsPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // if (categories.all?.length > 0) {
-    dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
-    // }
+    if (categories.all?.length > 0) {
+      dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
+    }
   }, [categories.all]);
 
   return (
@@ -119,43 +117,79 @@ const StatisticsHeader: React.FC = () => {
 const DoughnutChartsSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    incomesChart,
-    expensesChart,
-  } = useAppSelector(state => state.statistics);
-
-  const incomesData: string[] = Object.values(incomesChart?.transactions)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => {
-      return transaction.amount_of_funds
-    }));
-  const expensesData: string[] = Object.values(expensesChart?.transactions)
-    .flatMap(transactionsArr => transactionsArr.map(transaction => {
-      return transaction.amount_of_funds
-    }));
+  const { incomesChart, expensesChart, filterByDays } = useAppSelector(state => state.statistics);
 
   const incomesLabels: string[] = incomesChart.categories?.map(c => c.title);
   const expensesLabels: string[] = expensesChart.categories?.map(c => c.title);
 
+  const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
+    .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
+      return sum += parseFloat(transaction.amount_of_funds)
+    }, 0))
+    .reduce((sum, t) => sum + t, 0)
+    .toFixed(2);
+
+  const totalExpensesAmount: string = Object.values(expensesChart?.allTransactions)
+    ?.map((transactionsArr) => transactionsArr?.reduce((sum, transaction) => {
+      return sum += parseFloat(transaction?.amount_of_funds)
+    }, 0))
+    .reduce((sum, t) => sum + t, 0)
+    .toFixed(2);
+
   useEffect(() => {
-    const totalIncomesAmount: string = Object.values(incomesChart?.transactions)
-      .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
-        console.log('transaction in totalIncomesAmount', totalIncomesAmount)
-        return sum += parseFloat(transaction.amount_of_funds)
-      }, 0))
-      .reduce((sum, t) => sum + t, 0)
-      .toFixed(2);
-    console.log(totalIncomesAmount)
+    if (expensesChart.allTransactions) {
+      dispatch(setTotalExpenses(totalExpensesAmount))
+    }
+    if (incomesChart.allTransactions) {
+      dispatch(setTotalIncomes(totalIncomesAmount))
+    }
+  }, [expensesChart.allTransactions, incomesChart.allTransactions]);
 
-    const totalExpensesAmount: string = Object.values(expensesChart?.transactions)
-      .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
-        return sum += parseFloat(transaction.amount_of_funds)
-      }, 0))
-      .reduce((sum, t) => sum + t, 0)
-      .toFixed(2);
+  const incomesData = useRef<any>(null);
+  const expensesData = useRef<any>(null);
 
-    dispatch(setTotalIncomes(totalIncomesAmount))
-    dispatch(setTotalExpenses(totalExpensesAmount))
-  }, []);
+  useEffect(() => {
+    if (incomesChart.categories) {
+      dispatch(getFilteredCategoryTransactions({
+        chartType: "income",
+        categories: incomesChart.categories,
+        filterByDays
+      }))
+    }
+    if (expensesChart.categories) {
+      dispatch(getFilteredCategoryTransactions({
+        chartType: "expense",
+        categories: expensesChart.categories,
+        filterByDays
+      }))
+    }
+  }, [incomesChart.categories, expensesChart.categories]);
+
+  if (incomesChart.categoryTransactions) {
+    incomesData.current = incomesChart.categoryTransactions?.map((transactions) => {
+      return Object.values(transactions)?.reduce((total, transaction) => {
+        return (
+          total +
+          transaction.reduce((totalAmount, item) => {
+            return totalAmount + 1 * parseFloat(item?.amount_of_funds);
+          }, 0)
+        );
+      }, 0).toString();
+    });
+  }
+
+  if (expensesChart.categoryTransactions) {
+    expensesData.current = expensesChart.categoryTransactions?.map((transactions) => {
+      return Object.values(transactions)?.reduce((total, transaction) => {
+        return (
+          total +
+          transaction.reduce((totalAmount, item) => {
+            return totalAmount + 1 * parseFloat(item?.amount_of_funds);
+          }, 0)
+        );
+      }, 0).toString();
+    })
+  }
 
   return (
     <Box
@@ -165,43 +199,33 @@ const DoughnutChartsSection: React.FC = () => {
       mb="20px"
       borderBottom={`2px solid ${DIVIDER}`}
     >
-      <Box
-        display="flex"
-        direction="column"
-        borderRadius="16px"
-        grow="1"
-      >
+      <Box display="flex" direction="column" borderRadius="16px" grow="1">
         <Box display="flex" mb="20px" >
           <Typography as="h3" fz="16px" fw="500" mr="12px">
             Витрати:
           </Typography>
           <Typography as="span" fz="16px" fw="600">
-            {isDev ? "32450.67" : expensesChart.totalExpenses} ₴
+            {expensesChart.totalAmount} ₴
           </Typography>
         </Box>
         <DoughnutChart
-          data={isDev ? mockData : expensesData}
-          labels={isDev ? mockLabels : expensesLabels}
+          labels={expensesLabels}
+          data={expensesData.current}
           chartType="expense"
         />
       </Box>
-      <Box
-        display="flex"
-        direction="column"
-        borderRadius="16px"
-        grow="1"
-      >
+      <Box display="flex" direction="column" borderRadius="16px" grow="1">
         <Box display="flex" mb="20px">
           <Typography as="h3" fz="16px" fw="500" mr="12px">
             Надходження:
           </Typography>
           <Typography as="span" fz="16px" fw="600">
-            {isDev ? "128531.31" : incomesChart.totalIncomes} ₴
+            {incomesChart.totalAmount} ₴
           </Typography>
         </Box>
         <DoughnutChart
-          data={isDev ? mockData : incomesData}
-          labels={isDev ? mockLabels : incomesLabels}
+          labels={incomesLabels}
+          data={incomesData.current}
           chartType="income"
         />
       </Box>
@@ -230,8 +254,8 @@ const LineChartSection: React.FC = () => {
   })
 
   function onCategoryChange(e: any): void {
-    dispatch(setActiveCategory(e.value))
     setSelectedCategoryValues({ value: e.value, label: e.label })
+    dispatch(setActiveCategory(e.value))
     dispatch(getFilteredTransactions(
       `?category=${e.value}&days=${filterByDays}`
     ))

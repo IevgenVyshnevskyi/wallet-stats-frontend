@@ -7,7 +7,7 @@ import { useAppSelector } from "../../../store/hooks";
 type DoughnutChartProps = {
   data: string[];
   labels: string[];
-  handleUpdate?: () => void;
+  handleUpdate?: (chart: any) => any;
   chartType: "income" | "expense";
 }
 
@@ -17,11 +17,10 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   handleUpdate,
   chartType
 }) => {
-  const chartRef = useRef(null);
-  const chart = useRef(null);
+  const chartRef = useRef<any>(null);
+  const chart = useRef<any>(null);
 
-  const { categories } = useAppSelector(state => state.category);
-  const { transactions } = useAppSelector(state => state.transaction);
+  const { incomesChart, expensesChart } = useAppSelector(state => state.statistics);
 
   useEffect(() => {
     const myDoughnutChartRef = chartRef.current.getContext("2d");
@@ -84,21 +83,12 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
         chart.current.destroy();
       }
     };
-
   }, []);
-
-  // if (chartType === "income") {
   useEffect(() => {
-    if (categories[chartType]?.length > 0 || Object.keys(transactions[chartType])?.length > 0) {
-      chart.current.data.labels = labels || [];
-      chart.current.data.datasets.data = data || [];
-      chart.current.update();
-    }
-
-  }, [categories[chartType], transactions[chartType]]);
-  // } else {
-
-  // }
+    chart.current.data.labels = labels || [];
+    chart.current.data.datasets[0].data = data;
+    chart.current.update();
+  }, [incomesChart.categoryTransactions, expensesChart.categoryTransactions]);
 
   return (
     <Box bgColor={WHITE} borderRadius="8px" p="5px 0">

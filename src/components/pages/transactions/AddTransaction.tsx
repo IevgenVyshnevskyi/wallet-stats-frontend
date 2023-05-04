@@ -67,6 +67,7 @@ const AddTransaction: React.FC = () => {
     {
       buttonName: 'Витрата',
       onTabClick: () => {
+        if (addTransactionData?.type_of_outlay === "expense") return;
         dispatch(setAddTransactionData({
           type_of_outlay: "expense",
           category: categories.expense[0]?.id
@@ -81,6 +82,7 @@ const AddTransaction: React.FC = () => {
     {
       buttonName: 'Надходження',
       onTabClick: () => {
+        if (addTransactionData?.type_of_outlay === "income") return;
         dispatch(setAddTransactionData({
           type_of_outlay: "income",
           category: categories.income[0]?.id

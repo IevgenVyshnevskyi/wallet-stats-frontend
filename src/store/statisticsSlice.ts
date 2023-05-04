@@ -18,7 +18,7 @@ type StatisticsState = {
   expensesChart: DoughnutChartData;
   allOutlaysChart: {
     allTransactions: Transactions;
-    activeCategory: number;
+    activeCategoryId: number;
     categoryTransactions: Transactions;
   };
   isLoading: boolean;
@@ -39,9 +39,7 @@ export const getFilteredCategoryTransactions = createAsyncThunk<
         $api.get<Transactions>(`${TRANSACTION_PATH}?category=${c.id}&days=${filterByDays}`)
           .then(res => res.data)
       ))
-
       const data = await Promise.all(res)
-
       return { data, chartType };
     } catch (error) {
       return rejectWithValue('Помилка');
@@ -67,7 +65,7 @@ const initialState: StatisticsState = {
   },
   allOutlaysChart: {
     allTransactions: {},
-    activeCategory: 0,
+    activeCategoryId: 0,
     categoryTransactions: {},
   },
   isLoading: false,
@@ -99,8 +97,8 @@ const statisticsSlice = createSlice({
     setExpensesData: (state, action) => {
       state.expensesChart.data = action.payload;
     },
-    setActiveCategory: (state, action) => {
-      state.allOutlaysChart.activeCategory = action.payload;
+    setActiveCategoryId: (state, action) => {
+      state.allOutlaysChart.activeCategoryId = action.payload;
     },
   },
 
@@ -186,7 +184,7 @@ export const {
   setExpensesData,
   setTotalIncomes,
   setTotalExpenses,
-  setActiveCategory,
+  setActiveCategoryId,
 } = statisticsSlice.actions;
 
 export default statisticsSlice.reducer;

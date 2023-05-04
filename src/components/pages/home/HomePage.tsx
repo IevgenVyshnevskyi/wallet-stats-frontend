@@ -249,7 +249,6 @@ const Statistics: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { incomesChart, expensesChart } = useAppSelector(state => state.statistics);
-  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
   const { categories } = useAppSelector(state => state.category);
 
   const incomesLabels: string[] = incomesChart.categories?.map(c => c.title);

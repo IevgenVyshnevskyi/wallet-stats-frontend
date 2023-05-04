@@ -15,6 +15,7 @@ import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
+    ALERT_1,
     ALMOST_BLACK_FOR_TEXT,
     GRADIENT,
     WHITE
@@ -76,13 +77,13 @@ const RegisterPage: React.FC = () => {
                 background={WHITE}>
                 <Box m="auto 0" alignItems="center" textAlign="center">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
+                    <Typography fw="700" fz="24px" lh="170%" m="20px 0" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
                         Реєстрація нового користувача
                     </Typography>
                     <Form onSubmit={handleSubmit(handleSub)} maxWidth="592px" textAlign="center"
                         alignItems="end">
                         <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
-                            <Box mb="6px">
+                            <Box mb="10px">
                                 <Label htmlFor="first_name" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Ім'я</Label>
                                 <Input {...register('first_name', {
@@ -181,7 +182,11 @@ const RegisterPage: React.FC = () => {
                             </Box>
                         </Box>
 
-                        {registerError && <Typography as="p">{registerError}</Typography>}
+                        {registerError &&
+                            <Box display="flex" justifyContent="center" m="10px 0">
+                                <Typography as="p" textAlight="center" color={ALERT_1}>{registerError}</Typography>
+                            </Box>
+                        }
 
                         <Box display="flex" justifyContent="center">
                             <Button type="submit" disabled={!isValid || isLoading} width="204px" mt="6px"

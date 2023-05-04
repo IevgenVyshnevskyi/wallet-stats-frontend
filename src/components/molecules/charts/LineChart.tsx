@@ -6,7 +6,7 @@ import { useAppSelector } from "../../../store/hooks";
 const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   const {
     filterByDays,
-    allOutlaysChart
+    allOutlaysChart,
   } = useAppSelector(state => state.statistics)
 
   const chartRef = useRef(null);
@@ -18,7 +18,15 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
     const labels: string[] = [];
 
     for (let i = 0; i < (parseInt(filterByDays)); i++) {
-      labels.push(`${i + 1}д.`);
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+
+      const label = date.toLocaleDateString("uk-UA", {
+        month: "short",
+        day: "numeric"
+      });
+
+      labels.push(label);
     }
 
     setLabels(labels)
@@ -98,6 +106,9 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
           point: {
             hoverBorderWidth: 5,
           },
+        },
+        animation: {
+          duration: 1000,
         },
       },
     });

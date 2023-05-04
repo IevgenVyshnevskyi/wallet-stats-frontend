@@ -35,8 +35,7 @@ export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValu
 				return user;
 			})
 			.catch(error => {
-				const errorMessage = formatRegisterErrorMessage(error.response.data);
-				return rejectWithValue(errorMessage);
+				return rejectWithValue("Акаунт із вказаною поштою вже існує");
 			});
 	}
 );

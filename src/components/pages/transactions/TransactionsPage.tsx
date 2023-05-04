@@ -46,6 +46,7 @@ const TransactionsPage: React.FC = () => {
   useEffect(() => {
     if (isAddTransactionSuccess || isEditTransactionSuccess || isDeleteTransactionSuccess) {
       dispatch(getTransactions());
+      dispatch(getWallets());
     }
   }, [isAddTransactionSuccess, isEditTransactionSuccess, isDeleteTransactionSuccess]);
 

@@ -71,6 +71,7 @@ const EditTransaction: React.FC = () => {
     {
       buttonName: 'Витрата',
       onTabClick: () => {
+        if (editTransactionData?.type_of_outlay === "expense") return;
         dispatch(setEditTransactionData({
           type_of_outlay: "expense",
           category: categories.expense[0]?.id
@@ -85,6 +86,7 @@ const EditTransaction: React.FC = () => {
     {
       buttonName: 'Надходження',
       onTabClick: () => {
+        if (editTransactionData?.type_of_outlay === "income") return;
         dispatch(setEditTransactionData({
           type_of_outlay: "income",
           category: categories.income[0]?.id

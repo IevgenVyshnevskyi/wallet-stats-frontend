@@ -1,45 +1,71 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFilteredTransactions } from './transactionSlice';
-import { FilterByDaysOptions, ICategory, Transactions } from './types';
+import { FilterByDaysOptions, ICategory, Transactions, TypeOfOutlay } from './types';
 import { getFilteredCategories } from './categorySlice';
+import { $api, TRANSACTION_PATH } from '../api/api';
 
-type BasicDoughnutChartData = {
-  transactions: Transactions;
+type DoughnutChartData = {
+  allTransactions: Transactions;
+  categoryTransactions: Transactions[];
   categories: ICategory[];
+  data: string[],
+  totalAmount: string,
 };
 
 type StatisticsState = {
   filterByDays: FilterByDaysOptions;
-  incomesChart: BasicDoughnutChartData & {
-    totalIncomes: string,
-  };
-  expensesChart: BasicDoughnutChartData & {
-    totalExpenses: string,
-  };
+  incomesChart: DoughnutChartData;
+  expensesChart: DoughnutChartData;
   allOutlaysChart: {
-    transactions: Transactions;
-    activeCategory: number;
+    allTransactions: Transactions;
+    activeCategoryId: number;
     categoryTransactions: Transactions;
   };
   isLoading: boolean;
   error: string | null;
 };
 
+export const getFilteredCategoryTransactions = createAsyncThunk<
+  { data: Transactions[], chartType: TypeOfOutlay },
+  { chartType: TypeOfOutlay, categories: ICategory[], filterByDays: string },
+  { rejectValue: string }
+>(
+  'statistics/getFilteredCategoryTransactions',
+  async function (payload, { rejectWithValue }) {
+    const { chartType, categories, filterByDays } = payload;
+
+    try {
+      const res = await categories.map(c => (
+        $api.get<Transactions>(`${TRANSACTION_PATH}?category=${c.id}&days=${filterByDays}`)
+          .then(res => res.data)
+      ))
+      const data = await Promise.all(res)
+      return { data, chartType };
+    } catch (error) {
+      return rejectWithValue('Помилка');
+    }
+  }
+);
+
 const initialState: StatisticsState = {
   filterByDays: "30",
   incomesChart: {
-    transactions: {},
+    allTransactions: {},
+    categoryTransactions: [],
     categories: [],
-    totalIncomes: "",
+    data: [],
+    totalAmount: "",
   },
   expensesChart: {
-    transactions: {},
+    allTransactions: {},
+    categoryTransactions: [],
     categories: [],
-    totalExpenses: "",
+    data: [],
+    totalAmount: "",
   },
   allOutlaysChart: {
-    transactions: {},
-    activeCategory: 0,
+    allTransactions: {},
+    activeCategoryId: 0,
     categoryTransactions: {},
   },
   isLoading: false,
@@ -50,7 +76,7 @@ const statisticsSlice = createSlice({
   name: 'statistics',
   initialState,
   reducers: {
-    resetStatisticsState: (state) => {
+    resetStatisticsState: () => {
       return initialState;
     },
     resetError: (state) => {
@@ -60,13 +86,19 @@ const statisticsSlice = createSlice({
       state.filterByDays = action.payload;
     },
     setTotalIncomes: (state, action) => {
-      state.incomesChart.totalIncomes = action.payload;
+      state.incomesChart.totalAmount = action.payload;
     },
     setTotalExpenses: (state, action) => {
-      state.expensesChart.totalExpenses = action.payload;
+      state.expensesChart.totalAmount = action.payload;
     },
-    setActiveCategory: (state, action) => {
-      state.allOutlaysChart.activeCategory = action.payload;
+    setIncomesData: (state, action) => {
+      state.incomesChart.data = action.payload;
+    },
+    setExpensesData: (state, action) => {
+      state.expensesChart.data = action.payload;
+    },
+    setActiveCategoryId: (state, action) => {
+      state.allOutlaysChart.activeCategoryId = action.payload;
     },
   },
 
@@ -100,19 +132,44 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
+
         const { data, params } = action.payload;
 
         if (params.startsWith('?category=')) {
           state.allOutlaysChart.categoryTransactions = data;
         } else if (params.startsWith('?type_of_outlay=income')) {
-          state.incomesChart.transactions = data;
+          state.incomesChart.allTransactions = data;
         } else if (params.startsWith('?type_of_outlay=expense')) {
-          state.expensesChart.transactions = data;
+          state.expensesChart.allTransactions = data;
         }
-
-        state.isLoading = false;
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(getFilteredCategoryTransactions.pending, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getFilteredCategoryTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        const { data, chartType } = action.payload;
+
+        switch (chartType) {
+          case "expense":
+            state.expensesChart.categoryTransactions = data;
+            break;
+          case "income":
+            state.incomesChart.categoryTransactions = data;
+            break;
+          default:
+            break;
+        }
+      })
+      .addCase(getFilteredCategoryTransactions.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -123,9 +180,11 @@ export const {
   resetStatisticsState,
   resetError,
   setFilterByDays,
+  setIncomesData,
+  setExpensesData,
   setTotalIncomes,
   setTotalExpenses,
-  setActiveCategory,
+  setActiveCategoryId,
 } = statisticsSlice.actions;
 
 export default statisticsSlice.reducer;

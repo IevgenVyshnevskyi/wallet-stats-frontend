@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { PRIMARY } from './../../../shared/styles/variables';
 import { useAppSelector } from "../../../store/hooks";
-import { isDev } from "../../../consts/consts";
-import { mockData } from "../../../../mock-data/doughnutCharts";
 
-const LineChart: React.FC = () => {
+const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   const {
     filterByDays,
     allOutlaysChart
@@ -15,26 +13,15 @@ const LineChart: React.FC = () => {
   const chart = useRef(null);
 
   const [labels, setLabels] = useState<string[]>([]);
-  const [mockArr, setMockArr] = useState<number[]>([]);
-
-  const chartData: number[] = Object.values(
-    allOutlaysChart.categoryTransactions
-  )
-    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
-      parseInt(transaction.amount_of_funds)
-    )));
 
   useEffect(() => {
-    const newLabels: string[] = [];
-    const newMockArr: number[] = [];
+    const labels: string[] = [];
 
     for (let i = 0; i < (parseInt(filterByDays)); i++) {
-      newLabels.push(`${i + 1}д.`);
-      isDev ? newMockArr.push(Math.floor(Math.random() * 10000)) : undefined;
+      labels.push(`${i + 1}д.`);
     }
 
-    setLabels(newLabels)
-    setMockArr(newMockArr)
+    setLabels(labels)
 
     switch (filterByDays) {
       case "30":
@@ -66,11 +53,10 @@ const LineChart: React.FC = () => {
         labels: labels,
         datasets: [{
           label: 'Витрати або надходження за категорією',
-          data: isDev ? mockArr : chartData,
+          data: data,
           fill: false,
           borderColor: PRIMARY,
           tension: 0.4,
-          // pointBackgroundColor: "#ffffff11",
           pointBackgroundColor: PRIMARY,
           pointBorderWidth: 4,
           pointHitRadius: pointHitRadiusValue,
@@ -122,6 +108,19 @@ const LineChart: React.FC = () => {
       }
     };
   }, [labels]);
+
+  useEffect(() => {
+    chart.current.labels = labels;
+    chart.current.data.datasets[0].data = data;
+    chart.current.update();
+  }, [
+    allOutlaysChart.categoryTransactions,
+    allOutlaysChart.activeCategoryId,
+    allOutlaysChart.allTransactions,
+    labels,
+    data,
+  ]);
+
 
   return (
     <canvas style={{ zIndex: '-2' }} id="myLineChart" height="270px" ref={chartRef} />

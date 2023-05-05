@@ -23,6 +23,7 @@ function App() {
     { path: '/password-recovery/:uid?/:resetToken?', element: <PasswordRecovery /> },
     { path: '/password-reset-confirm/:uid?/:resetToken?', element: <PasswordRecovery /> },
     { path: '/home', element: <HomePage /> },
+    { path: '/email-confirm/:uid?/:confirmToken?', element: <Navigate to="/home" replace /> },
     { path: '/transactions', element: <TransactionsPage /> },
     { path: '/categories', element: <CategoriesPage /> },
     { path: '/statistics', element: <StatisticsPage /> },

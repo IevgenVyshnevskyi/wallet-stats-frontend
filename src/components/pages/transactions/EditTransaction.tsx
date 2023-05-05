@@ -255,7 +255,7 @@ const EditTransaction: React.FC = () => {
               width="93%"
               bgColor={WHITE}
               className={errors?.title && 'error'}
-              maxLength={35}
+              maxLength={50}
               {...register('title', {
                 validate: {
                   hasTwoSymbols: (value) => {

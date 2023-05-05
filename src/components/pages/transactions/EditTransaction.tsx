@@ -153,11 +153,6 @@ const EditTransaction: React.FC = () => {
   }
 
   function handleSub(data: { amount: string, title?: string }) {
-    if (getValues("title") === "") {
-      console.log('getValues("title") in if (getValues("title") === "") {', getValues('title'))
-      clearErrors('title');
-    }
-
     const editTransactionDataNoId = {
       ...editTransactionData,
       amount_of_funds: data?.amount,
@@ -170,9 +165,6 @@ const EditTransaction: React.FC = () => {
     }
 
     delete editTransactionDataNoId?.id;
-
-    console.log('getValues("title") in handleSub()', getValues('title'))
-    console.log('getValues("amount") in handleSub()', getValues('amount'))
 
     dispatch(setIsEditTransactionOpen(false));
     dispatch(resetActiveTransactionState({}))

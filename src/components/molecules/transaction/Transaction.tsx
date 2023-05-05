@@ -126,6 +126,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
           <Typography
             as="h5"
             fw="400"
+            fz="16px"
             color={isTransactionsPage && isActive ? WHITE : ALMOST_BLACK_FOR_TEXT}
           >
             {transaction?.title}

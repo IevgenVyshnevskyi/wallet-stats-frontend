@@ -19,16 +19,4 @@ export const mockCategories: ICategory[] = [
     type_of_outlay: "expense",
     owner: 1
   },
-  {
-    id: 3,
-    title: "Їжа та напої (ресторани, кав\'ярні, супермаркети)",
-    type_of_outlay: "income",
-    owner: 1
-  },
-  {
-    id: 4,
-    title: "Охорона здоров\'я та краса (лікарські засоби, косметика, зубні послуги)",
-    type_of_outlay: "expense",
-    owner: 1
-  }
 ];

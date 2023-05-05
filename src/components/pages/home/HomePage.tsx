@@ -253,8 +253,21 @@ const Statistics: React.FC = () => {
   const { incomesChart, expensesChart } = useAppSelector(state => state.statistics);
   const { categories } = useAppSelector(state => state.category);
 
-  const incomesLabels: string[] = incomesChart.categories?.map(c => c.title);
-  const expensesLabels: string[] = expensesChart.categories?.map(c => c.title);
+  const incomesTransactionCategoryIds: number[] = Object.values(incomesChart.allTransactions)
+    .flat()
+    .map((transaction) => transaction.category);
+
+  const expensesTransactionCategoryIds: number[] = Object.values(expensesChart.allTransactions)
+    .flat()
+    .map((transaction) => transaction.category);
+
+  const incomesLabels: string[] = incomesChart.categories
+    .filter((category) => incomesTransactionCategoryIds.includes(category.id))
+    .map((category) => category.title);
+
+  const expensesLabels: string[] = expensesChart.categories
+    .filter((category) => expensesTransactionCategoryIds.includes(category.id))
+    .map((category) => category.title);
 
   const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
     .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {

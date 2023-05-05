@@ -123,8 +123,24 @@ const DoughnutChartsSection: React.FC = () => {
 
   const { incomesChart, expensesChart, filterByDays, isLoading } = useAppSelector(state => state.statistics);
 
-  const incomesLabels: string[] = incomesChart.categories?.map(c => c.title);
-  const expensesLabels: string[] = expensesChart.categories?.map(c => c.title);
+  const incomesTransactionCategoryIds: number[] = Object.values(incomesChart.allTransactions)
+    .flat()
+    .map((transaction) => transaction.category);
+
+  const expensesTransactionCategoryIds: number[] = Object.values(expensesChart.allTransactions)
+    .flat()
+    .map((transaction) => transaction.category);
+
+  const incomesLabels: string[] = incomesChart.categories
+    .filter((category) => incomesTransactionCategoryIds.includes(category.id))
+    .map((category) => category.title);
+
+  const expensesLabels: string[] = expensesChart.categories
+    .filter((category) => expensesTransactionCategoryIds.includes(category.id))
+    .map((category) => category.title);
+
+  const incomesData = useRef<any>(null);
+  const expensesData = useRef<any>(null);
 
   const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
     .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
@@ -150,9 +166,6 @@ const DoughnutChartsSection: React.FC = () => {
       }
     }
   }, [expensesChart.allTransactions, incomesChart.allTransactions, isLoading]);
-
-  const incomesData = useRef<any>(null);
-  const expensesData = useRef<any>(null);
 
   useEffect(() => {
     if (isLoading === false) {
@@ -186,22 +199,20 @@ const DoughnutChartsSection: React.FC = () => {
         }, 0).toString();
       });
     }
-  }, [incomesChart.categoryTransactions]);
 
-
-  if (expensesChart.categoryTransactions) {
-    expensesData.current = expensesChart.categoryTransactions?.map((transactions) => {
-      return Object.values(transactions)?.reduce((total, transaction) => {
-        return (
-          total +
-          transaction.reduce((totalAmount, item) => {
-            return totalAmount + 1 * parseFloat(item?.amount_of_funds);
-          }, 0)
-        );
-      }, 0).toString();
-    })
-  }
-
+    if (expensesChart.categoryTransactions) {
+      expensesData.current = expensesChart.categoryTransactions?.map((transactions) => {
+        return Object.values(transactions)?.reduce((total, transaction) => {
+          return (
+            total +
+            transaction.reduce((totalAmount, item) => {
+              return totalAmount + 1 * parseFloat(item?.amount_of_funds);
+            }, 0)
+          );
+        }, 0).toString();
+      })
+    }
+  }, [incomesChart.categoryTransactions, expensesChart.categoryTransactions]);
 
   return (
     <Box

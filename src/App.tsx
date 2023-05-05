@@ -9,7 +9,6 @@ import HomePage from "./components/pages/home/HomePage";
 import TransactionsPage from './components/pages/transactions/TransactionsPage';
 import DataEntryPage from "./components/pages/data/DataEntryPage";
 import PasswordRecovery from "./components/pages/password-recovery/PasswordRecovery";
-import TwoFactorAuthenticationPage from "./components/pages/2FA/TwoFactorAuthenticationPage";
 import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 import NotFoundPage from "./components/pages/not-found/NotFoundPage";
@@ -21,7 +20,6 @@ function App() {
     { path: '/register', element: <RegisterPage /> },
     { path: '/data-entry', element: <DataEntryPage /> },
     { path: '/login', element: <LoginPage /> },
-    { path: '/authentication', element: <TwoFactorAuthenticationPage /> },
     { path: '/password-recovery/:uid?/:resetToken?', element: <PasswordRecovery /> },
     { path: '/password-reset-confirm/:uid?/:resetToken?', element: <PasswordRecovery /> },
     { path: '/home', element: <HomePage /> },

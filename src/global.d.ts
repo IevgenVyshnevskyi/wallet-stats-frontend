@@ -14,5 +14,3 @@ declare const __API_URL__: string;
 declare module '*.ttf';
 declare module '*.woff';
 declare module '*.woff2';
-
-// declare type StateSchema = import('./store').StateSchema;

@@ -42,7 +42,6 @@ const TwoFactorAuthenticationPage: React.FC = () => {
     });
 
     function handleSub(data: {}) {
-        console.log(data);
         //alert(JSON.stringify(data));
         reset();
     }

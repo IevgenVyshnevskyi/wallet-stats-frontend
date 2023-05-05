@@ -26,7 +26,7 @@ import { userId } from '../../../api/api';
 import { getFilteredCategories } from '../../../store/categorySlice';
 import DatePicker from './DatePicker';
 import { Form } from '../../atoms/form/Form.styled';
-import { moneyAmountRegex } from '../../../shared/utils/regexes';
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from '../../../shared/utils/regexes';
 import { useForm } from 'react-hook-form';
 
 const AddTransaction: React.FC = () => {
@@ -137,13 +137,15 @@ const AddTransaction: React.FC = () => {
     });
   }
 
-  function handleSub(data: { amount: string, category: number }) {
+  function handleSub(data: { amount: string, category: number, title?: string }) {
+    console.log(data)
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({
       data: {
         ...addTransactionData,
         amount_of_funds: data?.amount,
         owner: user?.id || userId,
+        title: data?.title
       },
       method: "POST"
     }))
@@ -227,6 +229,47 @@ const AddTransaction: React.FC = () => {
               m="0 0 20px 0"
             >
               {errors?.category && <>{errors?.category?.message || 'Error!'}</>}
+            </Box>
+          </Box>
+          <Box mb="25px">
+            <Label fw="500" htmlFor="title" mb="12px">
+              Деталі (не обовʼязково)
+            </Label>
+            <Input
+              type="text"
+              id="title"
+              width="93%"
+              bgColor={WHITE}
+              className={errors?.title && 'error'}
+              maxLength={35}
+              {...register('title', {
+                validate: {
+                  hasTwoSymbols: (value) => {
+                    if (!value) {
+                      clearErrors('title');
+                      return;
+                    };
+                    return twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів';
+                  },
+                  hasTwoLetters: (value) => {
+                    if (!value) {
+                      clearErrors('title');
+                      return;
+                    };
+                    return titleRegex.test(value) || 'Повинно бути не менше 2 літер';
+                  },
+                }
+              })}
+            />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
             </Box>
           </Box>
           <Box mb="20px">

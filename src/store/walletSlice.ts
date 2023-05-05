@@ -38,22 +38,15 @@ export const walletAction = createAsyncThunk<
       })
         .then(response => response?.data)
         .catch(error => {
-          const errorMessage = error.response?.data;
-          console.log('error in action wallet')
-          return rejectWithValue('error in action wallet');
-          // return rejectWithValue({ errorMessage, errorMethod: method });
+          return rejectWithValue('Помилка');
         });
     }
 
     return await $api.get(WALLET_PATH)
       .then(res => res?.data)
       .catch(error => {
-        const errorMessage = error.response?.data;
-        console.log('error in get response in action wallet')
         return rejectWithValue(`Помилка`)
       });
-
-    // return (await getResponse) as IWallet[]
   }
 );
 
@@ -101,9 +94,7 @@ export const postEntryData = createAsyncThunk<
     )
       .then(response => response.status)
       .catch(error => {
-        // const errorMessage = error.response.data;
-        console.log('error while creating a cash wallet', error)
-        return rejectWithValue('Error while creating a cash wallet');
+        return rejectWithValue('Помилка при створенні рахунку');
       });
 
     const postBankWalletResponsePromise = await $api.post(
@@ -112,9 +103,7 @@ export const postEntryData = createAsyncThunk<
     )
       .then(response => response.status)
       .catch(error => {
-        // const errorMessage = error.response;
-        console.log('error while creating a bank wallet', error)
-        return rejectWithValue('Error while creating a bank wallet');
+        return rejectWithValue('Помилка при створенні рахунку');
       });
 
     const [postCashWalletResponse, postBankWalletResponse] = await Promise.all(

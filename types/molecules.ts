@@ -1,4 +1,4 @@
-import { ICategory, ITransaction, IWallet } from "../src/store/types";
+import { ICategory, ITransaction } from "../src/store/types";
 
 export type CategoryProps = {
   category: ICategory;

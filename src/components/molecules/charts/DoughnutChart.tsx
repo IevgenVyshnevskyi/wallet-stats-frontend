@@ -7,13 +7,13 @@ import { useAppSelector } from "../../../store/hooks";
 type DoughnutChartProps = {
   data: string[];
   labels: string[];
-  handleUpdate?: (chart: any) => any;
-  chartType: "income" | "expense";
+  isHomePage?: boolean;
 }
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({
   data,
   labels,
+  isHomePage
 }) => {
   const chartRef = useRef<any>(null);
   const chart = useRef<any>(null);
@@ -112,8 +112,8 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
 
   return (
     <Box bgColor={WHITE} borderRadius="8px" p="5px 0">
-      <Box width="315px" m="0 auto">
-        <canvas id="myDoughnutChart" ref={chartRef} />
+      <Box width={isHomePage ? "100%" : "650px"} m="0 auto">
+        <canvas id="myDoughnutChart" height={isHomePage && "325px"} ref={chartRef} />
       </Box>
     </Box>
   );

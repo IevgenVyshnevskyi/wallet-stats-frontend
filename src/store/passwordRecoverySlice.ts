@@ -58,7 +58,11 @@ const initialState: PasswordRecoveryState = {
 const passwordRecoverySlice = createSlice({
   name: 'passwordRecovery',
   initialState,
-  reducers: {},
+  reducers: {
+    setIsResetLinkStepOpen(state, action) {
+      state.isResetLinkStepOpen = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(requestPasswordReset.pending, (state, action) => {
@@ -89,5 +93,7 @@ const passwordRecoverySlice = createSlice({
       })
   }
 });
+
+export const { setIsResetLinkStepOpen } = passwordRecoverySlice.actions;
 
 export default passwordRecoverySlice.reducer;

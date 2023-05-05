@@ -14,19 +14,24 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
 
   const [labels, setLabels] = useState<string[]>([]);
 
+  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
+  const [pointBorderWidthValue, setPointBorderWidthValue] = useState<number>(1);
+
   useEffect(() => {
     const labels: string[] = [];
+    if (Object.keys(allOutlaysChart.categoryTransactions)?.length > 0) {
 
-    for (let i = 0; i < (parseInt(filterByDays)); i++) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
+      for (let i = 0; i < (parseInt(filterByDays)); i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
 
-      const label = date.toLocaleDateString("uk-UA", {
-        month: "short",
-        day: "numeric"
-      });
+        const label = date.toLocaleDateString("uk-UA", {
+          month: "short",
+          day: "numeric"
+        });
 
-      labels.push(label);
+        labels.push(label);
+      }
     }
 
     setLabels(labels)
@@ -34,19 +39,21 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
     switch (filterByDays) {
       case "30":
         setPointHitRadiusValue(30)
+        setPointBorderWidthValue(4)
         break;
       case "90":
         setPointHitRadiusValue(15)
+        setPointBorderWidthValue(3)
         break;
       case "180":
-        setPointHitRadiusValue(10)
+        setPointHitRadiusValue(8)
+        setPointBorderWidthValue(2)
         break;
       default:
         break;
     }
-  }, [filterByDays]);
+  }, [allOutlaysChart.categoryTransactions]);
 
-  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -66,7 +73,7 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
           borderColor: PRIMARY,
           tension: 0.4,
           pointBackgroundColor: PRIMARY,
-          pointBorderWidth: 4,
+          pointBorderWidth: pointBorderWidthValue,
           pointHitRadius: pointHitRadiusValue,
         }]
       },
@@ -134,7 +141,7 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
 
 
   return (
-    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="270px" ref={chartRef} />
+    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="280px" ref={chartRef} />
   );
 };
 

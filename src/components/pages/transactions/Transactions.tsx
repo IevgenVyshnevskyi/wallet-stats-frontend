@@ -128,7 +128,6 @@ const Transactions: React.FC = () => {
             </List>
           </Box>
         ))}
-
       </Box>
     </Box>
   );

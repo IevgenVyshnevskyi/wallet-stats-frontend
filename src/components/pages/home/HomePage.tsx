@@ -336,9 +336,8 @@ const Statistics: React.FC = () => {
     })
   }
 
-
   return (
-    <Box display="flex" direction="column" width="600px">
+    <Box display="flex" direction="column" width="650px">
       <Typography
         as="h2"
         fz="22px"
@@ -369,7 +368,7 @@ const Statistics: React.FC = () => {
             <DoughnutChart
               labels={expensesLabels}
               data={expensesData.current}
-              chartType="expense"
+              isHomePage
             />
           </Box>
         </Box>
@@ -386,7 +385,7 @@ const Statistics: React.FC = () => {
             <DoughnutChart
               labels={incomesLabels}
               data={incomesData.current}
-              chartType="income"
+              isHomePage
             />
           </Box>
         </Box>

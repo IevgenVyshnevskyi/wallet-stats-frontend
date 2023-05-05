@@ -46,15 +46,13 @@ export const transactionAction = createAsyncThunk<
       })
         .then(response => response?.data)
         .catch(error => {
-          console.log('error in action transaction');
-          return rejectWithValue('error in action transaction');
+          return rejectWithValue('Помилка');
         });
     }
 
     return await $api.get(TRANSACTION_PATH)
       .then(res => res?.data)
       .catch(error => {
-        console.log('error in get response in action transaction');
         return rejectWithValue(`Помилка`)
       });
   }

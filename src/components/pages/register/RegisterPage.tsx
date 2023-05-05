@@ -90,7 +90,7 @@ const RegisterPage: React.FC = () => {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
                                         value: nameRegex,
-                                        message: "Назва повинна бути не менше 2 літер",
+                                        message: "Повинно бути не менше 2 літер",
                                     },
                                 })} type="text" id="first_name" width="284px"
                                     className={errors.first_name && 'error'}
@@ -103,7 +103,7 @@ const RegisterPage: React.FC = () => {
                                     required: 'Обов\'язкове поле для заповнення',
                                     pattern: {
                                         value: nameRegex,
-                                        message: "Повинно бути не менше 2 символів",
+                                        message: "Повинно бути не менше 2 літер",
                                     },
                                 })} type="text" id="last_name" width="284px"
                                     className={errors.last_name && 'error'}

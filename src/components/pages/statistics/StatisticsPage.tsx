@@ -68,6 +68,7 @@ const StatisticsHeader: React.FC = () => {
       buttonName: '1 місяць',
       filterBy: "?days=30",
       onTabClick: () => {
+        if (filterByDays === "30") return;
         dispatch(setFilterByDays("30"));
         dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
         dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
@@ -78,6 +79,7 @@ const StatisticsHeader: React.FC = () => {
       buttonName: "3 місяці",
       filterBy: '?days=90',
       onTabClick: () => {
+        if (filterByDays === "90") return;
         dispatch(setFilterByDays("90"));
         dispatch(getFilteredTransactions("?type_of_outlay=expense&days=90"));
         dispatch(getFilteredTransactions("?type_of_outlay=income&days=90"));
@@ -88,6 +90,7 @@ const StatisticsHeader: React.FC = () => {
       buttonName: "Півроку",
       filterBy: '?days=180',
       onTabClick: () => {
+        if (filterByDays === "180") return;
         dispatch(setFilterByDays("180"));
         dispatch(getFilteredTransactions("?type_of_outlay=expense&days=180"));
         dispatch(getFilteredTransactions("?type_of_outlay=income&days=180"));
@@ -139,8 +142,6 @@ const DoughnutChartsSection: React.FC = () => {
 
   useEffect(() => {
     if (isLoading === false) {
-      console.log('expensesChart.allTransactions:', expensesChart.allTransactions);
-      console.log('incomesChart.allTransactions:', incomesChart.allTransactions);
       if (expensesChart.allTransactions) {
         dispatch(setTotalExpenses(totalExpensesAmount))
       }
@@ -222,7 +223,6 @@ const DoughnutChartsSection: React.FC = () => {
         <DoughnutChart
           labels={expensesLabels}
           data={expensesData.current}
-          chartType="expense"
         />
       </Box>
       <Box display="flex" direction="column" borderRadius="16px" grow="1">
@@ -237,7 +237,6 @@ const DoughnutChartsSection: React.FC = () => {
         <DoughnutChart
           labels={incomesLabels}
           data={incomesData.current}
-          chartType="income"
         />
       </Box>
     </Box>
@@ -282,8 +281,6 @@ const LineChartSection: React.FC = () => {
 
     setChartData(newChartData);
   }, [allOutlaysChart?.categoryTransactions]);
-
-  console.log(chartData)
 
   useEffect(() => {
     if (!allOutlaysChart?.activeCategoryId) {

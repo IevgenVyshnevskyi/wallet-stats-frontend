@@ -24,7 +24,7 @@ import { emailRegex, passwordRegex } from "../../../shared/utils/regexes";
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { confirmPasswordReset, requestPasswordReset } from "../../../store/passwordRecoverySlice";
+import { confirmPasswordReset, requestPasswordReset, setIsResetLinkStepOpen } from "../../../store/passwordRecoverySlice";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -106,12 +106,6 @@ const EmailStep: React.FC = () => {
 const ResetLinkStep: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { email } = useAppSelector(state => state.passwordRecovery);
-
-  function sendRequestAgain() {
-    dispatch(requestPasswordReset({ email }));
-  }
-
   return (
     <Container display="flex">
       <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
@@ -132,7 +126,7 @@ const ResetLinkStep: React.FC = () => {
           </Typography>
           <Box display="flex" justifyContent="center">
             <ButtonLink
-              onClick={sendRequestAgain}
+              onClick={() => dispatch(setIsResetLinkStepOpen(false))}
               fz="14px"
               m="0 auto"
             >

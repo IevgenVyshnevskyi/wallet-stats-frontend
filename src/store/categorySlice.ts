@@ -47,15 +47,13 @@ export const categoryAction = createAsyncThunk<
       })
         .then(res => res?.data)
         .catch(error => {
-          console.log('error in action category');
-          return rejectWithValue('error in action category');
+          return rejectWithValue('Помилка');
         });
     }
 
     return await $api.get(CATEGORY_PATH)
       .then(res => res?.data)
       .catch(error => {
-        console.log('error in get response in action category');
         return rejectWithValue(`Помилка`)
       });
   }

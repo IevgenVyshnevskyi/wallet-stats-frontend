@@ -28,7 +28,7 @@ import Select from "../../molecules/select/Select";
 import DatePicker from "./DatePicker";
 import { Form } from "../../atoms/form/Form.styled";
 import { useForm } from "react-hook-form";
-import { moneyAmountRegex } from "../../../shared/utils/regexes";
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
 
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -58,11 +58,14 @@ const EditTransaction: React.FC = () => {
 
   const {
     register,
+    unregister,
     formState: { errors },
     handleSubmit,
     setValue,
     clearErrors,
     reset,
+    trigger,
+    getValues
   } = useForm({
     mode: "all",
   });
@@ -114,6 +117,14 @@ const EditTransaction: React.FC = () => {
     setValue('amount', editTransactionData?.amount_of_funds);
   }, [editTransactionData?.amount_of_funds]);
 
+  useEffect(() => {
+    if (editTransactionData?.title !== "New transaction") {
+      setValue('title', editTransactionData?.title);
+    } else {
+      setValue('title', "");
+    }
+  }, [editTransactionData?.title]);
+
   function onWalletClick(wallet: IWallet) {
     dispatch(setEditTransactionData({ wallet: wallet?.id }));
   };
@@ -141,13 +152,27 @@ const EditTransaction: React.FC = () => {
     dispatch(setActiveTransaction({}));
   }
 
-  function handleSub(data: { amount: string }) {
+  function handleSub(data: { amount: string, title?: string }) {
+    if (getValues("title") === "") {
+      console.log('getValues("title") in if (getValues("title") === "") {', getValues('title'))
+      clearErrors('title');
+    }
+
     const editTransactionDataNoId = {
       ...editTransactionData,
-      amount_of_funds: data?.amount
+      amount_of_funds: data?.amount,
     }
+
+    if (!getValues('title')) {
+      editTransactionDataNoId.title = "New transaction";
+    } else {
+      editTransactionDataNoId.title = data.title;
+    }
+
     delete editTransactionDataNoId?.id;
-    console.log(editTransactionDataNoId)
+
+    console.log('getValues("title") in handleSub()', getValues('title'))
+    console.log('getValues("amount") in handleSub()', getValues('amount'))
 
     dispatch(setIsEditTransactionOpen(false));
     dispatch(resetActiveTransactionState({}))
@@ -227,6 +252,47 @@ const EditTransaction: React.FC = () => {
               })}
               isError={errors?.category}
             />
+          </Box>
+          <Box mb="20px">
+            <Label fw="500" htmlFor="title" mb="12px">
+              Деталі (не обовʼязково)
+            </Label>
+            <Input
+              type="text"
+              id="title"
+              width="93%"
+              bgColor={WHITE}
+              className={errors?.title && 'error'}
+              maxLength={35}
+              {...register('title', {
+                validate: {
+                  hasTwoSymbols: (value) => {
+                    if (!value) {
+                      clearErrors('title');
+                      return;
+                    };
+                    return twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів';
+                  },
+                  hasTwoLetters: (value) => {
+                    if (!value) {
+                      clearErrors('title');
+                      return;
+                    };
+                    return titleRegex.test(value) || 'Повинно бути не менше 2 літер';
+                  },
+                }
+              })}
+            />
+            <Box
+              color="red"
+              textAlight="left"
+              border="red"
+              fz="13px"
+              height="14px"
+              m="0 0 20px 0"
+            >
+              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
+            </Box>
           </Box>
           <Box mb="20px">
             <Label fw="500" htmlFor="amount" mb="12px">

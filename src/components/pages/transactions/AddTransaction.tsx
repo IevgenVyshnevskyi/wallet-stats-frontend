@@ -60,6 +60,7 @@ const AddTransaction: React.FC = () => {
     formState: { errors },
     handleSubmit,
     setValue,
+    getValues,
     clearErrors,
   } = useForm({ mode: "all" });
 
@@ -138,14 +139,21 @@ const AddTransaction: React.FC = () => {
   }
 
   function handleSub(data: { amount: string, category: number, title?: string }) {
-    console.log(data)
+    let transactionTitle;
+
+    if (!getValues('title')) {
+      transactionTitle = "New transaction";
+    } else {
+      transactionTitle = data.title;
+    }
+
     dispatch(setActiveTransaction(null));
     dispatch(transactionAction({
       data: {
         ...addTransactionData,
         amount_of_funds: data?.amount,
         owner: user?.id || userId,
-        title: data?.title
+        title: transactionTitle
       },
       method: "POST"
     }))

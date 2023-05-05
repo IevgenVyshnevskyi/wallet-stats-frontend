@@ -133,9 +133,7 @@ const statisticsSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-
         const { data, params } = action.payload;
-
         if (params.startsWith('?category=')) {
           state.allOutlaysChart.categoryTransactions = data;
         } else if (params.startsWith('?type_of_outlay=income')) {

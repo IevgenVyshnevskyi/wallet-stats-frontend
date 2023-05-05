@@ -17,7 +17,7 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { IWallet, Transactions } from "../../../store/types";
+import { ICategory, IWallet, Transactions } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
 import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
@@ -58,8 +58,8 @@ const HomePage: React.FC = () => {
     dispatch(getWallets());
     dispatch(getTransactions());
     dispatch(getCategories());
-    dispatch(getFilteredCategories('?type_of_outlay=income'));
-    dispatch(getFilteredCategories('?type_of_outlay=expense'));
+    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
 
   useEffect(() => {
@@ -67,6 +67,8 @@ const HomePage: React.FC = () => {
       dispatch(getWallets());
       dispatch(getTransactions());
       dispatch(getCategories());
+      dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+      dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
     }
   }, [isWalletActionLoading, isBankDataLoading]);
 
@@ -247,27 +249,99 @@ const Transactions: React.FC = () => {
   );
 }
 
+interface ICategoryWithTotalAmount extends ICategory {
+  totalAmount: number;
+}
+
 const Statistics: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { incomesChart, expensesChart } = useAppSelector(state => state.statistics);
-  const { categories } = useAppSelector(state => state.category);
+  const { incomesChart, expensesChart, isLoading } = useAppSelector(state => state.statistics);
 
-  const incomesTransactionCategoryIds: number[] = Object.values(incomesChart.allTransactions)
-    .flat()
-    .map((transaction) => transaction.category);
+  const incomesLabels = useRef<string[]>(null);
+  const expensesLabels = useRef<string[]>(null);
 
-  const expensesTransactionCategoryIds: number[] = Object.values(expensesChart.allTransactions)
-    .flat()
-    .map((transaction) => transaction.category);
+  const incomesData = useRef<any>(null);
+  const expensesData = useRef<any>(null);
 
-  const incomesLabels: string[] = incomesChart.categories
-    .filter((category) => incomesTransactionCategoryIds.includes(category.id))
-    .map((category) => category.title);
+  const incomeCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
+  const expenseCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
 
-  const expensesLabels: string[] = expensesChart.categories
-    .filter((category) => expensesTransactionCategoryIds.includes(category.id))
-    .map((category) => category.title);
+  useEffect(() => {
+    if (incomesChart.categories && incomesChart.allTransactions) {
+      incomeCategoriesWithTotalAmount.current = incomesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(incomesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
+
+      incomesLabels.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      incomesData.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
+    }
+  }, [incomesChart.categories, incomesChart.allTransactions]);
+
+  useEffect(() => {
+    if (expensesChart.categories && expensesChart.allTransactions) {
+      expenseCategoriesWithTotalAmount.current = expensesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(expensesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
+
+      expensesLabels.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      expensesData.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
+    }
+  }, [expensesChart.categories, expensesChart.allTransactions])
 
   const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
     .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
@@ -284,71 +358,15 @@ const Statistics: React.FC = () => {
     .toFixed(2);
 
   useEffect(() => {
-    if (expensesChart.allTransactions) {
-      dispatch(setTotalExpenses(totalExpensesAmount))
+    if (isLoading === false) {
+      if (incomesChart.allTransactions) {
+        dispatch(setTotalIncomes(totalIncomesAmount));
+      }
+      if (expensesChart.allTransactions) {
+        dispatch(setTotalExpenses(totalExpensesAmount));
+      }
     }
-    if (incomesChart.allTransactions) {
-      dispatch(setTotalIncomes(totalIncomesAmount))
-    }
-  }, [expensesChart.allTransactions, incomesChart.allTransactions]);
-
-  const incomesData = useRef<any>(null);
-  const expensesData = useRef<any>(null);
-
-  useEffect(() => {
-    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
-    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
-  }, []);
-
-  useEffect(() => {
-    if (categories.all?.length > 0) {
-      dispatch(getFilteredTransactions(`?category=${categories?.all[0]?.id}`))
-    }
-  }, [categories.all]);
-
-  useEffect(() => {
-    if (incomesChart.categories) {
-      dispatch(getFilteredCategoryTransactions({
-        chartType: "income",
-        categories: incomesChart.categories,
-        filterByDays: "30"
-      }))
-    }
-    if (expensesChart.categories) {
-      dispatch(getFilteredCategoryTransactions({
-        chartType: "expense",
-        categories: expensesChart.categories,
-        filterByDays: "30"
-      }))
-    }
-  }, [incomesChart.categories, expensesChart.categories]);
-
-  if (incomesChart.categoryTransactions) {
-    incomesData.current = incomesChart.categoryTransactions?.map((transactions) => {
-      return Object.values(transactions)?.reduce((total, transaction) => {
-        return (
-          total +
-          transaction.reduce((totalAmount, item) => {
-            return totalAmount + 1 * parseFloat(item?.amount_of_funds);
-          }, 0)
-        );
-      }, 0).toString();
-    });
-  }
-
-  if (expensesChart.categoryTransactions) {
-    expensesData.current = expensesChart.categoryTransactions?.map((transactions) => {
-      return Object.values(transactions)?.reduce((total, transaction) => {
-        return (
-          total +
-          transaction.reduce((totalAmount, item) => {
-            return totalAmount + 1 * parseFloat(item?.amount_of_funds);
-          }, 0)
-        );
-      }, 0).toString();
-    })
-  }
-
+  }, [incomesChart.allTransactions, expensesChart.allTransactions, isLoading]);
   return (
     <Box display="flex" direction="column" width="650px">
       <Typography
@@ -379,7 +397,7 @@ const Statistics: React.FC = () => {
           </Box>
           <Box>
             <DoughnutChart
-              labels={expensesLabels}
+              labels={expensesLabels.current}
               data={expensesData.current}
               isHomePage
             />
@@ -396,7 +414,7 @@ const Statistics: React.FC = () => {
           </Box>
           <Box>
             <DoughnutChart
-              labels={incomesLabels}
+              labels={incomesLabels.current}
               data={incomesData.current}
               isHomePage
             />

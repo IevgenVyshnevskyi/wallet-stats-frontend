@@ -18,7 +18,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   const chartRef = useRef<any>(null);
   const chart = useRef<any>(null);
 
-  const { incomesChart, expensesChart, allOutlaysChart } = useAppSelector(state => state.statistics);
+  const { incomesChart, expensesChart, allOutlaysChart, isLoading } = useAppSelector(state => state.statistics);
 
   useEffect(() => {
     const myDoughnutChartRef = chartRef.current.getContext("2d");
@@ -98,7 +98,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
 
   useEffect(() => {
     chart.current.data.labels = labels || [];
-    chart.current.data.datasets[0].data = data;
+    chart.current.data.datasets[0].data = data || [];
     chart.current.update();
   }, [
     incomesChart.categoryTransactions,
@@ -108,6 +108,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
     allOutlaysChart?.activeCategoryId,
     labels,
     data,
+    // isLoading
   ]);
 
   return (

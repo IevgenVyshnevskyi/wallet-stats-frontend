@@ -11,10 +11,11 @@ import Select from "../../molecules/select/Select";
 import LineChart from "../../molecules/charts/LineChart";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
-import { getFilteredCategoryTransactions, setActiveCategoryId, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
+import { setActiveCategoryId, setFilterByDays, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
+import { ICategory } from "../../../store/types";
 
 const StatisticsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -118,29 +119,99 @@ const StatisticsHeader: React.FC = () => {
   );
 }
 
+interface ICategoryWithTotalAmount extends ICategory {
+  totalAmount: number;
+}
+
 const DoughnutChartsSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { incomesChart, expensesChart, filterByDays, isLoading } = useAppSelector(state => state.statistics);
+  const { incomesChart, expensesChart, isLoading } = useAppSelector(state => state.statistics);
 
-  const incomesTransactionCategoryIds: number[] = Object.values(incomesChart.allTransactions)
-    .flat()
-    .map((transaction) => transaction.category);
-
-  const expensesTransactionCategoryIds: number[] = Object.values(expensesChart.allTransactions)
-    .flat()
-    .map((transaction) => transaction.category);
-
-  const incomesLabels: string[] = incomesChart.categories
-    .filter((category) => incomesTransactionCategoryIds.includes(category.id))
-    .map((category) => category.title);
-
-  const expensesLabels: string[] = expensesChart.categories
-    .filter((category) => expensesTransactionCategoryIds.includes(category.id))
-    .map((category) => category.title);
+  const incomesLabels = useRef<string[]>(null);
+  const expensesLabels = useRef<string[]>(null);
 
   const incomesData = useRef<any>(null);
   const expensesData = useRef<any>(null);
+
+  const incomeCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
+  const expenseCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
+
+  useEffect(() => {
+    if (incomesChart.categories && incomesChart.allTransactions) {
+      incomeCategoriesWithTotalAmount.current = incomesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(incomesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
+
+      incomesLabels.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      incomesData.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
+    }
+  }, [incomesChart.categories, incomesChart.allTransactions]);
+
+  useEffect(() => {
+    if (expensesChart.categories && expensesChart.allTransactions) {
+      expenseCategoriesWithTotalAmount.current = expensesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(expensesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
+
+      expensesLabels.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      expensesData.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
+    }
+  }, [expensesChart.categories, expensesChart.allTransactions])
 
   const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
     .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
@@ -158,61 +229,14 @@ const DoughnutChartsSection: React.FC = () => {
 
   useEffect(() => {
     if (isLoading === false) {
-      if (expensesChart.allTransactions) {
-        dispatch(setTotalExpenses(totalExpensesAmount))
-      }
       if (incomesChart.allTransactions) {
-        dispatch(setTotalIncomes(totalIncomesAmount))
+        dispatch(setTotalIncomes(totalIncomesAmount));
+      }
+      if (expensesChart.allTransactions) {
+        dispatch(setTotalExpenses(totalExpensesAmount));
       }
     }
-  }, [expensesChart.allTransactions, incomesChart.allTransactions, isLoading]);
-
-  useEffect(() => {
-    if (isLoading === false) {
-      if (incomesChart.categories) {
-        dispatch(getFilteredCategoryTransactions({
-          chartType: "income",
-          categories: incomesChart.categories,
-          filterByDays
-        }))
-      }
-      if (expensesChart.categories) {
-        dispatch(getFilteredCategoryTransactions({
-          chartType: "expense",
-          categories: expensesChart.categories,
-          filterByDays
-        }))
-      }
-    }
-  }, [incomesChart.categories, expensesChart.categories, isLoading]);
-
-  useEffect(() => {
-    if (incomesChart.categoryTransactions) {
-      incomesData.current = incomesChart.categoryTransactions?.map((transactions) => {
-        return Object.values(transactions)?.reduce((total, transaction) => {
-          return (
-            total +
-            transaction.reduce((totalAmount, item) => {
-              return totalAmount + 1 * parseFloat(item?.amount_of_funds);
-            }, 0)
-          );
-        }, 0).toString();
-      });
-    }
-
-    if (expensesChart.categoryTransactions) {
-      expensesData.current = expensesChart.categoryTransactions?.map((transactions) => {
-        return Object.values(transactions)?.reduce((total, transaction) => {
-          return (
-            total +
-            transaction.reduce((totalAmount, item) => {
-              return totalAmount + 1 * parseFloat(item?.amount_of_funds);
-            }, 0)
-          );
-        }, 0).toString();
-      })
-    }
-  }, [incomesChart.categoryTransactions, expensesChart.categoryTransactions]);
+  }, [incomesChart.allTransactions, expensesChart.allTransactions, isLoading]);
 
   return (
     <Box
@@ -232,7 +256,7 @@ const DoughnutChartsSection: React.FC = () => {
           </Typography>
         </Box>
         <DoughnutChart
-          labels={expensesLabels}
+          labels={expensesLabels.current}
           data={expensesData.current}
         />
       </Box>
@@ -246,7 +270,7 @@ const DoughnutChartsSection: React.FC = () => {
           </Typography>
         </Box>
         <DoughnutChart
-          labels={incomesLabels}
+          labels={incomesLabels.current}
           data={incomesData.current}
         />
       </Box>

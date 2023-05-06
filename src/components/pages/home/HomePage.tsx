@@ -50,11 +50,11 @@ const HomePage: React.FC = () => {
     navigate("/welcome")
   }
 
-  if (isLoggedIn) {
-    dispatch(getUserDetails())
-  }
-
   useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getUserDetails())
+    }
+
     dispatch(getWallets());
     dispatch(getTransactions());
     dispatch(getFilteredCategories("?type_of_outlay=income"))

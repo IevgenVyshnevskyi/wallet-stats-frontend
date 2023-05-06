@@ -18,6 +18,7 @@ export type commonStylesProps = {
   lh?: string;
   textAlight?: string;
   display?: string;
+  flex?: string;
   direction?: string;
   gap?: string;
   bgColor?: string;
@@ -54,6 +55,7 @@ export const commonStyles = css<commonStylesProps>`
   
   text-align: ${({ textAlight }) => textAlight || undefined};
   display: ${({ display }) => display || 'block'};
+  flex: ${({ flex }) => flex || 'flex'};
   flex-direction: ${({ direction }) => direction || 'block'};
   gap: ${({ gap }) => gap || 'block'};
   background-color: ${({ bgColor }) => bgColor || 'transparent'};

@@ -17,7 +17,7 @@ import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { ICategory, IWallet, Transactions } from "../../../store/types";
+import { ICategory, ICategoryWithTotalAmount, IWallet, Transactions } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
 import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
 import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
@@ -26,7 +26,7 @@ import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails } from "../../../store/userSlice";
 import { filterTransactions } from "../../../shared/utils/filterTransactions";
-import { getFilteredCategoryTransactions, setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
+import { setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -50,14 +50,15 @@ const HomePage: React.FC = () => {
     navigate("/welcome")
   }
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(getUserDetails())
-    }
+  if (isLoggedIn) {
+    dispatch(getUserDetails())
+  }
 
+  useEffect(() => {
     dispatch(getWallets());
     dispatch(getTransactions());
-    dispatch(getCategories());
+    dispatch(getFilteredCategories("?type_of_outlay=income"))
+    dispatch(getFilteredCategories("?type_of_outlay=expense"))
     dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
     dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
@@ -247,10 +248,6 @@ const Transactions: React.FC = () => {
       </List>
     </Box>
   );
-}
-
-interface ICategoryWithTotalAmount extends ICategory {
-  totalAmount: number;
 }
 
 const Statistics: React.FC = () => {

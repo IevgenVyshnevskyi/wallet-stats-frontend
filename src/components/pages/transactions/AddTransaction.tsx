@@ -194,26 +194,19 @@ const AddTransaction: React.FC = () => {
           <DatePicker isEditTrapsactionOpen={false} />
         </Box>
         <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
             Рахунок
           </Typography>
-          <Box display="flex">
-            <List display="flex" gap="8px" wrap="wrap">
-              {(isDev ? mockWallets : wallets)?.map((wallet, index) => (
-                <ListItem key={index} width="250px">
-                  <Wallet
-                    wallet={wallet}
-                    onWalletClick={() => onWalletClick(wallet)}
-                    isActive={addTransactionData?.wallet === wallet.id}
-                  />
-                </ListItem>
-              ))}
-            </List>
+          <Box display="flex" wrap="wrap" gap="8px">
+            {wallets?.map((wallet, index) => (
+              <ListItem key={index} flex="1 1 240px">
+                <Wallet
+                  wallet={wallet}
+                  onWalletClick={() => onWalletClick(wallet)}
+                  isActive={addTransactionData?.wallet === wallet.id}
+                />
+              </ListItem>
+            ))}
           </Box>
         </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
@@ -287,9 +280,10 @@ const AddTransaction: React.FC = () => {
             <Input
               type="text"
               inputMode="numeric"
-              fz="22px"
+              style={{ fontSize: "19px", fontWeight: "600" }}
+              height='25px'
               id="amount"
-              width="270px"
+              width="225px"
               bgColor={WHITE}
               {...register('amount', {
                 required: 'Обов\'язкове поле для заповнення',

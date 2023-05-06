@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { IUser, LoginFormData, LoginResponse, PasswordChangeFormData, RegisterFormData } from './types';
 import { $api, CHANGE_USER_INFO_PATH, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH, userDataParsed, CHANGE_USER_PASSWORD_PATH } from '../api/api';
-import { formatRegisterErrorMessage } from '../shared/utils/formatRegisterErrorMessage';
-import { formatLoginErrorMessage } from './../shared/utils/formatLoginErrorMessage';
 
 export type UserState = {
 	user: IUser;
@@ -51,7 +49,6 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { reject
 				return userInfo;
 			})
 			.catch(error => {
-				const errorMessage = formatLoginErrorMessage(error.response.data);
 				return rejectWithValue('Будь ласка, введіть дані, вказані при реєстрації');
 			});
 	}
@@ -66,8 +63,7 @@ export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: 
 				return undefined;
 			})
 			.catch(error => {
-				const errorMessage = formatRegisterErrorMessage(error.response.data);
-				return rejectWithValue(errorMessage);
+				return rejectWithValue("Помилка");
 			});
 	}
 );
@@ -128,7 +124,7 @@ export const changeUserPassword = createAsyncThunk<
 	async function (payload, { rejectWithValue }) {
 		return $api.post(CHANGE_USER_PASSWORD_PATH, payload)
 			.then(res => res?.data)
-			.catch(error => rejectWithValue('Помилка'));
+			.catch(error => rejectWithValue("Введіть пароль, вказаний при реєстрації"));
 	}
 );
 

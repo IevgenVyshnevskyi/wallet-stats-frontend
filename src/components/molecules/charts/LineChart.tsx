@@ -2,56 +2,58 @@ import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { PRIMARY } from './../../../shared/styles/variables';
 import { useAppSelector } from "../../../store/hooks";
-import { isDev } from "../../../consts/consts";
-import { mockData } from "../../../../mock-data/doughnutCharts";
 
-const LineChart: React.FC = () => {
+const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   const {
     filterByDays,
-    allOutlaysChart
+    allOutlaysChart,
   } = useAppSelector(state => state.statistics)
 
   const chartRef = useRef(null);
   const chart = useRef(null);
 
   const [labels, setLabels] = useState<string[]>([]);
-  const [mockArr, setMockArr] = useState<number[]>([]);
 
-  const chartData: number[] = Object.values(
-    allOutlaysChart.categoryTransactions
-  )
-    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
-      parseInt(transaction.amount_of_funds)
-    )));
+  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
+  const [pointBorderWidthValue, setPointBorderWidthValue] = useState<number>(1);
 
   useEffect(() => {
-    const newLabels: string[] = [];
-    const newMockArr: number[] = [];
+    const labels: string[] = [];
+    if (Object.keys(allOutlaysChart.categoryTransactions)?.length > 0) {
 
-    for (let i = 0; i < (parseInt(filterByDays)); i++) {
-      newLabels.push(`${i + 1}д.`);
-      isDev ? newMockArr.push(Math.floor(Math.random() * 10000)) : undefined;
+      for (let i = 0; i < (parseInt(filterByDays)); i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+
+        const label = date.toLocaleDateString("uk-UA", {
+          month: "short",
+          day: "numeric"
+        });
+
+        labels.push(label);
+      }
     }
 
-    setLabels(newLabels)
-    setMockArr(newMockArr)
+    setLabels(labels)
 
     switch (filterByDays) {
       case "30":
         setPointHitRadiusValue(30)
+        setPointBorderWidthValue(4)
         break;
       case "90":
         setPointHitRadiusValue(15)
+        setPointBorderWidthValue(3)
         break;
       case "180":
-        setPointHitRadiusValue(10)
+        setPointHitRadiusValue(8)
+        setPointBorderWidthValue(2)
         break;
       default:
         break;
     }
-  }, [filterByDays]);
+  }, [allOutlaysChart.categoryTransactions]);
 
-  const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -66,13 +68,12 @@ const LineChart: React.FC = () => {
         labels: labels,
         datasets: [{
           label: 'Витрати або надходження за категорією',
-          data: isDev ? mockArr : chartData,
+          data: data,
           fill: false,
           borderColor: PRIMARY,
           tension: 0.4,
-          // pointBackgroundColor: "#ffffff11",
           pointBackgroundColor: PRIMARY,
-          pointBorderWidth: 4,
+          pointBorderWidth: pointBorderWidthValue,
           pointHitRadius: pointHitRadiusValue,
         }]
       },
@@ -113,6 +114,9 @@ const LineChart: React.FC = () => {
             hoverBorderWidth: 5,
           },
         },
+        animation: {
+          duration: 1000,
+        },
       },
     });
 
@@ -123,8 +127,21 @@ const LineChart: React.FC = () => {
     };
   }, [labels]);
 
+  useEffect(() => {
+    chart.current.labels = labels;
+    chart.current.data.datasets[0].data = data;
+    chart.current.update();
+  }, [
+    allOutlaysChart.categoryTransactions,
+    allOutlaysChart.activeCategoryId,
+    allOutlaysChart.allTransactions,
+    labels,
+    data,
+  ]);
+
+
   return (
-    <canvas id="myLineChart" height="270px" ref={chartRef} />
+    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="280px" ref={chartRef} />
   );
 };
 

@@ -24,7 +24,7 @@ type CategoryState = {
   isEditCategoryOpen: boolean;
 }
 
-type CategoryActionOptions = {
+type CategoryActionPayload = {
   method: MethodTypes;
   data?: ICategory;
   id?: string;
@@ -32,7 +32,7 @@ type CategoryActionOptions = {
 
 export const categoryAction = createAsyncThunk<
   ICategory[],
-  CategoryActionOptions,
+  CategoryActionPayload,
   { rejectValue: string }
 >(
   'category/categoryAction',
@@ -47,15 +47,13 @@ export const categoryAction = createAsyncThunk<
       })
         .then(res => res?.data)
         .catch(error => {
-          console.log('error in action category');
-          return rejectWithValue('error in action category');
+          return rejectWithValue('Помилка');
         });
     }
 
     return await $api.get(CATEGORY_PATH)
       .then(res => res?.data)
       .catch(error => {
-        console.log('error in get response in action category');
         return rejectWithValue(`Помилка`)
       });
   }

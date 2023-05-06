@@ -4,6 +4,8 @@ import walletReducer from './walletSlice';
 import transactionReducer from './transactionSlice';
 import categoryReducer from './categorySlice';
 import statisticsReducer from './statisticsSlice';
+import passwordRecoveryReducer from './passwordRecoverySlice';
+import bankDataReducer from './bankDataSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
     transaction: transactionReducer,
     category: categoryReducer,
     statistics: statisticsReducer,
+    passwordRecovery: passwordRecoveryReducer,
+    bankData: bankDataReducer,
   },
 });
 

@@ -18,7 +18,7 @@ import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { useContext, useEffect } from "react";
 import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { logoutUser, resetUserState } from "../../../store/userSlice";
+import { logoutUser, resetUserState, setIsLoggedOut } from "../../../store/userSlice";
 import PopupEditProfile from "../popup/PopupEditProfile";
 import PopupDeleteAccount from "../popup/PopupDeleteAccount";
 import { resetWalletState } from "../../../store/walletSlice";
@@ -40,12 +40,13 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedOut) {
-      dispatch(resetUserState());
       dispatch(resetWalletState());
       dispatch(resetCategoryState());
       dispatch(resetTransactionState());
       dispatch(resetStatisticsState());
-      navigate('/');
+      dispatch(resetUserState());
+      dispatch(setIsLoggedOut(true));
+      navigate('/welcome');
     }
   }, [isLoggedOut]);
 

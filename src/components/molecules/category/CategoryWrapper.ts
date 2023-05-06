@@ -4,10 +4,11 @@ import { PRIMARY_HOVER, WHITE } from "../../../shared/styles/variables";
 
 export const CategoryWrapper = styled(Box)`
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 16px;
   border-radius: 8px;
   padding: 16px;
-  margin-bottom: 8px;
+  width: 100%;
 
   &:hover {
     background-color: ${PRIMARY_HOVER};

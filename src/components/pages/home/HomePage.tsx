@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 
 import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
@@ -13,19 +13,20 @@ import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
 import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
-import { mockTransactions } from "../../../../mock-data/transactions";
 import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets, setActiveWallet } from "../../../store/walletSlice";
-import { IWallet } from "../../../store/types";
+import { ICategory, ICategoryWithTotalAmount, IWallet, Transactions } from "../../../store/types";
 import { isDev } from "../../../consts/consts";
-import { mockData, mockLabels } from "../../../../mock-data/doughnutCharts";
-import { formatTransactionDateToHours } from "../../../shared/utils/formatTransactionDate";
-import { getTransactions } from "../../../store/transactionSlice";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
+import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../../store/userSlice";
+import { filterTransactions } from "../../../shared/utils/filterTransactions";
+import { setTotalExpenses, setTotalIncomes } from "../../../store/statisticsSlice";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,40 +43,51 @@ const HomePage: React.FC = () => {
     isDeleteWalletSuccess,
     isLoading: isWalletActionLoading
   } = useAppSelector(state => state.wallet)
-
   const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+  const { isLoading: isBankDataLoading, isAddBankDataSuccess } = useAppSelector(state => state.bankData);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/")
+    navigate("/welcome")
+  }
+
+  if (isLoggedIn) {
+    dispatch(getUserDetails())
   }
 
   useEffect(() => {
     dispatch(getWallets());
     dispatch(getTransactions());
-    dispatch(getCategories());
-    dispatch(getFilteredCategories('?type_of_outlay=income'));
-    dispatch(getFilteredCategories('?type_of_outlay=expense'));
+    dispatch(getFilteredCategories("?type_of_outlay=income"))
+    dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
 
   useEffect(() => {
-    if (isWalletActionLoading === false) {
-      dispatch(getWallets());
-    }
-  }, [isWalletActionLoading]);
-
-  useEffect(() => {
-    if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess) {
+    if (isWalletActionLoading === false || isBankDataLoading === false) {
       dispatch(getWallets());
       dispatch(getTransactions());
       dispatch(getCategories());
+      dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+      dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
     }
-  }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess]);
+  }, [isWalletActionLoading, isBankDataLoading]);
+
+  useEffect(() => {
+    if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess || isAddBankDataSuccess) {
+      dispatch(getWallets());
+      dispatch(getTransactions());
+      dispatch(getCategories());
+      dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+      dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
+    }
+  }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess, isAddBankDataSuccess]);
 
   return (
     <>
       <HomePageWrapper>
         <Header />
-        <Box m="0 20px 36px" display="flex" grow="1" gap="25px">
+        <Box m="0 36px 24px" display="flex" grow="1" gap="25px">
           <Wallets />
           <Transactions />
           <Statistics />
@@ -96,7 +108,7 @@ const Wallets: React.FC = () => {
     setIsEditWalletPopupOpen
   } = useContext(PopupContext);
 
-  const { wallets, activeWallet } = useAppSelector(state => state.wallet)
+  const { wallets, activeWallet, isLoading } = useAppSelector(state => state.wallet)
 
   const cashWallet = wallets?.find(
     (wallet) => wallet?.type_of_account === 'cash'
@@ -119,7 +131,7 @@ const Wallets: React.FC = () => {
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Рахунки
@@ -131,6 +143,8 @@ const Wallets: React.FC = () => {
         p="15px"
         borderRadius="16px"
         grow="1"
+        overflow="auto"
+        height="100px"
       >
         <Box
           p="0 0 20px 0"
@@ -151,7 +165,7 @@ const Wallets: React.FC = () => {
             isActive={activeWallet?.id === (isDev ? mockWallets[0] : cashWallet)?.id}
           />
         </Box>
-        <Box grow="1">
+        <Box grow="1" mb="20px">
           <Typography
             as="h3"
             fz="16px"
@@ -175,7 +189,7 @@ const Wallets: React.FC = () => {
           </List>
         </Box>
         <Button
-          disabled={wallets?.length > 4}
+          disabled={wallets?.length > 4 || isLoading}
           secondary
           onClick={handleAddWalletClick}
         >
@@ -189,12 +203,18 @@ const Wallets: React.FC = () => {
 const Transactions: React.FC = () => {
   const { transactions } = useAppSelector(state => state.transaction)
 
+  const transactionsData = (): Transactions => {
+    let filteredTransactions: Transactions = transactions.all;
+
+    return filterTransactions(filteredTransactions)
+  };
+
   return (
     <Box display="flex" direction="column" grow="1">
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Останні транзакції
@@ -208,85 +228,148 @@ const Transactions: React.FC = () => {
         height="100px"
         bgColor={BASE_2}
         p="15px"
+        borderRadius="16px"
       >
-        {Object.keys(isDev
-          ? mockTransactions
-          : transactions.all)?.map((date) => (
-            <Box mb="20px" key={date}>
-              <Typography as="h3" fz="16px" fw="500" mb="20px">
-                {formatTransactionDateToHours(date)}
-              </Typography>
-              <List>
-                {(isDev
-                  ? mockTransactions
-                  : transactions.all)[date]?.map((transaction) => (
-                    <ListItem key={transaction?.id}>
-                      <Transaction
-                        transaction={transaction}
-                        isTransactionsPage={false}
-                      />
-                    </ListItem>
-                  ))}
-              </List>
-            </Box>
-          ))}
+        {Object.entries(transactionsData()).map(([date, transactions]) => (
+          <Box mb="20px" key={date}>
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
+              {formatTransactionDateToFullDate(date)}
+            </Typography>
+            <List display="flex" direction="column" gap="8px">
+              {transactions.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+                .map((transaction) => (
+                  <ListItem key={transaction?.id}>
+                    <Transaction transaction={transaction} isTransactionsPage={false} />
+                  </ListItem>
+                ))}
+            </List>
+          </Box>
+        ))}
       </List>
     </Box>
   );
 }
 
 const Statistics: React.FC = () => {
-  const { categories } = useAppSelector(state => state.category);
-  const { transactions } = useAppSelector(state => state.transaction);
+  const dispatch = useAppDispatch();
 
-  const [incomesLabels, setIncomesLabels] = useState<string[]>();
-  const [expensesLabels, setExpensesLabels] = useState<string[]>([]);
+  const { incomesChart, expensesChart, isLoading } = useAppSelector(state => state.statistics);
 
-  const incomesData: string[] = Object.values(transactions?.income)
-    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
-      transaction.amount_of_funds
-    )));
-  const expensesData: string[] = Object.values(transactions?.expense)
-    ?.flatMap(transactionsArr => transactionsArr.map(transaction => (
-      transaction.amount_of_funds
-    )));
-  useEffect(() => {
-    setIncomesLabels(categories.income?.map(c => c.title))
-  }, [categories.income])
+  const incomesLabels = useRef<string[]>(null);
+  const expensesLabels = useRef<string[]>(null);
+
+  const incomesData = useRef<any>(null);
+  const expensesData = useRef<any>(null);
+
+  const incomeCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
+  const expenseCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
 
   useEffect(() => {
-    setExpensesLabels(categories.expense?.map(c => c.title))
-  }, [categories.expense])
+    if (incomesChart.categories && incomesChart.allTransactions) {
+      incomeCategoriesWithTotalAmount.current = incomesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(incomesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
 
-  const [totalIncomesAmount, setTotalIncomesAmount] = useState<string>('');
-
-  useEffect(() => {
-    if (Object.keys(transactions.income)?.length > 0) {
-      setTotalIncomesAmount(Object.values(transactions?.income)
-        .map((transactionsArr) =>
-          transactionsArr.reduce((sum, transaction) =>
-            (sum += parseFloat(transaction.amount_of_funds)), 0
-          )
-        )
-        .reduce((sum, t) => sum + t, 0)
-        .toFixed(2))
+      incomesLabels.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      incomesData.current = incomeCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
     }
-  }, [transactions.income]);
+  }, [incomesChart.categories, incomesChart.allTransactions]);
 
-  const totalExpensesAmount: string = Object.values(transactions?.expense)
-    .map((transactionsArr) =>
-      transactionsArr.reduce((sum, transaction) =>
-        (sum += parseFloat(transaction.amount_of_funds)), 0
-      )
-    )
-    .reduce((sum, t) => sum + t, 0).toFixed(2);
+  useEffect(() => {
+    if (expensesChart.categories && expensesChart.allTransactions) {
+      expenseCategoriesWithTotalAmount.current = expensesChart.categories
+        .flatMap((category) => {
+          const transactionsForCategory = Object.values(expensesChart.allTransactions)
+            .flat()
+            .filter(
+              (transaction) =>
+                parseFloat(transaction.amount_of_funds) > 0 &&
+                transaction.category === category.id
+            );
+          if (!transactionsForCategory || transactionsForCategory.length === 0) {
+            return [];
+          }
+          const totalAmount = transactionsForCategory.reduce(
+            (sum, transaction) =>
+              sum + parseFloat(transaction.amount_of_funds),
+            0
+          );
+          return {
+            id: category.id,
+            title: category.title,
+            type_of_outlay: category.type_of_outlay,
+            owner: category.owner,
+            totalAmount,
+          };
+        })
+        .filter((category) => category.totalAmount > 0);
 
+      expensesLabels.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.title
+      })
+      expensesData.current = expenseCategoriesWithTotalAmount.current.map(c => {
+        return c.totalAmount
+      })
+    }
+  }, [expensesChart.categories, expensesChart.allTransactions])
+
+  const totalIncomesAmount: string = Object.values(incomesChart?.allTransactions)
+    .map((transactionsArr) => transactionsArr.reduce((sum, transaction) => {
+      return sum += parseFloat(transaction.amount_of_funds)
+    }, 0))
+    .reduce((sum, t) => sum + t, 0)
+    .toFixed(2);
+
+  const totalExpensesAmount: string = Object.values(expensesChart?.allTransactions)
+    ?.map((transactionsArr) => transactionsArr?.reduce((sum, transaction) => {
+      return sum += parseFloat(transaction?.amount_of_funds)
+    }, 0))
+    .reduce((sum, t) => sum + t, 0)
+    .toFixed(2);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      if (incomesChart.allTransactions) {
+        dispatch(setTotalIncomes(totalIncomesAmount));
+      }
+      if (expensesChart.allTransactions) {
+        dispatch(setTotalExpenses(totalExpensesAmount));
+      }
+    }
+  }, [incomesChart.allTransactions, expensesChart.allTransactions, isLoading]);
   return (
-    <Box display="flex" direction="column" width="600px">
+    <Box display="flex" direction="column" width="650px">
       <Typography
         as="h2"
         fz="22px"
-        fw="500"
+        fw="600"
         mb="20px"
       >
         Статистика за останній місяць
@@ -295,60 +378,42 @@ const Statistics: React.FC = () => {
         display="flex"
         direction="column"
         bgColor={BASE_2}
-        p="15px"
         borderRadius="16px"
+        overflow="auto"
+        height="100px"
+        p="15px"
       >
         <Box mb="20px">
           <Box display="flex" justifyContent="space-between">
-            <Typography
-              as="h3"
-              fz="16px"
-              fw="500"
-              mb="20px"
-            >
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
               Витрати
             </Typography>
-            <Typography
-              as="h3"
-              fz="16px"
-              fw="500"
-              mb="20px"
-            >
-              {isDev ? "32450.67" : totalExpensesAmount} ₴
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
+              {expensesChart.totalAmount} ₴
             </Typography>
           </Box>
           <Box>
             <DoughnutChart
-              data={isDev ? mockData : expensesData}
-              labels={isDev ? mockLabels : expensesLabels}
-              chartType="expense"
+              labels={expensesLabels.current}
+              data={expensesData.current}
+              isHomePage
             />
           </Box>
         </Box>
         <Box mb="20px">
           <Box display="flex" justifyContent="space-between">
-            <Typography
-              as="h3"
-              fz="16px"
-              fw="500"
-              mb="20px"
-            >
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
               Надходження
             </Typography>
-            <Typography
-              as="h3"
-              fz="16px"
-              fw="500"
-              mb="20px"
-            >
-              {isDev ? "128531.31" : totalIncomesAmount} ₴
+            <Typography as="h3" fz="16px" fw="500" mb="20px">
+              {incomesChart.totalAmount} ₴
             </Typography>
           </Box>
           <Box>
             <DoughnutChart
-              data={isDev ? mockData : incomesData}
-              labels={isDev ? mockLabels : incomesLabels}
-              chartType="income"
+              labels={incomesLabels.current}
+              data={incomesData.current}
+              isHomePage
             />
           </Box>
         </Box>

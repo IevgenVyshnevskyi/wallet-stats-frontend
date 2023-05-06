@@ -1,5 +1,6 @@
 export default function formatTransactionTime(timestamp: string): string {
   const date = new Date(timestamp);
+  date.setHours(date.getHours() + 3);
 
   const options = {
     hour: 'numeric',

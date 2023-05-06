@@ -23,7 +23,7 @@ type TransactionState = {
   isEditTransactionOpen: boolean;
 }
 
-type TransactionActionOptions = {
+type TransactionActionPayload = {
   method: MethodTypes;
   data?: ITransaction;
   id?: string;
@@ -31,7 +31,7 @@ type TransactionActionOptions = {
 
 export const transactionAction = createAsyncThunk<
   Transactions,
-  TransactionActionOptions,
+  TransactionActionPayload,
   { rejectValue: string }
 >(
   'transaction/transactionAction',
@@ -46,15 +46,13 @@ export const transactionAction = createAsyncThunk<
       })
         .then(response => response?.data)
         .catch(error => {
-          console.log('error in action transaction');
-          return rejectWithValue('error in action transaction');
+          return rejectWithValue('Помилка');
         });
     }
 
     return await $api.get(TRANSACTION_PATH)
       .then(res => res?.data)
       .catch(error => {
-        console.log('error in get response in action transaction');
         return rejectWithValue(`Помилка`)
       });
   }
@@ -116,7 +114,7 @@ const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
-    resetTransactionState: (state) => {
+    resetTransactionState: () => {
       return initialState;
     },
     resetError: (state) => {
@@ -191,6 +189,7 @@ const transactionSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
         const { data, params } = action.payload;
         switch (params) {
           case "":
@@ -205,7 +204,6 @@ const transactionSlice = createSlice({
           default:
             break;
         }
-        state.isLoading = false;
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;

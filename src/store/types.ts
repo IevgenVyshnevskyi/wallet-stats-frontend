@@ -8,7 +8,7 @@ export interface IUser {
   id?: number,
   first_name: string,
   last_name: string,
-  email: string,
+  email?: string,
   is_confirm_email?: boolean,
   token?: string;
 }
@@ -27,15 +27,9 @@ export type LoginFormData = {
 }
 
 export type LoginResponse = {
-  email: string
-}
-
-export interface PasswordRecoveryThreeFormData {
-  firstName?: string;
-  surname?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  user_id: string;
+  email: string;
+  token: string;
 }
 
 export interface DataEntryFormData {
@@ -43,6 +37,12 @@ export interface DataEntryFormData {
   cardAccountName: string;
   amountAccount: string;
   userId?: number;
+}
+
+export type NewPasswordFormData = {
+  uuid: string;
+  token: string;
+  password: string;
 }
 
 /* WALLET */
@@ -57,8 +57,8 @@ export interface IWallet {
   owner: number,
 }
 
-export interface WalletPopupActionsFormData {
-  name: string,
+export interface WalletFormData {
+  title: string,
   amount: string,
 }
 
@@ -100,3 +100,21 @@ export interface ICategory {
   type_of_outlay: TypeOfOutlay,
   owner: number
 }
+
+export interface ICategoryWithTotalAmount extends ICategory {
+  totalAmount: number;
+}
+
+export interface IBankData {
+  id?: number;
+  owner: number;
+  wallettitle: string;
+  file: any;
+}
+
+export interface PasswordChangeFormData {
+  old_password: string;
+  new_password: string;
+  new_password_2: string;
+}
+

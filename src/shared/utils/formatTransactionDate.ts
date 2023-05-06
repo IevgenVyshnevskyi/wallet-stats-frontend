@@ -1,18 +1,21 @@
-export function formatTransactionDateToHours(dateStr: string): string {
+export function formatTransactionDateToFullDate(dateStr: string): string {
   const date = new Date(dateStr);
+  date.setHours(date.getHours() + 3);
 
   const options = {
-    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
     timeZone: 'Europe/Kiev',
     locale: 'uk-UA',
   } as const;
 
-  const dayName = new Intl.DateTimeFormat('uk-UA', options).format(date);
+  const dayOfMonthAndMonthName = new Intl.DateTimeFormat('uk-UA', options).format(date);
+  const dayOfWeek = new Intl.DateTimeFormat('uk-UA', { weekday: 'long' }).format(date);
+  const capitalizedDayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
 
-  const capitalizedDayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-
-  return capitalizedDayName;
+  return `${capitalizedDayOfWeek}, ${dayOfMonthAndMonthName}`;
 }
+
 
 export function formatTransactionDateToUTC(date: Date): string {
   const newDate = new Date(date);
@@ -34,5 +37,8 @@ export function formatTransactionDateToUTC(date: Date): string {
 }
 
 export function formatTransactionDateToString(dateStr: string): Date {
-  return new Date(Date.parse(dateStr));
+  const utcDate = new Date(dateStr);
+  utcDate.setUTCHours(utcDate.getUTCHours() + 3);
+
+  return utcDate;
 }

@@ -101,6 +101,10 @@ export interface ICategory {
   owner: number
 }
 
+export interface ICategoryWithTotalAmount extends ICategory {
+  totalAmount: number;
+}
+
 export interface IBankData {
   id?: number;
   owner: number;

@@ -15,7 +15,7 @@ import { setActiveCategoryId, setFilterByDays, setTotalExpenses, setTotalIncomes
 import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
 import { token } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
-import { ICategory } from "../../../store/types";
+import { ICategory, ICategoryWithTotalAmount } from "../../../store/types";
 
 const StatisticsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -117,10 +117,6 @@ const StatisticsHeader: React.FC = () => {
       <TabFilter filterButtons={filterButtons} />
     </Box>
   );
-}
-
-interface ICategoryWithTotalAmount extends ICategory {
-  totalAmount: number;
 }
 
 const DoughnutChartsSection: React.FC = () => {
@@ -281,10 +277,7 @@ const DoughnutChartsSection: React.FC = () => {
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    filterByDays,
-    allOutlaysChart,
-  } = useAppSelector(state => state.statistics);
+  const { filterByDays, allOutlaysChart } = useAppSelector(state => state.statistics);
   const { categories } = useAppSelector(state => state.category);
 
   const selectedCategory = categories.all.find((c) => c.id === allOutlaysChart.activeCategoryId)
@@ -336,11 +329,13 @@ const LineChartSection: React.FC = () => {
   }, [allOutlaysChart?.activeCategoryId, filterByDays]);
 
   function onCategoryChange(e: any): void {
-    setSelectedCategoryValues({ value: e.value, label: e.label })
-    dispatch(setActiveCategoryId(e.value))
-    dispatch(getFilteredTransactions(
-      `?category=${e.value}&days=${filterByDays}`
-    ))
+    if (e.value !== allOutlaysChart?.activeCategoryId) {
+      setSelectedCategoryValues({ value: e.value, label: e.label })
+      dispatch(setActiveCategoryId(e.value))
+      dispatch(getFilteredTransactions(
+        `?category=${e.value}&days=${filterByDays}`
+      ))
+    }
   }
 
   return (

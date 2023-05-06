@@ -5,12 +5,7 @@ import { Button } from "../../atoms/button/Button.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import { Typography } from "../../atoms/typography/Typography.styled";
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import Wallet from "../../molecules/wallet/Wallet";
 import { Label } from "../../atoms/label/Label.styled";
-import { IWallet } from "../../../store/types";
 
 import {
   resetActiveTransactionState,
@@ -20,8 +15,6 @@ import {
   transactionAction
 } from "../../../store/transactionSlice";
 
-import { isDev } from "../../../consts/consts";
-import { mockWallets } from "../../../../mock-data/wallets";
 import { Input } from './../../atoms/input/Input.styled';
 import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 import Select from "../../molecules/select/Select";
@@ -35,7 +28,6 @@ const EditTransaction: React.FC = () => {
 
   const { editTransactionData, isLoading, isEditTransactionOpen } = useAppSelector(state => state.transaction)
   const { categories } = useAppSelector(state => state.category);
-  const { wallets } = useAppSelector(state => state.wallet);
 
   const selectedCategory = categories.all.find((c) => c.id === editTransactionData?.category)
 
@@ -58,50 +50,12 @@ const EditTransaction: React.FC = () => {
 
   const {
     register,
-    unregister,
     formState: { errors },
     handleSubmit,
     setValue,
     clearErrors,
-    reset,
-    trigger,
     getValues
-  } = useForm({
-    mode: "all",
-  });
-
-  const switchButtons: ISwitchButton[] = [
-    {
-      buttonName: 'Витрата',
-      onTabClick: () => {
-        if (editTransactionData?.type_of_outlay === "expense") return;
-        dispatch(setEditTransactionData({
-          type_of_outlay: "expense",
-          category: categories.expense[0]?.id
-        }));
-        setSelectedCategoryValues({
-          value: categories.expense[0]?.id,
-          label: categories.expense[0]?.title
-        })
-      },
-      isActive: editTransactionData?.type_of_outlay === "expense"
-    },
-    {
-      buttonName: 'Надходження',
-      onTabClick: () => {
-        if (editTransactionData?.type_of_outlay === "income") return;
-        dispatch(setEditTransactionData({
-          type_of_outlay: "income",
-          category: categories.income[0]?.id
-        }));
-        setSelectedCategoryValues({
-          value: categories.income[0]?.id,
-          label: categories.income[0]?.title
-        })
-      },
-      isActive: editTransactionData?.type_of_outlay === "income"
-    },
-  ];
+  } = useForm({ mode: "all" });
 
   useEffect(() => {
     setSelectedCategoryValues({
@@ -124,10 +78,6 @@ const EditTransaction: React.FC = () => {
       setValue('title', "");
     }
   }, [editTransactionData?.title]);
-
-  function onWalletClick(wallet: IWallet) {
-    dispatch(setEditTransactionData({ wallet: wallet?.id }));
-  };
 
   function onCategoryChange(selectedValue: any): void {
     dispatch(setEditTransactionData({ category: selectedValue?.value }));
@@ -194,43 +144,9 @@ const EditTransaction: React.FC = () => {
             fw="500"
             mb="12px"
           >
-            Тип транзакції
-          </Typography>
-          <TabSwitch switchButtons={switchButtons} />
-        </Box>
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
             Час транзакції
           </Typography>
           <DatePicker isEditTrapsactionOpen={isEditTransactionOpen} />
-        </Box>
-        <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
-            Рахунок
-          </Typography>
-          <Box display="flex">
-            <List display="flex" gap="8px" wrap="wrap">
-              {(isDev ? mockWallets : wallets).map((wallet, index) => (
-                <ListItem key={index} width="250px">
-                  <Wallet
-                    wallet={wallet}
-                    onWalletClick={() => onWalletClick(wallet)}
-                    isActive={editTransactionData?.wallet === wallet.id}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
         </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
           <Box mb="20px">
@@ -293,9 +209,10 @@ const EditTransaction: React.FC = () => {
             <Input
               type="text"
               inputMode="numeric"
-              fz="22px"
+              style={{ fontSize: "19px", fontWeight: "600" }}
+              height='25px'
               id="amount"
-              width="270px"
+              width="225px"
               bgColor={WHITE}
               {...register('amount', {
                 required: 'Обов\'язкове поле для заповнення',

@@ -1,4 +1,4 @@
-import { ALMOST_BLACK_FOR_TEXT, DIVIDER, PRIMARY_HOVER } from "../../../shared/styles/variables";
+import { ALERT_1, ALMOST_BLACK_FOR_TEXT, DIVIDER, PRIMARY_HOVER } from "../../../shared/styles/variables";
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from '../../atoms/button/Button.styled';
 import { Input } from "../../atoms/input/Input.styled";
@@ -202,7 +202,7 @@ const ChangePasswordTab: React.FC = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-	const { isLoading, isPasswordChanged } = useAppSelector(state => state.user)
+	const { isLoading, isPasswordChanged, passwordChangeError } = useAppSelector(state => state.user)
 
 	const { setIsEditProfilePopupOpen } = useContext(PopupContext);
 
@@ -343,6 +343,8 @@ const ChangePasswordTab: React.FC = () => {
 						&& <>{errors?.new_password_2?.message
 							|| 'Обов\'язкове поле для заповнення'}</>}
 				</Box>
+
+				{passwordChangeError && <Typography as="p" color={ALERT_1} textAlight="center">{passwordChangeError}</Typography>}
 			</Box>
 
 			<Box

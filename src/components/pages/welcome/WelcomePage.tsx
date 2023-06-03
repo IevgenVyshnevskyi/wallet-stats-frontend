@@ -21,6 +21,10 @@ const WelcomePage = () => {
         navigate('/register');
     }
 
+    function handleShowDemoClick() {
+        window.location.replace("https://spendwise-test.vercel.app/home");
+    }
+
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
@@ -32,7 +36,7 @@ const WelcomePage = () => {
                     <Typography fw="700" fz="24px" lh="170%" textAlign="center" m="48px 0 80px 0">
                         Контролюйте свої кошти з програмою <br /> обліку персональних фінансів!
                     </Typography>
-                    <Typography fw="400" fz="16px" lh="24px" m="0 0 16px 0" textAlign="center">
+                    {/* <Typography fw="400" fz="16px" lh="24px" m="0 0 16px 0" textAlign="center">
                         Для початку потрібно пройти невеличку реєстрацію
                     </Typography>
                     <Button m="0 auto" primary onClick={handleRegisterClick}>Почати реєстрацію</Button>
@@ -41,6 +45,12 @@ const WelcomePage = () => {
                     </Typography>
                     <Box display='flex' justifyContent='center'>
                         <Button secondary onClick={handleEnterClick}>Увійти</Button>
+                    </Box> */}
+                    <Typography fw="400" fz="16px" lh="19px" m="32px 0 16px 0" textAlign="center">
+                        Сервер тимчасово недоступний
+                    </Typography>
+                    <Box display='flex' justifyContent='center'>
+                        <Button secondary onClick={handleShowDemoClick}>Перейти до демо версії</Button>
                     </Box>
                 </Box>
             </Box>

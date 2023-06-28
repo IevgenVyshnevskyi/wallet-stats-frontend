@@ -1,9 +1,9 @@
 import { useRef, useEffect } from "react";
 
-import { setTotalIncomes, setTotalExpenses } from "../../../store/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { ICategoryWithTotalAmount } from "../../../store/types";
+import { setTotalIncomes, setTotalExpenses } from "../../../store/categorySlice";
 
+import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
 import {
   calculateCategoriesWithTotalAmount
 } from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
@@ -13,7 +13,8 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 
 import { BASE_2 } from "../../../shared/styles/variables";
-import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
+
+import { ICategoryWithTotalAmount } from "../../../store/types";
 
 const Statistics: React.FC = () => {
   const dispatch = useAppDispatch();

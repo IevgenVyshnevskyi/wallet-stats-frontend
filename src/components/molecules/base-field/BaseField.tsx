@@ -83,7 +83,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
         fz="13px"
         height="14px"
         width="300px"
-        m="0px 0 20px 0"
+        mb="20px"
       >
         {errors?.[name] && <>{errors?.[name]?.message || "Error!"}</>}
       </Box>

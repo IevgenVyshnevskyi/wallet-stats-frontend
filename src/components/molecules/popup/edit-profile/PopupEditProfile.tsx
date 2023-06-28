@@ -4,15 +4,14 @@ import { PopupContext } from "../../../../contexts/PopupContext";
 
 import { useAppSelector } from "../../../../store/hooks";
 
-import EditProfileTab from "./EditProfileTab";
-import ChangePasswordTab from "./ChangePasswordTab";
 import { Box } from "../../../atoms/box/Box.styled";
 import { Button } from '../../../atoms/button/Button.styled';
 import { PopupWrapper } from "../Popup.styled";
+import { ButtonPopup } from "../../../atoms/button/ButtonPopup";
 import { Typography } from '../../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../../atoms/button/ButtonLink";
-
-import { ButtonPopup } from "../../../atoms/button/ButtonPopup";
+import EditProfileTab from "./EditProfileTab";
+import ChangePasswordTab from "./ChangePasswordTab";
 
 import { PRIMARY_HOVER } from "../../../../shared/styles/variables";
 
@@ -88,7 +87,9 @@ const PopupEditProfile: React.FC = () => {
 						)}
 					</Box>
 					<Box display="flex" justifyContent="flex-end">
-						<ButtonLink onClick={onDeleteAccountClick}>Видалити аккаунт</ButtonLink>
+						<ButtonLink onClick={onDeleteAccountClick}>
+							Видалити аккаунт
+						</ButtonLink>
 					</Box>
 				</Box>
 				<Button secondary onClick={handleCloseClick} p="10px 20px">

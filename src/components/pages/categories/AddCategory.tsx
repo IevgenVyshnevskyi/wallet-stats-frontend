@@ -6,19 +6,20 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setAddCategoryData } from "../../../store/categorySlice";
 import { categoryAction, setActiveCategory } from "../../../store/categorySlice";
 
-import { Form } from "../../atoms/form/Form.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import useSwitchButtonOptions from "../../../shared/hooks/useSwitchButtonOptions";
 
-import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
+import { titleFieldRules } from "../../../shared/utils/field-rules/title";
 
 import { userId } from "../../../api/api";
 
-import { BASE_2, WHITE } from "../../../shared/styles/variables";
+import { Form } from "../../atoms/form/Form.styled";
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from "../../atoms/button/Button.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+import BaseField from "../../molecules/base-field/BaseField";
+
+import { BASE_2 } from "../../../shared/styles/variables";
 
 const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -28,22 +29,10 @@ const AddCategory: React.FC = () => {
 
   const isValid = Object.keys(addCategoryData || {})?.length >= 1;
 
-  const switchButtons: ISwitchButton[] = [
-    {
-      buttonName: 'Витрата',
-      onTabClick: () => {
-        dispatch(setAddCategoryData({ type_of_outlay: "expense" }));
-      },
-      isActive: addCategoryData?.type_of_outlay === "expense"
-    },
-    {
-      buttonName: 'Надходження',
-      onTabClick: () => {
-        dispatch(setAddCategoryData({ type_of_outlay: "income" }));
-      },
-      isActive: addCategoryData?.type_of_outlay === "income"
-    },
-  ];
+  const switchButtons = useSwitchButtonOptions(
+    addCategoryData,
+    setAddCategoryData
+  );
 
   const handleSub = (data: { title: string }) => {
     dispatch(setActiveCategory({}));
@@ -98,33 +87,13 @@ const AddCategory: React.FC = () => {
         </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
           <Box mb="25px">
-            <Label fw="500" htmlFor="title" mb="12px">
-              Назва категорії
-            </Label>
-            <Input
-              type="text"
-              id="title"
-              width="93%"
-              bgColor={WHITE}
-              className={errors?.title && 'error'}
-              {...register('title', {
-                required: 'Обов\'язкове поле для заповнення',
-                validate: {
-                  hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
-                  hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
-                }
-              })}
+            <BaseField
+              label="Назва категорії"
+              errors={errors}
+              fieldType="text"
+              name="title"
+              registerOptions={register('title', titleFieldRules)}
             />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
-            </Box>
           </Box>
           <Box>
             <Button

@@ -11,20 +11,19 @@ import {
   setIsEditCategoryOpen
 } from "../../../store/categorySlice";
 
+import useSwitchButtonOptions from "../../../shared/hooks/useSwitchButtonOptions";
+
+import { titleFieldRules } from "../../../shared/utils/field-rules/title";
+
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Label } from "../../atoms/label/Label.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
-import { Input } from "../../atoms/input/Input.styled";
 import { Form } from "../../atoms/form/Form.styled";
 import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+import BaseField from "../../molecules/base-field/BaseField";
 
-import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
-
-import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
-
-import { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import { MENU_BUTTON_HOVER } from "../../../shared/styles/variables";
 
 const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -45,22 +44,10 @@ const EditCategory: React.FC = () => {
     clearErrors,
   } = useForm({ mode: "all" });
 
-  const switchButtons: ISwitchButton[] = [
-    {
-      buttonName: 'Витрата',
-      onTabClick: () => {
-        dispatch(setEditCategoryData({ type_of_outlay: "expense" }));
-      },
-      isActive: editCategoryData?.type_of_outlay === "expense"
-    },
-    {
-      buttonName: 'Надходження',
-      onTabClick: () => {
-        dispatch(setEditCategoryData({ type_of_outlay: "income" }));
-      },
-      isActive: editCategoryData?.type_of_outlay === "income"
-    },
-  ];
+  const switchButtons = useSwitchButtonOptions(
+    editCategoryData,
+    setEditCategoryData
+  );
 
   const handleCancelEditCategory = () => {
     dispatch(setIsEditCategoryOpen(false));
@@ -127,35 +114,13 @@ const EditCategory: React.FC = () => {
           <TabSwitch switchButtons={switchButtons} />
         </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
-          <Box mb="25px">
-            <Label fw="500" htmlFor="title" mb="12px">
-              Назва категорії
-            </Label>
-            <Input
-              type="text"
-              id="title"
-              width="93%"
-              bgColor={WHITE}
-              className={errors.title && 'error'}
-              {...register('title', {
-                required: 'Обов\'язкове поле для заповнення',
-                validate: {
-                  hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
-                  hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
-                }
-              })}
-            />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
-            </Box>
-          </Box>
+          <BaseField
+            fieldType="text"
+            label="Назва категорії"
+            errors={errors}
+            name="title"
+            registerOptions={register('title', titleFieldRules)}
+          />
           <Box display="flex" gap="8px" mb="27px">
             <Button
               primary

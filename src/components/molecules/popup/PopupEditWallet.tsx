@@ -48,10 +48,7 @@ const PopupEditWallet: React.FC = () => {
 
 	const {
 		register,
-		formState: {
-			errors,
-			isValid,
-		},
+		formState: { errors, isValid },
 		handleSubmit,
 	} = useForm({ mode: "all" });
 

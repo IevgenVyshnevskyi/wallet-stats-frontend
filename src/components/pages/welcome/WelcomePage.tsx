@@ -51,7 +51,9 @@ const WelcomePage = () => {
                         Сервер тимчасово недоступний
                     </Typography>
                     <Box display='flex' justifyContent='center'>
-                        <Button secondary onClick={handleShowDemoClick}>Перейти до демо версії</Button>
+                        <Button secondary onClick={handleShowDemoClick}>
+                            Перейти до демо версії
+                        </Button>
                     </Box>
                 </Box>
             </Box>

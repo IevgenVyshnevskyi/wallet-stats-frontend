@@ -11,32 +11,29 @@ import {
 } from "../../../store/transactionSlice";
 
 import {
-  moneyAmountRegex,
-  titleRegex,
-  twoSymbolsRegex
-} from '../../../shared/utils/regexes';
-import {
   formatTransactionDateToUTC
 } from '../../../shared/utils/transactions/formatTransactionDate';
 import {
   setSelectOptions
 } from '../../../shared/utils/transactions/setSelectOptions';
+import { amountFieldRules } from '../../../shared/utils/field-rules/amount';
+import { detailsFieldRules } from '../../../shared/utils/field-rules/details';
 
 import { userId } from '../../../api/api';
 
 import { Form } from '../../atoms/form/Form.styled';
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
-import { Input } from "../../atoms/input/Input.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Select from "../../molecules/select/Select";
-import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import Wallet from "../../molecules/wallet/Wallet";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+import BaseField from '../../molecules/base-field/BaseField';
 import DatePicker from './DatePicker';
 
-import { BASE_2, WHITE } from "../../../shared/styles/variables";
+import { BASE_2, } from "../../../shared/styles/variables";
 
 import { IWallet, TypeOfOutlay } from "../../../store/types";
 import { SelectOptions } from '../../../../types/molecules';
@@ -243,81 +240,22 @@ const AddTransaction: React.FC = () => {
             </Box>
           </Box>
           <Box mb="25px">
-            <Label fw="500" htmlFor="title" mb="12px">
-              Деталі (не обовʼязково)
-            </Label>
-            <Input
-              type="text"
-              id="title"
-              width="93%"
-              bgColor={WHITE}
-              className={errors?.title && 'error'}
-              maxLength={50}
-              {...register('title', {
-                validate: {
-                  hasTwoSymbols: (value) => {
-                    if (!value) {
-                      clearErrors('title');
-                      return;
-                    };
-                    return twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів';
-                  },
-                  hasTwoLetters: (value) => {
-                    if (!value) {
-                      clearErrors('title');
-                      return;
-                    };
-                    return titleRegex.test(value) || 'Повинно бути не менше 2 літер';
-                  },
-                }
-              })}
+            <BaseField
+              fieldType="text"
+              label="Деталі (не обовʼязково)"
+              errors={errors}
+              name="title"
+              registerOptions={register('title', detailsFieldRules(clearErrors))}
             />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
-            </Box>
           </Box>
           <Box mb="20px">
-            <Label fw="500" htmlFor="amount" mb="12px">
-              Сума
-            </Label>
-            <Input
-              type="text"
-              inputMode="numeric"
-              style={{ fontSize: "19px", fontWeight: "600" }}
-              height='25px'
-              id="amount"
-              width="225px"
-              bgColor={WHITE}
-              {...register('amount', {
-                required: 'Обов\'язкове поле для заповнення',
-                pattern: {
-                  value: moneyAmountRegex,
-                  message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
-                },
-                min: {
-                  value: 0.00,
-                  message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
-                },
-              })}
-              className={errors.amount && 'error'}
+            <BaseField
+              fieldType="text"
+              label="Сума"
+              errors={errors}
+              name="amount"
+              registerOptions={register('amount', amountFieldRules)}
             />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.amount && <>{errors?.amount?.message || 'Error!'}</>}
-            </Box>
           </Box>
           <Box>
             <Button

@@ -3,16 +3,15 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { requestPasswordReset } from "../../../store/passwordRecoverySlice";
 
-import { emailRegex } from "../../../shared/utils/regexes";
+import { emailFieldRules } from "../../../shared/utils/field-rules/email";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import { Container } from "../../atoms/container/Container.styled";
 import { Img } from "../../atoms/img/Img.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { Label } from "../../atoms/label/Label.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import { Form } from "../../atoms/form/Form.styled";
+import BaseField from "../../molecules/base-field/BaseField";
 
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 import logo from "../../../shared/assets/images/logo.png";
@@ -59,19 +58,13 @@ const EmailStep: React.FC = () => {
             alignItems="end">
             <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
               <Box mb="6px">
-                <Label htmlFor="email" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-                  textAlight="left">Пошта</Label>
-                <Input {...register('email', {
-                  required: 'Обов\'язкове поле для заповнення',
-                  pattern: {
-                    value: emailRegex,
-                    message: "Введіть коректну електронну адресу"
-                  }
-                })} type="email" id="email" width="284px"
-                  className={errors.email && 'error'}
+                <BaseField
+                  fieldType="text"
+                  label="Пошта"
+                  errors={errors}
+                  name="email"
+                  registerOptions={register('email', emailFieldRules)}
                 />
-                <Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-                  m="6px 0 58px 0">{errors?.email && <>{errors?.email?.message || 'Error!'}</>}</Box>
               </Box>
             </Box>
             <Button type="submit" disabled={!isValid || isLoading} width="100px" m="0 auto" mt="56px"

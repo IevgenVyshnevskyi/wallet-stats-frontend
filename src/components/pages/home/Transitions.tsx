@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../../store/hooks";
-import { Transactions } from "../../../store/types";
+import { ITransaction, Transactions } from "../../../store/types";
 
 import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
 import {
@@ -13,6 +13,16 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import Transaction from "../../molecules/transaction/Transaction";
 
 import { BASE_2 } from "../../../shared/styles/variables";
+
+const renderTransactionItems = (transactions: ITransaction[]): React.ReactNode[] => {
+  return transactions
+    .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+    .map((transaction) => (
+      <ListItem key={transaction?.id}>
+        <Transaction transaction={transaction} isTransactionsPage={false} />
+      </ListItem>
+    ));
+};
 
 const Transactions: React.FC = () => {
   const { transactions } = useAppSelector(state => state.transaction)
@@ -44,18 +54,13 @@ const Transactions: React.FC = () => {
         p="15px"
         borderRadius="16px"
       >
-        {Object.entries(transactionsData()).map(([date, transactions]) => (
+        {Object.entries(transactionsData).map(([date, transactions]) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
               {formatTransactionDateToFullDate(date)}
             </Typography>
             <List display="flex" direction="column" gap="8px">
-              {transactions.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
-                .map((transaction) => (
-                  <ListItem key={transaction?.id}>
-                    <Transaction transaction={transaction} isTransactionsPage={false} />
-                  </ListItem>
-                ))}
+              {renderTransactionItems(transactions)}
             </List>
           </Box>
         ))}

@@ -11,6 +11,11 @@ import {
   setSuccessStatus
 } from "../../../../store/userSlice";
 
+import {
+  confirmPasswordInputRules,
+  passwordInputRules
+} from "../../../../shared/utils/field-rules/password";
+
 import { Form } from "../../../atoms/form/Form.styled";
 import { Box } from "../../../atoms/box/Box.styled";
 import { Typography } from "../../../atoms/typography/Typography.styled";
@@ -18,8 +23,6 @@ import { Button } from "../../../atoms/button/Button.styled";
 import BaseField from './../../base-field/BaseField';
 
 import { ALERT_1, DIVIDER } from "../../../../shared/styles/variables";
-
-import { confirmPasswordInputRules, passwordInputRules } from "../../../../shared/utils/field-rules/password";
 
 import { PasswordChangeFormData } from "../../../../store/types";
 

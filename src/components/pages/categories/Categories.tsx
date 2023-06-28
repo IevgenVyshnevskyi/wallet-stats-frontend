@@ -1,4 +1,11 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+  setActiveCategory,
+  setEditCategoryData,
+  setIsEditCategoryOpen
+} from "../../../store/categorySlice";
+
+import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
@@ -10,16 +17,7 @@ import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
 
-import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 import { ICategory } from "../../../store/types";
-
-import {
-  getFilteredCategories,
-  setActiveCategory,
-  setEditCategoryData,
-  setFilterByTypeOfOutlay,
-  setIsEditCategoryOpen
-} from "../../../store/categorySlice";
 
 const Categories: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,35 +27,7 @@ const Categories: React.FC = () => {
     filterByTypeOfOutlay
   } = useAppSelector(state => state.category);
 
-  const filterButtons: IFilterButton[] = [
-    {
-      buttonName: 'Всі категорії',
-      filterBy: "",
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("all"));
-        dispatch(getFilteredCategories(""))
-      },
-      isActive: filterByTypeOfOutlay === "all"
-    },
-    {
-      buttonName: "Витрати",
-      filterBy: '?type_of_outlay=expense',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("expense"));
-        dispatch(getFilteredCategories("?type_of_outlay=expense"))
-      },
-      isActive: filterByTypeOfOutlay === "expense"
-    },
-    {
-      buttonName: "Надходження",
-      filterBy: '?type_of_outlay=income',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("income"));
-        dispatch(getFilteredCategories("?type_of_outlay=income"))
-      },
-      isActive: filterByTypeOfOutlay === "income"
-    },
-  ];
+  const filterButtons = useFilterButtonOptions("category");
 
   const onCategoryClick = (category: ICategory) => {
     dispatch(setActiveCategory(category));
@@ -66,12 +36,15 @@ const Categories: React.FC = () => {
   }
 
   const categoriesData = (): ICategory[] => {
-    if (filterByTypeOfOutlay === "all") {
-      return categories.all;
-    } else if (filterByTypeOfOutlay === "expense") {
-      return categories.expense;
-    } else if (filterByTypeOfOutlay === "income") {
-      return categories.income;
+    switch (filterByTypeOfOutlay) {
+      case "all":
+        return categories.all;
+      case "expense":
+        return categories.expense;
+      case "income":
+        return categories.income;
+      default:
+        break;
     }
   }
 

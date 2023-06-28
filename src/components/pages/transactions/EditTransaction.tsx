@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks"
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Label } from "../../atoms/label/Label.styled";
+import { useForm } from "react-hook-form";
 
+import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import {
   resetActiveTransactionState,
   setActiveTransaction,
@@ -15,18 +11,33 @@ import {
   transactionAction
 } from "../../../store/transactionSlice";
 
+import {
+  moneyAmountRegex,
+  titleRegex,
+  twoSymbolsRegex
+} from "../../../shared/utils/regexes";
+import { setSelectOptions } from "../../../shared/utils/transactions/setSelectOptions";
+
 import { Input } from './../../atoms/input/Input.styled';
-import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from "../../atoms/button/Button.styled";
+import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { Typography } from "../../atoms/typography/Typography.styled";
+import { Label } from "../../atoms/label/Label.styled";
+import { Form } from "../../atoms/form/Form.styled";
 import Select from "../../molecules/select/Select";
 import DatePicker from "./DatePicker";
-import { Form } from "../../atoms/form/Form.styled";
-import { useForm } from "react-hook-form";
-import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
+
+import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
 
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const { editTransactionData, isLoading, isEditTransactionOpen } = useAppSelector(state => state.transaction)
+  const {
+    isLoading,
+    editTransactionData,
+    isEditTransactionOpen
+  } = useAppSelector(state => state.transaction)
   const { categories } = useAppSelector(state => state.category);
 
   const selectedCategory = categories.all.find((c) => c.id === editTransactionData?.category)
@@ -38,15 +49,59 @@ const EditTransaction: React.FC = () => {
     label: selectedCategory?.title,
   });
 
-  const options: any = (editTransactionData.type_of_outlay === "expense"
-    ? categories.expense
-    : categories.income
-  )?.map(({ id, title }) => {
-    return { value: id, label: title }
-  })
-
   const isValid = Object.keys(editTransactionData)?.length >= 5
     && editTransactionData?.amount_of_funds !== "";
+
+  const selectOptions = setSelectOptions(
+    editTransactionData.type_of_outlay,
+    categories
+  )
+
+  const onCategoryChange = (selectedValue: any): void => {
+    dispatch(setEditTransactionData({ category: selectedValue?.value }));
+    setSelectedCategoryValues({
+      value: selectedValue?.value,
+      label: selectedValue?.label
+    });
+  }
+
+  const handleCancelEditTransaction = () => {
+    dispatch(setIsEditTransactionOpen(false));
+    dispatch(setEditTransactionData({}));
+    dispatch(resetActiveTransactionState({}));
+  }
+
+  const handleDeleteTransaction = () => {
+    dispatch(setIsEditTransactionOpen(false));
+    dispatch(transactionAction({
+      method: "DELETE",
+      id: String(editTransactionData?.id)
+    }));
+    dispatch(setActiveTransaction({}));
+  }
+
+  const handleSub = (data: { amount: string, title?: string }) => {
+    const editTransactionDataNoId = {
+      ...editTransactionData,
+      amount_of_funds: data?.amount,
+    }
+
+    if (!getValues('title')) {
+      editTransactionDataNoId.title = "New transaction";
+    } else {
+      editTransactionDataNoId.title = data.title;
+    }
+
+    delete editTransactionDataNoId?.id;
+
+    dispatch(setIsEditTransactionOpen(false));
+    dispatch(resetActiveTransactionState({}))
+    dispatch(transactionAction({
+      data: editTransactionDataNoId,
+      method: "PUT",
+      id: String(editTransactionData?.id)
+    }));
+  }
 
   const {
     register,
@@ -79,52 +134,6 @@ const EditTransaction: React.FC = () => {
     }
   }, [editTransactionData?.title]);
 
-  function onCategoryChange(selectedValue: any): void {
-    dispatch(setEditTransactionData({ category: selectedValue?.value }));
-    setSelectedCategoryValues({
-      value: selectedValue?.value,
-      label: selectedValue?.label
-    });
-  }
-
-  function handleCancelEditTransaction() {
-    dispatch(setIsEditTransactionOpen(false));
-    dispatch(setEditTransactionData({}));
-    dispatch(resetActiveTransactionState({}));
-  }
-
-  function handleDeleteTransaction() {
-    dispatch(setIsEditTransactionOpen(false));
-    dispatch(transactionAction({
-      method: "DELETE",
-      id: String(editTransactionData?.id)
-    }));
-    dispatch(setActiveTransaction({}));
-  }
-
-  function handleSub(data: { amount: string, title?: string }) {
-    const editTransactionDataNoId = {
-      ...editTransactionData,
-      amount_of_funds: data?.amount,
-    }
-
-    if (!getValues('title')) {
-      editTransactionDataNoId.title = "New transaction";
-    } else {
-      editTransactionDataNoId.title = data.title;
-    }
-
-    delete editTransactionDataNoId?.id;
-
-    dispatch(setIsEditTransactionOpen(false));
-    dispatch(resetActiveTransactionState({}))
-    dispatch(transactionAction({
-      data: editTransactionDataNoId,
-      method: "PUT",
-      id: String(editTransactionData?.id)
-    }));
-  }
-
   return (
     <Box display="flex" direction="column" width="555px">
       <Typography
@@ -153,7 +162,7 @@ const EditTransaction: React.FC = () => {
             <Label fw="500" mb="12px">Категорія</Label>
             <Select
               value={selectedCategoryValues}
-              options={options}
+              options={selectOptions}
               onCategoryChange={onCategoryChange}
               {...register('category', {
                 required: 'Обов\'язкове поле для заповнення',

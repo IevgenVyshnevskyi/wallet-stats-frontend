@@ -1,14 +1,4 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { List } from "../../atoms/list/List.styled";
-import Transaction from "../../molecules/transaction/Transaction";
-import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
-import { ITransaction, Transactions } from "../../../store/types";
-
 import {
   getFilteredTransactions,
   setActiveTransaction,
@@ -16,8 +6,24 @@ import {
   setFilterByTypeOfOutlay,
   setIsEditTransactionOpen
 } from "../../../store/transactionSlice";
-import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
-import { filterTransactions } from "../../../shared/utils/filterTransactions";
+
+import {
+  formatTransactionDateToFullDate
+} from "../../../shared/utils/transactions/formatTransactionDate";
+import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
+
+import { Box } from "../../atoms/box/Box.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
+import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
+import { ListItem } from "../../atoms/list/ListItem.styled";
+import { List } from "../../atoms/list/List.styled";
+import Transaction from "../../molecules/transaction/Transaction";
+import TabFilter from "../../molecules/tabs/filter/TabFilter";
+
+import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
+
+import { ITransaction, Transactions, TypeOfOutlay } from "../../../store/types";
+import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -27,37 +33,29 @@ const Transactions: React.FC = () => {
     filterByTypeOfOutlay
   } = useAppSelector(state => state.transaction);
 
+  const setFilterButtonOptions = (
+    buttonName: string,
+    typeOfOutlay: TypeOfOutlay | "",
+  ): any => {
+    return {
+      buttonName,
+      typeOfOutlay,
+      filterBy: typeOfOutlay ? `?type_of_outlay=${typeOfOutlay}` : "",
+      isActive: filterByTypeOfOutlay === (typeOfOutlay || "all"),
+      onTabClick: () => {
+        dispatch(setFilterByTypeOfOutlay(typeOfOutlay || "all"));
+        dispatch(getFilteredTransactions(typeOfOutlay));
+      }
+    }
+  }
+
   const filterButtons: IFilterButton[] = [
-    {
-      buttonName: 'Всі транзакції',
-      filterBy: "",
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("all"));
-        dispatch(getFilteredTransactions(""))
-      },
-      isActive: filterByTypeOfOutlay === "all"
-    },
-    {
-      buttonName: "Витрати",
-      filterBy: '?type_of_outlay=expense',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("expense"));
-        dispatch(getFilteredTransactions("?type_of_outlay=expense"))
-      },
-      isActive: filterByTypeOfOutlay === "expense"
-    },
-    {
-      buttonName: "Надходження",
-      filterBy: '?type_of_outlay=income',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("income"));
-        dispatch(getFilteredTransactions("?type_of_outlay=income"))
-      },
-      isActive: filterByTypeOfOutlay === "income"
-    },
+    setFilterButtonOptions("Всі транзакції", ""),
+    setFilterButtonOptions("Витрати", "expense"),
+    setFilterButtonOptions("Витрати", "income")
   ];
 
-  function onTransactionClick(transaction: ITransaction) {
+  const onTransactionClick = (transaction: ITransaction) => {
     dispatch(setActiveTransaction(transaction));
     dispatch(setEditTransactionData(transaction));
     dispatch(setIsEditTransactionOpen(true));
@@ -75,7 +73,6 @@ const Transactions: React.FC = () => {
 
     return filterTransactions(filteredTransactions)
   };
-
 
   return (
     <Box grow="1" display="flex" direction="column">

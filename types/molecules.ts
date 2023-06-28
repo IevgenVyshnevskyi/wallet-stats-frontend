@@ -11,3 +11,8 @@ export type TransactionListProps = {
 export type MessageProps = {
   message: "success" | "error"
 }
+
+export type SelectOptions = {
+  value: number;
+  label: string;
+}

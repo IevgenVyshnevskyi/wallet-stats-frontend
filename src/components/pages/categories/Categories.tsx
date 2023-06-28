@@ -1,15 +1,17 @@
-import { mockCategories } from "../../../../mock-data/categories";
-import { isDev } from "../../../consts/consts";
-import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { ICategory } from "../../../store/types";
+
 import { Box } from "../../atoms/box/Box.styled";
 import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
 import { List } from "../../atoms/list/List.styled";
 import { ListItem } from "../../atoms/list/ListItem.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Category from "../../molecules/category/Category";
-import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
+import TabFilter from "../../molecules/tabs/filter/TabFilter";
+
+import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
+
+import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
+import { ICategory } from "../../../store/types";
 
 import {
   getFilteredCategories,
@@ -57,23 +59,19 @@ const Categories: React.FC = () => {
     },
   ];
 
-  function onCategoryClick(category: ICategory) {
+  const onCategoryClick = (category: ICategory) => {
     dispatch(setActiveCategory(category));
     dispatch(setEditCategoryData(category));
     dispatch(setIsEditCategoryOpen(true));
   }
 
   const categoriesData = (): ICategory[] => {
-    if (isDev) {
-      return mockCategories;
-    } else {
-      if (filterByTypeOfOutlay === "all") {
-        return categories.all;
-      } else if (filterByTypeOfOutlay === "expense") {
-        return categories.expense;
-      } else if (filterByTypeOfOutlay === "income") {
-        return categories.income;
-      }
+    if (filterByTypeOfOutlay === "all") {
+      return categories.all;
+    } else if (filterByTypeOfOutlay === "expense") {
+      return categories.expense;
+    } else if (filterByTypeOfOutlay === "income") {
+      return categories.income;
     }
   }
 

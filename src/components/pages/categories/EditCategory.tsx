@@ -1,12 +1,8 @@
-import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Label } from "../../atoms/label/Label.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import { useEffect } from "react";
 
+import { useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   categoryAction,
   resetActiveCategoryState,
@@ -14,11 +10,21 @@ import {
   setEditCategoryData,
   setIsEditCategoryOpen
 } from "../../../store/categorySlice";
+
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from "../../atoms/button/Button.styled";
+import { ButtonLink } from "../../atoms/button/ButtonLink";
+import { Label } from "../../atoms/label/Label.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
 import { Input } from "../../atoms/input/Input.styled";
-import { useForm } from "react-hook-form";
 import { Form } from "../../atoms/form/Form.styled";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+
 import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
-import { useEffect } from "react";
+
+import { MENU_BUTTON_HOVER, WHITE } from "../../../shared/styles/variables";
+
+import { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 
 const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -37,15 +43,7 @@ const EditCategory: React.FC = () => {
     handleSubmit,
     setValue,
     clearErrors,
-    reset,
-  } = useForm({
-    mode: "all",
-  });
-
-  useEffect(() => {
-    clearErrors('title')
-    setValue('title', editCategoryData?.title)
-  }, [editCategoryData?.title]);
+  } = useForm({ mode: "all" });
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -64,12 +62,12 @@ const EditCategory: React.FC = () => {
     },
   ];
 
-  function handleCancelEditCategory() {
+  const handleCancelEditCategory = () => {
     dispatch(setIsEditCategoryOpen(false));
     dispatch(resetActiveCategoryState({}));
   }
 
-  function handleDeleteCategory() {
+  const handleDeleteCategory = () => {
     dispatch(setIsEditCategoryOpen(false));
     dispatch(categoryAction({
       method: "DELETE",
@@ -78,7 +76,7 @@ const EditCategory: React.FC = () => {
     dispatch(setActiveCategory({}));
   }
 
-  function handleSub(data: { title: string }) {
+  const handleSub = (data: { title: string }) => {
     const editCategoryDataNoId = {
       ...editCategoryData,
       title: data?.title
@@ -93,6 +91,11 @@ const EditCategory: React.FC = () => {
       id: String(editCategoryData?.id)
     }));
   }
+
+  useEffect(() => {
+    clearErrors('title')
+    setValue('title', editCategoryData?.title)
+  }, [editCategoryData?.title]);
 
   return (
     <Box display="flex" direction="column" width="540px">

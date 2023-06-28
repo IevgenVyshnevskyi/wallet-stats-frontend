@@ -1,33 +1,46 @@
 import { useEffect, useState } from 'react';
-import { mockWallets } from "../../../../mock-data/wallets";
-import { isDev } from "../../../consts/consts";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import Select from "../../molecules/select/Select";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
-import Wallet from "../../molecules/wallet/Wallet";
-import { BASE_2, WHITE } from "../../../shared/styles/variables";
-import { IWallet } from "../../../store/types";
 
+import { useForm } from 'react-hook-form';
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getFilteredCategories } from '../../../store/categorySlice';
 import {
   setActiveTransaction,
   setAddTransactionData,
   transactionAction
 } from "../../../store/transactionSlice";
 
-import { formatTransactionDateToUTC } from '../../../shared/utils/formatTransactionDate';
+import {
+  moneyAmountRegex,
+  titleRegex,
+  twoSymbolsRegex
+} from '../../../shared/utils/regexes';
+import {
+  formatTransactionDateToUTC
+} from '../../../shared/utils/transactions/formatTransactionDate';
+import {
+  setSelectOptions
+} from '../../../shared/utils/transactions/setSelectOptions';
+
 import { userId } from '../../../api/api';
-import { getFilteredCategories } from '../../../store/categorySlice';
-import DatePicker from './DatePicker';
+
 import { Form } from '../../atoms/form/Form.styled';
-import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from '../../../shared/utils/regexes';
-import { useForm } from 'react-hook-form';
+import { Box } from "../../atoms/box/Box.styled";
+import { Button } from "../../atoms/button/Button.styled";
+import { Input } from "../../atoms/input/Input.styled";
+import { Label } from "../../atoms/label/Label.styled";
+import { ListItem } from "../../atoms/list/ListItem.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
+import Select from "../../molecules/select/Select";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
+import Wallet from "../../molecules/wallet/Wallet";
+import DatePicker from './DatePicker';
+
+import { BASE_2, WHITE } from "../../../shared/styles/variables";
+
+import { IWallet, TypeOfOutlay } from "../../../store/types";
+import { SelectOptions } from '../../../../types/molecules';
+import { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -39,21 +52,84 @@ const AddTransaction: React.FC = () => {
 
   const selectedCategory = categories.all.find((c) => c.id === addTransactionData?.category)
 
-  const [selectedCategoryValues, setSelectedCategoryValues] = useState<
-    { value: number, label: string }
-  >({
+  const [selectedCategoryValues, setSelectedCategoryValues] = useState<SelectOptions>({
     value: selectedCategory?.id,
     label: selectedCategory?.title,
   });
 
-  const options: any = (addTransactionData?.type_of_outlay === "expense"
-    ? categories.expense
-    : categories.income
-  )?.map(({ id, title }) => {
-    return { value: id, label: title }
-  })
-
   const isValid = Object.keys(addTransactionData || {})?.length >= 4;
+
+  const selectOptions = setSelectOptions(
+    addTransactionData?.type_of_outlay,
+    categories
+  )
+
+  const setSwitchButtonOptions = (
+    buttonName: string,
+    typeOfOutlay: TypeOfOutlay,
+  ): any => {
+    return {
+      buttonName,
+      isActive: addTransactionData?.type_of_outlay === typeOfOutlay,
+      onTabClick: () => {
+        if (addTransactionData?.type_of_outlay === typeOfOutlay) {
+          return;
+        };
+        dispatch(setAddTransactionData({
+          type_of_outlay: typeOfOutlay,
+          category: categories[typeOfOutlay][0]?.id
+        }));
+        setSelectedCategoryValues({
+          value: categories[typeOfOutlay][0]?.id,
+          label: categories[typeOfOutlay][0]?.title
+        })
+      },
+    }
+  }
+
+  const switchButtons: ISwitchButton[] = [
+    setSwitchButtonOptions('Витрата', "expense"),
+    setSwitchButtonOptions('Надходження', "income"),
+  ];
+
+  const onWalletClick = (wallet: IWallet) => {
+    dispatch(setAddTransactionData({ wallet: wallet.id }));
+  };
+
+  const onCategoryChange = (selectedValue: any): void => {
+    dispatch(setAddTransactionData({ category: selectedValue?.value }));
+    setSelectedCategoryValues({
+      value: selectedValue?.value,
+      label: selectedValue?.label
+    });
+  }
+
+  const handleSub = (
+    data: {
+      amount: string,
+      category: number,
+      title?: string
+    }
+  ) => {
+    let transactionTitle;
+
+    if (!getValues('title')) {
+      transactionTitle = "New transaction";
+    } else {
+      transactionTitle = data.title;
+    }
+
+    dispatch(setActiveTransaction(null));
+    dispatch(transactionAction({
+      data: {
+        ...addTransactionData,
+        amount_of_funds: data?.amount,
+        owner: user?.id || userId,
+        title: transactionTitle
+      },
+      method: "POST"
+    }))
+  }
 
   const {
     register,
@@ -63,39 +139,6 @@ const AddTransaction: React.FC = () => {
     getValues,
     clearErrors,
   } = useForm({ mode: "all" });
-
-  const switchButtons: ISwitchButton[] = [
-    {
-      buttonName: 'Витрата',
-      onTabClick: () => {
-        if (addTransactionData?.type_of_outlay === "expense") return;
-        dispatch(setAddTransactionData({
-          type_of_outlay: "expense",
-          category: categories.expense[0]?.id
-        }));
-        setSelectedCategoryValues({
-          value: categories.expense[0]?.id,
-          label: categories.expense[0]?.title
-        })
-      },
-      isActive: addTransactionData?.type_of_outlay === "expense"
-    },
-    {
-      buttonName: 'Надходження',
-      onTabClick: () => {
-        if (addTransactionData?.type_of_outlay === "income") return;
-        dispatch(setAddTransactionData({
-          type_of_outlay: "income",
-          category: categories.income[0]?.id
-        }));
-        setSelectedCategoryValues({
-          value: categories.income[0]?.id,
-          label: categories.income[0]?.title
-        })
-      },
-      isActive: addTransactionData?.type_of_outlay === "income"
-    },
-  ];
 
   useEffect(() => {
     clearErrors('category');
@@ -125,39 +168,6 @@ const AddTransaction: React.FC = () => {
     }))
     setValue('category', selectedCategoryValues)
   }, [categories.expense]);
-
-  function onWalletClick(wallet: IWallet) {
-    dispatch(setAddTransactionData({ wallet: wallet.id }));
-  };
-
-  function onCategoryChange(selectedValue: any): void {
-    dispatch(setAddTransactionData({ category: selectedValue?.value }));
-    setSelectedCategoryValues({
-      value: selectedValue?.value,
-      label: selectedValue?.label
-    });
-  }
-
-  function handleSub(data: { amount: string, category: number, title?: string }) {
-    let transactionTitle;
-
-    if (!getValues('title')) {
-      transactionTitle = "New transaction";
-    } else {
-      transactionTitle = data.title;
-    }
-
-    dispatch(setActiveTransaction(null));
-    dispatch(transactionAction({
-      data: {
-        ...addTransactionData,
-        amount_of_funds: data?.amount,
-        owner: user?.id || userId,
-        title: transactionTitle
-      },
-      method: "POST"
-    }))
-  }
 
   return (
     <Box display="flex" direction="column" width="555px">
@@ -214,7 +224,7 @@ const AddTransaction: React.FC = () => {
             <Label fw="500" mb="12px">Категорія</Label>
             <Select
               value={selectedCategoryValues}
-              options={options}
+              options={selectOptions}
               onCategoryChange={onCategoryChange}
               {...register('category', {
                 required: 'Обов\'язкове поле для заповнення',

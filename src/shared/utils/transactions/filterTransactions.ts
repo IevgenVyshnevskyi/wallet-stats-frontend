@@ -1,4 +1,4 @@
-import { Transactions } from "../../store/types";
+import { Transactions } from "../../../store/types";
 
 export function filterTransactions(filteredTransactions: Transactions): Transactions {
   const sortedTransactions: Transactions = {};

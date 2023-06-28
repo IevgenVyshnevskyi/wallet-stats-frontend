@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { loginUser } from "../../../store/userSlice";
+import { LoginFormData } from "../../../store/types";
 
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
@@ -13,23 +19,17 @@ import { Button } from "../../atoms/button/Button.styled";
 
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
-
 import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
 import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 
+import { emailRegex, passwordRegex } from "../../../shared/utils/regexes";
+
 import {
-    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
-    GRADIENT, PRIMARY,
+    GRADIENT,
+    PRIMARY,
     WHITE
 } from "../../../shared/styles/variables";
-import { getUserDetails, loginUser } from "../../../store/userSlice";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { LoginFormData } from "../../../store/types";
-import { useNavigate } from "react-router-dom";
-import { emailRegex, passwordRegex } from "../../../shared/utils/regexes";
-import { token } from "../../../api/api";
-
 
 const LoginPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -40,19 +40,16 @@ const LoginPage: React.FC = () => {
 
     const { loginError, isLoggedIn, isLoading } = useAppSelector(state => state.user)
 
-    const handleTogglePassword = () => {
-        setShowPassword(!showPassword);
-    };
+    const handleSub = (data: LoginFormData) => {
+        dispatch(loginUser(data));
+    }
 
     const {
         register,
         formState: { errors, isValid },
         handleSubmit,
         reset,
-    } = useForm({
-        mode: "all",
-    });
-
+    } = useForm({ mode: "all" });
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -60,10 +57,6 @@ const LoginPage: React.FC = () => {
             reset();
         }
     }, [isLoggedIn]);
-
-    function handleSub(data: LoginFormData) {
-        dispatch(loginUser(data));
-    }
 
     return (
         <Container display="flex" overflowX="hidden">
@@ -97,7 +90,7 @@ const LoginPage: React.FC = () => {
                             <Label htmlFor="password" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                 textAlight="left">Пароль</Label>
                             <Box position="relative" width="320px">
-                                <span onClick={handleTogglePassword} style={{
+                                <span onClick={() => setShowPassword(!showPassword)} style={{
                                     position: "absolute", top: "16px",
                                     right: "10px", cursor: "pointer"
                                 }}>{showPassword ?

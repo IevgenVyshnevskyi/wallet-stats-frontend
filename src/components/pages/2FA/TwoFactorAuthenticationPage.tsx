@@ -1,5 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getUserDetails } from "../../../store/userSlice";
 
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
@@ -9,48 +13,40 @@ import { Form } from "../../atoms/form/Form.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { Input } from "../../atoms/input/Input.styled";
 import { Button } from "../../atoms/button/Button.styled";
+import { ButtonLink } from "../../atoms/button/ButtonLink";
 
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import {
-    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
     DISABLED,
     GRADIENT, PRIMARY,
     WHITE
 } from "../../../shared/styles/variables";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { getUserDetails } from "../../../store/userSlice";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { token } from "../../../api/api";
 
 const TwoFactorAuthenticationPage: React.FC = () => {
     const dispatch = useAppDispatch();
+
+    const [count, setCount] = useState(60);
+
     const { isLoading } = useAppSelector(state => state.user);
 
-    const {
-        register,
-        formState: {
-            errors,
-            isValid,
-        },
-        handleSubmit,
-        reset,
-    } = useForm({
-        mode: "all",
-    });
+    const intervalRef = useRef(null);
 
-    function handleSub(data: {}) {
-        //alert(JSON.stringify(data));
+    const handleSub = (data: {}) => {
         reset();
     }
 
-    const [count, setCount] = useState(60);
-    const intervalRef = useRef(null);
+    const {
+        register,
+        formState: { errors, isValid },
+        handleSubmit,
+        reset,
+    } = useForm({ mode: "all" });
 
     useEffect(() => {
-        dispatch(getUserDetails())
+        dispatch(getUserDetails());
 
         intervalRef.current = setInterval(() => {
             setCount(count => count - 1);

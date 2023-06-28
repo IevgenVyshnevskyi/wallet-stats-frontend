@@ -11,8 +11,10 @@ import {
   WHITE
 } from "../../../shared/styles/variables";
 
+import { SelectOptions } from '../../../../types/molecules';
+
 type SelectProps = {
-  value: { value: number, label: string };
+  value: SelectOptions;
   options: any;
   onCategoryChange: (e: any) => void;
   width?: string;

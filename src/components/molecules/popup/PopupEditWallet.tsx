@@ -12,6 +12,9 @@ import {
 	walletAction
 } from "../../../store/walletSlice";
 
+import { titleFieldRules } from "../../../shared/utils/field-rules/title";
+import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
+
 import { userId } from "../../../api/api";
 
 import { Box } from "../../atoms/box/Box.styled";
@@ -20,15 +23,13 @@ import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Form } from "../../atoms/form/Form.styled";
 import { PopupWrapper } from "./Popup.styled";
+import BaseField from "../base-field/BaseField";
 
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
 
 import { ALERT_1, DIVIDER } from "../../../shared/styles/variables";
 
 import { IWallet, WalletFormData } from "../../../store/types";
-import BaseField from "../base-field/BaseField";
-import { titleFieldRules } from "../../../shared/utils/field-rules/title";
-import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
 
 const PopupEditWallet: React.FC = () => {
 	const dispatch = useAppDispatch()

@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+
 import { useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { registerUser } from '../../../store/userSlice';
+
+import { emailRegex, nameRegex, passwordRegex } from "../../../shared/utils/regexes";
 
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
@@ -13,6 +19,8 @@ import { Button } from "../../atoms/button/Button.styled";
 
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
+import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
+import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 
 import {
     ALERT_1,
@@ -21,12 +29,7 @@ import {
     WHITE
 } from "../../../shared/styles/variables";
 
-import VisibilityOn from '../../../shared/assets/icons/visibility-on.svg';
-import VisibilityOff from '../../../shared/assets/icons/visibility-off.svg';
 import { RegisterFormData } from "../../../store/types";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { registerUser } from '../../../store/userSlice';
-import { emailRegex, nameRegex, passwordRegex } from "../../../shared/utils/regexes";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -40,22 +43,11 @@ const RegisterPage: React.FC = () => {
 
     const {
         register,
-        formState: {
-            errors,
-            isValid,
-        },
+        formState: { errors, isValid },
         handleSubmit,
         reset,
         watch,
-    } = useForm({
-        mode: "all",
-    });
-    const handleTogglePassword = () => {
-        setShowPassword(!showPassword);
-    };
-    const handleToggleConfirmPassword = () => {
-        setShowConfirmPassword(!showConfirmPassword);
-    };
+    } = useForm({ mode: "all" });
 
     useEffect(() => {
         if (isRegistered) {
@@ -64,8 +56,8 @@ const RegisterPage: React.FC = () => {
         }
     }, [isRegistered]);
 
-    async function handleSub(data: RegisterFormData) {
-        await dispatch(registerUser(data));
+    const handleSub = (data: RegisterFormData) => {
+        dispatch(registerUser(data));
     }
 
     return (
@@ -126,7 +118,7 @@ const RegisterPage: React.FC = () => {
                                 <Label htmlFor="password" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
                                     textAlight="left">Пароль</Label>
                                 <Box position="relative">
-                                    <span onClick={handleTogglePassword} style={{
+                                    <span onClick={() => setShowPassword(!showPassword)} style={{
                                         position: "absolute", top: "16px",
                                         right: "10px", cursor: "pointer"
                                     }}>{showPassword ?
@@ -154,7 +146,7 @@ const RegisterPage: React.FC = () => {
                                 <Label htmlFor="password2" lh="16px" color={ALMOST_BLACK_FOR_TEXT} mt="4px"
                                     mb="6px" textAlight="left">Повторити пароль</Label>
                                 <Box position="relative">
-                                    <span onClick={handleToggleConfirmPassword} style={{
+                                    <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{
                                         position: "absolute", top: "16px",
                                         right: "10px", cursor: "pointer"
                                     }}>{showConfirmPassword ?

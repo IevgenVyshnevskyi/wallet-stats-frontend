@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useForm } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { postEntryData } from "../../../store/walletSlice";
+import { getUserDetails } from "../../../store/userSlice";
 
 import { Box } from '../../atoms/box/Box.styled';
 import { Typography } from '../../atoms/typography/Typography.styled';
@@ -10,47 +16,56 @@ import { Label } from "../../atoms/label/Label.styled";
 import { Input } from "../../atoms/input/Input.styled";
 import { Button } from "../../atoms/button/Button.styled";
 
-import logo from "../../../shared/assets/images/logo.png";
-import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
+import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
+
+import { localStorageIsDataEntrySuccess, token, userId } from "../../../api/api";
 
 import {
-    ALERT_1, ALERT_2,
     ALMOST_BLACK_FOR_TEXT,
     GRADIENT,
     GREY_50,
     WHITE
 } from "../../../shared/styles/variables";
 
+import logo from "../../../shared/assets/images/logo.png";
+import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
+
 import { DataEntryFormData } from "../../../store/types";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useNavigate } from "react-router-dom";
-import { postEntryData } from "../../../store/walletSlice";
-import { getUserDetails } from "../../../store/userSlice";
-import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
-import { localStorageIsDataEntrySuccess, token, userId } from "../../../api/api";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
-    const { isEntryDataSuccess, entryDataError, isLoading } = useAppSelector(state => state.wallet)
-    const { user, getDetailsError, isRegistered } = useAppSelector(state => state.user)
+    const {
+        isEntryDataSuccess,
+        entryDataError,
+        isLoading
+    } = useAppSelector(state => state.wallet)
+    const {
+        user,
+        getDetailsError,
+        isRegistered
+    } = useAppSelector(state => state.user)
 
     if (!isRegistered && localStorageIsDataEntrySuccess) {
         navigate("/home")
     }
 
+    const handleSub = (data: DataEntryFormData) => {
+        const resultData: DataEntryFormData = {
+            ...data,
+            userId: user?.id || userId,
+        }
+
+        dispatch(postEntryData(resultData))
+    }
+
     const {
         register,
-        formState: {
-            errors,
-            isValid,
-        },
+        formState: { errors, isValid },
         handleSubmit,
         reset,
-    } = useForm({
-        mode: "all",
-    });
+    } = useForm({ mode: "all" });
 
     useEffect(() => {
         if (isEntryDataSuccess) {
@@ -72,21 +87,12 @@ const DataEntryPage: React.FC = () => {
         }
     }, [user?.token]);
 
-    function handleSub(data: DataEntryFormData) {
-        const resultData: DataEntryFormData = {
-            ...data,
-            userId: user?.id || userId,
-        }
-
-        dispatch(postEntryData(resultData))
-    }
-
     return (
         <Container display="flex">
             <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
                 <Img src={InterfaceImage} m="0 auto" alt="InterfaceImage" />
             </Box>
-            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"background={WHITE}>
+            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={WHITE}>
                 <Box m="auto 0">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center" m="20px 0">

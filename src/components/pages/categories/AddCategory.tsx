@@ -1,18 +1,24 @@
-import { BASE_2, WHITE } from "../../../shared/styles/variables";
-import { categoryAction, setActiveCategory } from "../../../store/categorySlice";
+import { useEffect } from "react";
+
+import { useForm } from "react-hook-form";
+
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setAddCategoryData } from "../../../store/categorySlice";
+import { categoryAction, setActiveCategory } from "../../../store/categorySlice";
+
+import { Form } from "../../atoms/form/Form.styled";
+import { Label } from "../../atoms/label/Label.styled";
+import { Input } from "../../atoms/input/Input.styled";
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabSwitch, { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
-import { Label } from "../../atoms/label/Label.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { userId } from "../../../api/api";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Form } from "../../atoms/form/Form.styled";
+
 import { titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
+
+import { userId } from "../../../api/api";
+
+import { BASE_2, WHITE } from "../../../shared/styles/variables";
 
 const AddCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -21,16 +27,6 @@ const AddCategory: React.FC = () => {
   const { user } = useAppSelector(state => state.user);
 
   const isValid = Object.keys(addCategoryData || {})?.length >= 1;
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm({
-    mode: "all",
-  });
 
   const switchButtons: ISwitchButton[] = [
     {
@@ -49,11 +45,7 @@ const AddCategory: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(setAddCategoryData({ type_of_outlay: "expense" }))
-  }, []);
-
-  function handleSub(data: { title: string }) {
+  const handleSub = (data: { title: string }) => {
     dispatch(setActiveCategory({}));
     dispatch(categoryAction({
       data: {
@@ -64,6 +56,16 @@ const AddCategory: React.FC = () => {
       method: "POST"
     }))
   }
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({ mode: "all" });
+
+  useEffect(() => {
+    dispatch(setAddCategoryData({ type_of_outlay: "expense" }))
+  }, []);
 
   return (
     <Box display="flex" direction="column" width="540px">

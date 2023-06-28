@@ -1,22 +1,34 @@
+import React, { useContext, useEffect } from "react";
+
 import { useForm } from "react-hook-form";
 
-import { ALERT_1, ALMOST_BLACK_FOR_TEXT, DIVIDER } from "../../../shared/styles/variables";
+import { PopupContext } from "../../../contexts/PopupContext";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+	resetError,
+	setActiveWallet,
+	setSuccessStatus,
+	walletAction
+} from "../../../store/walletSlice";
+
+import { userId } from "../../../api/api";
+
 import { Box } from "../../atoms/box/Box.styled";
 import { Button } from '../../atoms/button/Button.styled';
-import { Input } from "../../atoms/input/Input.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import CrossIcon from './../../../shared/assets/icons/cross.svg';
-import { PopupWrapper } from "./Popup.styled";
-import React, { useContext, useEffect } from "react";
-import { PopupContext } from "../../../contexts/PopupContext";
 import { Typography } from '../../atoms/typography/Typography.styled';
 import { ButtonLink } from "../../atoms/button/ButtonLink";
 import { Form } from "../../atoms/form/Form.styled";
-import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { PopupWrapper } from "./Popup.styled";
+
+import CrossIcon from './../../../shared/assets/icons/cross.svg';
+
+import { ALERT_1, DIVIDER } from "../../../shared/styles/variables";
+
 import { IWallet, WalletFormData } from "../../../store/types";
-import { resetError, setActiveWallet, setSuccessStatus, walletAction } from "../../../store/walletSlice";
-import { userId } from "../../../api/api";
+import BaseField from "../base-field/BaseField";
+import { titleFieldRules } from "../../../shared/utils/field-rules/title";
+import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
 
 const PopupEditWallet: React.FC = () => {
 	const dispatch = useAppDispatch()
@@ -40,10 +52,7 @@ const PopupEditWallet: React.FC = () => {
 			isValid,
 		},
 		handleSubmit,
-		reset
-	} = useForm({
-		mode: "all",
-	});
+	} = useForm({ mode: "all" });
 
 	const handleCloseClick = () => {
 		setIsEditWalletPopupOpen(false);
@@ -51,12 +60,6 @@ const PopupEditWallet: React.FC = () => {
 		dispatch(resetError());
 		dispatch(setSuccessStatus(false));
 	};
-
-	useEffect(() => {
-		if (isEditWalletSuccess || isDeleteWalletSuccess) {
-			handleCloseClick()
-		}
-	}, [isEditWalletSuccess, isDeleteWalletSuccess]);
 
 	const handleDeleteWallet = () => {
 		dispatch(setSuccessStatus(false));
@@ -66,19 +69,7 @@ const PopupEditWallet: React.FC = () => {
 		}));
 	};
 
-	useEffect(() => {
-		const handleKeyPress = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				handleCloseClick()
-			}
-		}
-		window.addEventListener('keydown', handleKeyPress)
-		return () => {
-			window.removeEventListener('keydown', handleKeyPress);
-		};
-	}, []);
-
-	function handleSub(data: WalletFormData) {
+	const handleSub = (data: WalletFormData) => {
 		const wallet: IWallet = {
 			title: data.title,
 			amount: data.amount,
@@ -93,6 +84,26 @@ const PopupEditWallet: React.FC = () => {
 		}))
 	}
 
+	useEffect(() => {
+		if (isEditWalletSuccess || isDeleteWalletSuccess) {
+			handleCloseClick()
+		}
+	}, [isEditWalletSuccess, isDeleteWalletSuccess]);
+
+	useEffect(() => {
+		const handleKeyPress = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				handleCloseClick()
+			}
+		}
+
+		window.addEventListener('keydown', handleKeyPress);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyPress);
+		};
+	}, []);
+
 	return (
 		<PopupWrapper onClick={handleCloseClick}>
 			<Box onClick={event => event.stopPropagation()}>
@@ -102,46 +113,24 @@ const PopupEditWallet: React.FC = () => {
 					</Typography>
 					<Form onSubmit={handleSubmit(handleSub)}>
 						<Box mb="25px">
-							<Box>
-								<Label htmlFor="title" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-									textAlight="left">Назва рахунку</Label>
-								<Input {...register('title', {
-									required: 'Обов\'язкове поле для заповнення',
-									validate: {
-										hasTwoSymbols: (value) => twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів',
-										hasTwoLetters: (value) => titleRegex.test(value) || 'Повинно бути не менше 2 літер',
-									}
-								})}
-									type="text" id="title" width="284px"
-									className={errors.title && 'error'}
-									defaultValue={activeWallet?.title}
-
-								/>
-								<Box color="red" textAlight="left" border="red" fz="13px" height="14px"
-									m="6px 0 10px 0">{errors?.title && <>{errors?.title?.message || 'Error!'}</>}</Box>
-							</Box>
-							<Box mb="30px">
-								<Label htmlFor="amount" lh="16px" fz="13px" color={ALMOST_BLACK_FOR_TEXT} mb="6px"
-									textAlight="left">Сума коштів на рахунку</Label>
-								<Input {...register('amount', {
-									required: 'Обов\'язкове поле для заповнення',
-									pattern: {
-										value: moneyAmountRegex,
-										message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
-									},
-									min: {
-										value: 0.00,
-										message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки' /*'Мінімальне значення суми повинно бути не менше 0.01'*/
-									},
-								})} id="amount" type="text" step="0.01" width="284px" pr="10px"
-									className={errors.amount && 'error'}
-									defaultValue={activeWallet?.amount}
-								/>
-								<Box color="red" textAlight="left" border="red" fz="13px" height="14px" width="320px"
-									m="6px 0 10px 0">{errors?.amount && <>{errors?.amount?.message
-										|| 'Введіть додаткове значення'}</>}</Box>
-							</Box>
+							<BaseField
+								fieldType="text"
+								label="Назва рахунку"
+								errors={errors}
+								name="title"
+								registerOptions={register('title', titleFieldRules)}
+								defaultValue={activeWallet?.title}
+							/>
+							<BaseField
+								fieldType="text"
+								label="Сума коштів на рахунку"
+								errors={errors}
+								name="amount"
+								registerOptions={register('amount', amountFieldRules)}
+								defaultValue={activeWallet?.amount}
+							/>
 						</Box>
+
 						{error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
 
 						<Box
@@ -166,7 +155,6 @@ const PopupEditWallet: React.FC = () => {
 							<ButtonLink disabled={isLoading}>Видалити рахунок</ButtonLink>
 						</Box>
 					)}
-
 				</Box>
 				<Button secondary onClick={handleCloseClick} p="10px 20px">
 					<CrossIcon />

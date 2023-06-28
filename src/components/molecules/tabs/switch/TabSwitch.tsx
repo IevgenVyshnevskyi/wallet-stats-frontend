@@ -1,8 +1,9 @@
-import { WHITE } from "../../../../shared/styles/variables";
 import { ButtonTransparent } from "../../../atoms/button/ButtonTransparent.styled";
 import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
 import { TabSwitchWrapper } from "./TabSwitch.styled";
+
+import { WHITE } from "../../../../shared/styles/variables";
 
 export interface ISwitchButton {
   buttonName: string;

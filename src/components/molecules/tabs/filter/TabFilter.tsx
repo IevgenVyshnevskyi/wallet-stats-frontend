@@ -1,8 +1,9 @@
-import { TabFilterWrapper } from "./TabFilter.styled";
+import { Link } from './../../../atoms/link/Link.styled';
 import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
+import { TabFilterWrapper } from "./TabFilter.styled";
+
 import { WHITE } from "../../../../shared/styles/variables";
-import { Link } from './../../../atoms/link/Link.styled';
 
 export interface IFilterButton {
   filterBy: string;

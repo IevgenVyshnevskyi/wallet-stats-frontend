@@ -1,11 +1,21 @@
+import { useAppSelector } from "../../../store/hooks";
+
+import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
+import { CategoryWrapper } from "./CategoryWrapper";
+
+import {
+  GREEN,
+  WHITE,
+  ALERT_1,
+  PRIMARY,
+  DARK_FOR_TEXT
+} from './../../../shared/styles/variables';
+
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
-import { GREEN, WHITE, ALERT_1, PRIMARY, DARK_FOR_TEXT } from './../../../shared/styles/variables';
-import { Box } from "../../atoms/box/Box.styled";
+
 import { CategoryProps } from "../../../../types/molecules";
-import { useAppSelector } from "../../../store/hooks";
-import { CategoryWrapper } from "./CategoryWrapper";
 
 const Category: React.FC<CategoryProps> = ({ category }) => {
   const { activeCategory } = useAppSelector(state => state.category)

@@ -1,17 +1,30 @@
+import { useAppSelector } from '../../../store/hooks';
+
+import formatTransactionTime from "../../../shared/utils/formatTransactionTime";
+
+import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
+import { TransactionWrapper } from './TransactionWrapper';
+
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
-import { DARK_FOR_TEXT, GREEN, WHITE, PRIMARY, RED, ALMOST_BLACK_FOR_TEXT, DISABLED, DIVIDER } from './../../../shared/styles/variables';
-import { Box } from "../../atoms/box/Box.styled";
-import { useAppSelector } from '../../../store/hooks';
-import { TransactionWrapper } from './TransactionWrapper';
+
+import {
+  DARK_FOR_TEXT,
+  GREEN,
+  WHITE,
+  PRIMARY,
+  RED,
+  ALMOST_BLACK_FOR_TEXT,
+  DISABLED,
+  DIVIDER
+} from './../../../shared/styles/variables';
+
 import { ITransaction } from "../../../store/types";
-import formatTransactionTime from "../../../shared/utils/formatTransactionTime";
-import { useEffect, useRef } from "react";
 
 export type TransactionProps = {
   transaction: ITransaction;
-  onClick?: () => {};
+  onClick?: () => void;
   isTransactionsPage?: boolean;
 }
 
@@ -23,11 +36,13 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
   const isActive = transaction?.id === activeTransaction?.id;
   const isIncome = transaction?.type_of_outlay === "income";
 
-  const transactionCategoryTitle: string = (categories.all)
-    ?.find(category => category.id === transaction.category)?.title;
+  const transactionCategoryTitle: string = categories.all?.find(category => {
+    return category.id === transaction.category;
+  })?.title;
 
-  const transactionWalletTitle: string = (wallets)
-    ?.find(wallet => wallet.id === transaction.wallet)?.title;
+  const transactionWalletTitle: string = wallets?.find(wallet => {
+    return wallet.id === transaction.wallet
+  })?.title;
 
   return (
     <TransactionWrapper

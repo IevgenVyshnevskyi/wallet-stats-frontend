@@ -1,8 +1,11 @@
+import { WalletButton } from "./Wallet.styled";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
-import { WalletButton } from "./Wallet.styled";
+
 import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
+
 import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
+
 import { IWallet } from "../../../store/types";
 
 export type WalletProps = {
@@ -49,7 +52,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick, isActive }) => {
           fw="600"
           fz="22px"
         >
-          {wallet?.amount && wallet?.amount + " ₴"}
+          {wallet?.amount && (wallet?.amount + " ₴")}
         </Typography>
       </Box>
 

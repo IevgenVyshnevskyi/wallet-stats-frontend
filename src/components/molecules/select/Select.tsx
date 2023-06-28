@@ -19,7 +19,13 @@ type SelectProps = {
   isError?: any;
 }
 
-const Select: React.FC<SelectProps> = ({ value, options, onCategoryChange, width, isError }) => {
+const Select: React.FC<SelectProps> = ({
+  value,
+  options,
+  onCategoryChange,
+  width,
+  isError
+}) => {
   const customStyles: StylesConfig = {
     control: (baseStyles) => ({
       ...baseStyles,

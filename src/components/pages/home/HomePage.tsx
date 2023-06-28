@@ -11,7 +11,7 @@ import { Button } from "../../atoms/button/Button.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 import { HomePageWrapper } from "./HomePage.styled";
 import { PopupContext } from "../../../contexts/PopupContext";
-import PopupAddWallet from "../../molecules/popup/PopupAddWallet";
+import PopupAddWallet from "../../molecules/popup/add-wallet/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import { mockWallets } from "../../../../mock-data/wallets";
 import Transaction from "../../molecules/transaction/Transaction";
@@ -55,31 +55,31 @@ const HomePage: React.FC = () => {
       dispatch(getUserDetails())
     }
 
-    dispatch(getWallets());
-    dispatch(getTransactions());
-    dispatch(getFilteredCategories("?type_of_outlay=income"))
-    dispatch(getFilteredCategories("?type_of_outlay=expense"))
-    dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
-    dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
+    // dispatch(getWallets());
+    // dispatch(getTransactions());
+    // dispatch(getFilteredCategories("?type_of_outlay=income"))
+    // dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    // dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+    // dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
 
   useEffect(() => {
     if (isWalletActionLoading === false || isBankDataLoading === false) {
-      dispatch(getWallets());
-      dispatch(getTransactions());
-      dispatch(getCategories());
-      dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
-      dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
+      // dispatch(getWallets());
+      // dispatch(getTransactions());
+      // dispatch(getCategories());
+      // dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+      // dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
     }
   }, [isWalletActionLoading, isBankDataLoading]);
 
   useEffect(() => {
     if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess || isAddBankDataSuccess) {
-      dispatch(getWallets());
-      dispatch(getTransactions());
-      dispatch(getCategories());
-      dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
-      dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
+      // dispatch(getWallets());
+      // dispatch(getTransactions());
+      // dispatch(getCategories());
+      // dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
+      // dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
     }
   }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess, isAddBankDataSuccess]);
 

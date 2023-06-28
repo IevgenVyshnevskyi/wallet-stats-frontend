@@ -1,4 +1,24 @@
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { PopupContext } from "../../../contexts/PopupContext";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { logoutUser, resetUserState, setIsLoggedOut } from "../../../store/userSlice";
+import { resetWalletState } from "../../../store/walletSlice";
+import { resetCategoryState } from "../../../store/categorySlice";
+import { resetTransactionState } from "../../../store/transactionSlice";
+import { resetStatisticsState } from "../../../store/statisticsSlice";
+
+import { HeaderWrapper } from './Header.styled';
+import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
+import { Box } from './../../atoms/box/Box.styled';
+import { Typography } from "../../atoms/typography/Typography.styled";
+import { List } from './../../atoms/list/List.styled';
+import { ListItem } from './../../atoms/list/ListItem.styled';
+import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
+import PopupEditProfile from "../popup/edit-profile/PopupEditProfile";
+import PopupDeleteAccount from "../popup/PopupDeleteAccount";
 
 import LogoIcon from '../../../shared/assets/icons/logo.svg'
 import HomeIcon from '../../../shared/assets/icons/home.svg'
@@ -7,24 +27,6 @@ import FolderCheckIcon from '../../../shared/assets/icons/folder-check.svg'
 import PieChartIcon from '../../../shared/assets/icons/pie-chart.svg'
 import SettingsIcon from '../../../shared/assets/icons/settings-header.svg'
 import LogoutIcon from '../../../shared/assets/icons/logout.svg'
-
-import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
-import { Box } from './../../atoms/box/Box.styled';
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { HeaderWrapper } from './Header.styled';
-import { List } from './../../atoms/list/List.styled';
-import { ListItem } from './../../atoms/list/ListItem.styled';
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { useContext, useEffect } from "react";
-import { PopupContext } from "../../../contexts/PopupContext";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { logoutUser, resetUserState, setIsLoggedOut } from "../../../store/userSlice";
-import PopupEditProfile from "../popup/PopupEditProfile";
-import PopupDeleteAccount from "../popup/PopupDeleteAccount";
-import { resetWalletState } from "../../../store/walletSlice";
-import { resetCategoryState } from "../../../store/categorySlice";
-import { resetTransactionState } from "../../../store/transactionSlice";
-import { resetStatisticsState } from "../../../store/statisticsSlice";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -50,11 +52,11 @@ const Header: React.FC = () => {
     }
   }, [isLoggedOut]);
 
-  function handleEditProfileClick() {
+  const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
 
-  function handleLogOutClick() {
+  const handleLogOutClick = () => {
     dispatch(logoutUser());
   }
 

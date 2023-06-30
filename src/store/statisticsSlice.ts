@@ -1,8 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { getFilteredTransactions } from './transactionSlice';
-import { FilterByDaysOptions, ICategory, Transactions, TypeOfOutlay } from './types';
 import { getFilteredCategories } from './categorySlice';
+
+import { updateChartCategories } from '../shared/utils/store/updateChartCategories';
+import { updateChartTransactions } from '../shared/utils/store/updateChartTransactions';
+import { updateChartCategoryTransactions } from '../shared/utils/store/updateChartCategoryTransactions';
+
 import { $api, TRANSACTION_PATH } from '../api/api';
+
+import {
+  FilterByDaysOptions,
+  ICategory,
+  Transactions,
+  TypeOfOutlay
+} from './types';
 
 type DoughnutChartData = {
   allTransactions: Transactions;
@@ -12,7 +24,7 @@ type DoughnutChartData = {
   totalAmount: string,
 };
 
-type StatisticsState = {
+export type StatisticsState = {
   filterByDays: FilterByDaysOptions;
   incomesChart: DoughnutChartData;
   expensesChart: DoughnutChartData;
@@ -31,15 +43,22 @@ export const getFilteredCategoryTransactions = createAsyncThunk<
   { rejectValue: string }
 >(
   'statistics/getFilteredCategoryTransactions',
-  async function (payload, { rejectWithValue }) {
+  async (payload, { rejectWithValue }) => {
     const { chartType, categories, filterByDays } = payload;
 
     try {
-      const res = await categories.map(c => (
-        $api.get<Transactions>(`${TRANSACTION_PATH}?category=${c.id}&days=${filterByDays}`)
-          .then(res => res.data)
-      ))
-      const data = await Promise.all(res)
+      const promises = categories.map(async (c) => {
+        try {
+          const response = await $api.get<Transactions>(
+            `${TRANSACTION_PATH}?category=${c.id}&days=${filterByDays}`
+          );
+          return response.data;
+        } catch (error) {
+          throw new Error('Помилка');
+        }
+      });
+
+      const data = await Promise.all(promises);
       return { data, chartType };
     } catch (error) {
       return rejectWithValue('Помилка');
@@ -109,17 +128,7 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredCategories.fulfilled, (state, action) => {
-        const { data, params } = action.payload;
-        switch (params) {
-          case "?type_of_outlay=income":
-            state.incomesChart.categories = data;
-            break;
-          case "?type_of_outlay=expense":
-            state.expensesChart.categories = data;
-            break;
-          default:
-            break;
-        }
+        updateChartCategories(state, action)
         state.isLoading = false;
       })
       .addCase(getFilteredCategories.rejected, (state, action) => {
@@ -133,14 +142,7 @@ const statisticsSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { data, params } = action.payload;
-        if (params.startsWith('?category=')) {
-          state.allOutlaysChart.categoryTransactions = data;
-        } else if (params.startsWith('?type_of_outlay=income')) {
-          state.incomesChart.allTransactions = data;
-        } else if (params.startsWith('?type_of_outlay=expense')) {
-          state.expensesChart.allTransactions = data;
-        }
+        updateChartTransactions(state, action)
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;
@@ -153,19 +155,7 @@ const statisticsSlice = createSlice({
       })
       .addCase(getFilteredCategoryTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-
-        const { data, chartType } = action.payload;
-
-        switch (chartType) {
-          case "expense":
-            state.expensesChart.categoryTransactions = data;
-            break;
-          case "income":
-            state.incomesChart.categoryTransactions = data;
-            break;
-          default:
-            break;
-        }
+        updateChartCategoryTransactions(state, action)
       })
       .addCase(getFilteredCategoryTransactions.rejected, (state, action) => {
         state.isLoading = false;

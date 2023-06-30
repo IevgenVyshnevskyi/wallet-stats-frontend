@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import { $api, BANK_DATA_PATH } from '../api/api';
+
 import { IBankData } from './types';
 
 export type BankDataState = {
@@ -11,27 +13,30 @@ export type BankDataState = {
 
 export const getBankData = createAsyncThunk<IBankData[], undefined, { rejectValue: any }>(
   'bankData/getBankData',
-  async function (_, { rejectWithValue }) {
-    return $api.get(BANK_DATA_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        return rejectWithValue('Помилка');
-      });
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await $api.get(BANK_DATA_PATH);
+      return res?.data;
+    } catch (error) {
+      return rejectWithValue('Помилка');
+    }
   }
 );
 
 export const sendBankData = createAsyncThunk<undefined, IBankData, { rejectValue: any }>(
   'bankData/sendBankData',
-  async function (payload, { rejectWithValue }) {
-    return $api.post(BANK_DATA_PATH, payload, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      }
-    })
-      .then(res => res?.data)
-      .catch(error => {
-        return rejectWithValue('Помилка');
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await $api.post(BANK_DATA_PATH, payload, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        }
       });
+
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue('Помилка');
+    }
   }
 );
 

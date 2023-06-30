@@ -1,11 +1,16 @@
-import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
-import { ITransaction, MethodTypes, Transactions } from './types';
-import { $api, TRANSACTION_PATH } from '../api/api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import { getUserDetails } from './userSlice';
+
+import { updateTransactions } from '../shared/utils/store/updateTransactions';
+
+import { $api, TRANSACTION_PATH } from '../api/api';
+
+import { ITransaction, MethodTypes, Transactions } from './types';
 
 export type FilterByTypeOfOutlayOptions = "all" | "income" | "expense";
 
-type TransactionState = {
+export type TransactionState = {
   filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
   transactions: {
     all: Transactions;
@@ -35,26 +40,24 @@ export const transactionAction = createAsyncThunk<
   { rejectValue: string }
 >(
   'transaction/transactionAction',
-  async function (payload, { rejectWithValue }) {
+  async (payload, { rejectWithValue }) => {
     const { method, data, id } = payload;
 
-    if (method !== "GET") {
-      $api({
-        method,
-        url: `${TRANSACTION_PATH}${id ? (id + '/') : ''}`,
-        data: data || {},
-      })
-        .then(response => response?.data)
-        .catch(error => {
-          return rejectWithValue('Помилка');
+    try {
+      if (method !== "GET") {
+        const response = await $api({
+          method,
+          url: `${TRANSACTION_PATH}${id ? (id + '/') : ''}`,
+          data: data || {},
         });
+        return response.data;
+      } else {
+        const response = await $api.get(TRANSACTION_PATH);
+        return response.data;
+      }
+    } catch (error) {
+      return rejectWithValue('Помилка');
     }
-
-    return await $api.get(TRANSACTION_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        return rejectWithValue(`Помилка`)
-      });
   }
 );
 
@@ -64,13 +67,14 @@ export const getTransactions = createAsyncThunk<
   { rejectValue: string }
 >(
   'transaction/getTransactions',
-  async function (_, { rejectWithValue }) {
-    return $api.get(TRANSACTION_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await $api.get(TRANSACTION_PATH);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response.data;
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 
@@ -80,7 +84,7 @@ export const getFilteredTransactions = createAsyncThunk<
   { rejectValue: string }
 >(
   'transaction/getFilteredTransactions',
-  async function (params, { rejectWithValue }) {
+  async (params, { rejectWithValue }) => {
     try {
       const res = await $api.get(`${TRANSACTION_PATH}${params}`);
       const data = res?.data;
@@ -190,20 +194,7 @@ const transactionSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { data, params } = action.payload;
-        switch (params) {
-          case "":
-            state.transactions.all = data;
-            break;
-          case "?type_of_outlay=income":
-            state.transactions.income = data;
-            break;
-          case "?type_of_outlay=expense":
-            state.transactions.expense = data;
-            break;
-          default:
-            break;
-        }
+        updateTransactions(state, action)
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;

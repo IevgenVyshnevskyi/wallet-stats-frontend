@@ -1,12 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { $api, PASSWORD_RESET_CONFIRM_PATH, PASSWORD_RESET_REQUEST_PATH } from '../api/api';
 
-export type PasswordRecoveryState = {
+import {
+  $api,
+  PASSWORD_RESET_CONFIRM_PATH,
+  PASSWORD_RESET_REQUEST_PATH
+} from '../api/api';
+
+type PasswordRecoveryState = {
   email: string;
   isLoading: boolean;
   error: string | null;
   isResetLinkStepOpen: boolean;
   isNewPasswordSet: boolean;
+}
+
+type confirmPasswordResetPayload = {
+  uid: string;
+  token: string;
+  new_password: string;
 }
 
 export const requestPasswordReset = createAsyncThunk<
@@ -15,21 +26,16 @@ export const requestPasswordReset = createAsyncThunk<
   { rejectValue: any }
 >(
   'passwordRecovery/requestPasswordReset',
-  async function (payload, { rejectWithValue }) {
-    return $api.post(PASSWORD_RESET_REQUEST_PATH, payload)
-      .then(res => res.data)
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await $api.post(PASSWORD_RESET_REQUEST_PATH, payload);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response.data;
+      return rejectWithValue(errorMessage);
+    }
   }
 );
-
-export type confirmPasswordResetPayload = {
-  uid: string;
-  token: string;
-  new_password: string;
-}
 
 export const confirmPasswordReset = createAsyncThunk<
   undefined,
@@ -37,13 +43,14 @@ export const confirmPasswordReset = createAsyncThunk<
   { rejectValue: any }
 >(
   'passwordRecovery/confirmPasswordReset',
-  async function (payload, { rejectWithValue }) {
-    return $api.post(PASSWORD_RESET_CONFIRM_PATH, payload)
-      .then(res => res?.data)
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await $api.post(PASSWORD_RESET_CONFIRM_PATH, payload);
+      return response?.data;
+    } catch (error) {
+      const errorMessage = error.response.data;
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 

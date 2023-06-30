@@ -1,6 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { IUser, LoginFormData, LoginResponse, PasswordChangeFormData, RegisterFormData } from './types';
-import { $api, CHANGE_USER_INFO_PATH, LOGIN_PATH, LOGOUT_PATH, REGISTER_PATH, USER_DETAILS_PATH, userDataParsed, CHANGE_USER_PASSWORD_PATH } from '../api/api';
+
+import {
+	$api,
+	CHANGE_USER_INFO_PATH,
+	LOGIN_PATH,
+	LOGOUT_PATH,
+	REGISTER_PATH,
+	USER_DETAILS_PATH,
+	userDataParsed,
+	CHANGE_USER_PASSWORD_PATH
+} from '../api/api';
+
+import {
+	IUser,
+	LoginFormData,
+	LoginResponse,
+	PasswordChangeFormData,
+	RegisterFormData
+} from './types';
 
 export type UserState = {
 	user: IUser;
@@ -21,97 +38,117 @@ export type UserState = {
 	passwordChangeError: string | null;
 }
 
-export const registerUser = createAsyncThunk<any, RegisterFormData, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<
+	any,
+	RegisterFormData,
+	{ rejectValue: string }
+>(
 	'user/registerUser',
-	async function (registerData, { rejectWithValue }) {
-		return $api.post<IUser>(REGISTER_PATH, registerData)
-			.then(res => {
-				const user = res.data;
-				localStorage.clear();
-				localStorage.setItem('token', user.token);
-				localStorage.setItem('userData', JSON.stringify(user));
-				return user;
-			})
-			.catch(error => {
-				return rejectWithValue("Акаунт із вказаною поштою вже існує");
-			});
+	async (registerData, { rejectWithValue }) => {
+		try {
+			const response = await $api.post<IUser>(REGISTER_PATH, registerData);
+			const user = response.data;
+			localStorage.clear();
+			localStorage.setItem('token', user.token);
+			localStorage.setItem('userData', JSON.stringify(user));
+			return user;
+		} catch (error) {
+			return rejectWithValue("Акаунт із вказаною поштою вже існує");
+		}
 	}
 );
 
-export const loginUser = createAsyncThunk<LoginResponse, LoginFormData, { rejectValue: string }>(
+export const loginUser = createAsyncThunk<
+	LoginResponse,
+	LoginFormData,
+	{ rejectValue: string }
+>(
 	'user/loginUser',
-	async function (loginData, { rejectWithValue }) {
-		return $api.post<LoginResponse>(LOGIN_PATH, loginData)
-			.then(res => {
-				const userInfo = res.data;
-				localStorage.setItem('token', userInfo.token);
-				localStorage.setItem("isDataEntrySuccess", "true");
-				return userInfo;
-			})
-			.catch(error => {
-				return rejectWithValue('Будь ласка, введіть дані, вказані при реєстрації');
-			});
+	async (loginData, { rejectWithValue }) => {
+		try {
+			const response = await $api.post<LoginResponse>(LOGIN_PATH, loginData);
+			const userInfo = response.data;
+			localStorage.setItem('token', userInfo.token);
+			localStorage.setItem("isDataEntrySuccess", "true");
+			return userInfo;
+		} catch (error) {
+			return rejectWithValue('Будь ласка, введіть дані, вказані при реєстрації');
+		}
 	}
 );
 
-export const logoutUser = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
+export const logoutUser = createAsyncThunk<
+	undefined,
+	undefined,
+	{ rejectValue: string }
+>(
 	'user/logoutUser',
-	async function (_, { rejectWithValue }) {
-		return $api.get(LOGOUT_PATH)
-			.then(res => {
-				localStorage.clear();
-				return undefined;
-			})
-			.catch(error => {
-				return rejectWithValue("Помилка");
-			});
+	async (_, { rejectWithValue }) => {
+		try {
+			await $api.get(LOGOUT_PATH);
+			localStorage.clear();
+			return undefined;
+		} catch (error) {
+			return rejectWithValue("Помилка");
+		}
 	}
 );
 
-export const getUserDetails = createAsyncThunk<IUser, undefined, { rejectValue: string }>(
+export const getUserDetails = createAsyncThunk<
+	IUser,
+	undefined,
+	{ rejectValue: string }
+>(
 	'user/getUserDetails',
-	async function (_, { rejectWithValue }) {
-		return $api.get(USER_DETAILS_PATH)
-			.then(res => {
-				localStorage.setItem('userData', JSON.stringify(res.data))
-				return res.data
-			})
-			.catch(error => {
-				const errorMessage = error.response.data;
-				return rejectWithValue(errorMessage);
-			});
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await $api.get(USER_DETAILS_PATH);
+			const userData = response.data;
+			localStorage.setItem('userData', JSON.stringify(userData));
+			return userData;
+		} catch (error) {
+			const errorMessage = error.response.data;
+			return rejectWithValue(errorMessage);
+		}
 	}
 );
 
-export const deleteUserAccount = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
+export const deleteUserAccount = createAsyncThunk<
+	undefined,
+	undefined,
+	{ rejectValue: string }
+>(
 	'user/deleteUserAccount',
-	async function (_, { rejectWithValue }) {
-		return $api.delete(USER_DETAILS_PATH)
-			.then(res => {
-				localStorage.clear();
-				return undefined;
-			})
-			.catch(error => {
-				const errorMessage = error.response.data;
-				return rejectWithValue(errorMessage);
-			});
+	async (_, { rejectWithValue }) => {
+		try {
+			await $api.delete(USER_DETAILS_PATH);
+			localStorage.clear();
+			return undefined;
+		} catch (error) {
+			const errorMessage = error.response.data;
+			return rejectWithValue(errorMessage);
+		}
 	}
 );
 
-export const changeUserProfile = createAsyncThunk<IUser, IUser, { rejectValue: string }>(
+export const changeUserProfile = createAsyncThunk<
+	IUser,
+	IUser,
+	{ rejectValue: string }
+>(
 	'user/changeUserProfile',
-	async function (payload, { rejectWithValue }) {
-		return $api.put<IUser>(CHANGE_USER_INFO_PATH, payload)
-			.then(newUserInfo => {
-				localStorage.setItem('userData', JSON.stringify({
-					...userDataParsed,
-					...newUserInfo.data
-				}));
-				return newUserInfo.data;
-			})
-			.catch(error => {
-				return rejectWithValue('Помилка');
-			});
+	async (payload, { rejectWithValue }) => {
+		try {
+			const response = await $api.put<IUser>(CHANGE_USER_INFO_PATH, payload);
+			const newUserInfo = response.data;
+			localStorage.setItem('userData', JSON.stringify({
+				...userDataParsed,
+				...newUserInfo
+			}));
+			return newUserInfo;
+		} catch (error) {
+			return rejectWithValue('Помилка');
+		}
 	}
 );
 
@@ -121,10 +158,13 @@ export const changeUserPassword = createAsyncThunk<
 	{ rejectValue: string }
 >(
 	'user/changeUserPassword',
-	async function (payload, { rejectWithValue }) {
-		return $api.post(CHANGE_USER_PASSWORD_PATH, payload)
-			.then(res => res?.data)
-			.catch(error => rejectWithValue("Введіть пароль, вказаний при реєстрації"));
+	async (payload, { rejectWithValue }) => {
+		try {
+			const response = await $api.post(CHANGE_USER_PASSWORD_PATH, payload);
+			return response.data;
+		} catch (error) {
+			return rejectWithValue("Введіть пароль, вказаний при реєстрації");
+		}
 	}
 );
 

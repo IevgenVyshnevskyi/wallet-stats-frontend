@@ -12,7 +12,7 @@ import {
 } from "../../../store/transactionSlice";
 
 import { setSelectOptions } from "../../../shared/utils/transactions/setSelectOptions";
-import { detailsFieldRules } from "../../../shared/utils/field-rules/details";
+import { setDetailsFieldRules } from "../../../shared/utils/field-rules/details";
 import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
 
 import { Box } from "../../atoms/box/Box.styled";
@@ -173,7 +173,7 @@ const EditTransaction: React.FC = () => {
               label="Деталі (не обовʼязково)"
               errors={errors}
               name="title"
-              registerOptions={register('title', detailsFieldRules(clearErrors))}
+              registerOptions={register('title', setDetailsFieldRules(clearErrors))}
             />
           </Box>
           <Box mb="20px">

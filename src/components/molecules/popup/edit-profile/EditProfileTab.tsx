@@ -62,6 +62,7 @@ const EditProfileTab: React.FC = () => {
         errors={errors}
         registerOptions={register("first_name", nameFieldRules)}
         defaultValue={user?.first_name || userDataParsed?.first_name}
+        width="325px"
       />
       <BaseField
         fieldType="text"
@@ -70,6 +71,7 @@ const EditProfileTab: React.FC = () => {
         errors={errors}
         registerOptions={register("last_name", nameFieldRules)}
         defaultValue={user?.last_name || userDataParsed?.last_name}
+        width="325px"
       />
       <BaseField
         fieldType="email"
@@ -78,6 +80,7 @@ const EditProfileTab: React.FC = () => {
         errors={errors}
         disabled
         defaultValue={user?.email || userDataParsed?.email}
+        width="325px"
       />
 
       <Box

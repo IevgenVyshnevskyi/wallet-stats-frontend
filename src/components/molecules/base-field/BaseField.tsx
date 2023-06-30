@@ -69,7 +69,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
           type={setInputType()}
           id={name}
           name={name}
-          width="325px"
+          width="265px"
           style={{ paddingRight: "35px" }}
           className={errors?.[name] && "error"}
           {...registerOptions}

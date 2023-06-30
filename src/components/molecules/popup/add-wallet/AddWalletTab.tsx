@@ -100,6 +100,7 @@ const AddWalletTab: React.FC = () => {
           errors={errors}
           name="title"
           registerOptions={register('title', titleFieldRules)}
+          width="325px"
         />
         <BaseField
           fieldType="text"
@@ -107,6 +108,7 @@ const AddWalletTab: React.FC = () => {
           errors={errors}
           name="amount"
           registerOptions={register('amount', amountFieldRules)}
+          width="325px"
         />
       </Box>
 

@@ -17,7 +17,7 @@ import {
   setSelectOptions
 } from '../../../shared/utils/transactions/setSelectOptions';
 import { amountFieldRules } from '../../../shared/utils/field-rules/amount';
-import { detailsFieldRules } from '../../../shared/utils/field-rules/details';
+import { setDetailsFieldRules } from '../../../shared/utils/field-rules/details';
 
 import { userId } from '../../../api/api';
 
@@ -245,7 +245,7 @@ const AddTransaction: React.FC = () => {
               label="Деталі (не обовʼязково)"
               errors={errors}
               name="title"
-              registerOptions={register('title', detailsFieldRules(clearErrors))}
+              registerOptions={register('title', setDetailsFieldRules(clearErrors))}
             />
           </Box>
           <Box mb="20px">

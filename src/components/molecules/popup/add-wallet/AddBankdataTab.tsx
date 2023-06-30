@@ -98,6 +98,7 @@ const AddBankDataTab: React.FC = () => {
           errors={errors}
           name="wallettitle"
           registerOptions={register('wallettitle', titleFieldRules)}
+          width="325px"
         />
         <Box>
           <Button

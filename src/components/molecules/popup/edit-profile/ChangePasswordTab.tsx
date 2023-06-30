@@ -74,6 +74,7 @@ const ChangePasswordTab: React.FC = () => {
         isPasswordVisible={showOldPassword}
         setIsPasswordVisible={setShowOldPassword}
         registerOptions={register("old_password", passwordInputRules)}
+        width="325px"
       />
       <BaseField
         fieldType="password"
@@ -84,6 +85,7 @@ const ChangePasswordTab: React.FC = () => {
         setIsPasswordVisible={setShowPassword}
         inputRules={passwordInputRules}
         registerOptions={register("new_password", passwordInputRules)}
+        width="325px"
       />
       <BaseField
         fieldType="password"
@@ -96,10 +98,13 @@ const ChangePasswordTab: React.FC = () => {
           "new_password_2",
           confirmPasswordInputRules(watch, "new_password")
         )}
+        width="325px"
       />
 
       {passwordChangeError && (
-        <Typography as="p" color={ALERT_1} textAlight="center">{passwordChangeError}</Typography>
+        <Typography as="p" color={ALERT_1} textAlight="center">
+          {passwordChangeError}
+        </Typography>
       )}
 
       <Box

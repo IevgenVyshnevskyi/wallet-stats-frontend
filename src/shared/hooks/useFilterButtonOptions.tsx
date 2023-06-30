@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+
 import {
   setFilterByTypeOfOutlay,
   getFilteredTransactions
@@ -9,7 +10,6 @@ import {
 } from "../../store/categorySlice";
 
 import { IFilterButton } from "../../components/molecules/tabs/filter/TabFilter";
-
 import { TypeOfOutlay } from "../../store/types";
 
 const useFilterButtonOptions = (type: "category" | "transaction"): IFilterButton[] => {

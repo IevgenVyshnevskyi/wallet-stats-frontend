@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import { createContext, useState } from 'react';
 
 type PopupContextType = {
     isAddWalletPopupOpen: boolean;
@@ -13,24 +13,20 @@ type PopupContextType = {
 
 export const PopupContext = createContext<PopupContextType>({
     isAddWalletPopupOpen: false,
-    setIsAddWalletPopupOpen: () => {
-    },
+    setIsAddWalletPopupOpen: () => { },
     isEditWalletPopupOpen: false,
-    setIsEditWalletPopupOpen: () => {
-    },
+    setIsEditWalletPopupOpen: () => { },
     isEditProfilePopupOpen: false,
-    setIsEditProfilePopupOpen: () => {
-    },
+    setIsEditProfilePopupOpen: () => { },
     isDeleteAccountPopupOpen: false,
-    setIsDeleteAccountPopupOpen: () => {
-    },
+    setIsDeleteAccountPopupOpen: () => { },
 });
 
 type PopupProviderProps = {
     children: JSX.Element | JSX.Element[]
 };
 
-export const PopupProvider: React.FC<PopupProviderProps> = ({children}) => {
+export const PopupProvider: React.FC<PopupProviderProps> = ({ children }) => {
     const [isAddWalletPopupOpen, setIsAddWalletPopupOpen] = useState(false);
     const [isEditWalletPopupOpen, setIsEditWalletPopupOpen] = useState(false);
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);

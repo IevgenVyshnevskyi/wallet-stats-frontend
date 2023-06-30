@@ -10,7 +10,7 @@ import DoughnutChart from "../../molecules/charts/DoughnutChart";
 import { calculateCategoriesWithTotalAmount } from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
 import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
 
-import { DIVIDER } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { ICategoryWithTotalAmount } from "../../../store/types";
 
@@ -80,7 +80,7 @@ const DoughnutChartsSection: React.FC = () => {
       gap="32px"
       pb="20px"
       mb="20px"
-      borderBottom={`2px solid ${DIVIDER}`}
+      borderBottom={`2px solid ${COLORS.DIVIDER}`}
     >
       <Box display="flex" direction="column" borderRadius="16px" grow="1">
         <Box display="flex" mb="20px" >

@@ -1,7 +1,9 @@
 import styled from 'styled-components'
-import { BASE_1, GREY_50, PRIMARY } from '../../../shared/styles/variables'
+
 import { blackSVGtoWhite } from '../../../shared/styles/iconStyles'
 import { Box } from '../../atoms/box/Box.styled'
+
+import COLORS from '../../../shared/styles/variables'
 
 export const PopupWrapper = styled(Box)`
   position: absolute;
@@ -12,14 +14,14 @@ export const PopupWrapper = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${GREY_50}66;
+  background-color: ${COLORS.GREY_50}66;
 
   >${Box} {
     display: flex;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     padding: 32px;
     border-radius: 16px;
-    background: ${BASE_1};
+    background: ${COLORS.BASE_1};
     position: relative;
   
     > button {
@@ -29,8 +31,8 @@ export const PopupWrapper = styled(Box)`
       padding: 12px 20px;
 
       &:hover {
-        background-color: ${PRIMARY};
-        border-color: ${PRIMARY};
+        background-color: ${COLORS.PRIMARY};
+        border-color: ${COLORS.PRIMARY};
 
         svg {
           ${blackSVGtoWhite}

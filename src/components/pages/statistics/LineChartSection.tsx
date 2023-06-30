@@ -13,7 +13,9 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import LineChart from "../../molecules/charts/LineChart";
 import Select from "../../molecules/select/Select";
 
-import { WHITE } from "../../../shared/styles/variables";
+import { SelectOptions } from "../../../../types/molecules";
+
+import COLORS from "../../../shared/styles/variables";
 
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +32,7 @@ const LineChartSection: React.FC = () => {
 
   const [chartData, setChartData] = useState<number[]>([]);
 
-  const options: any = categories.all?.map(({ id, title }) => {
+  const options: SelectOptions[] = categories.all?.map(({ id, title }) => {
     return { value: id, label: title }
   })
 
@@ -84,7 +86,7 @@ const LineChartSection: React.FC = () => {
           onCategoryChange={onCategoryChange}
         />
       </Box>
-      <Box borderRadius="8px" bgColor={WHITE} p="15px" grow="1">
+      <Box borderRadius="8px" bgColor={COLORS.WHITE} p="15px" grow="1">
         <LineChart data={chartData} />
       </Box>
     </Box>

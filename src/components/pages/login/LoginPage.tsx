@@ -22,12 +22,7 @@ import BaseField from "../../molecules/base-field/BaseField";
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
-import {
-    ALMOST_BLACK_FOR_TEXT,
-    GRADIENT,
-    PRIMARY,
-    WHITE
-} from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const LoginPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -58,14 +53,14 @@ const LoginPage: React.FC = () => {
 
     return (
         <Container display="flex" overflowX="hidden">
-            <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+            <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
-                background={WHITE}>
+                background={COLORS.WHITE}>
                 <Box m="auto 0" justifyContent="center">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
+                    <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center"
                         m="48px 0 48px 0">
                         Вхід до вашого акаунту
                     </Typography>
@@ -94,7 +89,7 @@ const LoginPage: React.FC = () => {
                                     fz="14px"
                                     fw="600"
                                     lh="17px"
-                                    color={PRIMARY}
+                                    color={COLORS.PRIMARY}
                                 >
                                     Забули пароль?
                                 </Link>

@@ -9,16 +9,7 @@ import { TransactionWrapper } from './TransactionWrapper';
 import IncomeIcon from "../../../shared/assets/icons/income.svg"
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 
-import {
-  DARK_FOR_TEXT,
-  GREEN,
-  WHITE,
-  PRIMARY,
-  RED,
-  ALMOST_BLACK_FOR_TEXT,
-  DISABLED,
-  DIVIDER
-} from './../../../shared/styles/variables';
+import COLORS from '../../../shared/styles/variables';
 
 import { ITransaction } from "../../../store/types";
 
@@ -46,7 +37,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
 
   return (
     <TransactionWrapper
-      bgColor={isTransactionsPage && isActive ? PRIMARY : WHITE}
+      bgColor={isTransactionsPage && isActive ? COLORS.PRIMARY : COLORS.WHITE}
       width={isTransactionsPage ? "100%" : undefined}
       isTransactionsPage={isTransactionsPage}
     >
@@ -57,7 +48,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
               as="h4"
               fw="500"
               fz="14px"
-              color={isTransactionsPage && isActive ? WHITE : DARK_FOR_TEXT}
+              color={isTransactionsPage && isActive ? COLORS.WHITE : COLORS.DARK_FOR_TEXT}
               m="0 0 16px 0"
             >
               {transactionWalletTitle}
@@ -66,7 +57,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
               as="h4"
               fw="500"
               fz="14px"
-              color={isTransactionsPage && isActive ? WHITE : DISABLED}
+              color={isTransactionsPage && isActive ? COLORS.WHITE : COLORS.DISABLED}
               m="0 0 16px 0"
             >
               ({formatTransactionTime(transaction?.created)})
@@ -76,7 +67,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
             as="h5"
             fw="600"
             fz="16px"
-            color={isTransactionsPage && isActive ? WHITE : ALMOST_BLACK_FOR_TEXT}
+            color={isTransactionsPage && isActive ? COLORS.WHITE : COLORS.ALMOST_BLACK_FOR_TEXT}
           >
             {transactionCategoryTitle}
           </Typography>
@@ -93,13 +84,13 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
             alignItems="center"
             p="3px 6px"
             mb="9px"
-            bgColor={WHITE}
+            bgColor={COLORS.WHITE}
             gap="4px"
             borderRadius="6px"
           >
             <Typography
               as="span"
-              color={isIncome ? GREEN : RED}
+              color={isIncome ? COLORS.GREEN : COLORS.RED}
               textAlign="right"
               fw="600"
             >
@@ -113,7 +104,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
             fz="16px"
             fw="600"
             color={isTransactionsPage &&
-              isActive ? WHITE : DARK_FOR_TEXT
+              isActive ? COLORS.WHITE : COLORS.DARK_FOR_TEXT
             }
           >
             {transaction?.amount_of_funds} ₴
@@ -125,14 +116,14 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
         <Box
           display="flex"
           direction="column"
-          borderTop={`2px solid ${DIVIDER}`}
+          borderTop={`2px solid ${COLORS.DIVIDER}`}
           mt="20px"
           pt="15px"
         >
           <Typography
             as="h4"
             fz="14px"
-            color={isTransactionsPage && isActive ? DIVIDER : DISABLED}
+            color={isTransactionsPage && isActive ? COLORS.DIVIDER : COLORS.DISABLED}
             fw="500"
             mb="15px"
           >
@@ -142,7 +133,7 @@ const Transaction: React.FC<TransactionProps> = ({ transaction, isTransactionsPa
             as="h5"
             fw="400"
             fz="16px"
-            color={isTransactionsPage && isActive ? WHITE : ALMOST_BLACK_FOR_TEXT}
+            color={isTransactionsPage && isActive ? COLORS.WHITE : COLORS.ALMOST_BLACK_FOR_TEXT}
           >
             {transaction?.title}
           </Typography>

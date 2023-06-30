@@ -12,7 +12,7 @@ import { ListItem } from "../../atoms/list/ListItem.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Wallet from "../../molecules/wallet/Wallet";
 
-import { BASE_2, DIVIDER } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { IWallet } from "../../../store/types";
 
@@ -56,7 +56,7 @@ const Wallets: React.FC = () => {
       <Box
         display="flex"
         direction="column"
-        bgColor={BASE_2}
+        bgColor={COLORS.BASE_2}
         p="15px"
         borderRadius="16px"
         grow="1"
@@ -65,7 +65,7 @@ const Wallets: React.FC = () => {
       >
         <Box
           p="0 0 20px 0"
-          borderBottom={`2px solid ${DIVIDER}`}
+          borderBottom={`2px solid ${COLORS.DIVIDER}`}
           mb="20px"
         >
           <Typography

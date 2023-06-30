@@ -1,10 +1,10 @@
-import { WalletButton } from "./Wallet.styled";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
+import { WalletButton } from "./Wallet.styled";
 
 import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg'
 
-import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { IWallet } from "../../../store/types";
 
@@ -30,7 +30,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick, isActive }) => {
             <Typography
               as="h4"
               fw="500"
-              color={DARK_FOR_TEXT}
+              color={COLORS.DARK_FOR_TEXT}
               mb="10px"
             >
               {wallet?.title}
@@ -40,7 +40,7 @@ const Wallet: React.FC<WalletProps> = ({ wallet, onWalletClick, isActive }) => {
           <Typography
             as="h4"
             fw="500"
-            color={DARK_FOR_TEXT}
+            color={COLORS.DARK_FOR_TEXT}
             mb="10px"
           >
             {wallet?.title}

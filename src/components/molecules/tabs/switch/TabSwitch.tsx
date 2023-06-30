@@ -3,7 +3,7 @@ import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
 import { TabSwitchWrapper } from "./TabSwitch.styled";
 
-import { WHITE } from "../../../../shared/styles/variables";
+import COLORS from "../../../../shared/styles/variables";
 
 export interface ISwitchButton {
   buttonName: string;
@@ -22,7 +22,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ switchButtons }) => {
         {switchButtons.map(({ buttonName, onTabClick, isActive }, index) => (
           <ListItem
             key={index}
-            bgColor={isActive ? WHITE : "transparent"}
+            bgColor={isActive ? COLORS.WHITE : "transparent"}
           >
             <ButtonTransparent
               fw={isActive ? "700" : "400"}

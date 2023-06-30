@@ -16,7 +16,7 @@ import AddBankDataTab from "./AddBankdataTab";
 
 import CrossIcon from '../../../../shared/assets/icons/cross.svg';
 
-import { PRIMARY_HOVER } from "../../../../shared/styles/variables";
+import COLORS from "../../../../shared/styles/variables";
 
 const PopupAddWallet: React.FC = () => {
 	const dispatch = useAppDispatch()
@@ -67,14 +67,14 @@ const PopupAddWallet: React.FC = () => {
 						<ButtonPopup onClick={() => setIsAddWalletManuallyOpen(true)}
 							style={{
 								fontWeight: isAddWalletManuallyOpen && "700",
-								borderBottom: isAddWalletManuallyOpen && `2px solid ${PRIMARY_HOVER}`
+								borderBottom: isAddWalletManuallyOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
 							}}>
 							Ввести дані вручну
 						</ButtonPopup>
 						<ButtonPopup onClick={() => setIsAddWalletManuallyOpen(false)}
 							style={{
 								fontWeight: !isAddWalletManuallyOpen && "700",
-								borderBottom: !isAddWalletManuallyOpen && `2px solid ${PRIMARY_HOVER}`
+								borderBottom: !isAddWalletManuallyOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
 							}}>
 							Завантажити дані з файлу
 						</ButtonPopup>

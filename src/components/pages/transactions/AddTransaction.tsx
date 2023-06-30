@@ -33,7 +33,7 @@ import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import BaseField from '../../molecules/base-field/BaseField';
 import DatePicker from './DatePicker';
 
-import { BASE_2, } from "../../../shared/styles/variables";
+import COLORS from '../../../shared/styles/variables';
 
 import { IWallet, TypeOfOutlay } from "../../../store/types";
 import { SelectOptions } from '../../../../types/molecules';
@@ -177,7 +177,7 @@ const AddTransaction: React.FC = () => {
       >
         Додати транзакцію
       </Typography>
-      <Box overflow='auto' height="100px" bgColor={BASE_2} borderRadius="16px" grow="1" p="15px">
+      <Box overflow='auto' height="100px" bgColor={COLORS.BASE_2} borderRadius="16px" grow="1" p="15px">
         <Box mb="20px">
           <Typography
             as="h3"

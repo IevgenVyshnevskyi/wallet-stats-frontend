@@ -1,6 +1,8 @@
 import { createGlobalStyle } from "styled-components";
-import { ALMOST_BLACK_FOR_TEXT, BASE_1 } from "./variables";
+
 import { fontStyles } from "./fontStyles";
+
+import COLORS from "./variables";
 
 export const GlobalStyles = createGlobalStyle`
   ${fontStyles}
@@ -13,8 +15,8 @@ export const GlobalStyles = createGlobalStyle`
   
   body {
     font-weight: 400;
-    background-color: ${BASE_1};
-    color: ${ALMOST_BLACK_FOR_TEXT};
+    background-color: ${COLORS.BASE_1};
+    color: ${COLORS.ALMOST_BLACK_FOR_TEXT};
   }
 
   ::-webkit-scrollbar {

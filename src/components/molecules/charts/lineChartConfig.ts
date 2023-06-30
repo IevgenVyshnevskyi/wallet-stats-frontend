@@ -1,6 +1,6 @@
-import { PRIMARY } from "../../../shared/styles/variables";
-
 import { ChartData, ChartOptions } from "chart.js";
+
+import COLORS from "../../../shared/styles/variables";
 
 import { FilterByDaysOptions } from "../../../store/types";
 
@@ -62,9 +62,9 @@ export const setLineChartConfig = (
       label: 'Витрати або надходження за категорією',
       data,
       fill: false,
-      borderColor: PRIMARY,
+      borderColor: COLORS.PRIMARY,
       tension: 0.4,
-      pointBackgroundColor: PRIMARY,
+      pointBackgroundColor: COLORS.PRIMARY,
       pointBorderWidth: pointBorderWidthValue,
       pointHitRadius: pointHitRadiusValue,
     }]

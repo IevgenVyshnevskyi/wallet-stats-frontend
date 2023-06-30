@@ -13,9 +13,9 @@ import { ButtonLink } from "../../../atoms/button/ButtonLink";
 import EditProfileTab from "./EditProfileTab";
 import ChangePasswordTab from "./ChangePasswordTab";
 
-import { PRIMARY_HOVER } from "../../../../shared/styles/variables";
-
 import CrossIcon from '../../../../shared/assets/icons/cross.svg';
+
+import COLORS from "../../../../shared/styles/variables";
 
 const PopupEditProfile: React.FC = () => {
 	const {
@@ -67,14 +67,14 @@ const PopupEditProfile: React.FC = () => {
 							<ButtonPopup onClick={() => setIsEditProfileTabOpen(true)}
 								style={{
 									fontWeight: isEditProfileTabOpen && "700",
-									borderBottom: isEditProfileTabOpen && `2px solid ${PRIMARY_HOVER}`
+									borderBottom: isEditProfileTabOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
 								}}>
 								Дані користувача
 							</ButtonPopup>
 							<ButtonPopup onClick={() => setIsEditProfileTabOpen(false)}
 								style={{
 									fontWeight: !isEditProfileTabOpen && "700",
-									borderBottom: !isEditProfileTabOpen && `2px solid ${PRIMARY_HOVER}`
+									borderBottom: !isEditProfileTabOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
 								}}>
 								Зміна паролю
 							</ButtonPopup>

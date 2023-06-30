@@ -14,7 +14,7 @@ import DoughnutChartsSection from "./DoughnutChartSection";
 import LineChartSection from "./LineChartSection";
 import { StatisticsPageWrapper } from "./StatisticsPage.styled";
 
-import { BASE_2 } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const StatisticsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -51,7 +51,7 @@ const StatisticsPage: React.FC = () => {
 
       <Box m="0 36px 24px" display="flex" grow="1" direction="column">
         <StatisticsHeader />
-        <Box p="15px" bgColor={BASE_2} borderRadius="16px" grow="1">
+        <Box p="15px" bgColor={COLORS.BASE_2} borderRadius="16px" grow="1">
           <DoughnutChartsSection />
           <LineChartSection />
         </Box>

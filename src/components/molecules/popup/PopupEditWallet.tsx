@@ -27,7 +27,7 @@ import BaseField from "../base-field/BaseField";
 
 import CrossIcon from './../../../shared/assets/icons/cross.svg';
 
-import { ALERT_1, DIVIDER } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { IWallet, WalletFormData } from "../../../store/types";
 
@@ -129,13 +129,13 @@ const PopupEditWallet: React.FC = () => {
 							/>
 						</Box>
 
-						{error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+						{error && <Typography as="p" color={COLORS.ALERT_1}>{error}</Typography>}
 
 						<Box
 							display="flex"
 							width="320px"
 							justifyContent="space-between"
-							borderTop={`2px solid ${DIVIDER}`}
+							borderTop={`2px solid ${COLORS.DIVIDER}`}
 							pt="25px"
 							mb={activeWallet?.type_of_account === "bank" && "25px"}
 						>

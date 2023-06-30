@@ -15,7 +15,7 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import Category from "../../molecules/category/Category";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
-import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { ICategory } from "../../../store/types";
 
@@ -59,7 +59,7 @@ const Categories: React.FC = () => {
           mr="10px"
           fw="600"
           fz="12px"
-          color={DARK_FOR_TEXT}
+          color={COLORS.DARK_FOR_TEXT}
         >
           Відобразити
         </Typography>
@@ -69,7 +69,7 @@ const Categories: React.FC = () => {
       <Box
         display="flex"
         direction="column"
-        bgColor={BASE_2}
+        bgColor={COLORS.BASE_2}
         borderRadius="16px"
         grow="1"
         overflow="auto"

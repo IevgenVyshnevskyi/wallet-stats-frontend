@@ -25,7 +25,7 @@ import Select from "../../molecules/select/Select";
 import DatePicker from "./DatePicker";
 import BaseField from "../../molecules/base-field/BaseField";
 
-import { MENU_BUTTON_SELECTED } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const EditTransaction: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -142,7 +142,7 @@ const EditTransaction: React.FC = () => {
       >
         Редагування транзакції
       </Typography>
-      <Box bgColor={MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px" overflow="auto" height="100px">
+      <Box bgColor={COLORS.MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px" overflow="auto" height="100px">
         <Box mb="20px">
           <Typography
             as="h3"

@@ -24,12 +24,7 @@ import BaseField from "../../molecules/base-field/BaseField";
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
-import {
-    ALERT_1,
-    ALMOST_BLACK_FOR_TEXT,
-    GRADIENT,
-    WHITE
-} from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { RegisterFormData } from "../../../store/types";
 
@@ -64,14 +59,14 @@ const RegisterPage: React.FC = () => {
 
     return (
         <Container display="flex">
-            <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+            <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center"
-                background={WHITE}>
+                background={COLORS.WHITE}>
                 <Box m="auto 0" alignItems="center" textAlign="center">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" m="20px 0" color={ALMOST_BLACK_FOR_TEXT} textAlign="center">
+                    <Typography fw="700" fz="24px" lh="170%" m="20px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center">
                         Реєстрація нового користувача
                     </Typography>
                     <Form onSubmit={handleSubmit(handleSub)} maxWidth="592px" textAlign="center"
@@ -125,7 +120,9 @@ const RegisterPage: React.FC = () => {
 
                         {registerError && (
                             <Box display="flex" justifyContent="center" m="10px 0">
-                                <Typography as="p" textAlight="center" color={ALERT_1}>{registerError}</Typography>
+                                <Typography as="p" textAlight="center" color={COLORS.ALERT_1}>
+                                    {registerError}
+                                </Typography>
                             </Box>
                         )}
 

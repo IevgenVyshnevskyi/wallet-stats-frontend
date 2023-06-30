@@ -1,6 +1,6 @@
 import { ChartData, ChartOptions } from "chart.js";
 
-import { WHITE } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const calculatePercentage = (value: number, ctx: any): string => {
   let sum = 0;
@@ -81,7 +81,7 @@ export const getDoughnutChartConfig = (
         backgroundColor: "rgba(85, 85, 85, 0.35)",
         borderRadius: 4,
         padding: 6,
-        color: WHITE,
+        color: COLORS.WHITE,
         font: {
           size: 13,
           family: "Inter",

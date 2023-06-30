@@ -1,5 +1,6 @@
 import { css } from "styled-components";
-import { ALMOST_BLACK_FOR_TEXT } from "./variables";
+
+import COLORS from "./variables";
 
 export type commonStylesProps = {
   m?: string;
@@ -48,7 +49,7 @@ export const commonStyles = css<commonStylesProps>`
   padding-right: ${({ pr }) => pr || undefined};
   padding-bottom: ${({ pb }) => pb || undefined};
   padding-left: ${({ pl }) => pl || undefined};
-  color: ${({ color }) => color || ALMOST_BLACK_FOR_TEXT};
+  color: ${({ color }) => color || COLORS.ALMOST_BLACK_FOR_TEXT};
   width: ${({ width }) => width || undefined};
   height: ${({ height }) => height || undefined};
   line-height: ${({ lh }) => lh || undefined};

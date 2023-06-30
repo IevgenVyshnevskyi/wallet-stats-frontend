@@ -5,9 +5,10 @@ import { getFilteredTransactions } from "../../../store/transactionSlice";
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
-import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 
-import { DARK_FOR_TEXT } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
+
+import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
 
 const StatisticsHeader: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ const StatisticsHeader: React.FC = () => {
         mr="10px"
         fw="600"
         fz="12px"
-        color={DARK_FOR_TEXT}
+        color={COLORS.DARK_FOR_TEXT}
       >
         Відобразити дані за період
       </Typography>

@@ -9,7 +9,7 @@ import { getDoughnutChartConfig } from "./doughnutChartConfig";
 
 import { Box } from "../../atoms/box/Box.styled";
 
-import { WHITE } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 type DoughnutChartProps = {
   data: string[];
@@ -67,7 +67,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   ]);
 
   return (
-    <Box bgColor={WHITE} borderRadius="8px" p="5px 0">
+    <Box bgColor={COLORS.WHITE} borderRadius="8px" p="5px 0">
       <Box width={isHomePage ? "100%" : "650px"} m="0 auto">
         <canvas id="myDoughnutChart" height={isHomePage && "325px"} ref={chartRef} />
       </Box>

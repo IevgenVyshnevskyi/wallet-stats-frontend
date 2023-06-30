@@ -9,7 +9,7 @@ import { Container } from "../../atoms/container/Container.styled";
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
-import { GRADIENT, WHITE } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const WelcomePage = () => {
     const navigate = useNavigate();
@@ -28,10 +28,10 @@ const WelcomePage = () => {
 
     return (
         <Container display="flex">
-            <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+            <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
-            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={WHITE}>
+            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={COLORS.WHITE}>
                 <Box m="auto 0" justifyContent="space-around" textAlign="center">
                     <Img src={logo} alt="Logo" />
                     <Typography fw="700" fz="24px" lh="170%" textAlign="center" m="48px 0 80px 0">

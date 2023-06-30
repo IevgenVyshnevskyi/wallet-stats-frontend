@@ -4,15 +4,13 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setTotalIncomes, setTotalExpenses } from "../../../store/categorySlice";
 
 import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
-import {
-  calculateCategoriesWithTotalAmount
-} from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
+import { calculateCategoriesWithTotalAmount } from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 
-import { BASE_2 } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 import { ICategoryWithTotalAmount } from "../../../store/types";
 
@@ -93,7 +91,7 @@ const Statistics: React.FC = () => {
       <Box
         display="flex"
         direction="column"
-        bgColor={BASE_2}
+        bgColor={COLORS.BASE_2}
         borderRadius="16px"
         overflow="auto"
         height="100px"

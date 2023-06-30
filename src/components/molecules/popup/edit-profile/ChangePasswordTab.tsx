@@ -22,7 +22,7 @@ import { Typography } from "../../../atoms/typography/Typography.styled";
 import { Button } from "../../../atoms/button/Button.styled";
 import BaseField from './../../base-field/BaseField';
 
-import { ALERT_1, DIVIDER } from "../../../../shared/styles/variables";
+import COLORS from "../../../../shared/styles/variables";
 
 import { PasswordChangeFormData } from "../../../../store/types";
 
@@ -102,7 +102,7 @@ const ChangePasswordTab: React.FC = () => {
       />
 
       {passwordChangeError && (
-        <Typography as="p" color={ALERT_1} textAlight="center">
+        <Typography as="p" color={COLORS.ALERT_1} textAlight="center">
           {passwordChangeError}
         </Typography>
       )}
@@ -111,7 +111,7 @@ const ChangePasswordTab: React.FC = () => {
         display="flex"
         justifyContent="center"
         gap="35px"
-        borderTop={`2px solid ${DIVIDER}`}
+        borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="24px"
         mb="24px"
       >

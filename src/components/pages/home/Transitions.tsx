@@ -12,7 +12,7 @@ import { ListItem } from "../../atoms/list/ListItem.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import Transaction from "../../molecules/transaction/Transaction";
 
-import { BASE_2 } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const renderTransactionItems = (transactions: ITransaction[]): React.ReactNode[] => {
   return transactions
@@ -50,7 +50,7 @@ const Transactions: React.FC = () => {
         gap="8px"
         overflow="auto"
         height="100px"
-        bgColor={BASE_2}
+        bgColor={COLORS.BASE_2}
         p="15px"
         borderRadius="16px"
       >

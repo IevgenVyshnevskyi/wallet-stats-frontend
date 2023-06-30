@@ -1,6 +1,9 @@
 import styled, { css } from "styled-components"
-import { DISABLED, PRIMARY, PRIMARY_HOVER, WHITE } from "./../../../shared/styles/variables"
-import { commonStyles} from "../../../shared/styles/commonStyles"
+
+import { commonStyles } from "../../../shared/styles/commonStyles"
+
+import COLORS from "../../../shared/styles/variables"
+
 import { ButtonProps } from "../../../../types/atoms"
 
 export const buttonStyles = css<ButtonProps>`
@@ -12,17 +15,17 @@ export const buttonStyles = css<ButtonProps>`
     cursor: pointer;
 
     ${primary ? `
-      color: ${WHITE};
-      background-color: ${PRIMARY};
+      color: ${COLORS.WHITE};
+      background-color: ${COLORS.PRIMARY};
       border: none;
       &:hover {
-        background-color: ${PRIMARY_HOVER};
+        background-color: ${COLORS.PRIMARY_HOVER};
       }
     ` : secondary ? `
-      border: 2px solid ${PRIMARY};
-      background-color: ${WHITE};
+      border: 2px solid ${COLORS.PRIMARY};
+      background-color: ${COLORS.WHITE};
       &:hover {
-        border-color: ${PRIMARY_HOVER};
+        border-color: ${COLORS.PRIMARY_HOVER};
       }
     ` : undefined
     }
@@ -31,10 +34,10 @@ export const buttonStyles = css<ButtonProps>`
       cursor: not-allowed;
       pointer-events: none;
     ` + (primary ? `
-      background-color: ${DISABLED};
+      background-color: ${COLORS.DISABLED};
     ` : `
-      border-color: ${DISABLED};
-      color: ${DISABLED};
+      border-color: ${COLORS.DISABLED};
+      color: ${COLORS.DISABLED};
     ` ) : undefined
     }
   `}

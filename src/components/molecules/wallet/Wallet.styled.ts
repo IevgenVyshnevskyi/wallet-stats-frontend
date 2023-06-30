@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import { WHITE, PRIMARY, PRIMARY_HOVER, ALMOST_BLACK_FOR_TEXT } from "../../../shared/styles/variables";
-import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
+
 import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 import { commonStyles } from "../../../shared/styles/commonStyles";
+
+import { ButtonTransparent } from '../../atoms/button/ButtonTransparent.styled';
+
+import COLORS from "../../../shared/styles/variables";
 
 type WalletButtonProps = {
   isActive: boolean;
@@ -12,7 +15,7 @@ const transactionsPath = window.location.pathname === "/transactions";
 
 export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   ${commonStyles}
-  background: ${({ isActive }) => isActive ? PRIMARY : WHITE};
+  background: ${({ isActive }) => isActive ? COLORS.PRIMARY : COLORS.WHITE};
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -22,7 +25,7 @@ export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   border-radius: 8px;
 
   * {
-    color: ${({ isActive }) => isActive ? WHITE : ALMOST_BLACK_FOR_TEXT};
+    color: ${({ isActive }) => isActive ? COLORS.WHITE : COLORS.ALMOST_BLACK_FOR_TEXT};
   }
 
   svg {
@@ -31,10 +34,10 @@ export const WalletButton = styled(ButtonTransparent) <WalletButtonProps>`
   }
   
   &:hover {
-    background-color: ${PRIMARY_HOVER};
+    background-color: ${COLORS.PRIMARY_HOVER};
 
     * {
-      color: ${({ isActive }) => isActive ? WHITE : WHITE};
+      color: ${({ isActive }) => isActive ? COLORS.WHITE : COLORS.WHITE};
     }
 
     svg {

@@ -17,12 +17,7 @@ import BaseField from "../../molecules/base-field/BaseField";
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
-import {
-    ALMOST_BLACK_FOR_TEXT,
-    DISABLED,
-    GRADIENT, PRIMARY,
-    WHITE
-} from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const TwoFactorAuthenticationPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -62,19 +57,19 @@ const TwoFactorAuthenticationPage: React.FC = () => {
 
     return (
         <Container display="flex">
-            <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+            <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
                 <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
             </Box>
             <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center"
                 textAlign="center"
-                background={WHITE}>
+                background={COLORS.WHITE}>
                 <Box m="auto 0" alignItems="center" textAlign="center">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
+                    <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center"
                         m="48px 0 48px 0">
                         Вхід до вашого акаунту
                     </Typography>
-                    <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={ALMOST_BLACK_FOR_TEXT}
+                    <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT}
                         textAlign="center">
                         Введіть код якій вам було надіслано
                     </Typography>
@@ -94,7 +89,7 @@ const TwoFactorAuthenticationPage: React.FC = () => {
                                     type="number"
                                 />
                                 <Box width="320px" p="0 0 0 39%">
-                                    <ButtonLink disabled color={count > 0 ? DISABLED : PRIMARY}>
+                                    <ButtonLink disabled color={count > 0 ? COLORS.DISABLED : COLORS.PRIMARY}>
                                         Надіслати код ще раз {count > 0 ? count : null}
                                     </ButtonLink>
                                 </Box>

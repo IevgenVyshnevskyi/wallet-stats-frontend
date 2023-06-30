@@ -1,21 +1,12 @@
 import ReactSelect, { StylesConfig } from 'react-select'
 
-import {
-  ALERT_1,
-  ALERT_2,
-  ALMOST_BLACK_FOR_TEXT,
-  BASE_2,
-  MENU_BUTTON_HOVER,
-  PRIMARY,
-  PRIMARY_2,
-  WHITE
-} from "../../../shared/styles/variables";
+import COLORS from '../../../shared/styles/variables';
 
 import { SelectOptions } from '../../../../types/molecules';
 
 type SelectProps = {
   value: SelectOptions;
-  options: any;
+  options: SelectOptions[];
   onCategoryChange: (e: any) => void;
   width?: string;
   isError?: any;
@@ -31,33 +22,33 @@ const Select: React.FC<SelectProps> = ({
   const customStyles: StylesConfig = {
     control: (baseStyles) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: isError ? ALERT_2 : WHITE,
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: isError ? COLORS.ALERT_2 : COLORS.WHITE,
       fontSize: '16px',
-      border: `2px solid ${isError ? ALERT_1 : PRIMARY_2}`,
+      border: `2px solid ${isError ? COLORS.ALERT_1 : COLORS.PRIMARY_2}`,
       outline: 'none',
       borderRadius: '12px',
       padding: "3px 8px",
       width,
       '&:hover': {
-        border: `2px solid ${PRIMARY}`,
+        border: `2px solid ${COLORS.PRIMARY}`,
       },
     }),
     menu: (baseStyles) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: WHITE,
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: COLORS.WHITE,
       fontSize: '16px',
-      border: `2px solid ${PRIMARY_2}`,
+      border: `2px solid ${COLORS.PRIMARY_2}`,
       borderRadius: '12px',
       marginTop: '4px',
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: state.isSelected ? MENU_BUTTON_HOVER : WHITE,
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: state.isSelected ? COLORS.MENU_BUTTON_HOVER : COLORS.WHITE,
       '&:hover': {
-        background: state.isSelected ? MENU_BUTTON_HOVER : BASE_2,
+        background: state.isSelected ? COLORS.MENU_BUTTON_HOVER : COLORS.BASE_2,
       }
     })
   };

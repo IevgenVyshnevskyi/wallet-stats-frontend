@@ -1,7 +1,9 @@
 import styled from "styled-components";
 
 import {commonStyles} from "../../../shared/styles/commonStyles";
-import { WHITE } from "../../../shared/styles/variables";
+
+import COLORS from '../../../shared/styles/variables';
+
 import { FormProps } from "../../../../types/atoms";
 
 export const Form = styled.form<FormProps>`
@@ -9,6 +11,6 @@ export const Form = styled.form<FormProps>`
   
   max-width: ${({maxWidth}) => maxWidth || undefined};
   text-align: ${({textAlign}) => textAlign || undefined};
-  color: ${({color}) => color || WHITE};
+  color: ${({color}) => color || COLORS.WHITE};
   align-items: ${({alignItems}) => alignItems || undefined};
 `

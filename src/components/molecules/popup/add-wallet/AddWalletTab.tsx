@@ -24,7 +24,7 @@ import { Button } from "../../../atoms/button/Button.styled";
 import { Typography } from "../../../atoms/typography/Typography.styled";
 import BaseField from "../../base-field/BaseField";
 
-import { ALERT_1, DIVIDER } from "../../../../shared/styles/variables";
+import COLORS from "../../../../shared/styles/variables";
 
 import { IWallet, WalletFormData } from "../../../../store/types";
 
@@ -112,13 +112,13 @@ const AddWalletTab: React.FC = () => {
         />
       </Box>
 
-      {error && <Typography as="p" color={ALERT_1}>{error}</Typography>}
+      {error && <Typography as="p" color={COLORS.ALERT_1}>{error}</Typography>}
 
       <Box
         display="flex"
         width="376px"
         justifyContent="space-between"
-        borderTop={`2px solid ${DIVIDER}`}
+        borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="51px"
         mb="25px"
       >

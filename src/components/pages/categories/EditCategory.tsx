@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import useSwitchButtonOptions from "../../../shared/hooks/useSwitchButtonOptions";
 import {
   categoryAction,
   resetActiveCategoryState,
@@ -10,8 +11,6 @@ import {
   setEditCategoryData,
   setIsEditCategoryOpen
 } from "../../../store/categorySlice";
-
-import useSwitchButtonOptions from "../../../shared/hooks/useSwitchButtonOptions";
 
 import { titleFieldRules } from "../../../shared/utils/field-rules/title";
 
@@ -23,7 +22,7 @@ import { Form } from "../../atoms/form/Form.styled";
 import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import BaseField from "../../molecules/base-field/BaseField";
 
-import { MENU_BUTTON_HOVER } from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const EditCategory: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -96,7 +95,7 @@ const EditCategory: React.FC = () => {
         Редагування категорії
       </Typography>
       <Box
-        bgColor={MENU_BUTTON_HOVER}
+        bgColor={COLORS.MENU_BUTTON_HOVER}
         display="flex"
         direction="column"
         borderRadius="16px"

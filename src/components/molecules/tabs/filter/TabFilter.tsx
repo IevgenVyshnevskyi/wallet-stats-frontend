@@ -3,7 +3,7 @@ import { List } from "../../../atoms/list/List.styled";
 import { ListItem } from "../../../atoms/list/ListItem.styled";
 import { TabFilterWrapper } from "./TabFilter.styled";
 
-import { WHITE } from "../../../../shared/styles/variables";
+import COLORS from '../../../../shared/styles/variables';
 
 export interface IFilterButton {
   filterBy: string;
@@ -23,7 +23,7 @@ const TabFilter: React.FC<TabFilterProps> = ({ filterButtons }) => {
         {filterButtons.map(({ filterBy, onTabClick, buttonName, isActive }, index) => (
           <ListItem
             key={index}
-            bgColor={isActive ? WHITE : "transparent"}
+            bgColor={isActive ? COLORS.WHITE : "transparent"}
             textAlight="center"
           >
             <Link

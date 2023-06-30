@@ -22,11 +22,7 @@ import BaseField from "../../molecules/base-field/BaseField";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 import logo from "../../../shared/assets/images/logo.png";
 
-import {
-  GRADIENT,
-  WHITE,
-  ALMOST_BLACK_FOR_TEXT
-} from "../../../shared/styles/variables";
+import COLORS from "../../../shared/styles/variables";
 
 const NewPasswordStep: React.FC<{
   uid: string,
@@ -63,18 +59,18 @@ const NewPasswordStep: React.FC<{
 
   return (
     <Container display="flex">
-      <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+      <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
         <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
       </Box>
       <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center" textAlign="center"
-        background={WHITE}>
+        background={COLORS.WHITE}>
         <Box m="auto 0" alignItems="center" textAlign="center">
           <Img src={logo} alt="Logo" />
-          <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center"
+          <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center"
             m="48px 0 48px 0">
             Створення нового пароля
           </Typography>
-          <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={ALMOST_BLACK_FOR_TEXT}
+          <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT}
             textAlign="center">
             Введіть новий пароль для вашого <br /> аккаунту
           </Typography>

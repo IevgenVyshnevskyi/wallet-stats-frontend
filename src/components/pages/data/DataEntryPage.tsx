@@ -20,15 +20,10 @@ import { Form } from "../../atoms/form/Form.styled";
 import { Button } from "../../atoms/button/Button.styled";
 import BaseField from "../../molecules/base-field/BaseField";
 
-import {
-    ALMOST_BLACK_FOR_TEXT,
-    GRADIENT,
-    GREY_50,
-    WHITE
-} from "../../../shared/styles/variables";
-
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
+
+import COLORS from "../../../shared/styles/variables";
 
 import { DataEntryFormData } from "../../../store/types";
 
@@ -90,16 +85,16 @@ const DataEntryPage: React.FC = () => {
 
     return (
         <Container display="flex">
-            <Box flex="1" overflow="hidden" height="100vh" background={GRADIENT}>
+            <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
                 <Img src={InterfaceImage} m="0 auto" alt="InterfaceImage" />
             </Box>
-            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={WHITE}>
+            <Box display="flex" flexDirection="column" width="592px" alignItems="center" textAlign="center" background={COLORS.WHITE}>
                 <Box m="auto 0">
                     <Img src={logo} alt="Logo" />
-                    <Typography fw="700" fz="24px" lh="170%" color={ALMOST_BLACK_FOR_TEXT} textAlign="center" m="20px 0">
+                    <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center" m="20px 0">
                         Дякуємо за реєстрацію!
                     </Typography>
-                    <Typography fw="400" fz="16px" lh="24px" m="0 0 20px 0" color={ALMOST_BLACK_FOR_TEXT}
+                    <Typography fw="400" fz="16px" lh="24px" m="0 0 20px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT}
                         textAlign="center">
                         Ви можете внести актуальні дані по <br /> вашому готівковому та картковому <br /> рахунках.
                     </Typography>
@@ -129,7 +124,7 @@ const DataEntryPage: React.FC = () => {
                                     registerOptions={register('amountAccount', amountFieldRules)}
                                 />
                             </Box>
-                            <Box textAlight="start" fz="14px" lh="150%" color={GREY_50}>
+                            <Box textAlight="start" fz="14px" lh="150%" color={COLORS.GREY_50}>
                                 Додаткові карткові рахунки ви зможете <br /> внести пізніше.
                             </Box>
                         </Box>

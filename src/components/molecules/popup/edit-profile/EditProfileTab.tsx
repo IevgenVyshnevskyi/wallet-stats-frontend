@@ -20,9 +20,8 @@ import { Box } from "../../../atoms/box/Box.styled";
 import { Button } from "../../../atoms/button/Button.styled";
 import BaseField from "../../base-field/BaseField";
 
-import { DIVIDER } from "../../../../shared/styles/variables";
-
 import { IUser } from "../../../../store/types";
+import COLORS from "../../../../shared/styles/variables";
 
 const EditProfileTab: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -87,7 +86,7 @@ const EditProfileTab: React.FC = () => {
         display="flex"
         justifyContent="center"
         gap="35px"
-        borderTop={`2px solid ${DIVIDER}`}
+        borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="24px"
         mb="24px"
       >

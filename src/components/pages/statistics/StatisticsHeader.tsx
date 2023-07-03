@@ -15,7 +15,7 @@ const StatisticsHeader: React.FC = () => {
 
   const { filterByDays } = useAppSelector(state => state.statistics);
 
-  const setFilterButtonOptions = (buttonName: string, days: string): any => {
+  const setFilterButtonOptions = (buttonName: string, days: string): IFilterButton => {
     return {
       buttonName,
       filterBy: `?days=${days}`,

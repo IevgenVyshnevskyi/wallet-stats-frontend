@@ -23,7 +23,7 @@ type confirmPasswordResetPayload = {
 export const requestPasswordReset = createAsyncThunk<
   undefined,
   { email: string },
-  { rejectValue: any }
+  { rejectValue: string }
 >(
   'passwordRecovery/requestPasswordReset',
   async (payload, { rejectWithValue }) => {
@@ -40,7 +40,7 @@ export const requestPasswordReset = createAsyncThunk<
 export const confirmPasswordReset = createAsyncThunk<
   undefined,
   confirmPasswordResetPayload,
-  { rejectValue: any }
+  { rejectValue: string }
 >(
   'passwordRecovery/confirmPasswordReset',
   async (payload, { rejectWithValue }) => {

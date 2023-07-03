@@ -4,18 +4,16 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setActiveCategoryId } from "../../../store/statisticsSlice";
 import { getFilteredTransactions } from "../../../store/transactionSlice";
 
-import {
-  generateNewLineChartData
-} from "../../../shared/utils/statistics/generateNewLineChartData";
+import { generateNewLineChartData } from "../../../shared/utils/statistics/generateNewLineChartData";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
 import LineChart from "../../molecules/charts/LineChart";
 import Select from "../../molecules/select/Select";
 
-import { SelectOptions } from "../../../../types/molecules";
-
 import COLORS from "../../../shared/styles/variables";
+
+import { SelectOptions } from "../../../../types/molecules";
 
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();

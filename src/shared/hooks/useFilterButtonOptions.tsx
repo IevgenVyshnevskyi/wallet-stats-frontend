@@ -27,7 +27,7 @@ const useFilterButtonOptions = (type: "category" | "transaction"): IFilterButton
   const setFilterButtonOptions = (
     buttonName: string,
     typeOfOutlay: TypeOfOutlay | "",
-  ): any => {
+  ): IFilterButton => {
     return {
       buttonName,
       typeOfOutlay,

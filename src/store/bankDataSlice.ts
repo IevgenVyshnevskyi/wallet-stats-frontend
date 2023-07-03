@@ -11,7 +11,11 @@ export type BankDataState = {
   isAddBankDataSuccess: boolean;
 }
 
-export const getBankData = createAsyncThunk<IBankData[], undefined, { rejectValue: any }>(
+export const getBankData = createAsyncThunk<
+  IBankData[],
+  undefined,
+  { rejectValue: string }
+>(
   'bankData/getBankData',
   async (_, { rejectWithValue }) => {
     try {
@@ -23,7 +27,11 @@ export const getBankData = createAsyncThunk<IBankData[], undefined, { rejectValu
   }
 );
 
-export const sendBankData = createAsyncThunk<undefined, IBankData, { rejectValue: any }>(
+export const sendBankData = createAsyncThunk<
+  undefined,
+  IBankData,
+  { rejectValue: string }
+>(
   'bankData/sendBankData',
   async (payload, { rejectWithValue }) => {
     try {

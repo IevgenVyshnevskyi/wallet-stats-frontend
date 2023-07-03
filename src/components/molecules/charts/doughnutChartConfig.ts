@@ -5,7 +5,7 @@ import COLORS from "../../../shared/styles/variables";
 const calculatePercentage = (value: number, ctx: any): string => {
   let sum = 0;
   let dataArr = ctx.chart.data.datasets[0].data;
-  let percentage: any = 0;
+  let percentage: number = 0;
 
   dataArr.map((data: number) => {
     if (typeof data === 'number') {
@@ -14,7 +14,7 @@ const calculatePercentage = (value: number, ctx: any): string => {
   });
 
   if (typeof value === 'number') {
-    percentage = ((value * 100) / sum).toFixed();
+    percentage = parseInt(((value * 100) / sum).toFixed());
   }
 
   return percentage + '%';

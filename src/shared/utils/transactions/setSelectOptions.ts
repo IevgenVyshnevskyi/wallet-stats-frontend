@@ -3,7 +3,11 @@ import { ICategory, TypeOfOutlay } from '../../../store/types';
 
 export const setSelectOptions = (
   typeOfOutlay: TypeOfOutlay,
-  categories: any
+  categories: {
+    all: ICategory[];
+    income: ICategory[];
+    expense: ICategory[];
+  }
 ): SelectOptions[] => {
   let categoriesArr: ICategory[] = null;
 

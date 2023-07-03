@@ -1,6 +1,6 @@
 import { titleRegex, twoSymbolsRegex } from "../regexes";
 
-export const setDetailsFieldRules = (clearErrors: any) => {
+export const setDetailsFieldRules = (clearErrors: (name?: string | string[]) => void) => {
   return {
     validate: {
       hasTwoSymbols: (value: string) => {

@@ -64,7 +64,7 @@ const AddTransaction: React.FC = () => {
   const setSwitchButtonOptions = (
     buttonName: string,
     typeOfOutlay: TypeOfOutlay,
-  ): any => {
+  ): ISwitchButton => {
     return {
       buttonName,
       isActive: addTransactionData?.type_of_outlay === typeOfOutlay,

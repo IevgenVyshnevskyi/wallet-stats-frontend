@@ -54,14 +54,6 @@ const EditTransaction: React.FC = () => {
     categories
   )
 
-  const onCategoryChange = (selectedValue: any): void => {
-    dispatch(setEditTransactionData({ category: selectedValue?.value }));
-    setSelectedCategoryValues({
-      value: selectedValue?.value,
-      label: selectedValue?.label
-    });
-  }
-
   const handleCancelEditTransaction = () => {
     dispatch(setIsEditTransactionOpen(false));
     dispatch(setEditTransactionData({}));
@@ -98,6 +90,14 @@ const EditTransaction: React.FC = () => {
       method: "PUT",
       id: String(editTransactionData?.id)
     }));
+  }
+
+  const onCategoryChange = (selectedValue: any): void => {
+    dispatch(setEditTransactionData({ category: selectedValue?.value }));
+    setSelectedCategoryValues({
+      value: selectedValue?.value,
+      label: selectedValue?.label
+    });
   }
 
   const {

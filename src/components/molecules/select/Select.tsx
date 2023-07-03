@@ -3,13 +3,14 @@ import ReactSelect, { StylesConfig } from 'react-select'
 import COLORS from '../../../shared/styles/variables';
 
 import { SelectOptions } from '../../../../types/molecules';
+import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 type SelectProps = {
   value: SelectOptions;
   options: SelectOptions[];
-  onCategoryChange: (e: any) => void;
+  onCategoryChange: (e: React.ChangeEvent<{ value: string; label: string }>) => void;
   width?: string;
-  isError?: any;
+  isError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
 }
 
 const Select: React.FC<SelectProps> = ({

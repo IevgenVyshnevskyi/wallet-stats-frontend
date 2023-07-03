@@ -7,14 +7,16 @@ import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
 
 import COLORS from "../../../shared/styles/variables";
 
+import { FieldErrors, UseFormRegisterReturn } from 'react-hook-form'
+
 type BaseFieldProps = {
   fieldType: "text" | "email" | "password";
   name: string;
   label: string;
-  errors: any;
+  errors: FieldErrors;
   isPasswordVisible?: boolean;
-  setIsPasswordVisible?: any;
-  registerOptions?: any;
+  setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+  registerOptions?: UseFormRegisterReturn<string>;
   [key: string]: any;
 };
 

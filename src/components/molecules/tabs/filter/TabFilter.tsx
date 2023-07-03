@@ -5,11 +5,14 @@ import { TabFilterWrapper } from "./TabFilter.styled";
 
 import COLORS from '../../../../shared/styles/variables';
 
+import { TypeOfOutlay } from '../../../../store/types';
+
 export interface IFilterButton {
   filterBy: string;
   onTabClick: () => void;
   buttonName: string;
   isActive: boolean;
+  typeOfOutlay?: TypeOfOutlay | "";
 };
 
 type TabFilterProps = {

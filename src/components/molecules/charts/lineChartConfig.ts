@@ -2,10 +2,10 @@ import { ChartData, ChartOptions } from "chart.js";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { FilterByDaysOptions } from "../../../store/types";
+import { FilterByDaysOptions, Transactions } from "../../../store/types";
 
 export const generateLabels = (
-  categoryTransactions: any,
+  categoryTransactions: Transactions,
   filterByDays: FilterByDaysOptions
 ) => {
   const labels: string[] = [];
@@ -29,8 +29,8 @@ export const generateLabels = (
 
 export const setPointValues = (
   filterByDays: FilterByDaysOptions,
-  setPointHitRadiusValue: any,
-  setPointBorderWidthValue: any,
+  setPointHitRadiusValue: React.Dispatch<React.SetStateAction<number>>,
+  setPointBorderWidthValue: React.Dispatch<React.SetStateAction<number>>,
 ) => {
   switch (filterByDays) {
     case "30":
@@ -53,8 +53,8 @@ export const setPointValues = (
 export const setLineChartConfig = (
   data: number[],
   labels: string[],
-  pointBorderWidthValue: any,
-  pointHitRadiusValue: any,
+  pointBorderWidthValue: number,
+  pointHitRadiusValue: number,
 ): { chartData: ChartData, chartOptions: ChartOptions } => {
   const chartData: ChartData = {
     labels: labels,

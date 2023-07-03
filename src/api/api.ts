@@ -1,6 +1,7 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import { IUser } from "../store/types";
 import { Store } from '@reduxjs/toolkit';
+import axios, { InternalAxiosRequestConfig } from 'axios';
+
+import { IUser } from "../store/types";
 
 export const BASE_URL = "https://prod.wallet.cloudns.ph:8800";
 export const REGISTER_PATH = "/accounts/register/";
@@ -36,7 +37,7 @@ export const $api = axios.create({
   }
 });
 
-$api.interceptors.request.use((config: AxiosRequestConfig): any => {
+$api.interceptors.request.use((config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const userState = store.getState().user;
   let currentToken: string | undefined;
 

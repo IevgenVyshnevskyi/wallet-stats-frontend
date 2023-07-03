@@ -12,7 +12,7 @@ import { calculateTotalAmount } from "../../../shared/utils/statistics/calculate
 
 import COLORS from "../../../shared/styles/variables";
 
-import { ICategoryWithTotalAmount } from "../../../store/types";
+import { ICategoryWithTotalAmount } from "../../../../types/category";
 
 const DoughnutChartsSection: React.FC = () => {
   const dispatch = useAppDispatch();

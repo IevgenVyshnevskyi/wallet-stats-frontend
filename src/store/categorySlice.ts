@@ -1,33 +1,13 @@
 import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
 
 import { getUserDetails } from './userSlice';
-import { FilterByTypeOfOutlayOptions } from './transactionSlice';
 
 import { updateCategories } from '../shared/utils/store/updateCategories';
 
 import { $api, CATEGORY_PATH } from '../api/api';
 
-import { ICategory, MethodTypes } from './types';
-
-export type CategoryState = {
-  filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
-  categories: {
-    all: ICategory[];
-    income: ICategory[];
-    expense: ICategory[];
-  };
-  totalIncomes: string;
-  totalExpenses: string;
-  activeCategory: ICategory;
-  addCategoryData: ICategory;
-  editCategoryData: ICategory;
-  isLoading: boolean;
-  error: string | null;
-  isAddCategorySuccess: boolean;
-  isEditCategorySuccess: boolean;
-  isDeleteCategorySuccess: boolean;
-  isEditCategoryOpen: boolean;
-}
+import { CategoryState, ICategory } from '../../types/category';
+import { MethodTypes } from '../../types/common';
 
 type CategoryActionPayload = {
   method: MethodTypes;

@@ -24,7 +24,7 @@ import BaseField from './../../base-field/BaseField';
 
 import COLORS from "../../../../shared/styles/variables";
 
-import { PasswordChangeFormData } from "../../../../store/types";
+import { PasswordChangeFormData } from "../../../../../types/user";
 
 const ChangePasswordTab: React.FC = () => {
   const dispatch = useAppDispatch();

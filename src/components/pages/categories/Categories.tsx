@@ -17,7 +17,7 @@ import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { ICategory } from "../../../store/types";
+import { ICategory } from "../../../../types/category";
 
 const Categories: React.FC = () => {
   const dispatch = useAppDispatch();

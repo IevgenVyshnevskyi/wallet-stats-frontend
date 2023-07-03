@@ -23,7 +23,7 @@ import BankdataInfoMessage from "./BankdataInfoMessage";
 
 import COLORS from "../../../../shared/styles/variables";
 
-import { IBankData } from "../../../../store/types";
+import { IBankData } from "../../../../../types/bankdata";
 
 const AddBankDataTab: React.FC = () => {
   const dispatch = useAppDispatch()

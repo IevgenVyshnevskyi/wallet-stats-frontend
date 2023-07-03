@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { $api, WALLET_PATH } from '../api/api';
 
-import { UserState } from './userSlice';
-import { DataEntryFormData, IWallet, MethodTypes } from './types';
+import { DataEntryFormData, UserState } from '../../types/user';
+import { MethodTypes } from '../../types/common';
+import { IWallet } from '../../types/wallet';
 
 type WalletState = {
   wallets: IWallet[];
@@ -54,7 +55,11 @@ export const walletAction = createAsyncThunk<
   }
 );
 
-export const getWallets = createAsyncThunk<IWallet[], undefined, { rejectValue: string }>(
+export const getWallets = createAsyncThunk<
+  IWallet[],
+  undefined,
+  { rejectValue: string }
+>(
   'wallet/getWallets',
   async (_, { rejectWithValue }) => {
     try {

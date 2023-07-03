@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { $api, BANK_DATA_PATH } from '../api/api';
+import { IBankData } from '../../types/bankdata';
 
-import { IBankData } from './types';
-
-export type BankDataState = {
+type BankDataState = {
   isLoading: boolean;
   error: string | null;
   bankData: IBankData[];

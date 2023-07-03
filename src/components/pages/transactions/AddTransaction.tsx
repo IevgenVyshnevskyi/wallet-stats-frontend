@@ -35,9 +35,12 @@ import DatePicker from './DatePicker';
 
 import COLORS from '../../../shared/styles/variables';
 
-import { IWallet, TypeOfOutlay } from "../../../store/types";
-import { SelectOptions } from '../../../../types/molecules';
-import { ISwitchButton } from "../../molecules/tabs/switch/TabSwitch";
+import { IWallet } from '../../../../types/wallet';
+import {
+  ISwitchButton,
+  SelectOptions,
+  TypeOfOutlay
+} from '../../../../types/common';
 
 const AddTransaction: React.FC = () => {
   const dispatch = useAppDispatch()

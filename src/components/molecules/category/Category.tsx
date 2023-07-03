@@ -9,7 +9,11 @@ import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 
 import COLORS from "../../../shared/styles/variables";
 
-import { CategoryProps } from "../../../../types/molecules";
+import { ICategory } from "../../../../types/category";
+
+type CategoryProps = {
+  category: ICategory;
+}
 
 const Category: React.FC<CategoryProps> = ({ category }) => {
   const { activeCategory } = useAppSelector(state => state.category)

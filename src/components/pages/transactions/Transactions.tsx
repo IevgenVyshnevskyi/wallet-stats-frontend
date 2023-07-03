@@ -8,9 +8,7 @@ import {
 import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
 
 import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
-import {
-  formatTransactionDateToFullDate
-} from "../../../shared/utils/transactions/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/transactions/formatTransactionDate";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";
@@ -22,7 +20,7 @@ import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { ITransaction, Transactions } from "../../../store/types";
+import { ITransaction, Transactions } from "../../../../types/transactions";
 
 const renderTransactionItems = (
   transactions: ITransaction[],

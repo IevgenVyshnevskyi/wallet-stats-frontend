@@ -5,13 +5,9 @@ import { TabSwitchWrapper } from "./TabSwitch.styled";
 
 import COLORS from "../../../../shared/styles/variables";
 
-export interface ISwitchButton {
-  buttonName: string;
-  onTabClick: () => void;
-  isActive: boolean;
-};
+import { ISwitchButton } from "../../../../../types/common";
 
-export type TabSwitchProps = {
+type TabSwitchProps = {
   switchButtons: ISwitchButton[];
 };
 

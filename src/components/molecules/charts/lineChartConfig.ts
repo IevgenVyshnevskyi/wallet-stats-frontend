@@ -2,7 +2,8 @@ import { ChartData, ChartOptions } from "chart.js";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { FilterByDaysOptions, Transactions } from "../../../store/types";
+import { Transactions } from "../../../../types/transactions";
+import { FilterByDaysOptions } from "../../../../types/common";
 
 export const generateLabels = (
   categoryTransactions: Transactions,

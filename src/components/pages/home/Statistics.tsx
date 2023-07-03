@@ -12,7 +12,7 @@ import DoughnutChart from "../../molecules/charts/DoughnutChart";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { ICategoryWithTotalAmount } from "../../../store/types";
+import { ICategoryWithTotalAmount } from "../../../../types/category";
 
 const Statistics: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -1,4 +1,5 @@
-import { ICategory, ICategoryWithTotalAmount, Transactions } from "../../../store/types"
+import { ICategory, ICategoryWithTotalAmount } from "../../../../types/category";
+import { Transactions } from "../../../../types/transactions";
 
 export const calculateCategoriesWithTotalAmount = (
   categories: ICategory[],

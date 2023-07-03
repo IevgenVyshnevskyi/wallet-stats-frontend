@@ -14,28 +14,15 @@ import {
 import {
 	IUser,
 	LoginFormData,
-	LoginResponse,
 	PasswordChangeFormData,
-	RegisterFormData
-} from './types';
+	RegisterFormData,
+	UserState
+} from '../../types/user';
 
-export type UserState = {
-	user: IUser;
-	isLoading: boolean;
-	isLoggedIn: boolean;
-	isLoggedOut: boolean;
-	isRegistered: boolean;
-	isAccountDeleted: boolean;
-	isProfileChanged: boolean;
-	isPasswordChanged: boolean;
-	loginError: string | null;
-	logoutError: string | null;
-	getDetailsError: string | null;
-	registerError: string | null;
-	deleteUserAccountError: string | null;
-	confirmEmailError: string | null;
-	profileChangeError: string | null;
-	passwordChangeError: string | null;
+type LoginResponse = {
+	user_id: string;
+	email: string;
+	token: string;
 }
 
 export const registerUser = createAsyncThunk<

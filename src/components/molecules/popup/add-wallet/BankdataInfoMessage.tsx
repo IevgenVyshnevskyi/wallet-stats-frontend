@@ -7,7 +7,9 @@ import PackageErrorIcon from "../../../../shared/assets/icons/package-error.svg"
 
 import COLORS from "../../../../shared/styles/variables";
 
-import { MessageProps } from "../../../../../types/molecules";
+type MessageProps = {
+  message: "success" | "error"
+}
 
 const BankdataInfoMessage: React.FC<MessageProps> = ({ message }) => {
   return (

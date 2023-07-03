@@ -1,4 +1,4 @@
-import { Transactions } from "../../../store/types";
+import { Transactions } from "../../../../types/transactions";
 
 export const calculateTotalAmount = (allTransactions: Transactions): string => {
   const transactionAmounts = Object.values(allTransactions).flatMap(transactionsArr => {

@@ -6,27 +6,8 @@ import { updateTransactions } from '../shared/utils/store/updateTransactions';
 
 import { $api, TRANSACTION_PATH } from '../api/api';
 
-import { ITransaction, MethodTypes, Transactions } from './types';
-
-export type FilterByTypeOfOutlayOptions = "all" | "income" | "expense";
-
-export type TransactionState = {
-  filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
-  transactions: {
-    all: Transactions;
-    income: Transactions;
-    expense: Transactions;
-  };
-  activeTransaction: ITransaction;
-  addTransactionData: ITransaction;
-  editTransactionData: ITransaction;
-  isLoading: boolean;
-  error: string | null;
-  isAddTransactionSuccess: boolean;
-  isEditTransactionSuccess: boolean;
-  isDeleteTransactionSuccess: boolean;
-  isEditTransactionOpen: boolean;
-}
+import { MethodTypes } from '../../types/common';
+import { ITransaction, TransactionState, Transactions } from '../../types/transactions';
 
 type TransactionActionPayload = {
   method: MethodTypes;

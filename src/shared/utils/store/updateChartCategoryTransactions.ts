@@ -1,7 +1,8 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 
-import { StatisticsState } from "../../../store/statisticsSlice";
-import { Transactions, TypeOfOutlay } from "../../../store/types";
+import { TypeOfOutlay } from "../../../../types/common";
+import { Transactions } from "../../../../types/transactions";
+import { StatisticsState } from "../../../../types/statistics";
 
 export const updateChartCategoryTransactions = (
   state: StatisticsState,

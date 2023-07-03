@@ -26,7 +26,7 @@ import BaseField from "../../base-field/BaseField";
 
 import COLORS from "../../../../shared/styles/variables";
 
-import { IWallet, WalletFormData } from "../../../../store/types";
+import { IWallet, WalletFormData } from "../../../../../types/wallet";
 
 const AddWalletTab: React.FC = () => {
   const dispatch = useAppDispatch()

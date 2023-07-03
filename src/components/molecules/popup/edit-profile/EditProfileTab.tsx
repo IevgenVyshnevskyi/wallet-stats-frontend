@@ -20,8 +20,9 @@ import { Box } from "../../../atoms/box/Box.styled";
 import { Button } from "../../../atoms/button/Button.styled";
 import BaseField from "../../base-field/BaseField";
 
-import { IUser } from "../../../../store/types";
 import COLORS from "../../../../shared/styles/variables";
+
+import { IUser } from "../../../../../types/user";
 
 const EditProfileTab: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -25,7 +25,7 @@ import InterfaceImage from "../../../shared/assets/images/interface-image-full.p
 
 import COLORS from "../../../shared/styles/variables";
 
-import { DataEntryFormData } from "../../../store/types";
+import { DataEntryFormData } from "../../../../types/user";
 
 const DataEntryPage: React.FC = () => {
     const dispatch = useAppDispatch()

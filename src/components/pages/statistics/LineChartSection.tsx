@@ -13,7 +13,7 @@ import Select from "../../molecules/select/Select";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { SelectOptions } from "../../../../types/molecules";
+import { SelectOptions } from "../../../../types/common";
 
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -16,7 +16,6 @@ export function formatTransactionDateToFullDate(dateStr: string): string {
   return `${capitalizedDayOfWeek}, ${dayOfMonthAndMonthName}`;
 }
 
-
 export function formatTransactionDateToUTC(date: Date): string {
   const newDate = new Date(date);
 

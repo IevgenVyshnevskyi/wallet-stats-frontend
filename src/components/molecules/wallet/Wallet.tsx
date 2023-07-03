@@ -6,9 +6,9 @@ import SettingsWalletIcon from '../../../shared/assets/icons/settings-wallet.svg
 
 import COLORS from "../../../shared/styles/variables";
 
-import { IWallet } from "../../../store/types";
+import { IWallet } from "../../../../types/wallet";
 
-export type WalletProps = {
+type WalletProps = {
   wallet: IWallet;
   onWalletClick: () => void;
   isActive: boolean;

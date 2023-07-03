@@ -1,9 +1,8 @@
-import ReactSelect, { StylesConfig } from 'react-select'
-
 import COLORS from '../../../shared/styles/variables';
 
-import { SelectOptions } from '../../../../types/molecules';
+import ReactSelect, { StylesConfig } from 'react-select';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { SelectOptions } from '../../../../types/common';
 
 type SelectProps = {
   value: SelectOptions;

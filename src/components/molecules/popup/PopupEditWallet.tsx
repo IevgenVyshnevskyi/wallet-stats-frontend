@@ -29,7 +29,7 @@ import CrossIcon from './../../../shared/assets/icons/cross.svg';
 
 import COLORS from "../../../shared/styles/variables";
 
-import { IWallet, WalletFormData } from "../../../store/types";
+import { IWallet, WalletFormData } from "../../../../types/wallet";
 
 const PopupEditWallet: React.FC = () => {
 	const dispatch = useAppDispatch()

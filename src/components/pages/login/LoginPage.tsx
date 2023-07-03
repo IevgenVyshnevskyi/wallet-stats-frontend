@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { loginUser } from "../../../store/userSlice";
-import { LoginFormData } from "../../../store/types";
 
 import { emailFieldRules } from "../../../shared/utils/field-rules/email";
 import { passwordInputRules } from "../../../shared/utils/field-rules/password";
@@ -23,6 +22,8 @@ import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 
 import COLORS from "../../../shared/styles/variables";
+
+import { LoginFormData } from "../../../../types/user";
 
 const LoginPage: React.FC = () => {
     const dispatch = useAppDispatch();

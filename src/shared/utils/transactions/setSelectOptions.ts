@@ -1,5 +1,5 @@
-import { SelectOptions } from '../../../../types/molecules';
-import { ICategory, TypeOfOutlay } from '../../../store/types';
+import { ICategory } from "../../../../types/category";
+import { SelectOptions, TypeOfOutlay } from "../../../../types/common";
 
 export const setSelectOptions = (
   typeOfOutlay: TypeOfOutlay,

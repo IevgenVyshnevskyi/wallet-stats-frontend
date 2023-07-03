@@ -1,8 +1,9 @@
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+
 import { useAppDispatch } from "../../store/hooks";
 
-import { ISwitchButton } from "../../components/molecules/tabs/switch/TabSwitch";
-import { ICategory, TypeOfOutlay } from "../../store/types";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { ICategory } from "../../../types/category";
+import { ISwitchButton, TypeOfOutlay } from "../../../types/common";
 
 const useSwitchButtonOptions = (
   data: ICategory,

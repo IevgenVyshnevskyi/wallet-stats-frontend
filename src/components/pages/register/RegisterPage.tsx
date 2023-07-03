@@ -26,7 +26,7 @@ import InterfaceImage from "../../../shared/assets/images/interface-image-full.p
 
 import COLORS from "../../../shared/styles/variables";
 
-import { RegisterFormData } from "../../../store/types";
+import { RegisterFormData } from "../../../../types/user";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useAppDispatch();

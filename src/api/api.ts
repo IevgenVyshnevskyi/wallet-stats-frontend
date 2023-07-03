@@ -1,7 +1,7 @@
-import { Store } from '@reduxjs/toolkit';
 import axios, { InternalAxiosRequestConfig } from 'axios';
+import { Store } from '@reduxjs/toolkit';
 
-import { IUser } from "../store/types";
+import { IUser } from '../../types/user';
 
 export const BASE_URL = "https://prod.wallet.cloudns.ph:8800";
 export const REGISTER_PATH = "/accounts/register/";

@@ -1,6 +1,12 @@
 import styled, { css } from 'styled-components';
-import { commonStyles } from '../../../shared/styles/commonStyles';
-import { TypographyProps } from '../../../../types/atoms';
+
+import { commonStyles, commonStylesProps } from '../../../shared/styles/commonStyles';
+
+type TypographyProps = commonStylesProps & {
+  textAlign?: string;
+  letterSpacing?: string;
+  lh?: string;
+}
 
 export const Typography = styled.p<TypographyProps>(props => {
   const {

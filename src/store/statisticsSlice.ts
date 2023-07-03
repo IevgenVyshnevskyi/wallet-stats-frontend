@@ -9,33 +9,10 @@ import { updateChartCategoryTransactions } from '../shared/utils/store/updateCha
 
 import { $api, TRANSACTION_PATH } from '../api/api';
 
-import {
-  FilterByDaysOptions,
-  ICategory,
-  Transactions,
-  TypeOfOutlay
-} from './types';
-
-type DoughnutChartData = {
-  allTransactions: Transactions;
-  categoryTransactions: Transactions[];
-  categories: ICategory[];
-  data: string[],
-  totalAmount: string,
-};
-
-export type StatisticsState = {
-  filterByDays: FilterByDaysOptions;
-  incomesChart: DoughnutChartData;
-  expensesChart: DoughnutChartData;
-  allOutlaysChart: {
-    allTransactions: Transactions;
-    activeCategoryId: number;
-    categoryTransactions: Transactions;
-  };
-  isLoading: boolean;
-  error: string | null;
-};
+import { Transactions } from '../../types/transactions';
+import { ICategory } from '../../types/category';
+import { TypeOfOutlay } from '../../types/common';
+import { StatisticsState } from '../../types/statistics';
 
 export const getFilteredCategoryTransactions = createAsyncThunk<
   { data: Transactions[], chartType: TypeOfOutlay },

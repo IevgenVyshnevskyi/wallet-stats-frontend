@@ -14,7 +14,7 @@ import Wallet from "../../molecules/wallet/Wallet";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { IWallet } from "../../../store/types";
+import { IWallet } from "../../../../types/wallet";
 
 const Wallets: React.FC = () => {
   const dispatch = useAppDispatch()

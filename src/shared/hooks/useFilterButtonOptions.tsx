@@ -9,8 +9,7 @@ import {
   getFilteredCategories
 } from "../../store/categorySlice";
 
-import { IFilterButton } from "../../components/molecules/tabs/filter/TabFilter";
-import { TypeOfOutlay } from "../../store/types";
+import { IFilterButton, TypeOfOutlay } from "../../../types/common";
 
 const useFilterButtonOptions = (type: "category" | "transaction"): IFilterButton[] => {
   const dispatch = useAppDispatch();

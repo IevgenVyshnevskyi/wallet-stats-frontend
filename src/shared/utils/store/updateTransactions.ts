@@ -1,7 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 
-import { TransactionState } from "../../../store/transactionSlice";
-import { Transactions } from "../../../store/types";
+import { TransactionState, Transactions } from "../../../../types/transactions";
 
 export const updateTransactions = (
   state: TransactionState,

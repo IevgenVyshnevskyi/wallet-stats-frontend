@@ -1,4 +1,5 @@
 import { FieldValues, UseFormWatch } from "react-hook-form";
+
 import { passwordRegex } from "../regexes";
 
 type ConfirmPasswordInputRules = {

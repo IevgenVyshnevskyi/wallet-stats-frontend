@@ -1,5 +1,4 @@
 import { useAppSelector } from "../../../store/hooks";
-import { ITransaction, Transactions } from "../../../store/types";
 
 import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
 import {
@@ -13,6 +12,8 @@ import { Typography } from "../../atoms/typography/Typography.styled";
 import Transaction from "../../molecules/transaction/Transaction";
 
 import COLORS from "../../../shared/styles/variables";
+
+import { ITransaction, Transactions } from "../../../../types/transactions";
 
 const renderTransactionItems = (transactions: ITransaction[]): React.ReactNode[] => {
   return transactions

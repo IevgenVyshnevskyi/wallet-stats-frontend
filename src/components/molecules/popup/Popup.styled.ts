@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { blackSVGtoWhite } from '../../../shared/styles/iconStyles'
+
 import { Box } from '../../atoms/box/Box.styled'
 
 import COLORS from '../../../shared/styles/variables'

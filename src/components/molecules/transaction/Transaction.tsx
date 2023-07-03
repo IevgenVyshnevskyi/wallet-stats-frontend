@@ -11,9 +11,9 @@ import ExpenseIcon from "../../../shared/assets/icons/expense.svg"
 
 import COLORS from '../../../shared/styles/variables';
 
-import { ITransaction } from "../../../store/types";
+import { ITransaction } from '../../../../types/transactions';
 
-export type TransactionProps = {
+type TransactionProps = {
   transaction: ITransaction;
   onClick?: () => void;
   isTransactionsPage?: boolean;

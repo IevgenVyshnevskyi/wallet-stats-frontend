@@ -1,5 +1,16 @@
 import styled from "styled-components";
-import { ImgProps } from "../../../../types/atoms";
+
+type ImgProps = {
+  maxWidth?: string;
+  maxHeight?: string;
+  position?: string;
+  zIndex?: string;
+  top?: string;
+  left?: string;
+  m?: string;
+  p?: string;
+  display?: string;
+}
 
 export const Img = styled.img<ImgProps>`
   max-width: ${({maxWidth}) => maxWidth || undefined};

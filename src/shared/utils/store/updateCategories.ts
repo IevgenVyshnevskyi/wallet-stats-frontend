@@ -1,7 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 
-import { CategoryState } from "../../../store/categorySlice";
-import { ICategory } from "../../../store/types";
+import { CategoryState, ICategory } from "../../../../types/category";
 
 export const updateCategories = (
   state: CategoryState,

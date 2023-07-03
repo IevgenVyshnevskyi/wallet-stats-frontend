@@ -8,7 +8,7 @@ import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
+import { IFilterButton } from "../../../../types/common";
 
 const StatisticsHeader: React.FC = () => {
   const dispatch = useAppDispatch();

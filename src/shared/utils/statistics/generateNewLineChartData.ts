@@ -1,4 +1,4 @@
-import { Transactions } from "../../../store/types";
+import { Transactions } from "../../../../types/transactions";
 
 export const generateNewLineChartData = (categoryTransactions: Transactions): {
   diffInDays: number,

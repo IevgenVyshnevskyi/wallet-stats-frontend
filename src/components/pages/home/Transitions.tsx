@@ -1,9 +1,7 @@
 import { useAppSelector } from "../../../store/hooks";
 
 import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
-import {
-  formatTransactionDateToFullDate
-} from "../../../shared/utils/transactions/formatTransactionDate";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/transactions/formatTransactionDate";
 
 import { Box } from "../../atoms/box/Box.styled";
 import { List } from "../../atoms/list/List.styled";

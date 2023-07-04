@@ -1,4 +1,4 @@
-export function formatTransactionDateToFullDate(dateStr: string): string {
+export const formatTransactionDateToFullDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   date.setHours(date.getHours() + 3);
 
@@ -16,7 +16,7 @@ export function formatTransactionDateToFullDate(dateStr: string): string {
   return `${capitalizedDayOfWeek}, ${dayOfMonthAndMonthName}`;
 }
 
-export function formatTransactionDateToUTC(date: Date): string {
+export const formatTransactionDateToUTC = (date: Date): string => {
   const newDate = new Date(date);
 
   const options = {
@@ -35,7 +35,7 @@ export function formatTransactionDateToUTC(date: Date): string {
   return isoDate;
 }
 
-export function formatTransactionDateToString(dateStr: string): Date {
+export const formatTransactionDateToString = (dateStr: string): Date => {
   const utcDate = new Date(dateStr);
   utcDate.setUTCHours(utcDate.getUTCHours() + 3);
 

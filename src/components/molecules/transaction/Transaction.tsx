@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../../store/hooks';
 
-import formatTransactionTime from '../../../shared/utils/transactions/formatTransactionTime';
+import { formatTransactionTime } from '../../../shared/utils/transactions/formatTransactionTime';
 
 import { Box } from "../../atoms/box/Box.styled";
 import { Typography } from "../../atoms/typography/Typography.styled";

@@ -13,7 +13,7 @@ import CategoriesPage from './components/pages/categories/CategoriesPage';
 import StatisticsPage from "./components/pages/statistics/StatisticsPage";
 import NotFoundPage from "./components/pages/not-found/NotFoundPage";
 
-function App() {
+const App = () => {
   const elements = useRoutes([
     { path: '/', element: <Navigate to="/home" replace /> },
     { path: '/welcome', element: <WelcomePage /> },

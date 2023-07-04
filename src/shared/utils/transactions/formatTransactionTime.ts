@@ -1,4 +1,4 @@
-export default function formatTransactionTime(timestamp: string): string {
+export const formatTransactionTime = (timestamp: string): string => {
   const date = new Date(timestamp);
   date.setHours(date.getHours() + 3);
 

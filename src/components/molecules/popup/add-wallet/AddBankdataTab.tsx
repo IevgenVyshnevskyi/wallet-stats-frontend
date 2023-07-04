@@ -117,7 +117,7 @@ const AddBankDataTab: React.FC = () => {
             ref={inputFileRef}
             onChange={(e) => setFileValue(e.target.files[0])}
             multiple={false}
-            style={{ display: "none" }}
+            display="none"
           />
           <Box height="55px">
             {error && <BankdataInfoMessage message="error" />}

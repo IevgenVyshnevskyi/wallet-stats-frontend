@@ -6,8 +6,8 @@ import COLORS from '../../../shared/styles/variables';
 
 export const Input = styled.input`
   width: 100%;
-  ${commonStyles};
   padding: 12px 16px;
+  ${commonStyles}
   border-radius: 10px;
   font-weight: 400;
   font-size: 16px;

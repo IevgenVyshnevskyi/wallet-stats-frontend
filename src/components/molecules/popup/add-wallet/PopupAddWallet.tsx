@@ -64,18 +64,16 @@ const PopupAddWallet: React.FC = () => {
 						Додати картковий рахунок
 					</Typography>
 					<Box display="flex" width="100%" mb="24px">
-						<ButtonPopup onClick={() => setIsAddWalletManuallyOpen(true)}
-							style={{
-								fontWeight: isAddWalletManuallyOpen && "700",
-								borderBottom: isAddWalletManuallyOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
-							}}>
+						<ButtonPopup
+							onClick={() => setIsAddWalletManuallyOpen(true)}
+							isActive={isAddWalletManuallyOpen}
+						>
 							Ввести дані вручну
 						</ButtonPopup>
-						<ButtonPopup onClick={() => setIsAddWalletManuallyOpen(false)}
-							style={{
-								fontWeight: !isAddWalletManuallyOpen && "700",
-								borderBottom: !isAddWalletManuallyOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
-							}}>
+						<ButtonPopup
+							onClick={() => setIsAddWalletManuallyOpen(false)}
+							isActive={!isAddWalletManuallyOpen}
+						>
 							Завантажити дані з файлу
 						</ButtonPopup>
 					</Box>

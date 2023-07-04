@@ -36,6 +36,11 @@ export type commonStylesProps = {
   borderRadius?: string;
   tabindex?: string;
   border?: string;
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  cursor?: string;
 }
 
 export const commonStyles = css<commonStylesProps>`
@@ -73,4 +78,9 @@ export const commonStyles = css<commonStylesProps>`
   border-radius: ${({ borderRadius }) => borderRadius || undefined};
   tabindex: ${({ tabindex }) => tabindex || undefined};
   border: ${({ border }) => border || undefined};
+  top: ${({ top }) => top || undefined};
+  bottom: ${({ bottom }) => bottom || undefined};
+  left: ${({ left }) => left || undefined};
+  right: ${({ right }) => right || undefined};
+  cursor: ${({ cursor }) => cursor || undefined};
 `

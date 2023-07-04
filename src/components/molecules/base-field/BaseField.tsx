@@ -1,6 +1,7 @@
 import { Box } from "../../atoms/box/Box.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { Input } from "../../atoms/input/Input.styled";
+import { Typography } from "../../atoms/typography/Typography.styled";
 
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
@@ -51,28 +52,28 @@ const BaseField: React.FC<BaseFieldProps> = ({
         mb="6px"
         textAlight="left"
       >
+
         {label}
       </Label>
       <Box position="relative">
         {fieldType === "password" && (
-          <span
+          <Typography
+            as="span"
+            position="absolute"
+            top="16px"
+            right="10px"
+            cursor="pointer"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            style={{
-              position: "absolute",
-              top: "16px",
-              right: "10px",
-              cursor: "pointer"
-            }}
           >
             {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
-          </span>
+          </Typography>
         )}
         <Input
           type={setInputType()}
           id={name}
           name={name}
           width="265px"
-          style={{ paddingRight: "35px" }}
+          pr="35px"
           className={errors?.[name] && "error"}
           {...registerOptions}
           {...rest}

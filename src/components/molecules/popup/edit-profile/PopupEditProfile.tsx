@@ -15,8 +15,6 @@ import ChangePasswordTab from "./ChangePasswordTab";
 
 import CrossIcon from '../../../../shared/assets/icons/cross.svg';
 
-import COLORS from "../../../../shared/styles/variables";
-
 const PopupEditProfile: React.FC = () => {
 	const {
 		setIsEditProfilePopupOpen,
@@ -64,18 +62,16 @@ const PopupEditProfile: React.FC = () => {
 					</Typography>
 					<Box display="flex" direction="column" mb="25px">
 						<Box display="flex" width="100%" mb="24px">
-							<ButtonPopup onClick={() => setIsEditProfileTabOpen(true)}
-								style={{
-									fontWeight: isEditProfileTabOpen && "700",
-									borderBottom: isEditProfileTabOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
-								}}>
+							<ButtonPopup
+								onClick={() => setIsEditProfileTabOpen(true)}
+								isActive={isEditProfileTabOpen}
+							>
 								Дані користувача
 							</ButtonPopup>
-							<ButtonPopup onClick={() => setIsEditProfileTabOpen(false)}
-								style={{
-									fontWeight: !isEditProfileTabOpen && "700",
-									borderBottom: !isEditProfileTabOpen && `2px solid ${COLORS.PRIMARY_HOVER}`
-								}}>
+							<ButtonPopup
+								onClick={() => setIsEditProfileTabOpen(false)}
+								isActive={!isEditProfileTabOpen}
+							>
 								Зміна паролю
 							</ButtonPopup>
 						</Box>

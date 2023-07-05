@@ -1,0 +1,145 @@
+{
+  "users": [
+    {
+      "id": 0,
+      "first_name": "john",
+      "last_name": "doe",
+      "email": "user@gmail.com"
+    }
+  ],
+  "category": [
+    {
+      "id": 0,
+      "title": "Подарунки та благодійність (подарунки родичам та друзям, пожертвування)",
+      "type_of_outlay": "income",
+      "owner": 0
+    },
+    {
+      "id": 1,
+      "title": "Розваги (кінотеатри, концерти, музеї, ігри)",
+      "type_of_outlay": "expense",
+      "owner": 0
+    },
+    {
+      "id": 2,
+      "title": "Техніка та електроніка (комп'ютери, смартфони, планшети)",
+      "type_of_outlay": "expense",
+      "owner": 0
+    }
+  ],
+  "transactions": {
+    "2023-04-07": [
+      {
+        "id": 0,
+        "owner": 0,
+        "wallet": 0,
+        "title": "title",
+        "category": 1,
+        "description": "New transaction",
+        "type_of_outlay": "expense",
+        "amount_of_funds": "7193",
+        "created": "2023-04-07T21:01:49.424000Z"
+      },
+      {
+        "id": 1,
+        "owner": 0,
+        "wallet": 0,
+        "title": "title",
+        "category": 1,
+        "description": "New transaction",
+        "type_of_outlay": "expense",
+        "amount_of_funds": "7193",
+        "created": "2023-04-07T21:01:49.424000Z"
+      }
+    ],
+    "2023-06-10": [
+      {
+        "id": 2,
+        "owner": 0,
+        "wallet": 1,
+        "title": "New transaction",
+        "category": 0,
+        "description": "New transaction",
+        "type_of_outlay": "income",
+        "amount_of_funds": "3114.79",
+        "created": "2023-06-10T23:01:49.424000Z"
+      }
+    ],
+    "2023-07-04": [
+      {
+        "id": 3,
+        "owner": 0,
+        "wallet": 2,
+        "title": "New transaction",
+        "category": 2,
+        "description": "New transaction",
+        "type_of_outlay": "expense",
+        "amount_of_funds": "3114.79",
+        "created": "2023-06-04T23:01:49.424000Z"
+      }
+    ]
+  },
+  "wallet": [
+    {
+      "id": 0,
+      "title": "Готівка",
+      "amount": "13248.26",
+      "type_of_account": "cash",
+      "owner": 1
+    },
+    {
+      "id": 1,
+      "title": "Приват",
+      "amount": "3042.65",
+      "type_of_account": "bank",
+      "owner": 1
+    },
+    {
+      "id": 2,
+      "title": "Моно",
+      "amount": "5346.70",
+      "type_of_account": "bank",
+      "owner": 1
+    },
+    {
+      "id": 3,
+      "title": "Ощадss",
+      "amount": "346",
+      "type_of_account": "bank",
+      "owner": 10
+    },
+    {
+      "id": 4,
+      "title": "Альфа",
+      "amount": "2314.35",
+      "type_of_account": "bank",
+      "owner": 1
+    }
+  ],
+  "charts": {
+    "doughnut": {
+      "data": ["30", "25", "20", "15", "10"],
+      "labels": [
+        "Подарунки та благодійність",
+        "Охорона здоров'я та краса",
+        "Їжа та напої",
+        "Електроніка та техніка",
+        "Комунальні послуги"
+      ]
+    }
+  },
+  "options": [
+    {
+      "value": "Подарунки та благодійність (подарунки родичам та друзям, пожертвування)",
+      "label": "Подарунки та благодійність (подарунки родичам та друзям, пожертвування)"
+    },
+    {
+      "value": "Розваги (кінотеатри, концерти, музеї, ігри)",
+      "label": "Розваги (кінотеатри, концерти, музеї, ігри)"
+    },
+    {
+      "value": "Техніка та електроніка (комп'ютери, смартфони, планшети)",
+      "label": "Техніка та електроніка (комп'ютери, смартфони, планшети)"
+    }
+  ]
+}

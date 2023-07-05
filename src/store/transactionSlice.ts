@@ -1,70 +1,69 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserDetails } from './userSlice';
+import { getUserDetails } from "./userSlice";
 
-import { updateTransactions } from '../shared/utils/store/updateTransactions';
+import { updateTransactions } from "../shared/utils/store/updateTransactions";
 
-import { $api, TRANSACTION_PATH } from '../api/api';
+import { $api, TRANSACTION_PATH } from "../api/api";
 
-import { MethodTypes } from '../../types/common';
-import { ITransaction, TransactionState, Transactions } from '../../types/transactions';
+import { MethodTypes } from "../../types/common";
+import {
+  ITransaction,
+  TransactionState,
+  Transactions,
+} from "../../types/transactions";
 
 type TransactionActionPayload = {
   method: MethodTypes;
   data?: ITransaction;
   id?: string;
-}
+};
 
 export const transactionAction = createAsyncThunk<
   Transactions,
   TransactionActionPayload,
   { rejectValue: string }
->(
-  'transaction/transactionAction',
-  async (payload, { rejectWithValue }) => {
-    const { method, data, id } = payload;
+>("transaction/transactionAction", async (payload, { rejectWithValue }) => {
+  const { method, data, id } = payload;
 
-    try {
-      if (method !== "GET") {
-        const response = await $api({
-          method,
-          url: `${TRANSACTION_PATH}${id ? (id + '/') : ''}`,
-          data: data || {},
-        });
-        return response.data;
-      } else {
-        const response = await $api.get(TRANSACTION_PATH);
-        return response.data;
-      }
-    } catch (error) {
-      return rejectWithValue('Помилка');
+  try {
+    if (method !== "GET") {
+      const response = await $api({
+        method,
+        url: `${TRANSACTION_PATH}${id ? `${id}/` : ""}`,
+        data: data || {},
+      });
+      return response.data;
     }
+
+    const response = await $api.get(TRANSACTION_PATH);
+
+    return response.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
   }
-);
+});
 
 export const getTransactions = createAsyncThunk<
   Transactions,
   undefined,
   { rejectValue: string }
->(
-  'transaction/getTransactions',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await $api.get(TRANSACTION_PATH);
-      return response.data;
-    } catch (error) {
-      const errorMessage = error.response.data;
-      return rejectWithValue(errorMessage);
-    }
+>("transaction/getTransactions", async (_, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(TRANSACTION_PATH);
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 export const getFilteredTransactions = createAsyncThunk<
-  { data: Transactions, params: string },
+  { data: Transactions; params: string },
   string,
   { rejectValue: string }
 >(
-  'transaction/getFilteredTransactions',
+  "transaction/getFilteredTransactions",
   async (params, { rejectWithValue }) => {
     try {
       const res = await $api.get(`${TRANSACTION_PATH}${params}`);
@@ -93,10 +92,10 @@ const initialState: TransactionState = {
   isEditTransactionSuccess: false,
   isDeleteTransactionSuccess: false,
   isEditTransactionOpen: false,
-}
+};
 
 const transactionSlice = createSlice({
-  name: 'transaction',
+  name: "transaction",
   initialState,
   reducers: {
     resetTransactionState: () => {
@@ -119,13 +118,13 @@ const transactionSlice = createSlice({
       state.addTransactionData = {
         ...state.addTransactionData,
         ...action.payload,
-      }
+      };
     },
     setEditTransactionData: (state, action) => {
       state.editTransactionData = {
         ...state.editTransactionData,
         ...action.payload,
-      }
+      };
     },
     setSuccessStatus: (state, action) => {
       state.isAddTransactionSuccess = action.payload;
@@ -175,7 +174,7 @@ const transactionSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        updateTransactions(state, action)
+        updateTransactions(state, action);
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;
@@ -192,8 +191,8 @@ const transactionSlice = createSlice({
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const {
@@ -205,7 +204,7 @@ export const {
   setAddTransactionData,
   setEditTransactionData,
   setSuccessStatus,
-  setIsEditTransactionOpen
+  setIsEditTransactionOpen,
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

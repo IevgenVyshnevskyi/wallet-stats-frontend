@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   setActiveTransaction,
   setEditTransactionData,
-  setIsEditTransactionOpen
+  setIsEditTransactionOpen,
 } from "../../../store/transactionSlice";
 
 import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
@@ -27,14 +27,15 @@ const renderTransactionItems = (
   onTransactionClick: (transaction: ITransaction) => void
 ): React.ReactNode[] => {
   return transactions
-    .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+    .sort((a, b) => {
+      return new Date(b.created).getTime() - new Date(a.created).getTime();
+    })
     .map((transaction) => (
       <ListItem key={transaction?.id}>
         <ButtonTransparent
           width="100%"
           onClick={() => onTransactionClick(transaction)}
-          borderRadius="8px"
-        >
+          borderRadius="8px">
           <Transaction transaction={transaction} isTransactionsPage />
         </ButtonTransparent>
       </ListItem>
@@ -44,10 +45,9 @@ const renderTransactionItems = (
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    transactions,
-    filterByTypeOfOutlay
-  } = useAppSelector(state => state.transaction);
+  const { transactions, filterByTypeOfOutlay } = useAppSelector(
+    (state) => state.transaction
+  );
 
   const filterButtons = useFilterButtonOptions("transaction");
 
@@ -55,7 +55,7 @@ const Transactions: React.FC = () => {
     dispatch(setActiveTransaction(transaction));
     dispatch(setEditTransactionData(transaction));
     dispatch(setIsEditTransactionOpen(true));
-  }
+  };
 
   const transactionsData = (): Transactions => {
     let filteredTransactions: Transactions = {};
@@ -91,8 +91,7 @@ const Transactions: React.FC = () => {
           mr="10px"
           fw="600"
           color={COLORS.DARK_FOR_TEXT}
-          fz="12px"
-        >
+          fz="12px">
           Відобразити
         </Typography>
         <TabFilter filterButtons={filterButtons} />
@@ -106,9 +105,8 @@ const Transactions: React.FC = () => {
         borderRadius="16px"
         grow="1"
         overflow="auto"
-        height="100px"
-      >
-        {Object.entries(transactionsData).map(([date, transactions]) => (
+        height="100px">
+        {Object.entries(transactionsData()).map(([date, transactions]) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
               {formatTransactionDateToFullDate(date)}
@@ -121,6 +119,6 @@ const Transactions: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default Transactions;

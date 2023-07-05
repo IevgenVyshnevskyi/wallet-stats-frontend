@@ -12,13 +12,13 @@ export const generateLabels = (
   const labels: string[] = [];
 
   if (Object.keys(categoryTransactions)?.length > 0) {
-    for (let i = 0; i < (parseInt(filterByDays)); i++) {
+    for (let i = 0; i < parseInt(filterByDays); i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);
 
       const label = date.toLocaleDateString("uk-UA", {
         month: "short",
-        day: "numeric"
+        day: "numeric",
       });
 
       labels.push(label);
@@ -26,50 +26,52 @@ export const generateLabels = (
   }
 
   return labels;
-}
+};
 
 export const setPointValues = (
   filterByDays: FilterByDaysOptions,
   setPointHitRadiusValue: React.Dispatch<React.SetStateAction<number>>,
-  setPointBorderWidthValue: React.Dispatch<React.SetStateAction<number>>,
+  setPointBorderWidthValue: React.Dispatch<React.SetStateAction<number>>
 ) => {
   switch (filterByDays) {
     case "30":
-      setPointHitRadiusValue(30)
-      setPointBorderWidthValue(4)
+      setPointHitRadiusValue(4);
+      setPointBorderWidthValue(30);
       break;
     case "90":
-      setPointHitRadiusValue(15)
-      setPointBorderWidthValue(3)
+      setPointHitRadiusValue(3);
+      setPointBorderWidthValue(15);
       break;
     case "180":
-      setPointHitRadiusValue(8)
-      setPointBorderWidthValue(2)
+      setPointHitRadiusValue(2);
+      setPointBorderWidthValue(8);
       break;
     default:
       break;
   }
-}
+};
 
 export const setLineChartConfig = (
   data: number[],
   labels: string[],
   pointBorderWidthValue: number,
-  pointHitRadiusValue: number,
-): { chartData: ChartData, chartOptions: ChartOptions } => {
+  pointHitRadiusValue: number
+): { chartData: ChartData; chartOptions: ChartOptions } => {
   const chartData: ChartData = {
-    labels: labels,
-    datasets: [{
-      label: 'Витрати або надходження за категорією',
-      data,
-      fill: false,
-      borderColor: COLORS.PRIMARY,
-      tension: 0.4,
-      pointBackgroundColor: COLORS.PRIMARY,
-      pointBorderWidth: pointBorderWidthValue,
-      pointHitRadius: pointHitRadiusValue,
-    }]
-  }
+    labels,
+    datasets: [
+      {
+        label: "Витрати або надходження за категорією",
+        data,
+        fill: false,
+        borderColor: COLORS.PRIMARY,
+        tension: 0.4,
+        pointBackgroundColor: COLORS.PRIMARY,
+        pointBorderWidth: pointBorderWidthValue,
+        pointHitRadius: pointHitRadiusValue,
+      },
+    ],
+  };
 
   const chartOptions: ChartOptions = {
     plugins: {
@@ -113,5 +115,5 @@ export const setLineChartConfig = (
     },
   };
 
-  return { chartData, chartOptions }
-}
+  return { chartData, chartOptions };
+};

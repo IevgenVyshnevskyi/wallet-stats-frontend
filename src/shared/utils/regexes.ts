@@ -4,9 +4,10 @@ export const twoSymbolsRegex = /^.{2,}$/;
 
 export const nameRegex = /^[A-Za-zА-Яа-яІіЇїЄєҐґ\s-']{2,}$/;
 
-export const titleRegex = /^(?=.*[A-Za-zА-Яа-яІіЇїЄєҐґ])[A-Za-zА-Яа-яІіЇїЄєҐґ0-9\s-'()]+$/;
+export const titleRegex =
+  /^(?=.*[A-Za-zА-Яа-яІіЇїЄєҐґ])[A-Za-zА-Яа-яІіЇїЄєҐґ0-9\s-',()]+$/;
 
 export const passwordRegex =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!\"#$%&'()*+,-.\/:;<=>?@[\\\]^_`{|}~])[A-Za-z\d!\"#$%&'()*+,-.\/:;<=>?@[\\\]^_`{|}~]{8,}$/;
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])[A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]{8,}$/;
 
-export const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+export const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;

@@ -1,86 +1,77 @@
-import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserDetails } from './userSlice';
+import { getUserDetails } from "./userSlice";
 
-import { updateCategories } from '../shared/utils/store/updateCategories';
+import { updateCategories } from "../shared/utils/store/updateCategories";
 
-import { $api, CATEGORY_PATH } from '../api/api';
+import { $api, CATEGORY_PATH } from "../api/api";
 
-import { CategoryState, ICategory } from '../../types/category';
-import { MethodTypes } from '../../types/common';
+import { CategoryState, ICategory } from "../../types/category";
+import { MethodTypes } from "../../types/common";
 
 type CategoryActionPayload = {
   method: MethodTypes;
   data?: ICategory;
   id?: string;
-}
+};
 
 export const categoryAction = createAsyncThunk<
   ICategory[],
   CategoryActionPayload,
   { rejectValue: string }
->(
-  'category/categoryAction',
-  async (payload, { rejectWithValue }) => {
-    const { method, data, id } = payload;
+>("category/categoryAction", async (payload, { rejectWithValue }) => {
+  const { method, data, id } = payload;
 
-    if (method !== "GET") {
-      try {
-        const response = await $api({
-          method,
-          url: `${CATEGORY_PATH}${id ? (id + '/') : ''}`,
-          data: data || {},
-        });
-
-        return response?.data;
-      } catch (error) {
-        return rejectWithValue('Помилка');
-      }
-    }
-
+  if (method !== "GET") {
     try {
-      const response = await $api.get(CATEGORY_PATH);
+      const response = await $api({
+        method,
+        url: `${CATEGORY_PATH}${id ? `${id}/` : ""}`,
+        data: data || {},
+      });
+
       return response?.data;
     } catch (error) {
-      return rejectWithValue('Помилка');
+      return rejectWithValue("Помилка");
     }
   }
-);
+
+  try {
+    const response = await $api.get(CATEGORY_PATH);
+    return response?.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
+  }
+});
 
 export const getCategories = createAsyncThunk<
   ICategory[],
   undefined,
   { rejectValue: string }
->(
-  'category/getCategories',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await $api.get(CATEGORY_PATH);
-      return response?.data;
-    } catch (error) {
-      const errorMessage = error.response.data;
-      return rejectWithValue(errorMessage);
-    }
+>("category/getCategories", async (_, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(CATEGORY_PATH);
+    return response?.data;
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 export const getFilteredCategories = createAsyncThunk<
-  { data: ICategory[], params: string },
+  { data: ICategory[]; params: string },
   string,
   { rejectValue: string }
->(
-  'transaction/getFilteredCategories',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await $api.get(`${CATEGORY_PATH}${params}`);
-      const data = response?.data;
-      return { data, params };
-    } catch (error) {
-      const errorMessage = error.response.data;
-      return rejectWithValue(errorMessage);
-    }
+>("transaction/getFilteredCategories", async (params, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(`${CATEGORY_PATH}${params}`);
+    const data = response?.data;
+    return { data, params };
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 const initialState: CategoryState = {
   filterByTypeOfOutlay: "all",
@@ -100,10 +91,10 @@ const initialState: CategoryState = {
   isEditCategorySuccess: false,
   isDeleteCategorySuccess: false,
   isEditCategoryOpen: false,
-}
+};
 
 const categorySlice = createSlice({
-  name: 'category',
+  name: "category",
   initialState,
   reducers: {
     resetCategoryState: (state) => {
@@ -132,13 +123,13 @@ const categorySlice = createSlice({
       state.addCategoryData = {
         ...state.addCategoryData,
         ...action.payload,
-      }
+      };
     },
     setEditCategoryData: (state, action) => {
       state.editCategoryData = {
         ...state.editCategoryData,
         ...action.payload,
-      }
+      };
     },
     setSuccessStatus: (state, action) => {
       state.isAddCategorySuccess = action.payload;
@@ -187,7 +178,7 @@ const categorySlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredCategories.fulfilled, (state, action) => {
-        updateCategories(state, action)
+        updateCategories(state, action);
         state.isLoading = false;
       })
       .addCase(getFilteredCategories.rejected, (state, action) => {
@@ -205,8 +196,8 @@ const categorySlice = createSlice({
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const {
@@ -220,7 +211,7 @@ export const {
   setAddCategoryData,
   setEditCategoryData,
   setSuccessStatus,
-  setIsEditCategoryOpen
+  setIsEditCategoryOpen,
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

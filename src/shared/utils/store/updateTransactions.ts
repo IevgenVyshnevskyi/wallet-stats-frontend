@@ -4,7 +4,7 @@ import { TransactionState, Transactions } from "../../../../types/transactions";
 
 export const updateTransactions = (
   state: TransactionState,
-  action: PayloadAction<{ data: Transactions, params: string }>
+  action: PayloadAction<{ data: Transactions; params: string }>
 ) => {
   const { data, params } = action.payload;
 
@@ -21,4 +21,4 @@ export const updateTransactions = (
     default:
       break;
   }
-}
+};

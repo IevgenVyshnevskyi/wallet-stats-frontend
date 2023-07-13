@@ -6,7 +6,7 @@ import { StatisticsState } from "../../../../types/statistics";
 
 export const updateChartCategoryTransactions = (
   state: StatisticsState,
-  action: PayloadAction<{ data: Transactions[], chartType: TypeOfOutlay }>
+  action: PayloadAction<{ data: Transactions[]; chartType: TypeOfOutlay }>
 ) => {
   const { data, chartType } = action.payload;
 
@@ -20,4 +20,4 @@ export const updateChartCategoryTransactions = (
     default:
       break;
   }
-}
+};

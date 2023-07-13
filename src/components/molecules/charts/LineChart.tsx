@@ -7,14 +7,13 @@ import { useAppSelector } from "../../../store/hooks";
 import {
   generateLabels,
   setLineChartConfig,
-  setPointValues
+  setPointValues,
 } from "./lineChartConfig";
 
 const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
-  const {
-    filterByDays,
-    allOutlaysChart,
-  } = useAppSelector(state => state.statistics)
+  const { filterByDays, allOutlaysChart } = useAppSelector(
+    (state) => state.statistics
+  );
 
   const chartRef = useRef(null);
   const chart = useRef(null);
@@ -35,17 +34,16 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
     const labels = generateLabels(
       allOutlaysChart.categoryTransactions,
       filterByDays
-    )
+    );
 
-    setLabels(labels)
+    setLabels(labels);
 
     setPointValues(
       filterByDays,
       setPointHitRadiusValue,
       setPointBorderWidthValue
-    )
+    );
   }, [allOutlaysChart.categoryTransactions]);
-
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -80,7 +78,12 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   ]);
 
   return (
-    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="280px" ref={chartRef} />
+    <canvas
+      style={{ zIndex: "-2" }}
+      id="myLineChart"
+      height="280px"
+      ref={chartRef}
+    />
   );
 };
 

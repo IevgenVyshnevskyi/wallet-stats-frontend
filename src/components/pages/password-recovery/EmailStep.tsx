@@ -20,7 +20,7 @@ import COLORS from "../../../shared/styles/variables";
 
 const EmailStep: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector(state => state.passwordRecovery)
+  const { isLoading } = useAppSelector((state) => state.passwordRecovery);
 
   const {
     register,
@@ -30,27 +30,49 @@ const EmailStep: React.FC = () => {
 
   const handleSub = (data: { email: string }) => {
     dispatch(requestPasswordReset(data));
-  }
+  };
 
   return (
     <Container display="flex">
-      <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
+      <Box
+        flex="1"
+        overflow="hidden"
+        height="100vh"
+        background={COLORS.GRADIENT}>
         <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
       </Box>
-      <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center"
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="592px"
+        justifyContent="center"
+        alignItems="center"
         textAlign="center"
         background={COLORS.WHITE}>
         <Box m="auto 0">
           <Img src={logo} alt="Logo" />
-          <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center"
+          <Typography
+            fw="700"
+            fz="24px"
+            lh="170%"
+            color={COLORS.ALMOST_BLACK_FOR_TEXT}
+            textAlign="center"
             m="48px 0 48px 0">
             Відновлення пароля
           </Typography>
-          <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT}
+          <Typography
+            fw="400"
+            fz="16px"
+            lh="24px"
+            m="0 0 24px 0"
+            color={COLORS.ALMOST_BLACK_FOR_TEXT}
             textAlign="center">
             Введіть пошту на яку ви реєстрували <br /> ваш аккаунт
           </Typography>
-          <Form onSubmit={handleSubmit(handleSub)} maxWidth="592px" textAlign="center"
+          <Form
+            onSubmit={handleSubmit(handleSub)}
+            maxWidth="592px"
+            textAlign="center"
             alignItems="end">
             <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
               <Box mb="6px">
@@ -59,11 +81,16 @@ const EmailStep: React.FC = () => {
                   label="Пошта"
                   errors={errors}
                   name="email"
-                  registerOptions={register('email', emailFieldRules)}
+                  registerOptions={register("email", emailFieldRules)}
                 />
               </Box>
             </Box>
-            <Button type="submit" disabled={!isValid || isLoading} width="100px" m="0 auto" mt="56px"
+            <Button
+              type="submit"
+              disabled={!isValid || isLoading}
+              width="100px"
+              m="0 auto"
+              mt="56px"
               primary>
               Далі
             </Button>
@@ -71,7 +98,7 @@ const EmailStep: React.FC = () => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 export default EmailStep;

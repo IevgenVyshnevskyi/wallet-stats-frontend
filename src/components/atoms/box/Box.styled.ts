@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-import { commonStyles, commonStylesProps } from "../../../shared/styles/commonStyles";
+import {
+  commonStyles,
+  commonStylesProps,
+} from "../../../shared/styles/commonStyles";
 
 type BoxProps = commonStylesProps & {
   border?: string;
@@ -21,7 +24,7 @@ type BoxProps = commonStylesProps & {
   flex?: string;
   flexBasis?: string;
   overflow?: string;
-}
+};
 
 export const Box = styled.div<BoxProps>`
   ${commonStyles};
@@ -33,7 +36,7 @@ export const Box = styled.div<BoxProps>`
 
   max-width: ${({ maxWidth }) => maxWidth || undefined};
   max-height: ${({ maxHeight }) => maxHeight || undefined};
-  text-align: ${({ textAlign }) => textAlign || 'left'};
+  text-align: ${({ textAlign }) => textAlign || "left"};
   background: ${({ background }) => background || undefined};
   position: ${({ position }) => position || "static"};
   z-index: ${({ zIndex }) => zIndex || 0};
@@ -41,4 +44,4 @@ export const Box = styled.div<BoxProps>`
   flex-direction: ${({ flexDirection }) => flexDirection || undefined};
   flex: ${({ flex }) => flex || undefined};
   flex-basis: ${({ flexBasis }) => flexBasis || undefined};
-`
+`;

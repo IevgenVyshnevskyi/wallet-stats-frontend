@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 
 import { PopupContext } from "../../../../contexts/PopupContext";
 
@@ -8,19 +8,19 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   changeUserPassword,
   resetProfileEditErrors,
-  setSuccessStatus
+  setSuccessStatus,
 } from "../../../../store/userSlice";
 
 import {
   confirmPasswordInputRules,
-  passwordInputRules
+  passwordInputRules,
 } from "../../../../shared/utils/field-rules/password";
 
 import { Form } from "../../../atoms/form/Form.styled";
 import { Box } from "../../../atoms/box/Box.styled";
 import { Typography } from "../../../atoms/typography/Typography.styled";
 import { Button } from "../../../atoms/button/Button.styled";
-import BaseField from './../../base-field/BaseField';
+import BaseField from "../../base-field/BaseField";
 
 import COLORS from "../../../../shared/styles/variables";
 
@@ -33,11 +33,9 @@ const ChangePasswordTab: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const {
-    isLoading,
-    isPasswordChanged,
-    passwordChangeError
-  } = useAppSelector(state => state.user)
+  const { isLoading, isPasswordChanged, passwordChangeError } = useAppSelector(
+    (state) => state.user
+  );
 
   const { setIsEditProfilePopupOpen } = useContext(PopupContext);
 
@@ -48,18 +46,18 @@ const ChangePasswordTab: React.FC = () => {
 
   const handleSubmitChangePassword = (data: PasswordChangeFormData) => {
     dispatch(changeUserPassword(data));
-  }
+  };
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
-    watch
+    watch,
   } = useForm({ mode: "all" });
 
   useEffect(() => {
     if (isPasswordChanged) {
-      dispatch(setSuccessStatus(false))
+      dispatch(setSuccessStatus(false));
       handleCloseClick();
     }
   }, [isPasswordChanged]);
@@ -113,9 +111,12 @@ const ChangePasswordTab: React.FC = () => {
         gap="35px"
         borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="24px"
-        mb="24px"
-      >
-        <Button type="submit" disabled={!isValid || isLoading} primary width="100%">
+        mb="24px">
+        <Button
+          type="submit"
+          disabled={!isValid || isLoading}
+          primary
+          width="100%">
           Зберегти
         </Button>
         <Button type="reset" secondary width="100%" onClick={handleCloseClick}>
@@ -123,7 +124,7 @@ const ChangePasswordTab: React.FC = () => {
         </Button>
       </Box>
     </Form>
-  )
-}
+  );
+};
 
 export default ChangePasswordTab;

@@ -7,17 +7,19 @@ import EmailStep from "./EmailStep";
 import ResetLinkStep from "./ResetLinkStep";
 
 const PasswordRecovery: React.FC = () => {
-  const { uid, resetToken } = useParams<{ uid: string, resetToken: string }>();
+  const { uid, resetToken } = useParams<{ uid: string; resetToken: string }>();
 
-  const { isResetLinkStepOpen } = useAppSelector(state => state.passwordRecovery);
-
-  return (
-    (uid && resetToken) ? (
-      <NewPasswordStep uid={uid} resetToken={resetToken} />
-    ) : (
-      isResetLinkStepOpen ? <ResetLinkStep /> : <EmailStep />
-    )
+  const { isResetLinkStepOpen } = useAppSelector(
+    (state) => state.passwordRecovery
   );
-}
+
+  return uid && resetToken ? (
+    <NewPasswordStep uid={uid} resetToken={resetToken} />
+  ) : isResetLinkStepOpen ? (
+    <ResetLinkStep />
+  ) : (
+    <EmailStep />
+  );
+};
 
 export default PasswordRecovery;

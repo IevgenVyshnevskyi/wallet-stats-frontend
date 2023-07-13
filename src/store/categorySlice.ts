@@ -97,9 +97,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    resetCategoryState: (state) => {
-      return initialState;
-    },
+    resetCategoryState: (state) => initialState,
     resetError: (state) => {
       state.error = null;
     },

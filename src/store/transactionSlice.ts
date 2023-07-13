@@ -98,9 +98,7 @@ const transactionSlice = createSlice({
   name: "transaction",
   initialState,
   reducers: {
-    resetTransactionState: () => {
-      return initialState;
-    },
+    resetTransactionState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },

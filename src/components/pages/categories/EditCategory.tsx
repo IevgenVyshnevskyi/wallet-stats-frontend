@@ -9,7 +9,7 @@ import {
   resetActiveCategoryState,
   setActiveCategory,
   setEditCategoryData,
-  setIsEditCategoryOpen
+  setIsEditCategoryOpen,
 } from "../../../store/categorySlice";
 
 import { titleFieldRules } from "../../../shared/utils/field-rules/title";
@@ -25,13 +25,11 @@ import BaseField from "../../molecules/base-field/BaseField";
 import COLORS from "../../../shared/styles/variables";
 
 const EditCategory: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const {
-    activeCategory,
-    editCategoryData,
-    isLoading
-  } = useAppSelector(state => state.category)
+  const { activeCategory, editCategoryData, isLoading } = useAppSelector(
+    (state) => state.category
+  );
 
   const isValid = Object.keys(editCategoryData || {})?.length >= 2;
 
@@ -51,47 +49,45 @@ const EditCategory: React.FC = () => {
   const handleCancelEditCategory = () => {
     dispatch(setIsEditCategoryOpen(false));
     dispatch(resetActiveCategoryState({}));
-  }
+  };
 
   const handleDeleteCategory = () => {
     dispatch(setIsEditCategoryOpen(false));
-    dispatch(categoryAction({
-      method: "DELETE",
-      id: String(activeCategory?.id)
-    }));
+    dispatch(
+      categoryAction({
+        method: "DELETE",
+        id: String(activeCategory?.id),
+      })
+    );
     dispatch(setActiveCategory({}));
-  }
+  };
 
   const handleSub = (data: { title: string }) => {
     const editCategoryDataNoId = {
       ...editCategoryData,
-      title: data?.title
+      title: data?.title,
     };
     delete editCategoryDataNoId.id;
 
     dispatch(setIsEditCategoryOpen(false));
-    dispatch(resetActiveCategoryState({}))
-    dispatch(categoryAction({
-      data: editCategoryDataNoId,
-      method: "PUT",
-      id: String(editCategoryData?.id)
-    }));
-  }
+    dispatch(resetActiveCategoryState({}));
+    dispatch(
+      categoryAction({
+        data: editCategoryDataNoId,
+        method: "PUT",
+        id: String(editCategoryData?.id),
+      })
+    );
+  };
 
   useEffect(() => {
-    clearErrors('title')
-    setValue('title', editCategoryData?.title)
+    clearErrors("title");
+    setValue("title", editCategoryData?.title);
   }, [editCategoryData?.title]);
 
   return (
     <Box display="flex" direction="column" width="540px">
-      <Typography
-        as="h2"
-        fw="600"
-        fz="22px"
-        mt="5px"
-        mb="30px"
-      >
+      <Typography as="h2" fw="600" fz="22px" mt="5px" mb="30px">
         Редагування категорії
       </Typography>
       <Box
@@ -99,15 +95,9 @@ const EditCategory: React.FC = () => {
         display="flex"
         direction="column"
         borderRadius="16px"
-        p="15px"
-      >
+        p="15px">
         <Box mb="25px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
             Тип категорії
           </Typography>
           <TabSwitch switchButtons={switchButtons} />
@@ -118,21 +108,17 @@ const EditCategory: React.FC = () => {
             label="Назва категорії"
             errors={errors}
             name="title"
-            registerOptions={register('title', titleFieldRules)}
+            registerOptions={register("title", titleFieldRules)}
           />
           <Box display="flex" gap="8px" mb="27px">
             <Button
               primary
               width="100%"
               type="submit"
-              disabled={!isValid || !!errors?.title || isLoading}
-            >
+              disabled={!isValid || !!errors?.title || isLoading}>
               Зберегти
             </Button>
-            <Button
-              secondary
-              width="100%"
-              onClick={handleCancelEditCategory}>
+            <Button secondary width="100%" onClick={handleCancelEditCategory}>
               Скасувати
             </Button>
           </Box>
@@ -145,6 +131,6 @@ const EditCategory: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default EditCategory;

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import styled from "styled-components";
+import { commonStyles } from "../../../shared/styles/commonStyles";
 
 export const ButtonTransparent = styled.button`
   ${commonStyles}
@@ -9,4 +9,4 @@ export const ButtonTransparent = styled.button`
   cursor: pointer;
   background: transparent;
   display: flex;
-`
+`;

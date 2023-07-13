@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import {
   changeUserProfile,
   resetProfileEditErrors,
-  setSuccessStatus
+  setSuccessStatus,
 } from "../../../../store/userSlice";
 
 import { nameFieldRules } from "../../../../shared/utils/field-rules/name";
@@ -29,7 +29,9 @@ const EditProfileTab: React.FC = () => {
 
   const { setIsEditProfilePopupOpen } = useContext(PopupContext);
 
-  const { isProfileChanged, isLoading, user } = useAppSelector(state => state.user);
+  const { isProfileChanged, isLoading, user } = useAppSelector(
+    (state) => state.user
+  );
 
   const handleCloseClick = () => {
     dispatch(resetProfileEditErrors());
@@ -37,18 +39,18 @@ const EditProfileTab: React.FC = () => {
   };
 
   const handleSubmitChangeProfile = (data: IUser) => {
-    dispatch(changeUserProfile(data))
-  }
+    dispatch(changeUserProfile(data));
+  };
 
   const {
     register,
     formState: { errors, isValid },
-    handleSubmit
+    handleSubmit,
   } = useForm({ mode: "all" });
 
   useEffect(() => {
     if (isProfileChanged) {
-      dispatch(setSuccessStatus(false))
+      dispatch(setSuccessStatus(false));
       handleCloseClick();
     }
   }, [isProfileChanged]);
@@ -89,9 +91,12 @@ const EditProfileTab: React.FC = () => {
         gap="35px"
         borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="24px"
-        mb="24px"
-      >
-        <Button type="submit" disabled={!isValid || isLoading} primary width="100%">
+        mb="24px">
+        <Button
+          type="submit"
+          disabled={!isValid || isLoading}
+          primary
+          width="100%">
           Зберегти
         </Button>
         <Button type="reset" secondary width="100%" onClick={handleCloseClick}>
@@ -99,7 +104,7 @@ const EditProfileTab: React.FC = () => {
         </Button>
       </Box>
     </Form>
-  )
-}
+  );
+};
 
 export default EditProfileTab;

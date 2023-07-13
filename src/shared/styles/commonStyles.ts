@@ -41,7 +41,7 @@ export type commonStylesProps = {
   left?: string;
   right?: string;
   cursor?: string;
-}
+};
 
 export const commonStyles = css<commonStylesProps>`
   margin: ${({ m }) => m || undefined};
@@ -58,16 +58,16 @@ export const commonStyles = css<commonStylesProps>`
   width: ${({ width }) => width || undefined};
   height: ${({ height }) => height || undefined};
   line-height: ${({ lh }) => lh || undefined};
-  
+
   text-align: ${({ textAlight }) => textAlight || undefined};
-  display: ${({ display }) => display || 'block'};
-  flex: ${({ flex }) => flex || 'flex'};
-  flex-direction: ${({ direction }) => direction || 'block'};
-  gap: ${({ gap }) => gap || 'block'};
-  background-color: ${({ bgColor }) => bgColor || 'transparent'};
+  display: ${({ display }) => display || "block"};
+  flex: ${({ flex }) => flex || "flex"};
+  flex-direction: ${({ direction }) => direction || "block"};
+  gap: ${({ gap }) => gap || "block"};
+  background-color: ${({ bgColor }) => bgColor || "transparent"};
   flex-grow: ${({ grow }) => grow || undefined};
   flex-basis: ${({ basis }) => basis || undefined};
-  flex-wrap: ${({ wrap }) => wrap && "wrap" || undefined};
+  flex-wrap: ${({ wrap }) => (wrap && "wrap") || undefined};
   justify-content: ${({ justifyContent }) => justifyContent || undefined};
   align-items: ${({ alignItems }) => alignItems || undefined};
   font-size: ${({ fz }) => fz || undefined};
@@ -83,4 +83,4 @@ export const commonStyles = css<commonStylesProps>`
   left: ${({ left }) => left || undefined};
   right: ${({ right }) => right || undefined};
   cursor: ${({ cursor }) => cursor || undefined};
-`
+`;

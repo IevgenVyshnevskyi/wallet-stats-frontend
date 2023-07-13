@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import { commonStyles } from "../../../shared/styles/commonStyles";
 
 export const List = styled.ul`
   margin: 0;

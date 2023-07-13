@@ -33,4 +33,4 @@ export const GlobalStyles = createGlobalStyle`
   scrollbar-width: thin;
 
   scrollbar-color: #ccc #f5f5f5;
-`
+`;

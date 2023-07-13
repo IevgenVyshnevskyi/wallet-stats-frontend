@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import { commonStyles } from "../../../shared/styles/commonStyles";
 
-import COLORS from '../../../shared/styles/variables';
+import COLORS from "../../../shared/styles/variables";
 
 export const Input = styled.input`
   width: 100%;
@@ -17,7 +17,7 @@ export const Input = styled.input`
     border-color: ${COLORS.PRIMARY};
     outline: none;
   }
-  
+
   &.error {
     border: 2px solid ${COLORS.ALERT_1};
     background-color: ${COLORS.ALERT_2};

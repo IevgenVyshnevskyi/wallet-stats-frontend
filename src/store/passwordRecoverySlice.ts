@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
   $api,
   PASSWORD_RESET_CONFIRM_PATH,
-  PASSWORD_RESET_REQUEST_PATH
-} from '../api/api';
+  PASSWORD_RESET_REQUEST_PATH,
+} from "../api/api";
 
 type PasswordRecoveryState = {
   email: string;
@@ -12,20 +12,20 @@ type PasswordRecoveryState = {
   error: string | null;
   isResetLinkStepOpen: boolean;
   isNewPasswordSet: boolean;
-}
+};
 
 type confirmPasswordResetPayload = {
   uid: string;
   token: string;
   new_password: string;
-}
+};
 
 export const requestPasswordReset = createAsyncThunk<
   undefined,
   { email: string },
   { rejectValue: string }
 >(
-  'passwordRecovery/requestPasswordReset',
+  "passwordRecovery/requestPasswordReset",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await $api.post(PASSWORD_RESET_REQUEST_PATH, payload);
@@ -42,7 +42,7 @@ export const confirmPasswordReset = createAsyncThunk<
   confirmPasswordResetPayload,
   { rejectValue: string }
 >(
-  'passwordRecovery/confirmPasswordReset',
+  "passwordRecovery/confirmPasswordReset",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await $api.post(PASSWORD_RESET_CONFIRM_PATH, payload);
@@ -60,20 +60,20 @@ const initialState: PasswordRecoveryState = {
   error: null,
   isResetLinkStepOpen: false,
   isNewPasswordSet: false,
-}
+};
 
 const passwordRecoverySlice = createSlice({
-  name: 'passwordRecovery',
+  name: "passwordRecovery",
   initialState,
   reducers: {
     setIsResetLinkStepOpen(state, action) {
       state.isResetLinkStepOpen = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(requestPasswordReset.pending, (state, action) => {
-        state.email = action.payload
+        state.email = action.payload;
         state.isLoading = true;
         state.error = null;
       })
@@ -97,8 +97,8 @@ const passwordRecoverySlice = createSlice({
       .addCase(confirmPasswordReset.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const { setIsResetLinkStepOpen } = passwordRecoverySlice.actions;

@@ -6,8 +6,8 @@ type DoughnutChartData = {
   allTransactions: Transactions;
   categoryTransactions: Transactions[];
   categories: ICategory[];
-  data: string[],
-  totalAmount: string,
+  data: string[];
+  totalAmount: string;
 };
 
 export type StatisticsState = {

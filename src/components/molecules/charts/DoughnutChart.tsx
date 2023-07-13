@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { Chart } from "chart.js/auto";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import { useAppSelector } from "../../../store/hooks";
 
@@ -15,33 +15,31 @@ type DoughnutChartProps = {
   data: string[];
   labels: string[];
   isHomePage?: boolean;
-}
+};
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({
   data,
   labels,
-  isHomePage
+  isHomePage,
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chart = useRef<any>();
 
-  const {
-    incomesChart,
-    expensesChart,
-    allOutlaysChart
-  } = useAppSelector(state => state.statistics);
+  const { incomesChart, expensesChart, allOutlaysChart } = useAppSelector(
+    (state) => state.statistics
+  );
 
-  const { chartData, chartOptions } = getDoughnutChartConfig(data, labels)
+  const { chartData, chartOptions } = getDoughnutChartConfig(data, labels);
 
   useEffect(() => {
-    const myDoughnutChartRef = chartRef.current.getContext('2d');
+    const myDoughnutChartRef = chartRef.current.getContext("2d");
 
     if (chart.current) {
       chart.current.destroy(); // Destroy the previous chart instance
     }
 
     chart.current = new Chart(myDoughnutChartRef, {
-      type: 'doughnut',
+      type: "doughnut",
       data: chartData,
       options: chartOptions,
       plugins: [ChartDataLabels],
@@ -69,7 +67,11 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
   return (
     <Box bgColor={COLORS.WHITE} borderRadius="8px" p="5px 0">
       <Box width={isHomePage ? "100%" : "650px"} m="0 auto">
-        <canvas id="myDoughnutChart" height={isHomePage && "325px"} ref={chartRef} />
+        <canvas
+          id="myDoughnutChart"
+          height={isHomePage && "325px"}
+          ref={chartRef}
+        />
       </Box>
     </Box>
   );

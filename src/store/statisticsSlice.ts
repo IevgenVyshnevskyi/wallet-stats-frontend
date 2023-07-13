@@ -1,25 +1,25 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getFilteredTransactions } from './transactionSlice';
-import { getFilteredCategories } from './categorySlice';
+import { getFilteredTransactions } from "./transactionSlice";
+import { getFilteredCategories } from "./categorySlice";
 
-import { updateChartCategories } from '../shared/utils/store/updateChartCategories';
-import { updateChartTransactions } from '../shared/utils/store/updateChartTransactions';
-import { updateChartCategoryTransactions } from '../shared/utils/store/updateChartCategoryTransactions';
+import { updateChartCategories } from "../shared/utils/store/updateChartCategories";
+import { updateChartTransactions } from "../shared/utils/store/updateChartTransactions";
+import { updateChartCategoryTransactions } from "../shared/utils/store/updateChartCategoryTransactions";
 
-import { $api, TRANSACTION_PATH } from '../api/api';
+import { $api, TRANSACTION_PATH } from "../api/api";
 
-import { Transactions } from '../../types/transactions';
-import { ICategory } from '../../types/category';
-import { TypeOfOutlay } from '../../types/common';
-import { StatisticsState } from '../../types/statistics';
+import { Transactions } from "../../types/transactions";
+import { ICategory } from "../../types/category";
+import { TypeOfOutlay } from "../../types/common";
+import { StatisticsState } from "../../types/statistics";
 
 export const getFilteredCategoryTransactions = createAsyncThunk<
-  { data: Transactions[], chartType: TypeOfOutlay },
-  { chartType: TypeOfOutlay, categories: ICategory[], filterByDays: string },
+  { data: Transactions[]; chartType: TypeOfOutlay },
+  { chartType: TypeOfOutlay; categories: ICategory[]; filterByDays: string },
   { rejectValue: string }
 >(
-  'statistics/getFilteredCategoryTransactions',
+  "statistics/getFilteredCategoryTransactions",
   async (payload, { rejectWithValue }) => {
     const { chartType, categories, filterByDays } = payload;
 
@@ -31,14 +31,14 @@ export const getFilteredCategoryTransactions = createAsyncThunk<
           );
           return response.data;
         } catch (error) {
-          throw new Error('Помилка');
+          throw new Error("Помилка");
         }
       });
 
       const data = await Promise.all(promises);
       return { data, chartType };
     } catch (error) {
-      return rejectWithValue('Помилка');
+      return rejectWithValue("Помилка");
     }
   }
 );
@@ -69,12 +69,10 @@ const initialState: StatisticsState = {
 };
 
 const statisticsSlice = createSlice({
-  name: 'statistics',
+  name: "statistics",
   initialState,
   reducers: {
-    resetStatisticsState: () => {
-      return initialState;
-    },
+    resetStatisticsState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },
@@ -105,7 +103,7 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredCategories.fulfilled, (state, action) => {
-        updateChartCategories(state, action)
+        updateChartCategories(state, action);
         state.isLoading = false;
       })
       .addCase(getFilteredCategories.rejected, (state, action) => {
@@ -119,7 +117,7 @@ const statisticsSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        updateChartTransactions(state, action)
+        updateChartTransactions(state, action);
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;
@@ -132,13 +130,13 @@ const statisticsSlice = createSlice({
       })
       .addCase(getFilteredCategoryTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        updateChartCategoryTransactions(state, action)
+        updateChartCategoryTransactions(state, action);
       })
       .addCase(getFilteredCategoryTransactions.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const {

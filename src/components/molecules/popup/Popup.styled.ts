@@ -1,10 +1,10 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-import { blackSVGtoWhite } from '../../../shared/styles/iconStyles'
+import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
 
-import { Box } from '../../atoms/box/Box.styled'
+import { Box } from "../../atoms/box/Box.styled";
 
-import COLORS from '../../../shared/styles/variables'
+import COLORS from "../../../shared/styles/variables";
 
 export const PopupWrapper = styled(Box)`
   position: absolute;
@@ -17,14 +17,14 @@ export const PopupWrapper = styled(Box)`
   align-items: center;
   background-color: ${COLORS.GREY_50}66;
 
-  >${Box} {
+  > ${Box} {
     display: flex;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     padding: 32px;
     border-radius: 16px;
     background: ${COLORS.BASE_1};
     position: relative;
-  
+
     > button {
       top: 15px;
       right: 15px;
@@ -41,4 +41,4 @@ export const PopupWrapper = styled(Box)`
       }
     }
   }
-`
+`;

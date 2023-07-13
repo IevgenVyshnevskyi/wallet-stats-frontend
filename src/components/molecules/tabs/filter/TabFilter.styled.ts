@@ -33,6 +33,6 @@ export const TabFilterWrapper = styled(Box)`
           background-color: ${COLORS.BASE_1};
         }
       }
-    } 
-  } 
-`
+    }
+  }
+`;

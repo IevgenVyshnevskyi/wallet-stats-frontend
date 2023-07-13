@@ -2,40 +2,50 @@ import { forwardRef, useState } from "react";
 
 import ReactDatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import uk from 'date-fns/locale/uk';
-registerLocale('uk', uk)
+import uk from "date-fns/locale/uk";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setAddTransactionData, setEditTransactionData } from "../../../store/transactionSlice";
+import {
+  setAddTransactionData,
+  setEditTransactionData,
+} from "../../../store/transactionSlice";
 
 import {
   formatTransactionDateToString,
-  formatTransactionDateToUTC
+  formatTransactionDateToUTC,
 } from "../../../shared/utils/transactions/formatTransactionDate";
 
 import { DateInput } from "../../atoms/input/InputDate.styled";
 
-const DatePicker: React.FC<{ isEditTrapsactionOpen?: boolean }> = ({ isEditTrapsactionOpen }) => {
-  const dispatch = useAppDispatch()
+registerLocale("uk", uk);
 
-  const { editTransactionData, addTransactionData } = useAppSelector(state => state.transaction)
+const DatePicker: React.FC<{ isEditTrapsactionOpen?: boolean }> = ({
+  isEditTrapsactionOpen,
+}) => {
+  const dispatch = useAppDispatch();
+
+  const { editTransactionData, addTransactionData } = useAppSelector(
+    (state) => state.transaction
+  );
 
   const [startDate] = useState(new Date());
 
   const formattedDate = editTransactionData?.created
     ? formatTransactionDateToString(editTransactionData?.created)
     : addTransactionData?.created
-      ? formatTransactionDateToString(addTransactionData?.created)
-      : startDate;
+    ? formatTransactionDateToString(addTransactionData?.created)
+    : startDate;
 
   const onDateChange = (date: Date) => {
     const actionData = {
-      created: formatTransactionDateToUTC(date)
+      created: formatTransactionDateToUTC(date),
     };
 
-    dispatch(isEditTrapsactionOpen
-      ? setEditTransactionData(actionData)
-      : setAddTransactionData(actionData))
+    dispatch(
+      isEditTrapsactionOpen
+        ? setEditTransactionData(actionData)
+        : setAddTransactionData(actionData)
+    );
   };
 
   return (
@@ -51,15 +61,14 @@ const DatePicker: React.FC<{ isEditTrapsactionOpen?: boolean }> = ({ isEditTraps
       customInput={<CustomDateInput />}
     />
   );
-}
+};
 
-const CustomDateInput = forwardRef<HTMLButtonElement, any>((
-  { value, onClick },
-  ref
-) => (
-  <DateInput onClick={onClick} ref={ref}>
-    {value}
-  </DateInput>
-));
+const CustomDateInput = forwardRef<HTMLButtonElement, any>(
+  ({ value, onClick }, ref) => (
+    <DateInput onClick={onClick} ref={ref}>
+      {value}
+    </DateInput>
+  )
+);
 
 export default DatePicker;

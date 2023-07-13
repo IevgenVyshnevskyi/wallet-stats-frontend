@@ -10,7 +10,7 @@ import {
   resetError,
   setActiveWallet,
   setSuccessStatus,
-  walletAction
+  walletAction,
 } from "../../../../store/walletSlice";
 
 import { titleFieldRules } from "../../../../shared/utils/field-rules/title";
@@ -29,23 +29,21 @@ import COLORS from "../../../../shared/styles/variables";
 import { IWallet, WalletFormData } from "../../../../../types/wallet";
 
 const AddWalletTab: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
-  const {
-    error,
-    isAddWalletSuccess,
-    isLoading
-  } = useAppSelector(state => state.wallet);
+  const { error, isAddWalletSuccess, isLoading } = useAppSelector(
+    (state) => state.wallet
+  );
 
-  const { user } = useAppSelector(state => state.user);
+  const { user } = useAppSelector((state) => state.user);
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
-    reset
+    reset,
   } = useForm({ mode: "all" });
 
   const handleCloseClick = () => {
@@ -63,13 +61,15 @@ const AddWalletTab: React.FC = () => {
       amount: data.amount,
       type_of_account: "bank",
       owner: user?.id || userId,
-    }
+    };
 
-    dispatch(walletAction({
-      data: wallet,
-      method: "POST",
-    }))
-  }
+    dispatch(
+      walletAction({
+        data: wallet,
+        method: "POST",
+      })
+    );
+  };
 
   useEffect(() => {
     if (isAddWalletSuccess) {
@@ -79,15 +79,15 @@ const AddWalletTab: React.FC = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleCloseClick()
+      if (event.key === "Escape") {
+        handleCloseClick();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
@@ -99,7 +99,7 @@ const AddWalletTab: React.FC = () => {
           label="Введіть назву карткового рахунку"
           errors={errors}
           name="title"
-          registerOptions={register('title', titleFieldRules)}
+          registerOptions={register("title", titleFieldRules)}
           width="325px"
         />
         <BaseField
@@ -107,12 +107,16 @@ const AddWalletTab: React.FC = () => {
           label="Введіть суму коштів на рахунку"
           errors={errors}
           name="amount"
-          registerOptions={register('amount', amountFieldRules)}
+          registerOptions={register("amount", amountFieldRules)}
           width="325px"
         />
       </Box>
 
-      {error && <Typography as="p" color={COLORS.ALERT_1}>{error}</Typography>}
+      {error && (
+        <Typography as="p" color={COLORS.ALERT_1}>
+          {error}
+        </Typography>
+      )}
 
       <Box
         display="flex"
@@ -120,9 +124,12 @@ const AddWalletTab: React.FC = () => {
         justifyContent="space-between"
         borderTop={`2px solid ${COLORS.DIVIDER}`}
         pt="51px"
-        mb="25px"
-      >
-        <Button type="submit" width="176px" primary disabled={!isValid || isLoading}>
+        mb="25px">
+        <Button
+          type="submit"
+          width="176px"
+          primary
+          disabled={!isValid || isLoading}>
           Зберегти
         </Button>
         <Button type="reset" width="176px" secondary onClick={handleCloseClick}>
@@ -130,7 +137,7 @@ const AddWalletTab: React.FC = () => {
         </Button>
       </Box>
     </Form>
-  )
-}
+  );
+};
 
 export default AddWalletTab;

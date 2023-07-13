@@ -65,27 +65,25 @@ const EditTransaction: React.FC = () => {
   const setSwitchButtonOptions = (
     buttonName: string,
     typeOfOutlay: TypeOfOutlay
-  ): ISwitchButton => {
-    return {
-      buttonName,
-      isActive: editTransactionData?.type_of_outlay === typeOfOutlay,
-      onTabClick: () => {
-        if (editTransactionData?.type_of_outlay === typeOfOutlay) {
-          return;
-        }
-        dispatch(
-          setEditTransactionData({
-            type_of_outlay: typeOfOutlay,
-            category: categories[typeOfOutlay][0]?.id,
-          })
-        );
-        setSelectedCategoryValues({
-          value: categories[typeOfOutlay][0]?.id,
-          label: categories[typeOfOutlay][0]?.title,
-        });
-      },
-    };
-  };
+  ): ISwitchButton => ({
+    buttonName,
+    isActive: editTransactionData?.type_of_outlay === typeOfOutlay,
+    onTabClick: () => {
+      if (editTransactionData?.type_of_outlay === typeOfOutlay) {
+        return;
+      }
+      dispatch(
+        setEditTransactionData({
+          type_of_outlay: typeOfOutlay,
+          category: categories[typeOfOutlay][0]?.id,
+        })
+      );
+      setSelectedCategoryValues({
+        value: categories[typeOfOutlay][0]?.id,
+        label: categories[typeOfOutlay][0]?.title,
+      });
+    },
+  });
 
   const switchButtons: ISwitchButton[] = [
     setSwitchButtonOptions("Витрата", "expense"),

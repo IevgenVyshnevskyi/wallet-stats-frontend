@@ -3,18 +3,24 @@ export const formatTransactionDateToFullDate = (dateStr: string): string => {
   date.setHours(date.getHours() + 3);
 
   const options = {
-    day: 'numeric',
-    month: 'long',
-    timeZone: 'Europe/Kiev',
-    locale: 'uk-UA',
+    day: "numeric",
+    month: "long",
+    timeZone: "Europe/Kiev",
+    locale: "uk-UA",
   } as const;
 
-  const dayOfMonthAndMonthName = new Intl.DateTimeFormat('uk-UA', options).format(date);
-  const dayOfWeek = new Intl.DateTimeFormat('uk-UA', { weekday: 'long' }).format(date);
-  const capitalizedDayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+  const dayOfMonthAndMonthName = new Intl.DateTimeFormat(
+    "uk-UA",
+    options
+  ).format(date);
+  const dayOfWeek = new Intl.DateTimeFormat("uk-UA", {
+    weekday: "long",
+  }).format(date);
+  const capitalizedDayOfWeek =
+    dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
 
   return `${capitalizedDayOfWeek}, ${dayOfMonthAndMonthName}`;
-}
+};
 
 export const formatTransactionDateToUTC = (date: Date): string => {
   const newDate = new Date(date);
@@ -29,15 +35,17 @@ export const formatTransactionDateToUTC = (date: Date): string => {
     timeZone: "UTC",
   } as const;
 
-  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(newDate);
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
+    newDate
+  );
   const isoDate = new Date(formattedDate).toISOString();
 
   return isoDate;
-}
+};
 
 export const formatTransactionDateToString = (dateStr: string): Date => {
   const utcDate = new Date(dateStr);
   utcDate.setUTCHours(utcDate.getUTCHours() + 3);
 
   return utcDate;
-}
+};

@@ -9,4 +9,4 @@ export const HomePageWrapper = styled.div`
   > div > div > div {
     flex-grow: 1;
   }
-`
+`;

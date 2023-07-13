@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -18,9 +18,9 @@ type LinkProps = {
   mb?: string;
   m?: string;
   outline?: string;
-}
+};
 
-export const Link = styled(RouterLink) <LinkProps>`
+export const Link = styled(RouterLink)<LinkProps>`
   font-weight: ${({ fw }) => fw || "700px"};
   font-size: ${({ fz }) => fz || "18px"};
   border-radius: ${({ borderRadius }) => borderRadius || "16px"};
@@ -39,4 +39,4 @@ export const Link = styled(RouterLink) <LinkProps>`
   &:hover {
     text-decoration: underline;
   }
-`
+`;

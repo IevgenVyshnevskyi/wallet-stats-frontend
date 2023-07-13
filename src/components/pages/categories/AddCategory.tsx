@@ -3,8 +3,11 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setAddCategoryData } from "../../../store/categorySlice";
-import { categoryAction, setActiveCategory } from "../../../store/categorySlice";
+import {
+  setAddCategoryData,
+  categoryAction,
+  setActiveCategory,
+} from "../../../store/categorySlice";
 
 import useSwitchButtonOptions from "../../../shared/hooks/useSwitchButtonOptions";
 
@@ -22,10 +25,12 @@ import BaseField from "../../molecules/base-field/BaseField";
 import COLORS from "../../../shared/styles/variables";
 
 const AddCategory: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const { addCategoryData, isLoading } = useAppSelector(state => state.category);
-  const { user } = useAppSelector(state => state.user);
+  const { addCategoryData, isLoading } = useAppSelector(
+    (state) => state.category
+  );
+  const { user } = useAppSelector((state) => state.user);
 
   const isValid = Object.keys(addCategoryData || {})?.length >= 1;
 
@@ -36,15 +41,17 @@ const AddCategory: React.FC = () => {
 
   const handleSub = (data: { title: string }) => {
     dispatch(setActiveCategory({}));
-    dispatch(categoryAction({
-      data: {
-        ...addCategoryData,
-        title: data?.title,
-        owner: user?.id || userId,
-      },
-      method: "POST"
-    }))
-  }
+    dispatch(
+      categoryAction({
+        data: {
+          ...addCategoryData,
+          title: data?.title,
+          owner: user?.id || userId,
+        },
+        method: "POST",
+      })
+    );
+  };
 
   const {
     register,
@@ -53,18 +60,12 @@ const AddCategory: React.FC = () => {
   } = useForm({ mode: "all" });
 
   useEffect(() => {
-    dispatch(setAddCategoryData({ type_of_outlay: "expense" }))
+    dispatch(setAddCategoryData({ type_of_outlay: "expense" }));
   }, []);
 
   return (
     <Box display="flex" direction="column" width="540px">
-      <Typography
-        as="h2"
-        fw="600"
-        fz="22px"
-        mt="5px"
-        mb="30px"
-      >
+      <Typography as="h2" fw="600" fz="22px" mt="5px" mb="30px">
         Додати категорію
       </Typography>
       <Box
@@ -72,15 +73,9 @@ const AddCategory: React.FC = () => {
         direction="column"
         bgColor={COLORS.BASE_2}
         borderRadius="16px"
-        p="15px"
-      >
+        p="15px">
         <Box mb="25px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
             Тип категорії
           </Typography>
           <TabSwitch switchButtons={switchButtons} />
@@ -92,7 +87,7 @@ const AddCategory: React.FC = () => {
               errors={errors}
               fieldType="text"
               name="title"
-              registerOptions={register('title', titleFieldRules)}
+              registerOptions={register("title", titleFieldRules)}
             />
           </Box>
           <Box>
@@ -100,8 +95,7 @@ const AddCategory: React.FC = () => {
               primary
               width="100%"
               type="submit"
-              disabled={!isValid || !!errors?.title || isLoading}
-            >
+              disabled={!isValid || !!errors?.title || isLoading}>
               Зберегти
             </Button>
           </Box>
@@ -109,6 +103,6 @@ const AddCategory: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default AddCategory;

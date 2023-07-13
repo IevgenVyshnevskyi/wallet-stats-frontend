@@ -4,7 +4,7 @@ import { CategoryState, ICategory } from "../../../../types/category";
 
 export const updateCategories = (
   state: CategoryState,
-  action: PayloadAction<{ data: ICategory[], params: string }>
+  action: PayloadAction<{ data: ICategory[]; params: string }>
 ) => {
   const { data, params } = action.payload;
 
@@ -21,4 +21,4 @@ export const updateCategories = (
     default:
       break;
   }
-}
+};

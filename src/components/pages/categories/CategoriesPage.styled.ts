@@ -7,4 +7,4 @@ export const CategoriesPageWrapper = styled(Box)`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-`
+`;

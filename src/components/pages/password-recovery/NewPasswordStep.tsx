@@ -8,7 +8,7 @@ import { confirmPasswordReset } from "../../../store/passwordRecoverySlice";
 
 import {
   confirmPasswordInputRules,
-  passwordInputRules
+  passwordInputRules,
 } from "../../../shared/utils/field-rules/password";
 
 import { Box } from "../../atoms/box/Box.styled";
@@ -25,24 +25,28 @@ import logo from "../../../shared/assets/images/logo.png";
 import COLORS from "../../../shared/styles/variables";
 
 const NewPasswordStep: React.FC<{
-  uid: string,
-  resetToken: string
+  uid: string;
+  resetToken: string;
 }> = ({ uid, resetToken }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { isNewPasswordSet, isLoading } = useAppSelector(state => state.passwordRecovery)
+  const { isNewPasswordSet, isLoading } = useAppSelector(
+    (state) => state.passwordRecovery
+  );
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSub = (data: { password: string, confirmPassword: string }) => {
-    dispatch(confirmPasswordReset({
-      uid,
-      token: resetToken,
-      new_password: data?.password,
-    }))
-  }
+  const handleSub = (data: { password: string; confirmPassword: string }) => {
+    dispatch(
+      confirmPasswordReset({
+        uid,
+        token: resetToken,
+        new_password: data?.password,
+      })
+    );
+  };
 
   const {
     register,
@@ -53,28 +57,51 @@ const NewPasswordStep: React.FC<{
 
   useEffect(() => {
     if (isNewPasswordSet) {
-      navigate('/login')
+      navigate("/login");
     }
   }, [isNewPasswordSet]);
 
   return (
     <Container display="flex">
-      <Box flex="1" overflow="hidden" height="100vh" background={COLORS.GRADIENT}>
+      <Box
+        flex="1"
+        overflow="hidden"
+        height="100vh"
+        background={COLORS.GRADIENT}>
         <Img src={InterfaceImage} m="0 0 0 100px" alt="InterfaceImage" />
       </Box>
-      <Box display="flex" flexDirection="column" width="592px" justifyContent="center" alignItems="center" textAlign="center"
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="592px"
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
         background={COLORS.WHITE}>
         <Box m="auto 0" alignItems="center" textAlign="center">
           <Img src={logo} alt="Logo" />
-          <Typography fw="700" fz="24px" lh="170%" color={COLORS.ALMOST_BLACK_FOR_TEXT} textAlign="center"
+          <Typography
+            fw="700"
+            fz="24px"
+            lh="170%"
+            color={COLORS.ALMOST_BLACK_FOR_TEXT}
+            textAlign="center"
             m="48px 0 48px 0">
             Створення нового пароля
           </Typography>
-          <Typography fw="400" fz="16px" lh="24px" m="0 0 24px 0" color={COLORS.ALMOST_BLACK_FOR_TEXT}
+          <Typography
+            fw="400"
+            fz="16px"
+            lh="24px"
+            m="0 0 24px 0"
+            color={COLORS.ALMOST_BLACK_FOR_TEXT}
             textAlign="center">
             Введіть новий пароль для вашого <br /> аккаунту
           </Typography>
-          <Form onSubmit={handleSubmit(handleSub)} maxWidth="592px" textAlign="center"
+          <Form
+            onSubmit={handleSubmit(handleSub)}
+            maxWidth="592px"
+            textAlign="center"
             alignItems="end">
             <Box maxWidth="320px" alignItems="flex-start" m="0 auto">
               <Box mb="6px">
@@ -101,7 +128,11 @@ const NewPasswordStep: React.FC<{
                 />
               </Box>
             </Box>
-            <Button type="submit" disabled={!isValid || isLoading} width="139px" m="44px auto 0"
+            <Button
+              type="submit"
+              disabled={!isValid || isLoading}
+              width="139px"
+              m="44px auto 0"
               primary>
               Зберегти
             </Button>
@@ -109,7 +140,7 @@ const NewPasswordStep: React.FC<{
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 export default NewPasswordStep;

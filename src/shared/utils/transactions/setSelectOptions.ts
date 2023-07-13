@@ -17,7 +17,5 @@ export const setSelectOptions = (
     categoriesArr = categories.income;
   }
 
-  return categoriesArr?.map(({ id, title }) => {
-    return { value: id, label: title };
-  });
+  return categoriesArr?.map(({ id, title }) => ({ value: id, label: title }));
 };

@@ -68,27 +68,25 @@ const AddTransaction: React.FC = () => {
   const setSwitchButtonOptions = (
     buttonName: string,
     typeOfOutlay: TypeOfOutlay
-  ): ISwitchButton => {
-    return {
-      buttonName,
-      isActive: addTransactionData?.type_of_outlay === typeOfOutlay,
-      onTabClick: () => {
-        if (addTransactionData?.type_of_outlay === typeOfOutlay) {
-          return;
-        }
-        dispatch(
-          setAddTransactionData({
-            type_of_outlay: typeOfOutlay,
-            category: categories[typeOfOutlay][0]?.id,
-          })
-        );
-        setSelectedCategoryValues({
-          value: categories[typeOfOutlay][0]?.id,
-          label: categories[typeOfOutlay][0]?.title,
-        });
-      },
-    };
-  };
+  ): ISwitchButton => ({
+    buttonName,
+    isActive: addTransactionData?.type_of_outlay === typeOfOutlay,
+    onTabClick: () => {
+      if (addTransactionData?.type_of_outlay === typeOfOutlay) {
+        return;
+      }
+      dispatch(
+        setAddTransactionData({
+          type_of_outlay: typeOfOutlay,
+          category: categories[typeOfOutlay][0]?.id,
+        })
+      );
+      setSelectedCategoryValues({
+        value: categories[typeOfOutlay][0]?.id,
+        label: categories[typeOfOutlay][0]?.title,
+      });
+    },
+  });
 
   const switchButtons: ISwitchButton[] = [
     setSwitchButtonOptions("Витрата", "expense"),
@@ -237,7 +235,7 @@ const AddTransaction: React.FC = () => {
               fz="13px"
               height="14px"
               m="0 0 20px 0">
-              {errors?.category && <>{errors?.category?.message || "Error!"}</>}
+              {(errors?.category && errors?.category?.message) || "Error!"}
             </Box>
           </Box>
           <Box mb="25px">

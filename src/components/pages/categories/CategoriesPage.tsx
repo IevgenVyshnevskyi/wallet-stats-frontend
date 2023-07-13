@@ -1,20 +1,20 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getCategories } from "../../../store/categorySlice";
 
-import { token } from '../../../api/api';
+import { token } from "../../../api/api";
 
 import { Box } from "../../atoms/box/Box.styled";
-import Header from '../../molecules/header/Header';
-import Categories from './Categories';
-import EditCategory from './EditCategory';
-import AddCategory from './AddCategory';
+import Header from "../../molecules/header/Header";
+import Categories from "./Categories";
+import EditCategory from "./EditCategory";
+import AddCategory from "./AddCategory";
 import { CategoriesPageWrapper } from "./CategoriesPage.styled";
 
 const CategoriesPage: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -22,13 +22,13 @@ const CategoriesPage: React.FC = () => {
     isEditCategorySuccess,
     isDeleteCategorySuccess,
     isEditCategoryOpen,
-    isLoading
-  } = useAppSelector(state => state.category);
+    isLoading,
+  } = useAppSelector((state) => state.category);
 
-  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+  const { isLoggedIn, isRegistered } = useAppSelector((state) => state.user);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/welcome")
+    navigate("/welcome");
   }
 
   useEffect(() => {
@@ -42,7 +42,11 @@ const CategoriesPage: React.FC = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (isAddCategorySuccess || isEditCategorySuccess || isDeleteCategorySuccess) {
+    if (
+      isAddCategorySuccess ||
+      isEditCategorySuccess ||
+      isDeleteCategorySuccess
+    ) {
       dispatch(getCategories());
     }
   }, [isAddCategorySuccess, isEditCategorySuccess, isDeleteCategorySuccess]);
@@ -58,6 +62,6 @@ const CategoriesPage: React.FC = () => {
       </Box>
     </CategoriesPageWrapper>
   );
-}
+};
 
 export default CategoriesPage;

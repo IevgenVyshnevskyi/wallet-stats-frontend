@@ -25,11 +25,11 @@ import { ITransaction, Transactions } from "../../../../types/transactions";
 const renderTransactionItems = (
   transactions: ITransaction[],
   onTransactionClick: (transaction: ITransaction) => void
-): React.ReactNode[] => {
-  return transactions
-    .sort((a, b) => {
-      return new Date(b.created).getTime() - new Date(a.created).getTime();
-    })
+): React.ReactNode[] =>
+  transactions
+    .sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    )
     .map((transaction) => (
       <ListItem key={transaction?.id}>
         <ButtonTransparent
@@ -40,7 +40,6 @@ const renderTransactionItems = (
         </ButtonTransparent>
       </ListItem>
     ));
-};
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();

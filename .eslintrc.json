@@ -19,7 +19,6 @@
       "warn",
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "no-undef": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -36,6 +35,8 @@
         "namedComponents": "arrow-function",
         "unnamedComponents": "arrow-function"
       }
-    ]
+    ],
+    "no-undef": "off",
+    "no-param-reassign": "off"
   }
 }

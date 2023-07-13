@@ -5,4 +5,4 @@ export const tabWrapperStyles = css`
   background-color: rgba(115, 127, 239, 0.3);
   display: flex;
   align-items: center;
-`
+`;

@@ -1,3 +1,4 @@
+import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
 import { Box } from "../../atoms/box/Box.styled";
 import { Label } from "../../atoms/label/Label.styled";
 import { Input } from "../../atoms/input/Input.styled";
@@ -7,8 +8,6 @@ import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
 
 import COLORS from "../../../shared/styles/variables";
-
-import { FieldErrors, UseFormRegisterReturn } from 'react-hook-form'
 
 type BaseFieldProps = {
   fieldType: "text" | "email" | "password";
@@ -35,9 +34,8 @@ const BaseField: React.FC<BaseFieldProps> = ({
     if (fieldType === "password") {
       if (isPasswordVisible) {
         return "text";
-      } else {
-        return "password";
       }
+      return "password";
     }
     return "text";
   };
@@ -50,9 +48,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
         lh="16px"
         color={COLORS.ALMOST_BLACK_FOR_TEXT}
         mb="6px"
-        textAlight="left"
-      >
-
+        textAlight="left">
         {label}
       </Label>
       <Box position="relative">
@@ -63,8 +59,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
             top="16px"
             right="10px"
             cursor="pointer"
-            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
             {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
           </Typography>
         )}
@@ -86,8 +81,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
         fz="13px"
         height="14px"
         width="300px"
-        mb="20px"
-      >
+        mb="20px">
         {errors?.[name] && <>{errors?.[name]?.message || "Error!"}</>}
       </Box>
     </Box>

@@ -1,8 +1,9 @@
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
-import { Box } from "../../atoms/box/Box.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { Input } from "../../atoms/input/Input.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+
+import Box from "../../atoms/box/Box.styled";
+import Label from "../../atoms/label/Label.styled";
+import Input from "../../atoms/input/Input.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 
 import VisibilityOff from "../../../shared/assets/icons/visibility-off.svg";
 import VisibilityOn from "../../../shared/assets/icons/visibility-on.svg";
@@ -82,7 +83,7 @@ const BaseField: React.FC<BaseFieldProps> = ({
         height="14px"
         width="300px"
         mb="20px">
-        {errors?.[name] && <>{errors?.[name]?.message || "Error!"}</>}
+        {errors?.[name]?.message && "Error!"}
       </Box>
     </Box>
   );

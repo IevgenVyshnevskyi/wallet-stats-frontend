@@ -12,13 +12,13 @@ import {
   setIsEditCategoryOpen,
 } from "../../../store/categorySlice";
 
-import { titleFieldRules } from "../../../shared/utils/field-rules/title";
+import titleFieldRules from "../../../shared/utils/field-rules/title";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Form } from "../../atoms/form/Form.styled";
+import Box from "../../atoms/box/Box.styled";
+import Button from "../../atoms/button/Button.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
+import Typography from "../../atoms/typography/Typography.styled";
+import Form from "../../atoms/form/Form.styled";
 import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import BaseField from "../../molecules/base-field/BaseField";
 

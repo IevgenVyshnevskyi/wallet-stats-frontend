@@ -1,4 +1,4 @@
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 
 const NotFoundPage = () => (
   <Typography as="h1" textAlight="center">

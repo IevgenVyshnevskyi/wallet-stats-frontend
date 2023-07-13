@@ -15,9 +15,17 @@ import {
   formatTransactionDateToUTC,
 } from "../../../shared/utils/transactions/formatTransactionDate";
 
-import { DateInput } from "../../atoms/input/InputDate.styled";
+import DateInput from "../../atoms/input/InputDate.styled";
 
 registerLocale("uk", uk);
+
+const CustomDateInput = forwardRef<HTMLButtonElement, any>(
+  ({ value, onClick }, ref) => (
+    <DateInput onClick={onClick} ref={ref}>
+      {value}
+    </DateInput>
+  )
+);
 
 const DatePicker: React.FC<{ isEditTrapsactionOpen?: boolean }> = ({
   isEditTrapsactionOpen,
@@ -62,13 +70,5 @@ const DatePicker: React.FC<{ isEditTrapsactionOpen?: boolean }> = ({
     />
   );
 };
-
-const CustomDateInput = forwardRef<HTMLButtonElement, any>(
-  ({ value, onClick }, ref) => (
-    <DateInput onClick={onClick} ref={ref}>
-      {value}
-    </DateInput>
-  )
-);
 
 export default DatePicker;

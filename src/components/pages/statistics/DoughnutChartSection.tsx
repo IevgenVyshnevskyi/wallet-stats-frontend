@@ -6,12 +6,12 @@ import {
   setTotalExpenses,
 } from "../../../store/categorySlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 
-import { calculateCategoriesWithTotalAmount } from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
-import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
+import calculateCategoriesWithTotalAmount from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
+import calculateTotalAmount from "../../../shared/utils/statistics/calculateTotalAmount";
 
 import COLORS from "../../../shared/styles/variables";
 

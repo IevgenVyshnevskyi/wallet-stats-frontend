@@ -1,6 +1,6 @@
 import { Transactions } from "../../../../types/transactions";
 
-export const calculateTotalAmount = (allTransactions: Transactions): string => {
+const calculateTotalAmount = (allTransactions: Transactions): string => {
   const transactionAmounts = Object.values(allTransactions).flatMap(
     (transactionsArr) =>
       transactionsArr.map((transaction) =>
@@ -15,3 +15,5 @@ export const calculateTotalAmount = (allTransactions: Transactions): string => {
 
   return totalAmount.toFixed(2);
 };
+
+export default calculateTotalAmount;

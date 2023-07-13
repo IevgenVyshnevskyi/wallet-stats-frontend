@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-import { commonStyles } from "../../../shared/styles/commonStyles";
+import commonStyles from "../../../shared/styles/commonStyles";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const Input = styled.input`
+const Input = styled.input`
   width: 100%;
   padding: 12px 16px;
   ${commonStyles}
@@ -28,3 +28,5 @@ export const Input = styled.input`
     cursor: not-allowed;
   }
 `;
+
+export default Input;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const HomePageWrapper = styled.div`
+const HomePageWrapper = styled.div`
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
@@ -10,3 +10,4 @@ export const HomePageWrapper = styled.div`
     flex-grow: 1;
   }
 `;
+export default HomePageWrapper;

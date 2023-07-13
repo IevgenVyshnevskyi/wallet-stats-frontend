@@ -11,13 +11,13 @@ import {
   setSuccessStatus,
 } from "../../../../store/userSlice";
 
-import { nameFieldRules } from "../../../../shared/utils/field-rules/name";
+import nameFieldRules from "../../../../shared/utils/field-rules/name";
 
 import { userDataParsed } from "../../../../api/api";
 
-import { Form } from "../../../atoms/form/Form.styled";
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
+import Form from "../../../atoms/form/Form.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
 import BaseField from "../../base-field/BaseField";
 
 import COLORS from "../../../../shared/styles/variables";

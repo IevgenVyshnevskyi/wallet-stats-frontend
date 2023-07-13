@@ -5,11 +5,11 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setActiveWallet } from "../../../store/walletSlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import List from "../../atoms/list/List.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import Wallet from "../../molecules/wallet/Wallet";
 
 import COLORS from "../../../shared/styles/variables";

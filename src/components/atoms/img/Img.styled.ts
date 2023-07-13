@@ -12,7 +12,7 @@ type ImgProps = {
   display?: string;
 };
 
-export const Img = styled.img<ImgProps>`
+const Img = styled.img<ImgProps>`
   max-width: ${({ maxWidth }) => maxWidth || undefined};
   max-height: ${({ maxHeight }) => maxHeight || undefined};
   position: ${({ position }) => position || undefined};
@@ -23,3 +23,5 @@ export const Img = styled.img<ImgProps>`
   padding: ${({ p }) => p || "0px 0px 0px 0px"};
   display: ${({ display }) => display || undefined};
 `;
+
+export default Img;

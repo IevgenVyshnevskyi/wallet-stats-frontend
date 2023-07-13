@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { postEntryData } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
 
-import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
-import { titleFieldRules } from "../../../shared/utils/field-rules/title";
+import amountFieldRules from "../../../shared/utils/field-rules/amount";
+import titleFieldRules from "../../../shared/utils/field-rules/title";
 
 import {
   localStorageIsDataEntrySuccess,
@@ -16,12 +16,12 @@ import {
   userId,
 } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Img } from "../../atoms/img/Img.styled";
-import { Container } from "../../atoms/container/Container.styled";
-import { Form } from "../../atoms/form/Form.styled";
-import { Button } from "../../atoms/button/Button.styled";
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import Img from "../../atoms/img/Img.styled";
+import Container from "../../atoms/container/Container.styled";
+import Form from "../../atoms/form/Form.styled";
 import BaseField from "../../molecules/base-field/BaseField";
 
 import logo from "../../../shared/assets/images/logo.png";

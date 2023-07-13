@@ -2,7 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 
 import { TransactionState, Transactions } from "../../../../types/transactions";
 
-export const updateTransactions = (
+const updateTransactions = (
   state: TransactionState,
   action: PayloadAction<{ data: Transactions; params: string }>
 ) => {
@@ -22,3 +22,5 @@ export const updateTransactions = (
       break;
   }
 };
+
+export default updateTransactions;

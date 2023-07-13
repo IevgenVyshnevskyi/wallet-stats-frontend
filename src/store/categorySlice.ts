@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getUserDetails } from "./userSlice";
 
-import { updateCategories } from "../shared/utils/store/updateCategories";
+import updateCategories from "../shared/utils/store/updateCategories";
 
 import { $api, CATEGORY_PATH } from "../api/api";
 
@@ -97,7 +97,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    resetCategoryState: (state) => initialState,
+    resetCategoryState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },

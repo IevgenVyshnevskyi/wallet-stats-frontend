@@ -1,5 +1,5 @@
-import { Box } from "../../../atoms/box/Box.styled";
-import { Typography } from "../../../atoms/typography/Typography.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Typography from "../../../atoms/typography/Typography.styled";
 
 import PackageSuccessIcon from "../../../../shared/assets/icons/package-success.svg";
 import PackageErrorIcon from "../../../../shared/assets/icons/package-error.svg";

@@ -5,7 +5,7 @@ import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 
 import { BuildOptions } from "../types/types";
 
-export const buildPlugins = (
+const buildPlugins = (
   options: BuildOptions
 ): webpack.WebpackPluginInstance[] => {
   const { paths } = options;
@@ -29,3 +29,5 @@ export const buildPlugins = (
 
   return plugins;
 };
+
+export default buildPlugins;

@@ -4,12 +4,12 @@ import { PopupContext } from "../../../../contexts/PopupContext";
 
 import { useAppSelector } from "../../../../store/hooks";
 
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
-import { PopupWrapper } from "../Popup.styled";
-import { ButtonPopup } from "../../../atoms/button/ButtonPopup";
-import { Typography } from "../../../atoms/typography/Typography.styled";
-import { ButtonLink } from "../../../atoms/button/ButtonLink";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
+import PopupWrapper from "../Popup.styled";
+import ButtonPopup from "../../../atoms/button/ButtonPopup";
+import Typography from "../../../atoms/typography/Typography.styled";
+import ButtonLink from "../../../atoms/button/ButtonLink";
 import EditProfileTab from "./EditProfileTab";
 import ChangePasswordTab from "./ChangePasswordTab";
 

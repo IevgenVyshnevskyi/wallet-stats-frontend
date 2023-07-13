@@ -1,6 +1,6 @@
 import { moneyAmountRegex } from "../regexes";
 
-export const amountFieldRules = {
+const amountFieldRules = {
   required: "Обов'язкове поле для заповнення",
   pattern: {
     value: moneyAmountRegex,
@@ -13,3 +13,5 @@ export const amountFieldRules = {
       "Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки",
   },
 };
+
+export default amountFieldRules;

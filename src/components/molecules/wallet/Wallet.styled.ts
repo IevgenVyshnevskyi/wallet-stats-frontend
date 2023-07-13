@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
-import { commonStyles } from "../../../shared/styles/commonStyles";
+import blackSVGtoWhite from "../../../shared/styles/iconStyles";
+import commonStyles from "../../../shared/styles/commonStyles";
 
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
 
 import COLORS from "../../../shared/styles/variables";
 
@@ -13,7 +13,7 @@ type WalletButtonProps = {
 
 const transactionsPath = window.location.pathname === "/transactions";
 
-export const WalletButton = styled(ButtonTransparent)<WalletButtonProps>`
+const WalletButton = styled(ButtonTransparent)<WalletButtonProps>`
   ${commonStyles}
   background: ${({ isActive }) => (isActive ? COLORS.PRIMARY : COLORS.WHITE)};
   width: 100%;
@@ -47,3 +47,5 @@ export const WalletButton = styled(ButtonTransparent)<WalletButtonProps>`
     }
   }
 `;
+
+export default WalletButton;

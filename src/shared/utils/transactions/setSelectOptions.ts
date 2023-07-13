@@ -1,7 +1,7 @@
 import { ICategory } from "../../../../types/category";
 import { SelectOptions, TypeOfOutlay } from "../../../../types/common";
 
-export const setSelectOptions = (
+const setSelectOptions = (
   typeOfOutlay: TypeOfOutlay,
   categories: {
     all: ICategory[];
@@ -19,3 +19,5 @@ export const setSelectOptions = (
 
   return categoriesArr?.map(({ id, title }) => ({ value: id, label: title }));
 };
+
+export default setSelectOptions;

@@ -1,6 +1,6 @@
 import { titleRegex, twoSymbolsRegex } from "../regexes";
 
-export const titleFieldRules = {
+const titleFieldRules = {
   required: "Обов'язкове поле для заповнення",
   validate: {
     hasTwoSymbols: (value: string) =>
@@ -9,3 +9,5 @@ export const titleFieldRules = {
       titleRegex.test(value) || "Повинно бути не менше 2 літер",
   },
 };
+
+export default titleFieldRules;

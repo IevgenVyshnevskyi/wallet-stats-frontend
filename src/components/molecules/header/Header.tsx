@@ -14,13 +14,13 @@ import { resetCategoryState } from "../../../store/categorySlice";
 import { resetTransactionState } from "../../../store/transactionSlice";
 import { resetStatisticsState } from "../../../store/statisticsSlice";
 
-import { HeaderWrapper } from "./Header.styled";
-import { LinkMenu } from "../../atoms/link/LinkMenu.styled";
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
+import HeaderWrapper from "./Header.styled";
+import LinkMenu from "../../atoms/link/LinkMenu.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import List from "../../atoms/list/List.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
 import PopupEditProfile from "../popup/edit-profile/PopupEditProfile";
 import PopupDeleteAccount from "../popup/PopupDeleteAccount";
 

@@ -1,8 +1,8 @@
 import { useAppSelector } from "../../../store/hooks";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { CategoryWrapper } from "./CategoryWrapper";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import CategoryWrapper from "./CategoryWrapper";
 
 import IncomeIcon from "../../../shared/assets/icons/income.svg";
 import ExpenseIcon from "../../../shared/assets/icons/expense.svg";

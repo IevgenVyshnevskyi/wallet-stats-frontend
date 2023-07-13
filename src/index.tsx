@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { GlobalStyles } from "./shared/styles/globalStyles";
+import GlobalStyles from "./shared/styles/globalStyles";
 import App from "./App";
 import store from "./store/store";
 import { injectStore } from "./api/api";

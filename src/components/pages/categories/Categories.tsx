@@ -7,11 +7,11 @@ import {
 
 import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
+import List from "../../atoms/list/List.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import Category from "../../molecules/category/Category";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
@@ -74,8 +74,8 @@ const Categories: React.FC = () => {
         height="100px"
         p="15px">
         <List gap="8px" display="flex" direction="column">
-          {categoriesData()?.map((category, index) => (
-            <ListItem key={index}>
+          {categoriesData()?.map((category) => (
+            <ListItem key={category.id}>
               <ButtonTransparent
                 width="100%"
                 onClick={() => onCategoryClick(category)}

@@ -1,6 +1,6 @@
 import { Transactions } from "../../../../types/transactions";
 
-export const generateNewLineChartData = (
+const generateNewLineChartData = (
   categoryTransactions: Transactions
 ): {
   diffInDays: number;
@@ -27,3 +27,5 @@ export const generateNewLineChartData = (
 
   return { diffInDays, totalAmount };
 };
+
+export default generateNewLineChartData;

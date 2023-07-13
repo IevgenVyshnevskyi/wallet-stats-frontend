@@ -1,5 +1,6 @@
 import path from "path";
-import { buildWebpacConfig } from "./config/build/buildWebpackConfig";
+
+import buildWebpacConfig from "./config/build/buildWebpackConfig";
 
 import { BuildEnv, BuildPaths } from "./config/types/types";
 

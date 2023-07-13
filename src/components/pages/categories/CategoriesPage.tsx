@@ -6,12 +6,12 @@ import { getCategories } from "../../../store/categorySlice";
 
 import { token } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 import Header from "../../molecules/header/Header";
 import Categories from "./Categories";
 import EditCategory from "./EditCategory";
 import AddCategory from "./AddCategory";
-import { CategoriesPageWrapper } from "./CategoriesPage.styled";
+import CategoriesPageWrapper from "./CategoriesPage.styled";
 
 const CategoriesPage: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getUserDetails } from "../../../store/userSlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Img } from "../../atoms/img/Img.styled";
-import { Container } from "../../atoms/container/Container.styled";
-import { Form } from "../../atoms/form/Form.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import Img from "../../atoms/img/Img.styled";
+import Container from "../../atoms/container/Container.styled";
+import Form from "../../atoms/form/Form.styled";
+import Button from "../../atoms/button/Button.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
 import BaseField from "../../molecules/base-field/BaseField";
 
 import logo from "../../../shared/assets/images/logo.png";
@@ -28,10 +28,6 @@ const TwoFactorAuthenticationPage: React.FC = () => {
 
   const intervalRef = useRef(null);
 
-  const handleSub = (data: {}) => {
-    reset();
-  };
-
   const {
     register,
     formState: { errors, isValid },
@@ -39,11 +35,15 @@ const TwoFactorAuthenticationPage: React.FC = () => {
     reset,
   } = useForm({ mode: "all" });
 
+  const handleSub = () => {
+    reset();
+  };
+
   useEffect(() => {
     dispatch(getUserDetails());
 
     intervalRef.current = setInterval(() => {
-      setCount((count) => count - 1);
+      setCount((prevCount) => prevCount - 1);
     }, 1000);
 
     return () => clearInterval(intervalRef.current);

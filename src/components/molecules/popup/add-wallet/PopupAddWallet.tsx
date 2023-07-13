@@ -10,17 +10,15 @@ import {
   setSuccessStatus,
 } from "../../../../store/walletSlice";
 
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
-import { ButtonPopup } from "../../../atoms/button/ButtonPopup";
-import { Typography } from "../../../atoms/typography/Typography.styled";
-import { PopupWrapper } from "../Popup.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
+import ButtonPopup from "../../../atoms/button/ButtonPopup";
+import Typography from "../../../atoms/typography/Typography.styled";
+import PopupWrapper from "../Popup.styled";
 import AddWalletTab from "./AddWalletTab";
 import AddBankDataTab from "./AddBankdataTab";
 
 import CrossIcon from "../../../../shared/assets/icons/cross.svg";
-
-import COLORS from "../../../../shared/styles/variables";
 
 const PopupAddWallet: React.FC = () => {
   const dispatch = useAppDispatch();

@@ -3,14 +3,14 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { requestPasswordReset } from "../../../store/passwordRecoverySlice";
 
-import { emailFieldRules } from "../../../shared/utils/field-rules/email";
+import emailFieldRules from "../../../shared/utils/field-rules/email";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Container } from "../../atoms/container/Container.styled";
-import { Img } from "../../atoms/img/Img.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Form } from "../../atoms/form/Form.styled";
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import Container from "../../atoms/container/Container.styled";
+import Img from "../../atoms/img/Img.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import Form from "../../atoms/form/Form.styled";
 import BaseField from "../../molecules/base-field/BaseField";
 
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";

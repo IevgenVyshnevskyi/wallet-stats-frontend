@@ -1,6 +1,6 @@
 import { Transactions } from "../../../../types/transactions";
 
-export const filterTransactions = (
+const filterTransactions = (
   filteredTransactions: Transactions
 ): Transactions => {
   const sortedTransactions: Transactions = {};
@@ -21,3 +21,5 @@ export const filterTransactions = (
 
   return sortedTransactions;
 };
+
+export default filterTransactions;

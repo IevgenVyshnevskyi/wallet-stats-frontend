@@ -8,12 +8,12 @@ import { getCategories } from "../../../store/categorySlice";
 
 import { token } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 import Header from "../../molecules/header/Header";
 import EditTransaction from "./EditTransaction";
 import Transactions from "./Transactions";
 import AddTransaction from "./AddTransaction";
-import { TransactionsPageWrapper } from "./TransactionsPage.styled";
+import TransactionsPageWrapper from "./TransactionsPage.styled";
 
 const TransactionsPage: React.FC = () => {
   const dispatch = useAppDispatch();

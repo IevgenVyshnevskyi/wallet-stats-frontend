@@ -2,7 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 
 import { CategoryState, ICategory } from "../../../../types/category";
 
-export const updateCategories = (
+const updateCategories = (
   state: CategoryState,
   action: PayloadAction<{ data: ICategory[]; params: string }>
 ) => {
@@ -22,3 +22,5 @@ export const updateCategories = (
       break;
   }
 };
+
+export default updateCategories;

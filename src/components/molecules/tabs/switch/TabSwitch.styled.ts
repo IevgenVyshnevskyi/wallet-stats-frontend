@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
-import { Box } from "../../../atoms/box/Box.styled";
-import { List } from "../../../atoms/list/List.styled";
-import { ListItem } from "../../../atoms/list/ListItem.styled";
-import { ButtonTransparent } from "../../../atoms/button/ButtonTransparent.styled";
-import { tabWrapperStyles } from "../tabWrapperStyles";
+import Box from "../../../atoms/box/Box.styled";
+import List from "../../../atoms/list/List.styled";
+import ListItem from "../../../atoms/list/ListItem.styled";
+import ButtonTransparent from "../../../atoms/button/ButtonTransparent.styled";
+import tabWrapperStyles from "../tabWrapperStyles";
 
 import COLORS from "../../../../shared/styles/variables";
 
-export const TabSwitchWrapper = styled(Box)`
+const TabSwitchWrapper = styled(Box)`
   ${tabWrapperStyles}
   width: 215px;
 
@@ -38,3 +38,5 @@ export const TabSwitchWrapper = styled(Box)`
     }
   }
 `;
+
+export default TabSwitchWrapper;

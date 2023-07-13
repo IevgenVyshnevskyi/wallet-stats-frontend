@@ -12,15 +12,15 @@ import {
 import { setSuccessStatus } from "../../../../store/userSlice";
 import { setActiveWallet, resetError } from "../../../../store/walletSlice";
 
-import { titleFieldRules } from "../../../../shared/utils/field-rules/title";
+import titleFieldRules from "../../../../shared/utils/field-rules/title";
 
 import { userId } from "../../../../api/api";
 
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
-import { Input } from "../../../atoms/input/Input.styled";
-import { Typography } from "../../../atoms/typography/Typography.styled";
-import { Form } from "../../../atoms/form/Form.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
+import Input from "../../../atoms/input/Input.styled";
+import Typography from "../../../atoms/typography/Typography.styled";
+import Form from "../../../atoms/form/Form.styled";
 import BaseField from "../../base-field/BaseField";
 import BankdataInfoMessage from "./BankdataInfoMessage";
 

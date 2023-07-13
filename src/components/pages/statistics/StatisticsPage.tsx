@@ -13,12 +13,12 @@ import {
 
 import { token } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 import Header from "../../molecules/header/Header";
 import StatisticsHeader from "./StatisticsHeader";
 import DoughnutChartsSection from "./DoughnutChartSection";
 import LineChartSection from "./LineChartSection";
-import { StatisticsPageWrapper } from "./StatisticsPage.styled";
+import StatisticsPageWrapper from "./StatisticsPage.styled";
 
 import COLORS from "../../../shared/styles/variables";
 

@@ -17,11 +17,11 @@ import { resetCategoryState } from "../../../store/categorySlice";
 import { resetTransactionState } from "../../../store/transactionSlice";
 import { resetStatisticsState } from "../../../store/statisticsSlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Form } from "../../atoms/form/Form.styled";
-import { PopupWrapper } from "./Popup.styled";
+import Box from "../../atoms/box/Box.styled";
+import Button from "../../atoms/button/Button.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import Form from "../../atoms/form/Form.styled";
+import PopupWrapper from "./Popup.styled";
 
 import CrossIcon from "../../../shared/assets/icons/cross.svg";
 

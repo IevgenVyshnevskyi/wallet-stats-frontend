@@ -31,12 +31,12 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   );
 
   useEffect(() => {
-    const labels = generateLabels(
+    const generatedLabels = generateLabels(
       allOutlaysChart.categoryTransactions,
       filterByDays
     );
 
-    setLabels(labels);
+    setLabels(generatedLabels);
 
     setPointValues(
       filterByDays,

@@ -2,8 +2,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setFilterByDays } from "../../../store/statisticsSlice";
 import { getFilteredTransactions } from "../../../store/transactionSlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import COLORS from "../../../shared/styles/variables";

@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
-
-import { Button } from "../../atoms/button/Button.styled";
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Img } from "../../atoms/img/Img.styled";
-import { Container } from "../../atoms/container/Container.styled";
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import Img from "../../atoms/img/Img.styled";
+import Container from "../../atoms/container/Container.styled";
 
 import logo from "../../../shared/assets/images/logo.png";
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
@@ -12,16 +10,6 @@ import InterfaceImage from "../../../shared/assets/images/interface-image-full.p
 import COLORS from "../../../shared/styles/variables";
 
 const WelcomePage = () => {
-  const navigate = useNavigate();
-
-  const handleEnterClick = () => {
-    navigate("/login");
-  };
-
-  const handleRegisterClick = () => {
-    navigate("/register");
-  };
-
   const handleShowDemoClick = () => {
     window.location.replace("https://spendwise-test.vercel.app/home");
   };

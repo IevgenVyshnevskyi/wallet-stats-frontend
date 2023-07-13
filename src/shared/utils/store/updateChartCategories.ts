@@ -3,7 +3,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { StatisticsState } from "../../../../types/statistics";
 import { ICategory } from "../../../../types/category";
 
-export const updateChartCategories = (
+const updateChartCategories = (
   state: StatisticsState,
   action: PayloadAction<{ data: ICategory[]; params: string }>
 ) => {
@@ -20,3 +20,5 @@ export const updateChartCategories = (
       break;
   }
 };
+
+export default updateChartCategories;

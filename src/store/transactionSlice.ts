@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getUserDetails } from "./userSlice";
 
-import { updateTransactions } from "../shared/utils/store/updateTransactions";
+import updateTransactions from "../shared/utils/store/updateTransactions";
 
 import { $api, TRANSACTION_PATH } from "../api/api";
 

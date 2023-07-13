@@ -1,11 +1,11 @@
 import { useAppDispatch } from "../../../store/hooks";
 import { setIsResetLinkStepOpen } from "../../../store/passwordRecoverySlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Container } from "../../atoms/container/Container.styled";
-import { Img } from "../../atoms/img/Img.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
+import Container from "../../atoms/container/Container.styled";
+import Img from "../../atoms/img/Img.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 
 import InterfaceImage from "../../../shared/assets/images/interface-image-full.png";
 import logo from "../../../shared/assets/images/logo.png";

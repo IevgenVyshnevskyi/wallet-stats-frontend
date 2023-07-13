@@ -1,6 +1,6 @@
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { WalletButton } from "./Wallet.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import WalletButton from "./Wallet.styled";
 
 import SettingsWalletIcon from "../../../shared/assets/icons/settings-wallet.svg";
 

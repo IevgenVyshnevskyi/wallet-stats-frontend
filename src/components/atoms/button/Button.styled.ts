@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
-import {
-  commonStyles,
+import commonStyles, {
   commonStylesProps,
 } from "../../../shared/styles/commonStyles";
 
@@ -62,7 +61,9 @@ export const buttonStyles = css<ButtonProps>`
   `}
 `;
 
-export const Button = styled.button<ButtonProps>`
+const Button = styled.button<ButtonProps>`
   ${commonStyles}
   ${buttonStyles}
 `;
+
+export default Button;

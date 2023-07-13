@@ -10,7 +10,7 @@ import InterBold from "../fonts/Inter/static/Inter-Bold.ttf";
 import InterExtraBold from "../fonts/Inter/static/Inter-ExtraBold.ttf";
 import InterBlack from "../fonts/Inter/static/Inter-Black.ttf";
 
-export const fontStyles = css`
+const fontStyles = css`
   @font-face {
     font-family: "Inter";
     src: url(${InterThin}) format("truetype");
@@ -74,3 +74,5 @@ export const fontStyles = css`
     font-style: normal;
   }
 `;
+
+export default fontStyles;

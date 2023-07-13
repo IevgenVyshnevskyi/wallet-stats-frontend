@@ -5,9 +5,9 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import { useAppSelector } from "../../../store/hooks";
 
-import { getDoughnutChartConfig } from "./doughnutChartConfig";
+import getDoughnutChartConfig from "./doughnutChartConfig";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 
 import COLORS from "../../../shared/styles/variables";
 

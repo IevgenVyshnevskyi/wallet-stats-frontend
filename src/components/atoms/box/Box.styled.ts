@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
-import {
-  commonStyles,
+import commonStyles, {
   commonStylesProps,
 } from "../../../shared/styles/commonStyles";
 
@@ -26,7 +25,7 @@ type BoxProps = commonStylesProps & {
   overflow?: string;
 };
 
-export const Box = styled.div<BoxProps>`
+const Box = styled.div<BoxProps>`
   ${commonStyles};
   border: ${({ border }) => border || undefined};
   border-top: ${({ borderTop }) => borderTop || undefined};
@@ -45,3 +44,5 @@ export const Box = styled.div<BoxProps>`
   flex: ${({ flex }) => flex || undefined};
   flex-basis: ${({ flexBasis }) => flexBasis || undefined};
 `;
+
+export default Box;

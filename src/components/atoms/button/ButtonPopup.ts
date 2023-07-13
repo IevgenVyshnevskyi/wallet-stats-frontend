@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const ButtonPopup = styled.button<{ isActive: boolean }>`
+const ButtonPopup = styled.button<{ isActive: boolean }>`
   color: ${(props) => props.color || COLORS.ALMOST_BLACK_FOR_TEXT};
   font-weight: ${(props) => (props.isActive ? "700" : "400")};
   font-size: 12px;
@@ -15,3 +15,5 @@ export const ButtonPopup = styled.button<{ isActive: boolean }>`
     ${(props) => (props.isActive ? COLORS.PRIMARY_HOVER : COLORS.DIVIDER)};
   cursor: pointer;
 `;
+
+export default ButtonPopup;

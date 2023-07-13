@@ -3,7 +3,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { StatisticsState } from "../../../../types/statistics";
 import { Transactions } from "../../../../types/transactions";
 
-export const updateChartTransactions = (
+const updateChartTransactions = (
   state: StatisticsState,
   action: PayloadAction<{ data: Transactions; params: string }>
 ) => {
@@ -17,3 +17,5 @@ export const updateChartTransactions = (
     state.expensesChart.allTransactions = data;
   }
 };
+
+export default updateChartTransactions;

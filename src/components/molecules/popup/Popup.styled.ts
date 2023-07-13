@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
+import blackSVGtoWhite from "../../../shared/styles/iconStyles";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const PopupWrapper = styled(Box)`
+const PopupWrapper = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
@@ -42,3 +42,5 @@ export const PopupWrapper = styled(Box)`
     }
   }
 `;
+
+export default PopupWrapper;

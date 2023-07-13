@@ -43,7 +43,7 @@ export type commonStylesProps = {
   cursor?: string;
 };
 
-export const commonStyles = css<commonStylesProps>`
+const commonStyles = css<commonStylesProps>`
   margin: ${({ m }) => m || undefined};
   margin-top: ${({ mt }) => mt || undefined};
   margin-right: ${({ mr }) => mr || undefined};
@@ -84,3 +84,5 @@ export const commonStyles = css<commonStylesProps>`
   right: ${({ right }) => right || undefined};
   cursor: ${({ cursor }) => cursor || undefined};
 `;
+
+export default commonStyles;

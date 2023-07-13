@@ -13,15 +13,15 @@ import {
   walletAction,
 } from "../../../../store/walletSlice";
 
-import { titleFieldRules } from "../../../../shared/utils/field-rules/title";
-import { amountFieldRules } from "../../../../shared/utils/field-rules/amount";
+import titleFieldRules from "../../../../shared/utils/field-rules/title";
+import amountFieldRules from "../../../../shared/utils/field-rules/amount";
 
 import { userId } from "../../../../api/api";
 
-import { Form } from "../../../atoms/form/Form.styled";
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
-import { Typography } from "../../../atoms/typography/Typography.styled";
+import Form from "../../../atoms/form/Form.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
+import Typography from "../../../atoms/typography/Typography.styled";
 import BaseField from "../../base-field/BaseField";
 
 import COLORS from "../../../../shared/styles/variables";

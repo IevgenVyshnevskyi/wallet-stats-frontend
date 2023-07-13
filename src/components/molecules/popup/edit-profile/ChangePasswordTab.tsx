@@ -16,10 +16,10 @@ import {
   passwordInputRules,
 } from "../../../../shared/utils/field-rules/password";
 
-import { Form } from "../../../atoms/form/Form.styled";
-import { Box } from "../../../atoms/box/Box.styled";
-import { Typography } from "../../../atoms/typography/Typography.styled";
-import { Button } from "../../../atoms/button/Button.styled";
+import Form from "../../../atoms/form/Form.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Typography from "../../../atoms/typography/Typography.styled";
+import Button from "../../../atoms/button/Button.styled";
 import BaseField from "../../base-field/BaseField";
 
 import COLORS from "../../../../shared/styles/variables";

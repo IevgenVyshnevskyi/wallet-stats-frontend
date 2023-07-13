@@ -59,7 +59,7 @@ const passwordRecoverySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBankData.pending, (state, action) => {
+      .addCase(getBankData.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })

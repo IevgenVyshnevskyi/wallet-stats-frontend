@@ -17,14 +17,14 @@ import {
 
 import { token } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 import Header from "../../molecules/header/Header";
 import PopupAddWallet from "../../molecules/popup/add-wallet/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import Wallets from "./Wallets";
 import Transactions from "./Transitions";
 import Statistics from "./Statistics";
-import { HomePageWrapper } from "./HomePage.styled";
+import HomePageWrapper from "./HomePage.styled";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();

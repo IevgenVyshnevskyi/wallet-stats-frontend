@@ -4,7 +4,7 @@ import { TypeOfOutlay } from "../../../../types/common";
 import { Transactions } from "../../../../types/transactions";
 import { StatisticsState } from "../../../../types/statistics";
 
-export const updateChartCategoryTransactions = (
+const updateChartCategoryTransactions = (
   state: StatisticsState,
   action: PayloadAction<{ data: Transactions[]; chartType: TypeOfOutlay }>
 ) => {
@@ -21,3 +21,5 @@ export const updateChartCategoryTransactions = (
       break;
   }
 };
+
+export default updateChartCategoryTransactions;

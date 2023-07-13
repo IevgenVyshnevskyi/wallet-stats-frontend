@@ -1,7 +1,7 @@
-import { ButtonTransparent } from "../../../atoms/button/ButtonTransparent.styled";
-import { List } from "../../../atoms/list/List.styled";
-import { ListItem } from "../../../atoms/list/ListItem.styled";
-import { TabSwitchWrapper } from "./TabSwitch.styled";
+import ButtonTransparent from "../../../atoms/button/ButtonTransparent.styled";
+import List from "../../../atoms/list/List.styled";
+import ListItem from "../../../atoms/list/ListItem.styled";
+import TabSwitchWrapper from "./TabSwitch.styled";
 
 import COLORS from "../../../../shared/styles/variables";
 
@@ -14,8 +14,10 @@ type TabSwitchProps = {
 const TabSwitch: React.FC<TabSwitchProps> = ({ switchButtons }) => (
   <TabSwitchWrapper>
     <List>
-      {switchButtons.map(({ buttonName, onTabClick, isActive }, index) => (
-        <ListItem key={index} bgColor={isActive ? COLORS.WHITE : "transparent"}>
+      {switchButtons.map(({ buttonName, onTabClick, isActive }) => (
+        <ListItem
+          key={buttonName}
+          bgColor={isActive ? COLORS.WHITE : "transparent"}>
           <ButtonTransparent fw={isActive ? "700" : "400"} onClick={onTabClick}>
             {buttonName}
           </ButtonTransparent>

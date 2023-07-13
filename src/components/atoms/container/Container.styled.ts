@@ -5,7 +5,9 @@ type ContainerProps = {
   overflowX?: string;
 };
 
-export const Container = styled.div<ContainerProps>`
+const Container = styled.div<ContainerProps>`
   display: ${({ display }) => display || undefined};
   overflow-x: ${({ overflowX }) => overflowX || undefined};
 `;
+
+export default Container;

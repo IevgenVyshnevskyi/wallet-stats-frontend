@@ -20,7 +20,7 @@ type LinkProps = {
   outline?: string;
 };
 
-export const Link = styled(RouterLink)<LinkProps>`
+const Link = styled(RouterLink)<LinkProps>`
   font-weight: ${({ fw }) => fw || "700px"};
   font-size: ${({ fz }) => fz || "18px"};
   border-radius: ${({ borderRadius }) => borderRadius || "16px"};
@@ -40,3 +40,5 @@ export const Link = styled(RouterLink)<LinkProps>`
     text-decoration: underline;
   }
 `;
+
+export default Link;

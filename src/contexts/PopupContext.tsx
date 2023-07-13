@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 
 type PopupContextType = {
   isAddWalletPopupOpen: boolean;
@@ -33,19 +33,30 @@ export const PopupProvider: React.FC<PopupProviderProps> = ({ children }) => {
   const [isDeleteAccountPopupOpen, setIsDeleteAccountPopupOpen] =
     useState(false);
 
+  const value = useMemo(
+    () => ({
+      isAddWalletPopupOpen,
+      setIsAddWalletPopupOpen,
+      isEditWalletPopupOpen,
+      setIsEditWalletPopupOpen,
+      isEditProfilePopupOpen,
+      setIsEditProfilePopupOpen,
+      isDeleteAccountPopupOpen,
+      setIsDeleteAccountPopupOpen,
+    }),
+    [
+      isAddWalletPopupOpen,
+      setIsAddWalletPopupOpen,
+      isEditWalletPopupOpen,
+      setIsEditWalletPopupOpen,
+      isEditProfilePopupOpen,
+      setIsEditProfilePopupOpen,
+      isDeleteAccountPopupOpen,
+      setIsDeleteAccountPopupOpen,
+    ]
+  );
+
   return (
-    <PopupContext.Provider
-      value={{
-        isAddWalletPopupOpen,
-        setIsAddWalletPopupOpen,
-        isEditWalletPopupOpen,
-        setIsEditWalletPopupOpen,
-        isEditProfilePopupOpen,
-        setIsEditProfilePopupOpen,
-        isDeleteAccountPopupOpen,
-        setIsDeleteAccountPopupOpen,
-      }}>
-      {children}
-    </PopupContext.Provider>
+    <PopupContext.Provider value={value}>{children}</PopupContext.Provider>
   );
 };

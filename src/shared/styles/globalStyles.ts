@@ -1,10 +1,10 @@
 import { createGlobalStyle } from "styled-components";
 
-import { fontStyles } from "./fontStyles";
+import fontStyles from "./fontStyles";
 
 import COLORS from "./variables";
 
-export const GlobalStyles = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
   ${fontStyles}
 
   * {
@@ -34,3 +34,5 @@ export const GlobalStyles = createGlobalStyle`
 
   scrollbar-color: #ccc #f5f5f5;
 `;
+
+export default GlobalStyles;

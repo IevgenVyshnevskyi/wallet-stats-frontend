@@ -3,9 +3,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getFilteredTransactions } from "./transactionSlice";
 import { getFilteredCategories } from "./categorySlice";
 
-import { updateChartCategories } from "../shared/utils/store/updateChartCategories";
-import { updateChartTransactions } from "../shared/utils/store/updateChartTransactions";
-import { updateChartCategoryTransactions } from "../shared/utils/store/updateChartCategoryTransactions";
+import updateChartCategories from "../shared/utils/store/updateChartCategories";
+import updateChartTransactions from "../shared/utils/store/updateChartTransactions";
+import updateChartCategoryTransactions from "../shared/utils/store/updateChartCategoryTransactions";
 
 import { $api, TRANSACTION_PATH } from "../api/api";
 

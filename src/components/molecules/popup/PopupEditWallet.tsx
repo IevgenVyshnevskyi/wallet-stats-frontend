@@ -12,17 +12,17 @@ import {
   walletAction,
 } from "../../../store/walletSlice";
 
-import { titleFieldRules } from "../../../shared/utils/field-rules/title";
-import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
+import titleFieldRules from "../../../shared/utils/field-rules/title";
+import amountFieldRules from "../../../shared/utils/field-rules/amount";
 
 import { userId } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Form } from "../../atoms/form/Form.styled";
-import { PopupWrapper } from "./Popup.styled";
+import Box from "../../atoms/box/Box.styled";
+import Button from "../../atoms/button/Button.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
+import Form from "../../atoms/form/Form.styled";
+import PopupWrapper from "./Popup.styled";
 import BaseField from "../base-field/BaseField";
 
 import CrossIcon from "../../../shared/assets/icons/cross.svg";

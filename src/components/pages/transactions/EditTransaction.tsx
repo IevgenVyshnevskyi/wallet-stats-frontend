@@ -11,17 +11,17 @@ import {
   transactionAction,
 } from "../../../store/transactionSlice";
 
-import { setSelectOptions } from "../../../shared/utils/transactions/setSelectOptions";
-import { setDetailsFieldRules } from "../../../shared/utils/field-rules/details";
-import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
+import setSelectOptions from "../../../shared/utils/transactions/setSelectOptions";
+import setDetailsFieldRules from "../../../shared/utils/field-rules/details";
+import amountFieldRules from "../../../shared/utils/field-rules/amount";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { Form } from "../../atoms/form/Form.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
+import Typography from "../../atoms/typography/Typography.styled";
+import Label from "../../atoms/label/Label.styled";
+import Form from "../../atoms/form/Form.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
 import Select from "../../molecules/select/Select";
 import Wallet from "../../molecules/wallet/Wallet";
 import BaseField from "../../molecules/base-field/BaseField";
@@ -204,8 +204,8 @@ const EditTransaction: React.FC = () => {
             Рахунок
           </Typography>
           <Box display="flex" wrap="wrap" gap="8px">
-            {wallets?.map((wallet, index) => (
-              <ListItem key={index} flex="1 1 240px">
+            {wallets?.map((wallet) => (
+              <ListItem key={wallet.id} flex="1 1 240px">
                 <Wallet
                   wallet={wallet}
                   onWalletClick={() => onWalletClick(wallet)}

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { List } from "../../atoms/list/List.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import List from "../../atoms/list/List.styled";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const HeaderWrapper = styled.nav`
+const HeaderWrapper = styled.nav`
   display: flex;
   align-items: center;
   padding: 12px 50px;
@@ -34,3 +34,5 @@ export const HeaderWrapper = styled.nav`
     align-items: center;
   }
 `;
+
+export default HeaderWrapper;

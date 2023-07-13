@@ -3,9 +3,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 import { BuildOptions } from "../types/types";
 
-export const buildLoaders = ({
-  isDev,
-}: BuildOptions): webpack.RuleSetRule[] => {
+const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => {
   const typescriptLoader = {
     test: /\.tsx?$/,
     use: "ts-loader",
@@ -65,3 +63,5 @@ export const buildLoaders = ({
     babelLoader,
   ];
 };
+
+export default buildLoaders;

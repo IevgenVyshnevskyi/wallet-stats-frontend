@@ -4,7 +4,7 @@ import {
 } from "../../../../types/category";
 import { Transactions } from "../../../../types/transactions";
 
-export const calculateCategoriesWithTotalAmount = (
+const calculateCategoriesWithTotalAmount = (
   categories: ICategory[],
   allTransactions: Transactions
 ): ICategoryWithTotalAmount[] =>
@@ -33,3 +33,5 @@ export const calculateCategoriesWithTotalAmount = (
       };
     })
     .filter((category) => category.totalAmount > 0);
+
+export default calculateCategoriesWithTotalAmount;

@@ -7,7 +7,7 @@ const calculatePercentage = (value: number, ctx: any): string => {
   const dataArr = ctx.chart.data.datasets[0].data;
   let percentage: number = 0;
 
-  dataArr.map((data: number) => {
+  dataArr.forEach((data: number) => {
     if (typeof data === "number") {
       sum += data;
     }
@@ -20,7 +20,7 @@ const calculatePercentage = (value: number, ctx: any): string => {
   return `${percentage}%`;
 };
 
-export const getDoughnutChartConfig = (
+const getDoughnutChartConfig = (
   data: string[],
   labels: string[]
 ): { chartData: ChartData; chartOptions: ChartOptions } => {
@@ -98,3 +98,5 @@ export const getDoughnutChartConfig = (
 
   return { chartData, chartOptions };
 };
+
+export default getDoughnutChartConfig;

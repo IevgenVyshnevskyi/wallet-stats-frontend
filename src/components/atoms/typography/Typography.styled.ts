@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
-import {
-  commonStyles,
+import commonStyles, {
   commonStylesProps,
 } from "../../../shared/styles/commonStyles";
 
@@ -11,7 +10,7 @@ type TypographyProps = commonStylesProps & {
   lh?: string;
 };
 
-export const Typography = styled.p<TypographyProps>((props) => {
+const Typography = styled.p<TypographyProps>((props) => {
   const { textAlign, letterSpacing, lh } = props;
 
   return css`
@@ -21,3 +20,5 @@ export const Typography = styled.p<TypographyProps>((props) => {
     line-height: ${lh || undefined};
   `;
 });
+
+export default Typography;

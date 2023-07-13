@@ -11,18 +11,18 @@ import {
 } from "../../../store/transactionSlice";
 
 import { formatTransactionDateToUTC } from "../../../shared/utils/transactions/formatTransactionDate";
-import { setSelectOptions } from "../../../shared/utils/transactions/setSelectOptions";
-import { amountFieldRules } from "../../../shared/utils/field-rules/amount";
-import { setDetailsFieldRules } from "../../../shared/utils/field-rules/details";
+import setSelectOptions from "../../../shared/utils/transactions/setSelectOptions";
+import amountFieldRules from "../../../shared/utils/field-rules/amount";
+import setDetailsFieldRules from "../../../shared/utils/field-rules/details";
 
 import { userId } from "../../../api/api";
 
-import { Form } from "../../atoms/form/Form.styled";
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { Label } from "../../atoms/label/Label.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Button from "../../atoms/button/Button.styled";
+import Form from "../../atoms/form/Form.styled";
+import Box from "../../atoms/box/Box.styled";
+import Label from "../../atoms/label/Label.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import Select from "../../molecules/select/Select";
 import Wallet from "../../molecules/wallet/Wallet";
 import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
@@ -68,27 +68,25 @@ const AddTransaction: React.FC = () => {
   const setSwitchButtonOptions = (
     buttonName: string,
     typeOfOutlay: TypeOfOutlay
-  ): ISwitchButton => {
-    return {
-      buttonName,
-      isActive: addTransactionData?.type_of_outlay === typeOfOutlay,
-      onTabClick: () => {
-        if (addTransactionData?.type_of_outlay === typeOfOutlay) {
-          return;
-        }
-        dispatch(
-          setAddTransactionData({
-            type_of_outlay: typeOfOutlay,
-            category: categories[typeOfOutlay][0]?.id,
-          })
-        );
-        setSelectedCategoryValues({
-          value: categories[typeOfOutlay][0]?.id,
-          label: categories[typeOfOutlay][0]?.title,
-        });
-      },
-    };
-  };
+  ): ISwitchButton => ({
+    buttonName,
+    isActive: addTransactionData?.type_of_outlay === typeOfOutlay,
+    onTabClick: () => {
+      if (addTransactionData?.type_of_outlay === typeOfOutlay) {
+        return;
+      }
+      dispatch(
+        setAddTransactionData({
+          type_of_outlay: typeOfOutlay,
+          category: categories[typeOfOutlay][0]?.id,
+        })
+      );
+      setSelectedCategoryValues({
+        value: categories[typeOfOutlay][0]?.id,
+        label: categories[typeOfOutlay][0]?.title,
+      });
+    },
+  });
 
   const switchButtons: ISwitchButton[] = [
     setSwitchButtonOptions("Витрата", "expense"),
@@ -106,6 +104,15 @@ const AddTransaction: React.FC = () => {
       label: selectedValue?.label,
     });
   };
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    getValues,
+    clearErrors,
+  } = useForm({ mode: "all" });
 
   const handleSub = (data: {
     amount: string;
@@ -133,15 +140,6 @@ const AddTransaction: React.FC = () => {
       })
     );
   };
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-    clearErrors,
-  } = useForm({ mode: "all" });
 
   useEffect(() => {
     clearErrors("category");
@@ -205,8 +203,8 @@ const AddTransaction: React.FC = () => {
             Рахунок
           </Typography>
           <Box display="flex" wrap="wrap" gap="8px">
-            {wallets?.map((wallet, index) => (
-              <ListItem key={index} flex="1 1 240px">
+            {wallets?.map((wallet) => (
+              <ListItem key={wallet.id} flex="1 1 240px">
                 <Wallet
                   wallet={wallet}
                   onWalletClick={() => onWalletClick(wallet)}
@@ -237,7 +235,7 @@ const AddTransaction: React.FC = () => {
               fz="13px"
               height="14px"
               m="0 0 20px 0">
-              {errors?.category && <>{errors?.category?.message || "Error!"}</>}
+              {errors?.category?.message && "Error!"}
             </Box>
           </Box>
           <Box mb="25px">

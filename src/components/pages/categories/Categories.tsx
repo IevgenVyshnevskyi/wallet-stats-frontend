@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   setActiveCategory,
   setEditCategoryData,
-  setIsEditCategoryOpen
+  setIsEditCategoryOpen,
 } from "../../../store/categorySlice";
 
 import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { List } from "../../atoms/list/List.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
+import List from "../../atoms/list/List.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import Category from "../../molecules/category/Category";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
@@ -22,10 +22,9 @@ import { ICategory } from "../../../../types/category";
 const Categories: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    categories,
-    filterByTypeOfOutlay
-  } = useAppSelector(state => state.category);
+  const { categories, filterByTypeOfOutlay } = useAppSelector(
+    (state) => state.category
+  );
 
   const filterButtons = useFilterButtonOptions("category");
 
@@ -33,7 +32,7 @@ const Categories: React.FC = () => {
     dispatch(setActiveCategory(category));
     dispatch(setEditCategoryData(category));
     dispatch(setIsEditCategoryOpen(true));
-  }
+  };
 
   const categoriesData = (): ICategory[] => {
     switch (filterByTypeOfOutlay) {
@@ -46,7 +45,7 @@ const Categories: React.FC = () => {
       default:
         break;
     }
-  }
+  };
 
   return (
     <Box grow="1" display="flex" direction="column">
@@ -59,8 +58,7 @@ const Categories: React.FC = () => {
           mr="10px"
           fw="600"
           fz="12px"
-          color={COLORS.DARK_FOR_TEXT}
-        >
+          color={COLORS.DARK_FOR_TEXT}>
           Відобразити
         </Typography>
         <TabFilter filterButtons={filterButtons} />
@@ -74,16 +72,14 @@ const Categories: React.FC = () => {
         grow="1"
         overflow="auto"
         height="100px"
-        p="15px"
-      >
+        p="15px">
         <List gap="8px" display="flex" direction="column">
-          {categoriesData()?.map((category, index) => (
-            <ListItem key={index}>
+          {categoriesData()?.map((category) => (
+            <ListItem key={category.id}>
               <ButtonTransparent
                 width="100%"
                 onClick={() => onCategoryClick(category)}
-                borderRadius="8px"
-              >
+                borderRadius="8px">
                 <Category category={category} />
               </ButtonTransparent>
             </ListItem>
@@ -92,6 +88,6 @@ const Categories: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default Categories;

@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import commonStyles from "../../../shared/styles/commonStyles";
 
-import COLORS from '../../../shared/styles/variables';
+import COLORS from "../../../shared/styles/variables";
 
-export const DateInput = styled.button`
+const DateInput = styled.button`
   ${commonStyles}
   padding: 10px 14px;
   background: ${COLORS.WHITE};
@@ -18,3 +18,5 @@ export const DateInput = styled.button`
     outline: none;
   }
 `;
+
+export default DateInput;

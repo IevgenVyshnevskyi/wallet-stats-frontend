@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setActiveCategoryId } from "../../../store/statisticsSlice";
 import { getFilteredTransactions } from "../../../store/transactionSlice";
 
-import { generateNewLineChartData } from "../../../shared/utils/statistics/generateNewLineChartData";
+import generateNewLineChartData from "../../../shared/utils/statistics/generateNewLineChartData";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import LineChart from "../../molecules/charts/LineChart";
 import Select from "../../molecules/select/Select";
 
@@ -18,10 +18,14 @@ import { SelectOptions } from "../../../../types/common";
 const LineChartSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { filterByDays, allOutlaysChart } = useAppSelector(state => state.statistics);
-  const { categories } = useAppSelector(state => state.category);
+  const { filterByDays, allOutlaysChart } = useAppSelector(
+    (state) => state.statistics
+  );
+  const { categories } = useAppSelector((state) => state.category);
 
-  const selectedCategory = categories.all.find((c) => c.id === allOutlaysChart.activeCategoryId)
+  const selectedCategory = categories.all.find(
+    (c) => c.id === allOutlaysChart.activeCategoryId
+  );
 
   const [selectedCategoryValues, setSelectedCategoryValues] = useState<any>({
     value: selectedCategory?.id,
@@ -30,27 +34,27 @@ const LineChartSection: React.FC = () => {
 
   const [chartData, setChartData] = useState<number[]>([]);
 
-  const options: SelectOptions[] = categories.all?.map(({ id, title }) => {
-    return { value: id, label: title }
-  })
+  const options: SelectOptions[] = categories.all?.map(({ id, title }) => ({
+    value: id,
+    label: title,
+  }));
 
   const onCategoryChange = (e: any): void => {
     if (e.value !== allOutlaysChart?.activeCategoryId) {
-      setSelectedCategoryValues({ value: e.value, label: e.label })
-      dispatch(setActiveCategoryId(e.value))
-      dispatch(getFilteredTransactions(
-        `?category=${e.value}&days=${filterByDays}`
-      ))
+      setSelectedCategoryValues({ value: e.value, label: e.label });
+      dispatch(setActiveCategoryId(e.value));
+      dispatch(
+        getFilteredTransactions(`?category=${e.value}&days=${filterByDays}`)
+      );
     }
-  }
+  };
 
   useEffect(() => {
     const newChartData: number[] = new Array(parseInt(filterByDays)).fill(0);
 
-    const {
-      diffInDays,
-      totalAmount
-    } = generateNewLineChartData(allOutlaysChart.categoryTransactions)
+    const { diffInDays, totalAmount } = generateNewLineChartData(
+      allOutlaysChart.categoryTransactions
+    );
 
     newChartData[diffInDays] = totalAmount;
 
@@ -59,15 +63,17 @@ const LineChartSection: React.FC = () => {
 
   useEffect(() => {
     if (allOutlaysChart?.activeCategoryId) {
-      dispatch(getFilteredTransactions(
-        `?category=${allOutlaysChart?.activeCategoryId}&days=${filterByDays}`
-      ))
+      dispatch(
+        getFilteredTransactions(
+          `?category=${allOutlaysChart?.activeCategoryId}&days=${filterByDays}`
+        )
+      );
     } else {
       setSelectedCategoryValues({
         value: categories.all[0]?.id,
-        label: categories.all[0]?.title
-      })
-      dispatch(setActiveCategoryId(categories.all[0]?.id))
+        label: categories.all[0]?.title,
+      });
+      dispatch(setActiveCategoryId(categories.all[0]?.id));
     }
   }, [allOutlaysChart?.activeCategoryId, filterByDays, categories.all]);
 
@@ -89,6 +95,6 @@ const LineChartSection: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default LineChartSection;

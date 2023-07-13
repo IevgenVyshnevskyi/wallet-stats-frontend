@@ -12,7 +12,10 @@ export const generateLabels = (
   const labels: string[] = [];
 
   if (Object.keys(categoryTransactions)?.length > 0) {
-    for (let i = 0; i < parseInt(filterByDays); i++) {
+    const daysCount = parseInt(filterByDays);
+    const daysArray = Array.from({ length: daysCount }).fill(null);
+
+    daysArray.forEach((_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - i);
 
@@ -22,7 +25,7 @@ export const generateLabels = (
       });
 
       labels.push(label);
-    }
+    });
   }
 
   return labels;

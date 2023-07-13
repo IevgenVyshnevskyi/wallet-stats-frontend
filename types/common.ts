@@ -12,15 +12,15 @@ export interface IFilterButton {
   buttonName: string;
   isActive: boolean;
   typeOfOutlay?: TypeOfOutlay | "";
-};
+}
 
 export interface ISwitchButton {
   buttonName: string;
   onTabClick: () => void;
   isActive: boolean;
-};
+}
 
 export type SelectOptions = {
   value: number;
   label: string;
-}
+};

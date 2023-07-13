@@ -1,11 +1,14 @@
-import { ICategory, ICategoryWithTotalAmount } from "../../../../types/category";
+import {
+  ICategory,
+  ICategoryWithTotalAmount,
+} from "../../../../types/category";
 import { Transactions } from "../../../../types/transactions";
 
-export const calculateCategoriesWithTotalAmount = (
+const calculateCategoriesWithTotalAmount = (
   categories: ICategory[],
   allTransactions: Transactions
-): ICategoryWithTotalAmount[] => {
-  return categories
+): ICategoryWithTotalAmount[] =>
+  categories
     .flatMap((category) => {
       const transactionsForCategory = Object.values(allTransactions)
         .flat()
@@ -18,8 +21,7 @@ export const calculateCategoriesWithTotalAmount = (
         return [];
       }
       const totalAmount = transactionsForCategory.reduce(
-        (sum, transaction) =>
-          sum + parseFloat(transaction.amount_of_funds),
+        (sum, transaction) => sum + parseFloat(transaction.amount_of_funds),
         0
       );
       return {
@@ -31,4 +33,5 @@ export const calculateCategoriesWithTotalAmount = (
       };
     })
     .filter((category) => category.totalAmount > 0);
-}
+
+export default calculateCategoriesWithTotalAmount;

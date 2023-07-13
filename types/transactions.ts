@@ -14,7 +14,7 @@ export interface ITransaction {
 
 export type Transactions = {
   [date: string]: ITransaction[];
-}
+};
 
 export type TransactionState = {
   filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
@@ -32,4 +32,4 @@ export type TransactionState = {
   isEditTransactionSuccess: boolean;
   isDeleteTransactionSuccess: boolean;
   isEditTransactionOpen: boolean;
-}
+};

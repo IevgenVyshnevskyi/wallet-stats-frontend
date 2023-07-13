@@ -1,10 +1,10 @@
 import { FilterByTypeOfOutlayOptions, TypeOfOutlay } from "./common";
 
 export interface ICategory {
-  id?: number,
-  title: string,
-  type_of_outlay: TypeOfOutlay,
-  owner: number
+  id?: number;
+  title: string;
+  type_of_outlay: TypeOfOutlay;
+  owner: number;
 }
 
 export interface ICategoryWithTotalAmount extends ICategory {
@@ -29,4 +29,4 @@ export type CategoryState = {
   isEditCategorySuccess: boolean;
   isDeleteCategorySuccess: boolean;
   isEditCategoryOpen: boolean;
-}
+};

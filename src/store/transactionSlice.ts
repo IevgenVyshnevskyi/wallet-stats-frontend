@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getUserDetails } from "./userSlice";
 
-import { updateTransactions } from "../shared/utils/store/updateTransactions";
+import updateTransactions from "../shared/utils/store/updateTransactions";
 
 import { $api, TRANSACTION_PATH } from "../api/api";
 
@@ -98,9 +98,7 @@ const transactionSlice = createSlice({
   name: "transaction",
   initialState,
   reducers: {
-    resetTransactionState: () => {
-      return initialState;
-    },
+    resetTransactionState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },

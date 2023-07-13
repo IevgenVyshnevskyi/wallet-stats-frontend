@@ -19,7 +19,6 @@
       "warn",
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "no-undef": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -36,6 +35,14 @@
         "namedComponents": "arrow-function",
         "unnamedComponents": "arrow-function"
       }
-    ]
+    ],
+    "no-undef": "off",
+    "no-param-reassign": "off",
+    "no-unused-vars": "off",
+    "no-nested-ternary": "off",
+    "radix": "off",
+    "consistent-return": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

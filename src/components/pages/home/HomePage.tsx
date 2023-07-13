@@ -6,59 +6,59 @@ import { PopupContext } from "../../../contexts/PopupContext";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getWallets } from "../../../store/walletSlice";
 import { getUserDetails } from "../../../store/userSlice";
-import { getFilteredTransactions, getTransactions } from "../../../store/transactionSlice";
-import { getCategories, getFilteredCategories } from "../../../store/categorySlice";
+import {
+  getFilteredTransactions,
+  getTransactions,
+} from "../../../store/transactionSlice";
+import {
+  getCategories,
+  getFilteredCategories,
+} from "../../../store/categorySlice";
 
 import { token } from "../../../api/api";
 
-import { Box } from "../../atoms/box/Box.styled";
-import Header from '../../molecules/header/Header';
+import Box from "../../atoms/box/Box.styled";
+import Header from "../../molecules/header/Header";
 import PopupAddWallet from "../../molecules/popup/add-wallet/PopupAddWallet";
 import PopupEditWallet from "../../molecules/popup/PopupEditWallet";
 import Wallets from "./Wallets";
 import Transactions from "./Transitions";
 import Statistics from "./Statistics";
-import { HomePageWrapper } from "./HomePage.styled";
+import HomePageWrapper from "./HomePage.styled";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const {
-    isAddWalletPopupOpen,
-    isEditWalletPopupOpen,
-  } = useContext(PopupContext);
+  const { isAddWalletPopupOpen, isEditWalletPopupOpen } =
+    useContext(PopupContext);
 
   const {
     isAddWalletSuccess,
     isEditWalletSuccess,
     isDeleteWalletSuccess,
-    isLoading: isWalletActionLoading
-  } = useAppSelector(state => state.wallet);
+    isLoading: isWalletActionLoading,
+  } = useAppSelector((state) => state.wallet);
 
-  const {
-    isLoggedIn,
-    isRegistered
-  } = useAppSelector(state => state.user);
+  const { isLoggedIn, isRegistered } = useAppSelector((state) => state.user);
 
-  const {
-    isLoading: isBankDataLoading,
-    isAddBankDataSuccess
-  } = useAppSelector(state => state.bankData);
+  const { isLoading: isBankDataLoading, isAddBankDataSuccess } = useAppSelector(
+    (state) => state.bankData
+  );
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/welcome")
+    navigate("/welcome");
   }
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(getUserDetails())
+      dispatch(getUserDetails());
     }
 
     dispatch(getWallets());
     dispatch(getTransactions());
-    dispatch(getFilteredCategories("?type_of_outlay=income"))
-    dispatch(getFilteredCategories("?type_of_outlay=expense"))
+    dispatch(getFilteredCategories("?type_of_outlay=income"));
+    dispatch(getFilteredCategories("?type_of_outlay=expense"));
     dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
     dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
   }, []);
@@ -74,14 +74,24 @@ const HomePage: React.FC = () => {
   }, [isWalletActionLoading, isBankDataLoading]);
 
   useEffect(() => {
-    if (isAddWalletSuccess || isEditWalletSuccess || isDeleteWalletSuccess || isAddBankDataSuccess) {
+    if (
+      isAddWalletSuccess ||
+      isEditWalletSuccess ||
+      isDeleteWalletSuccess ||
+      isAddBankDataSuccess
+    ) {
       dispatch(getWallets());
       dispatch(getTransactions());
       dispatch(getCategories());
       dispatch(getFilteredTransactions("?type_of_outlay=expense&days=30"));
       dispatch(getFilteredTransactions("?type_of_outlay=income&days=30"));
     }
-  }, [isAddWalletSuccess, isEditWalletSuccess, isDeleteWalletSuccess, isAddBankDataSuccess]);
+  }, [
+    isAddWalletSuccess,
+    isEditWalletSuccess,
+    isDeleteWalletSuccess,
+    isAddBankDataSuccess,
+  ]);
 
   return (
     <>

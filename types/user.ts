@@ -1,9 +1,9 @@
 export interface IUser {
-  id?: number,
-  first_name: string,
-  last_name: string,
-  email?: string,
-  is_confirm_email?: boolean,
+  id?: number;
+  first_name: string;
+  last_name: string;
+  email?: string;
+  is_confirm_email?: boolean;
   token?: string;
 }
 
@@ -24,20 +24,20 @@ export type UserState = {
   confirmEmailError: string | null;
   profileChangeError: string | null;
   passwordChangeError: string | null;
-}
+};
 
 export type RegisterFormData = {
-  first_name: string,
-  last_name: string,
-  email: string,
-  password: string,
-  password2: string,
-}
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password2: string;
+};
 
 export type LoginFormData = {
-  email: string,
-  password: string,
-}
+  email: string;
+  password: string;
+};
 
 export interface DataEntryFormData {
   availableCash: string;

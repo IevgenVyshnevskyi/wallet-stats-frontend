@@ -13,23 +13,21 @@ const useSwitchButtonOptions = (
 
   const setSwitchButtonOptions = (
     buttonName: string,
-    typeOfOutlay: TypeOfOutlay,
-  ): ISwitchButton => {
-    return {
-      buttonName,
-      isActive: data?.type_of_outlay === typeOfOutlay,
-      onTabClick: () => {
-        dispatch(dataHandler({ type_of_outlay: typeOfOutlay }));
-      },
-    }
-  }
+    typeOfOutlay: TypeOfOutlay
+  ): ISwitchButton => ({
+    buttonName,
+    isActive: data?.type_of_outlay === typeOfOutlay,
+    onTabClick: () => {
+      dispatch(dataHandler({ type_of_outlay: typeOfOutlay }));
+    },
+  });
 
   const switchButtons: ISwitchButton[] = [
-    setSwitchButtonOptions('Витрата', "expense"),
-    setSwitchButtonOptions('Надходження', "income")
+    setSwitchButtonOptions("Витрата", "expense"),
+    setSwitchButtonOptions("Надходження", "income"),
   ];
 
   return switchButtons;
-}
+};
 
 export default useSwitchButtonOptions;

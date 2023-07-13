@@ -1,19 +1,21 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
-import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
+import blackSVGtoWhite from "../../../shared/styles/iconStyles";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const LinkMenu = styled(RouterLink)`
+const LinkMenu = styled(RouterLink)`
   padding: 10px 28px;
   border-radius: 40px;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
 
-  ${({ to }) => (to === window.location.pathname ? `
+  ${({ to }) =>
+    to === window.location.pathname
+      ? `
     background-color: ${COLORS.PRIMARY};
     > span {
       color: ${COLORS.WHITE};
@@ -22,8 +24,8 @@ export const LinkMenu = styled(RouterLink)`
     svg {
       ${blackSVGtoWhite};
     }
-  ` : undefined
-  )}
+  `
+      : undefined}
 
   &:hover {
     background-color: ${COLORS.PRIMARY_HOVER};
@@ -45,4 +47,6 @@ export const LinkMenu = styled(RouterLink)`
     font-size: 14px;
     font-weight: 600;
   }
-`
+`;
+
+export default LinkMenu;

@@ -2,8 +2,8 @@ import type { Configuration as DevServerConfiguration } from "webpack-dev-server
 
 import { BuildOptions } from "../types/types";
 
-export const buildDevServer = (options: BuildOptions): DevServerConfiguration => {
-  const { paths } = options
+const buildDevServer = (options: BuildOptions): DevServerConfiguration => {
+  const { paths } = options;
 
   return {
     port: options.port,
@@ -12,6 +12,8 @@ export const buildDevServer = (options: BuildOptions): DevServerConfiguration =>
     historyApiFallback: true,
     static: {
       directory: paths.output,
-    }
-  }
-}
+    },
+  };
+};
+
+export default buildDevServer;

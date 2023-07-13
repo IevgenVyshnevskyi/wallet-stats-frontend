@@ -1,34 +1,31 @@
-import webpack from 'webpack';
+import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
-import { BuildOptions } from '../types/types';
+import { BuildOptions } from "../types/types";
 
-export const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => {
+const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => {
   const typescriptLoader = {
     test: /\.tsx?$/,
-    use: 'ts-loader',
+    use: "ts-loader",
     exclude: /node_modules/,
   };
 
   const styleLoader = {
     test: /\.css$/,
-    use: [
-      isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-      'css-loader',
-    ],
+    use: [isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader"],
   };
 
   const svgLoader = {
     test: /\.svg$/,
-    use: '@svgr/webpack',
+    use: "@svgr/webpack",
   };
 
   const graphicsLoader = {
     test: /\.(png|jpe?g|gif)$/i,
     use: {
-      loader: 'file-loader',
+      loader: "file-loader",
       options: {
-        outputPath: 'assets',
+        outputPath: "assets",
       },
     },
   };
@@ -36,9 +33,9 @@ export const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => 
   const fontsLoader = {
     test: /\.(ttf)$/i,
     use: {
-      loader: 'file-loader',
+      loader: "file-loader",
       options: {
-        outputPath: 'fonts',
+        outputPath: "fonts",
       },
     },
   };
@@ -47,12 +44,12 @@ export const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => 
     test: /\.m?js$/,
     exclude: /node_modules/,
     use: {
-      loader: 'babel-loader',
+      loader: "babel-loader",
       options: {
-        presets: [
-          ['@babel/preset-env', { targets: 'defaults' }],
-        ],
-        plugins: [isDev && require.resolve('react-refresh/babel')].filter(Boolean),
+        presets: [["@babel/preset-env", { targets: "defaults" }]],
+        plugins: [isDev && require.resolve("react-refresh/babel")].filter(
+          Boolean
+        ),
       },
     },
   };
@@ -65,4 +62,6 @@ export const buildLoaders = ({ isDev }: BuildOptions): webpack.RuleSetRule[] => 
     styleLoader,
     babelLoader,
   ];
-}
+};
+
+export default buildLoaders;

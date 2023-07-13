@@ -7,29 +7,32 @@ import {
 
 import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
 
-import { filterTransactions } from "../../../shared/utils/transactions/filterTransactions";
+import filterTransactions from "../../../shared/utils/transactions/filterTransactions";
 import { formatTransactionDateToFullDate } from "../../../shared/utils/transactions/formatTransactionDate";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { List } from "../../atoms/list/List.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import List from "../../atoms/list/List.styled";
 import Transaction from "../../molecules/transaction/Transaction";
 import TabFilter from "../../molecules/tabs/filter/TabFilter";
 
 import COLORS from "../../../shared/styles/variables";
 
-import { ITransaction, Transactions } from "../../../../types/transactions";
+import {
+  ITransaction,
+  Transactions as TransactionsType,
+} from "../../../../types/transactions";
 
 const renderTransactionItems = (
   transactions: ITransaction[],
   onTransactionClick: (transaction: ITransaction) => void
-): React.ReactNode[] => {
-  return transactions
-    .sort((a, b) => {
-      return new Date(b.created).getTime() - new Date(a.created).getTime();
-    })
+): React.ReactNode[] =>
+  transactions
+    .sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    )
     .map((transaction) => (
       <ListItem key={transaction?.id}>
         <ButtonTransparent
@@ -40,7 +43,6 @@ const renderTransactionItems = (
         </ButtonTransparent>
       </ListItem>
     ));
-};
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -57,8 +59,8 @@ const Transactions: React.FC = () => {
     dispatch(setIsEditTransactionOpen(true));
   };
 
-  const transactionsData = (): Transactions => {
-    let filteredTransactions: Transactions = {};
+  const transactionsData = (): TransactionsType => {
+    let filteredTransactions: TransactionsType = {};
 
     switch (filterByTypeOfOutlay) {
       case "all":
@@ -106,13 +108,13 @@ const Transactions: React.FC = () => {
         grow="1"
         overflow="auto"
         height="100px">
-        {Object.entries(transactionsData()).map(([date, transactions]) => (
+        {Object.entries(transactionsData()).map(([date, transactionsArr]) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
               {formatTransactionDateToFullDate(date)}
             </Typography>
             <List display="flex" direction="column" gap="8px">
-              {renderTransactionItems(transactions, onTransactionClick)}
+              {renderTransactionItems(transactionsArr, onTransactionClick)}
             </List>
           </Box>
         ))}

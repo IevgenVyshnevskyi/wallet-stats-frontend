@@ -1,7 +1,9 @@
 import styled from "styled-components";
 
-import { commonStyles } from "../../../shared/styles/commonStyles";
+import commonStyles from "../../../shared/styles/commonStyles";
 
-export const ListItem = styled.li`
+const ListItem = styled.li`
   ${commonStyles}
 `;
+
+export default ListItem;

@@ -124,9 +124,7 @@ const walletSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
-    resetWalletState: (state) => {
-      return initialState;
-    },
+    resetWalletState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },

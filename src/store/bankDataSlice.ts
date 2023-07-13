@@ -1,76 +1,71 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { $api, BANK_DATA_PATH } from '../api/api';
-import { IBankData } from '../../types/bankdata';
+import { $api, BANK_DATA_PATH } from "../api/api";
+
+import { IBankData } from "../../types/bankdata";
 
 type BankDataState = {
   isLoading: boolean;
   error: string | null;
   bankData: IBankData[];
   isAddBankDataSuccess: boolean;
-}
+};
 
 export const getBankData = createAsyncThunk<
   IBankData[],
   undefined,
   { rejectValue: string }
->(
-  'bankData/getBankData',
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await $api.get(BANK_DATA_PATH);
-      return res?.data;
-    } catch (error) {
-      return rejectWithValue('Помилка');
-    }
+>("bankData/getBankData", async (_, { rejectWithValue }) => {
+  try {
+    const res = await $api.get(BANK_DATA_PATH);
+    return res?.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
   }
-);
+});
 
 export const sendBankData = createAsyncThunk<
   undefined,
   IBankData,
   { rejectValue: string }
->(
-  'bankData/sendBankData',
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await $api.post(BANK_DATA_PATH, payload, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        }
-      });
+>("bankData/sendBankData", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await $api.post(BANK_DATA_PATH, payload, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
 
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue('Помилка');
-    }
+    return response?.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
   }
-);
+});
 
 const initialState: BankDataState = {
   isLoading: false,
   error: null,
   bankData: null,
   isAddBankDataSuccess: false,
-}
+};
 
 const passwordRecoverySlice = createSlice({
-  name: 'bankData',
+  name: "bankData",
   initialState,
   reducers: {
     setBankDataSuccessStatus(state, action) {
       state.isAddBankDataSuccess = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBankData.pending, (state, action) => {
+      .addCase(getBankData.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(getBankData.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.bankData = action.payload
+        state.bankData = action.payload;
       })
       .addCase(getBankData.rejected, (state, action) => {
         state.isLoading = false;
@@ -88,12 +83,10 @@ const passwordRecoverySlice = createSlice({
       .addCase(sendBankData.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
-export const {
-  setBankDataSuccessStatus
-} = passwordRecoverySlice.actions
+export const { setBankDataSuccessStatus } = passwordRecoverySlice.actions;
 
 export default passwordRecoverySlice.reducer;

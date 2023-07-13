@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-import { Box } from "../../atoms/box/Box.styled";
+import Box from "../../atoms/box/Box.styled";
 
 import COLORS from "../../../shared/styles/variables";
 
-export const CategoryWrapper = styled(Box)`
+const CategoryWrapper = styled(Box)`
   display: flex;
   align-items: center;
   gap: 16px;
@@ -20,3 +20,5 @@ export const CategoryWrapper = styled(Box)`
     }
   }
 `;
+
+export default CategoryWrapper;

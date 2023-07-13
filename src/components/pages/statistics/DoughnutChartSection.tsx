@@ -1,14 +1,17 @@
 import { useRef, useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setTotalIncomes, setTotalExpenses } from "../../../store/categorySlice";
+import {
+  setTotalIncomes,
+  setTotalExpenses,
+} from "../../../store/categorySlice";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 import DoughnutChart from "../../molecules/charts/DoughnutChart";
 
-import { calculateCategoriesWithTotalAmount } from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
-import { calculateTotalAmount } from "../../../shared/utils/statistics/calculateTotalAmount";
+import calculateCategoriesWithTotalAmount from "../../../shared/utils/statistics/calculateCategoriesWithTotalAmount";
+import calculateTotalAmount from "../../../shared/utils/statistics/calculateTotalAmount";
 
 import COLORS from "../../../shared/styles/variables";
 
@@ -17,7 +20,9 @@ import { ICategoryWithTotalAmount } from "../../../../types/category";
 const DoughnutChartsSection: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { incomesChart, expensesChart, isLoading } = useAppSelector(state => state.statistics);
+  const { incomesChart, expensesChart, isLoading } = useAppSelector(
+    (state) => state.statistics
+  );
 
   const incomesLabels = useRef<string[]>(null);
   const expensesLabels = useRef<string[]>(null);
@@ -25,43 +30,51 @@ const DoughnutChartsSection: React.FC = () => {
   const incomesData = useRef<any>(null);
   const expensesData = useRef<any>(null);
 
-  const incomeCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
-  const expenseCategoriesWithTotalAmount = useRef<ICategoryWithTotalAmount[]>(null);
+  const incomeCategoriesWithTotalAmount =
+    useRef<ICategoryWithTotalAmount[]>(null);
+  const expenseCategoriesWithTotalAmount =
+    useRef<ICategoryWithTotalAmount[]>(null);
 
-  const totalIncomesAmount: string = calculateTotalAmount(incomesChart?.allTransactions);
-  const totalExpensesAmount: string = calculateTotalAmount(expensesChart?.allTransactions);
+  const totalIncomesAmount: string = calculateTotalAmount(
+    incomesChart?.allTransactions
+  );
+  const totalExpensesAmount: string = calculateTotalAmount(
+    expensesChart?.allTransactions
+  );
 
   useEffect(() => {
     if (incomesChart.categories && incomesChart.allTransactions) {
-      incomeCategoriesWithTotalAmount.current = calculateCategoriesWithTotalAmount(
-        incomesChart.categories,
-        incomesChart.allTransactions,
-      )
+      incomeCategoriesWithTotalAmount.current =
+        calculateCategoriesWithTotalAmount(
+          incomesChart.categories,
+          incomesChart.allTransactions
+        );
 
-      incomesLabels.current = incomeCategoriesWithTotalAmount.current.map(c => {
-        return c.title
-      })
-      incomesData.current = incomeCategoriesWithTotalAmount.current.map(c => {
-        return c.totalAmount
-      })
+      incomesLabels.current = incomeCategoriesWithTotalAmount.current.map(
+        (c) => c.title
+      );
+      incomesData.current = incomeCategoriesWithTotalAmount.current.map(
+        (c) => c.totalAmount
+      );
     }
   }, [incomesChart.categories, incomesChart.allTransactions]);
 
   useEffect(() => {
     if (expensesChart.categories && expensesChart.allTransactions) {
-      expenseCategoriesWithTotalAmount.current = calculateCategoriesWithTotalAmount(
-        expensesChart.categories,
-        expensesChart.allTransactions,
-      )
+      expenseCategoriesWithTotalAmount.current =
+        calculateCategoriesWithTotalAmount(
+          expensesChart.categories,
+          expensesChart.allTransactions
+        );
 
-      expensesLabels.current = expenseCategoriesWithTotalAmount.current.map(c => {
-        return c.title
-      })
-      expensesData.current = expenseCategoriesWithTotalAmount.current.map(c => {
-        return c.totalAmount
-      })
+      expensesLabels.current = expenseCategoriesWithTotalAmount.current.map(
+        (c) => c.title
+      );
+      expensesData.current = expenseCategoriesWithTotalAmount.current.map(
+        (c) => c.totalAmount
+      );
     }
-  }, [expensesChart.categories, expensesChart.allTransactions])
+  }, [expensesChart.categories, expensesChart.allTransactions]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -80,10 +93,9 @@ const DoughnutChartsSection: React.FC = () => {
       gap="32px"
       pb="20px"
       mb="20px"
-      borderBottom={`2px solid ${COLORS.DIVIDER}`}
-    >
+      borderBottom={`2px solid ${COLORS.DIVIDER}`}>
       <Box display="flex" direction="column" borderRadius="16px" grow="1">
-        <Box display="flex" mb="20px" >
+        <Box display="flex" mb="20px">
           <Typography as="h3" fz="16px" fw="500" mr="12px">
             Витрати:
           </Typography>
@@ -112,6 +124,6 @@ const DoughnutChartsSection: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default DoughnutChartsSection;

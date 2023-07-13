@@ -5,19 +5,22 @@ import { useForm } from "react-hook-form";
 import { PopupContext } from "../../../../contexts/PopupContext";
 
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { setBankDataSuccessStatus, sendBankData } from "../../../../store/bankDataSlice";
+import {
+  setBankDataSuccessStatus,
+  sendBankData,
+} from "../../../../store/bankDataSlice";
 import { setSuccessStatus } from "../../../../store/userSlice";
 import { setActiveWallet, resetError } from "../../../../store/walletSlice";
 
-import { titleFieldRules } from "../../../../shared/utils/field-rules/title";
+import titleFieldRules from "../../../../shared/utils/field-rules/title";
 
 import { userId } from "../../../../api/api";
 
-import { Box } from "../../../atoms/box/Box.styled";
-import { Button } from "../../../atoms/button/Button.styled";
-import { Input } from "../../../atoms/input/Input.styled";
-import { Typography } from "../../../atoms/typography/Typography.styled";
-import { Form } from "../../../atoms/form/Form.styled";
+import Box from "../../../atoms/box/Box.styled";
+import Button from "../../../atoms/button/Button.styled";
+import Input from "../../../atoms/input/Input.styled";
+import Typography from "../../../atoms/typography/Typography.styled";
+import Form from "../../../atoms/form/Form.styled";
 import BaseField from "../../base-field/BaseField";
 import BankdataInfoMessage from "./BankdataInfoMessage";
 
@@ -26,7 +29,7 @@ import COLORS from "../../../../shared/styles/variables";
 import { IBankData } from "../../../../../types/bankdata";
 
 const AddBankDataTab: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const [fileValue, setFileValue] = useState<any>();
 
@@ -35,19 +38,17 @@ const AddBankDataTab: React.FC = () => {
 
   const { setIsAddWalletPopupOpen } = useContext(PopupContext);
 
-  const {
-    error,
-    isAddWalletSuccess,
-    isLoading
-  } = useAppSelector(state => state.wallet);
-  const { user } = useAppSelector(state => state.user);
-  const { isAddBankDataSuccess } = useAppSelector(state => state.bankData);
+  const { error, isAddWalletSuccess, isLoading } = useAppSelector(
+    (state) => state.wallet
+  );
+  const { user } = useAppSelector((state) => state.user);
+  const { isAddBankDataSuccess } = useAppSelector((state) => state.bankData);
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
-    reset
+    reset,
   } = useForm({ mode: "all" });
 
   const handleCloseClick = () => {
@@ -61,12 +62,12 @@ const AddBankDataTab: React.FC = () => {
 
   const handleSubmitBankData = (data: IBankData) => {
     const formData: any = new FormData();
-    formData.append('file', fileValue);
-    formData.append('owner', user?.id || userId);
-    formData.append('wallettitle', data.wallettitle);
+    formData.append("file", fileValue);
+    formData.append("owner", user?.id || userId);
+    formData.append("wallettitle", data.wallettitle);
 
     dispatch(sendBankData(formData));
-  }
+  };
 
   useEffect(() => {
     if (isAddBankDataSuccess) {
@@ -77,15 +78,15 @@ const AddBankDataTab: React.FC = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleCloseClick()
+      if (event.key === "Escape") {
+        handleCloseClick();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
@@ -97,7 +98,7 @@ const AddBankDataTab: React.FC = () => {
           label="Введіть назву карткового рахунку"
           errors={errors}
           name="wallettitle"
-          registerOptions={register('wallettitle', titleFieldRules)}
+          registerOptions={register("wallettitle", titleFieldRules)}
           width="325px"
         />
         <Box>
@@ -105,8 +106,7 @@ const AddBankDataTab: React.FC = () => {
             primary
             onClick={() => inputFileRef.current.click()}
             width="376px"
-            type="button"
-          >
+            type="button">
             Вибрати файл даних
           </Button>
 
@@ -126,7 +126,11 @@ const AddBankDataTab: React.FC = () => {
         </Box>
       </Box>
 
-      {error && <Typography as="p" color={COLORS.ALERT_1}>{error}</Typography>}
+      {error && (
+        <Typography as="p" color={COLORS.ALERT_1}>
+          {error}
+        </Typography>
+      )}
 
       <Box
         display="flex"
@@ -134,15 +138,13 @@ const AddBankDataTab: React.FC = () => {
         justifyContent="space-between"
         borderTop={`2px solid ${COLORS.ALERT_1}`}
         pt="51px"
-        mb="25px"
-      >
+        mb="25px">
         <Button
           type="submit"
           width="176px"
           ref={submitButtonRef}
           primary
-          disabled={!isValid || !fileValue || isLoading}
-        >
+          disabled={!isValid || !fileValue || isLoading}>
           Зберегти
         </Button>
         <Button type="reset" width="176px" secondary onClick={handleCloseClick}>
@@ -150,7 +152,7 @@ const AddBankDataTab: React.FC = () => {
         </Button>
       </Box>
     </Form>
-  )
-}
+  );
+};
 
 export default AddBankDataTab;

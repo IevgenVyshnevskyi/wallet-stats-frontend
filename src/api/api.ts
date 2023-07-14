@@ -1,10 +1,9 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-import { Store } from "@reduxjs/toolkit";
 
+import { Store } from "@reduxjs/toolkit";
 import { IUser } from "../../types/user";
 
-// export const BASE_URL = "https://prod.wallet.cloudns.ph:8800";
-export const BASE_URL = "http:localhost:4000";
+export const BASE_URL = "https://spendwise-mock-backend.onrender.com";
 export const REGISTER_PATH = "/accounts/register/";
 export const LOGIN_PATH = "/accounts/login/";
 export const LOGOUT_PATH = "/accounts/logout/";
@@ -15,9 +14,7 @@ export const CHANGE_USER_PASSWORD_PATH =
 export const PASSWORD_RESET_REQUEST_PATH = "/accounts/password-reset-request/";
 export const PASSWORD_RESET_CONFIRM_PATH = "/accounts/password-reset-confirm/";
 export const WALLET_PATH = "/wallet/";
-// export const CATEGORY_PATH = "/wallet/category/";
 export const CATEGORY_PATH = "/category/";
-// export const TRANSACTION_PATH = "/wallet/transactions/";
 export const TRANSACTION_PATH = "/transactions/";
 export const BANK_DATA_PATH = "/bankdata/";
 

@@ -1,11 +1,9 @@
-import { Typography } from "../../atoms/typography/Typography.styled";
+import Typography from "../../atoms/typography/Typography.styled";
 
-const NotFoundPage = () => {
-  return (
-    <Typography as="h1" textAlight="center">
-      Сторінка не знайдена
-    </Typography>
-  );
-}
+const NotFoundPage = () => (
+  <Typography as="h1" textAlight="center">
+    Сторінка не знайдена
+  </Typography>
+);
 
 export default NotFoundPage;

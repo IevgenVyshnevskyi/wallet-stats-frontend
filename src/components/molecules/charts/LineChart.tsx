@@ -1,13 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
 import { Chart } from "chart.js/auto";
-import { PRIMARY } from './../../../shared/styles/variables';
+
 import { useAppSelector } from "../../../store/hooks";
 
+import {
+  generateLabels,
+  setLineChartConfig,
+  setPointValues,
+} from "./lineChartConfig";
+
 const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
-  const {
-    filterByDays,
-    allOutlaysChart,
-  } = useAppSelector(state => state.statistics)
+  const { filterByDays, allOutlaysChart } = useAppSelector(
+    (state) => state.statistics
+  );
 
   const chartRef = useRef(null);
   const chart = useRef(null);
@@ -17,43 +23,27 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
   const [pointHitRadiusValue, setPointHitRadiusValue] = useState<number>(1);
   const [pointBorderWidthValue, setPointBorderWidthValue] = useState<number>(1);
 
+  const { chartData, chartOptions } = setLineChartConfig(
+    data,
+    labels,
+    pointHitRadiusValue,
+    pointBorderWidthValue
+  );
+
   useEffect(() => {
-    const labels: string[] = [];
-    if (Object.keys(allOutlaysChart.categoryTransactions)?.length > 0) {
+    const generatedLabels = generateLabels(
+      allOutlaysChart.categoryTransactions,
+      filterByDays
+    );
 
-      for (let i = 0; i < (parseInt(filterByDays)); i++) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
+    setLabels(generatedLabels);
 
-        const label = date.toLocaleDateString("uk-UA", {
-          month: "short",
-          day: "numeric"
-        });
-
-        labels.push(label);
-      }
-    }
-
-    setLabels(labels)
-
-    switch (filterByDays) {
-      case "30":
-        setPointHitRadiusValue(30)
-        setPointBorderWidthValue(4)
-        break;
-      case "90":
-        setPointHitRadiusValue(15)
-        setPointBorderWidthValue(3)
-        break;
-      case "180":
-        setPointHitRadiusValue(8)
-        setPointBorderWidthValue(2)
-        break;
-      default:
-        break;
-    }
+    setPointValues(
+      filterByDays,
+      setPointHitRadiusValue,
+      setPointBorderWidthValue
+    );
   }, [allOutlaysChart.categoryTransactions]);
-
 
   useEffect(() => {
     const myLineChartRef = chartRef.current.getContext("2d");
@@ -64,60 +54,8 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
 
     chart.current = new Chart(myLineChartRef, {
       type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Витрати або надходження за категорією',
-          data: data,
-          fill: false,
-          borderColor: PRIMARY,
-          tension: 0.4,
-          pointBackgroundColor: PRIMARY,
-          pointBorderWidth: pointBorderWidthValue,
-          pointHitRadius: pointHitRadiusValue,
-        }]
-      },
-      options: {
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const value = context.formattedValue;
-                return `${value}₴`;
-              },
-            },
-          },
-          legend: {
-            display: false,
-          },
-        },
-        scales: {
-          x: {
-            display: true,
-            title: {
-              display: true,
-              text: "Період",
-            },
-          },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: "Сума",
-            },
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        elements: {
-          point: {
-            hoverBorderWidth: 5,
-          },
-        },
-        animation: {
-          duration: 1000,
-        },
-      },
+      data: chartData,
+      options: chartOptions,
     });
 
     return () => {
@@ -139,9 +77,13 @@ const LineChart: React.FC<{ data: number[] }> = ({ data }) => {
     data,
   ]);
 
-
   return (
-    <canvas style={{ zIndex: '-2' }} id="myLineChart" height="280px" ref={chartRef} />
+    <canvas
+      style={{ zIndex: "-2" }}
+      id="myLineChart"
+      height="280px"
+      ref={chartRef}
+    />
   );
 };
 

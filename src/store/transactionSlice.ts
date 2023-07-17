@@ -1,86 +1,70 @@
-import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
-import { ITransaction, MethodTypes, Transactions } from './types';
-import { $api, TRANSACTION_PATH } from '../api/api';
-import { getUserDetails } from './userSlice';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export type FilterByTypeOfOutlayOptions = "all" | "income" | "expense";
+import { getUserDetails } from "./userSlice";
 
-type TransactionState = {
-  filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
-  transactions: {
-    all: Transactions;
-    income: Transactions;
-    expense: Transactions;
-  };
-  activeTransaction: ITransaction;
-  addTransactionData: ITransaction;
-  editTransactionData: ITransaction;
-  isLoading: boolean;
-  error: string | null;
-  isAddTransactionSuccess: boolean;
-  isEditTransactionSuccess: boolean;
-  isDeleteTransactionSuccess: boolean;
-  isEditTransactionOpen: boolean;
-}
+import updateTransactions from "../shared/utils/store/updateTransactions";
+
+import { $api, TRANSACTION_PATH } from "../api/api";
+
+import { MethodTypes } from "../../types/common";
+import {
+  ITransaction,
+  TransactionState,
+  Transactions,
+} from "../../types/transactions";
 
 type TransactionActionPayload = {
   method: MethodTypes;
   data?: ITransaction;
   id?: string;
-}
+};
 
 export const transactionAction = createAsyncThunk<
   Transactions,
   TransactionActionPayload,
   { rejectValue: string }
->(
-  'transaction/transactionAction',
-  async function (payload, { rejectWithValue }) {
-    const { method, data, id } = payload;
+>("transaction/transactionAction", async (payload, { rejectWithValue }) => {
+  const { method, data, id } = payload;
 
+  try {
     if (method !== "GET") {
-      $api({
+      const response = await $api({
         method,
-        url: `${TRANSACTION_PATH}${id ? (id + '/') : ''}`,
+        url: `${TRANSACTION_PATH}${id ? `${id}/` : ""}`,
         data: data || {},
-      })
-        .then(response => response?.data)
-        .catch(error => {
-          return rejectWithValue('Помилка');
-        });
+      });
+      return response.data;
     }
 
-    return await $api.get(TRANSACTION_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        return rejectWithValue(`Помилка`)
-      });
+    const response = await $api.get(TRANSACTION_PATH);
+
+    return response.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
   }
-);
+});
 
 export const getTransactions = createAsyncThunk<
   Transactions,
   undefined,
   { rejectValue: string }
->(
-  'transaction/getTransactions',
-  async function (_, { rejectWithValue }) {
-    return $api.get(TRANSACTION_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
+>("transaction/getTransactions", async (_, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(TRANSACTION_PATH);
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 export const getFilteredTransactions = createAsyncThunk<
-  { data: Transactions, params: string },
+  { data: Transactions; params: string },
   string,
   { rejectValue: string }
 >(
-  'transaction/getFilteredTransactions',
-  async function (params, { rejectWithValue }) {
+  "transaction/getFilteredTransactions",
+  async (params, { rejectWithValue }) => {
     try {
       const res = await $api.get(`${TRANSACTION_PATH}${params}`);
       const data = res?.data;
@@ -108,15 +92,13 @@ const initialState: TransactionState = {
   isEditTransactionSuccess: false,
   isDeleteTransactionSuccess: false,
   isEditTransactionOpen: false,
-}
+};
 
 const transactionSlice = createSlice({
-  name: 'transaction',
+  name: "transaction",
   initialState,
   reducers: {
-    resetTransactionState: () => {
-      return initialState;
-    },
+    resetTransactionState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },
@@ -134,13 +116,13 @@ const transactionSlice = createSlice({
       state.addTransactionData = {
         ...state.addTransactionData,
         ...action.payload,
-      }
+      };
     },
     setEditTransactionData: (state, action) => {
       state.editTransactionData = {
         ...state.editTransactionData,
         ...action.payload,
-      }
+      };
     },
     setSuccessStatus: (state, action) => {
       state.isAddTransactionSuccess = action.payload;
@@ -190,20 +172,7 @@ const transactionSlice = createSlice({
       })
       .addCase(getFilteredTransactions.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { data, params } = action.payload;
-        switch (params) {
-          case "":
-            state.transactions.all = data;
-            break;
-          case "?type_of_outlay=income":
-            state.transactions.income = data;
-            break;
-          case "?type_of_outlay=expense":
-            state.transactions.expense = data;
-            break;
-          default:
-            break;
-        }
+        updateTransactions(state, action);
       })
       .addCase(getFilteredTransactions.rejected, (state, action) => {
         state.isLoading = false;
@@ -220,8 +189,8 @@ const transactionSlice = createSlice({
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const {
@@ -233,7 +202,7 @@ export const {
   setAddTransactionData,
   setEditTransactionData,
   setSuccessStatus,
-  setIsEditTransactionOpen
+  setIsEditTransactionOpen,
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

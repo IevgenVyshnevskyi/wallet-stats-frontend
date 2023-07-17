@@ -1,8 +1,26 @@
-import styled from "styled-components";
-import { Link as RouterLink } from 'react-router-dom';
-import { LinkProps } from "../../../../types/atoms";
+import { Link as RouterLink } from "react-router-dom";
 
-export const Link = styled(RouterLink) <LinkProps>`
+import styled from "styled-components";
+
+type LinkProps = {
+  fw?: string;
+  fz?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
+  cursor?: string;
+  background?: string;
+  color?: string;
+  textDecor?: string;
+  lh?: string;
+  width?: string;
+  height?: string;
+  mb?: string;
+  m?: string;
+  outline?: string;
+};
+
+const Link = styled(RouterLink)<LinkProps>`
   font-weight: ${({ fw }) => fw || "700px"};
   font-size: ${({ fz }) => fz || "18px"};
   border-radius: ${({ borderRadius }) => borderRadius || "16px"};
@@ -21,4 +39,6 @@ export const Link = styled(RouterLink) <LinkProps>`
   &:hover {
     text-decoration: underline;
   }
-`
+`;
+
+export default Link;

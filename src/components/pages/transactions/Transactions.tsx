@@ -1,81 +1,84 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { Box } from "../../atoms/box/Box.styled";
-import { Typography } from "../../atoms/typography/Typography.styled";
-import TabFilter, { IFilterButton } from "../../molecules/tabs/filter/TabFilter";
-import { ButtonTransparent } from "../../atoms/button/ButtonTransparent.styled";
-import { ListItem } from "../../atoms/list/ListItem.styled";
-import { List } from "../../atoms/list/List.styled";
-import Transaction from "../../molecules/transaction/Transaction";
-import { BASE_2, DARK_FOR_TEXT } from "../../../shared/styles/variables";
-import { ITransaction, Transactions } from "../../../store/types";
-
 import {
-  getFilteredTransactions,
   setActiveTransaction,
   setEditTransactionData,
-  setFilterByTypeOfOutlay,
-  setIsEditTransactionOpen
+  setIsEditTransactionOpen,
 } from "../../../store/transactionSlice";
-import { formatTransactionDateToFullDate } from "../../../shared/utils/formatTransactionDate";
-import { filterTransactions } from "../../../shared/utils/filterTransactions";
+
+import useFilterButtonOptions from "../../../shared/hooks/useFilterButtonOptions";
+
+import filterTransactions from "../../../shared/utils/transactions/filterTransactions";
+import { formatTransactionDateToFullDate } from "../../../shared/utils/transactions/formatTransactionDate";
+
+import Box from "../../atoms/box/Box.styled";
+import Typography from "../../atoms/typography/Typography.styled";
+import ButtonTransparent from "../../atoms/button/ButtonTransparent.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
+import List from "../../atoms/list/List.styled";
+import Transaction from "../../molecules/transaction/Transaction";
+import TabFilter from "../../molecules/tabs/filter/TabFilter";
+
+import COLORS from "../../../shared/styles/variables";
+
+import {
+  ITransaction,
+  Transactions as TransactionsType,
+} from "../../../../types/transactions";
+
+const renderTransactionItems = (
+  transactions: ITransaction[],
+  onTransactionClick: (transaction: ITransaction) => void
+): React.ReactNode[] =>
+  transactions
+    .sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    )
+    .map((transaction) => (
+      <ListItem key={transaction?.id}>
+        <ButtonTransparent
+          width="100%"
+          onClick={() => onTransactionClick(transaction)}
+          borderRadius="8px">
+          <Transaction transaction={transaction} isTransactionsPage />
+        </ButtonTransparent>
+      </ListItem>
+    ));
 
 const Transactions: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const {
-    transactions,
-    filterByTypeOfOutlay
-  } = useAppSelector(state => state.transaction);
+  const { transactions, filterByTypeOfOutlay } = useAppSelector(
+    (state) => state.transaction
+  );
 
-  const filterButtons: IFilterButton[] = [
-    {
-      buttonName: 'Всі транзакції',
-      filterBy: "",
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("all"));
-        dispatch(getFilteredTransactions(""))
-      },
-      isActive: filterByTypeOfOutlay === "all"
-    },
-    {
-      buttonName: "Витрати",
-      filterBy: '?type_of_outlay=expense',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("expense"));
-        dispatch(getFilteredTransactions("?type_of_outlay=expense"))
-      },
-      isActive: filterByTypeOfOutlay === "expense"
-    },
-    {
-      buttonName: "Надходження",
-      filterBy: '?type_of_outlay=income',
-      onTabClick: () => {
-        dispatch(setFilterByTypeOfOutlay("income"));
-        dispatch(getFilteredTransactions("?type_of_outlay=income"))
-      },
-      isActive: filterByTypeOfOutlay === "income"
-    },
-  ];
+  const filterButtons = useFilterButtonOptions("transaction");
 
-  function onTransactionClick(transaction: ITransaction) {
+  const onTransactionClick = (transaction: ITransaction) => {
     dispatch(setActiveTransaction(transaction));
     dispatch(setEditTransactionData(transaction));
     dispatch(setIsEditTransactionOpen(true));
-  }
-
-  const transactionsData = (): Transactions => {
-    let filteredTransactions: Transactions = {};
-    if (filterByTypeOfOutlay === "all") {
-      filteredTransactions = transactions.all;
-    } else if (filterByTypeOfOutlay === "expense") {
-      filteredTransactions = transactions.expense;
-    } else if (filterByTypeOfOutlay === "income") {
-      filteredTransactions = transactions.income;
-    }
-
-    return filterTransactions(filteredTransactions)
   };
 
+  const transactionsData = (): TransactionsType => {
+    let filteredTransactions: TransactionsType = {};
+
+    switch (filterByTypeOfOutlay) {
+      case "all":
+        filteredTransactions = transactions.all;
+        break;
+      case "expense":
+        filteredTransactions = transactions.expense;
+        break;
+      case "income":
+        filteredTransactions = transactions.income;
+        break;
+      default:
+        filteredTransactions = transactions.all;
+        break;
+    }
+
+    return filterTransactions(filteredTransactions);
+  };
 
   return (
     <Box grow="1" display="flex" direction="column">
@@ -89,9 +92,8 @@ const Transactions: React.FC = () => {
           as="span"
           mr="10px"
           fw="600"
-          color={DARK_FOR_TEXT}
-          fz="12px"
-        >
+          color={COLORS.DARK_FOR_TEXT}
+          fz="12px">
           Відобразити
         </Typography>
         <TabFilter filterButtons={filterButtons} />
@@ -100,37 +102,25 @@ const Transactions: React.FC = () => {
       <Box
         display="flex"
         direction="column"
-        bgColor={BASE_2}
+        bgColor={COLORS.BASE_2}
         p="15px"
         borderRadius="16px"
         grow="1"
         overflow="auto"
-        height="100px"
-      >
-        {Object.entries(transactionsData()).map(([date, transactions]) => (
+        height="100px">
+        {Object.entries(transactionsData()).map(([date, transactionsArr]) => (
           <Box mb="20px" key={date}>
             <Typography as="h3" fz="16px" fw="500" mb="20px">
               {formatTransactionDateToFullDate(date)}
             </Typography>
             <List display="flex" direction="column" gap="8px">
-              {transactions.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
-                .map((transaction) => (
-                  <ListItem key={transaction?.id}>
-                    <ButtonTransparent
-                      width="100%"
-                      onClick={() => onTransactionClick(transaction)}
-                      borderRadius="8px"
-                    >
-                      <Transaction transaction={transaction} isTransactionsPage />
-                    </ButtonTransparent>
-                  </ListItem>
-                ))}
+              {renderTransactionItems(transactionsArr, onTransactionClick)}
             </List>
           </Box>
         ))}
       </Box>
     </Box>
   );
-}
+};
 
 export default Transactions;

@@ -1,36 +1,41 @@
-import styled from "styled-components"
-import { PRIMARY, PRIMARY_HOVER, WHITE } from "../../../shared/styles/variables"
-import { Link as RouterLink } from 'react-router-dom';
-import { blackSVGtoWhite } from "../../../shared/styles/iconStyles";
+import { Link as RouterLink } from "react-router-dom";
 
-export const LinkMenu = styled(RouterLink)`
+import styled from "styled-components";
+
+import blackSVGtoWhite from "../../../shared/styles/iconStyles";
+
+import COLORS from "../../../shared/styles/variables";
+
+const LinkMenu = styled(RouterLink)`
   padding: 10px 28px;
   border-radius: 40px;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
 
-  ${({ to }) => (to === window.location.pathname ? `
-    background-color: ${PRIMARY};
+  ${({ to }) =>
+    to === window.location.pathname
+      ? `
+    background-color: ${COLORS.PRIMARY};
     > span {
-      color: ${WHITE};
+      color: ${COLORS.WHITE};
     }
 
     svg {
       ${blackSVGtoWhite};
     }
-  ` : undefined
-  )}
+  `
+      : undefined}
 
   &:hover {
-    background-color: ${PRIMARY_HOVER};
+    background-color: ${COLORS.PRIMARY_HOVER};
 
     svg {
       ${blackSVGtoWhite}
     }
 
     > span {
-      color: ${WHITE};
+      color: ${COLORS.WHITE};
     }
   }
 
@@ -42,4 +47,6 @@ export const LinkMenu = styled(RouterLink)`
     font-size: 14px;
     font-weight: 600;
   }
-`
+`;
+
+export default LinkMenu;

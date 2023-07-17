@@ -1,20 +1,22 @@
 import { useEffect } from "react";
-import { Box } from "../../atoms/box/Box.styled";
-import { TransactionsPageWrapper } from "./TransactionsPage.styled";
+import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getUserDetails } from "../../../store/userSlice";
-import Header from "../../molecules/header/Header";
 import { getTransactions } from "../../../store/transactionSlice";
+import { getWallets } from "../../../store/walletSlice";
+import { getCategories } from "../../../store/categorySlice";
+
+import { token } from "../../../api/api";
+
+import Box from "../../atoms/box/Box.styled";
+import Header from "../../molecules/header/Header";
 import EditTransaction from "./EditTransaction";
 import Transactions from "./Transactions";
 import AddTransaction from "./AddTransaction";
-import { getWallets } from "../../../store/walletSlice";
-import { getCategories } from "../../../store/categorySlice";
-import { token } from "../../../api/api";
-import { useNavigate } from "react-router-dom";
+import TransactionsPageWrapper from "./TransactionsPage.styled";
 
 const TransactionsPage: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -22,13 +24,13 @@ const TransactionsPage: React.FC = () => {
     isEditTransactionSuccess,
     isDeleteTransactionSuccess,
     isEditTransactionOpen,
-    isLoading
-  } = useAppSelector(state => state.transaction);
+    isLoading,
+  } = useAppSelector((state) => state.transaction);
 
-  const { isLoggedIn, isRegistered } = useAppSelector(state => state.user);
+  const { isLoggedIn, isRegistered } = useAppSelector((state) => state.user);
 
   if (!token && !isRegistered && !isLoggedIn) {
-    navigate("/welcome")
+    navigate("/welcome");
   }
 
   useEffect(() => {
@@ -38,17 +40,25 @@ const TransactionsPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading === false) {
+    if (!isLoading) {
       dispatch(getTransactions());
     }
   }, [isLoading]);
 
   useEffect(() => {
-    if (isAddTransactionSuccess || isEditTransactionSuccess || isDeleteTransactionSuccess) {
+    if (
+      isAddTransactionSuccess ||
+      isEditTransactionSuccess ||
+      isDeleteTransactionSuccess
+    ) {
       dispatch(getTransactions());
       dispatch(getWallets());
     }
-  }, [isAddTransactionSuccess, isEditTransactionSuccess, isDeleteTransactionSuccess]);
+  }, [
+    isAddTransactionSuccess,
+    isEditTransactionSuccess,
+    isDeleteTransactionSuccess,
+  ]);
 
   return (
     <TransactionsPageWrapper>
@@ -61,6 +71,6 @@ const TransactionsPage: React.FC = () => {
       </Box>
     </TransactionsPageWrapper>
   );
-}
+};
 
 export default TransactionsPage;

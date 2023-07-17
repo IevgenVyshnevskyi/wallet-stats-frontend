@@ -1,10 +1,13 @@
-import styled from 'styled-components';
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import styled from "styled-components";
 
-export const List = styled.ul`
+import commonStyles from "../../../shared/styles/commonStyles";
+
+const List = styled.ul`
   margin: 0;
   padding: 0;
   ${commonStyles}
 
   list-style: none;
 `;
+
+export default List;

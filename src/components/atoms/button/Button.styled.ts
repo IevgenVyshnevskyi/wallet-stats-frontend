@@ -1,7 +1,16 @@
-import styled, { css } from "styled-components"
-import { DISABLED, PRIMARY, PRIMARY_HOVER, WHITE } from "./../../../shared/styles/variables"
-import { commonStyles} from "../../../shared/styles/commonStyles"
-import { ButtonProps } from "../../../../types/atoms"
+import styled, { css } from "styled-components";
+
+import commonStyles, {
+  commonStylesProps,
+} from "../../../shared/styles/commonStyles";
+
+import COLORS from "../../../shared/styles/variables";
+
+type ButtonProps = commonStylesProps & {
+  primary?: boolean;
+  secondary?: boolean;
+  disabled?: boolean;
+};
 
 export const buttonStyles = css<ButtonProps>`
   ${({ primary, secondary, disabled }) => `
@@ -11,36 +20,50 @@ export const buttonStyles = css<ButtonProps>`
     border-radius: 12px;
     cursor: pointer;
 
-    ${primary ? `
-      color: ${WHITE};
-      background-color: ${PRIMARY};
+    ${
+      primary
+        ? `
+      color: ${COLORS.WHITE};
+      background-color: ${COLORS.PRIMARY};
       border: none;
       &:hover {
-        background-color: ${PRIMARY_HOVER};
+        background-color: ${COLORS.PRIMARY_HOVER};
       }
-    ` : secondary ? `
-      border: 2px solid ${PRIMARY};
-      background-color: ${WHITE};
+    `
+        : secondary
+        ? `
+      border: 2px solid ${COLORS.PRIMARY};
+      background-color: ${COLORS.WHITE};
       &:hover {
-        border-color: ${PRIMARY_HOVER};
+        border-color: ${COLORS.PRIMARY_HOVER};
       }
-    ` : undefined
+    `
+        : undefined
     }
 
-    ${disabled ? `
+    ${
+      disabled
+        ? `
       cursor: not-allowed;
       pointer-events: none;
-    ` + (primary ? `
-      background-color: ${DISABLED};
-    ` : `
-      border-color: ${DISABLED};
-      color: ${DISABLED};
-    ` ) : undefined
+    ${
+      primary
+        ? `
+      background-color: ${COLORS.DISABLED};
+    `
+        : `
+      border-color: ${COLORS.DISABLED};
+      color: ${COLORS.DISABLED};
+    `
+    }`
+        : undefined
     }
   `}
-`
+`;
 
-export const Button = styled.button<ButtonProps>`
+const Button = styled.button<ButtonProps>`
   ${commonStyles}
   ${buttonStyles}
-`
+`;
+
+export default Button;

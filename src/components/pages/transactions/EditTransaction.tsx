@@ -1,52 +1,94 @@
 import { useEffect, useState } from "react";
 
-import { Box } from "../../atoms/box/Box.styled";
-import { Button } from "../../atoms/button/Button.styled";
-import { ButtonLink } from "../../atoms/button/ButtonLink";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks"
-import { Typography } from "../../atoms/typography/Typography.styled";
-import { Label } from "../../atoms/label/Label.styled";
+import { useForm } from "react-hook-form";
 
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   resetActiveTransactionState,
   setActiveTransaction,
   setEditTransactionData,
   setIsEditTransactionOpen,
-  transactionAction
+  transactionAction,
 } from "../../../store/transactionSlice";
 
-import { Input } from './../../atoms/input/Input.styled';
-import { MENU_BUTTON_SELECTED, WHITE } from "../../../shared/styles/variables";
+import setSelectOptions from "../../../shared/utils/transactions/setSelectOptions";
+import setDetailsFieldRules from "../../../shared/utils/field-rules/details";
+import amountFieldRules from "../../../shared/utils/field-rules/amount";
+
+import Button from "../../atoms/button/Button.styled";
+import Box from "../../atoms/box/Box.styled";
+import ButtonLink from "../../atoms/button/ButtonLink";
+import Typography from "../../atoms/typography/Typography.styled";
+import Label from "../../atoms/label/Label.styled";
+import Form from "../../atoms/form/Form.styled";
+import ListItem from "../../atoms/list/ListItem.styled";
 import Select from "../../molecules/select/Select";
+import Wallet from "../../molecules/wallet/Wallet";
+import BaseField from "../../molecules/base-field/BaseField";
+import TabSwitch from "../../molecules/tabs/switch/TabSwitch";
 import DatePicker from "./DatePicker";
-import { Form } from "../../atoms/form/Form.styled";
-import { useForm } from "react-hook-form";
-import { moneyAmountRegex, titleRegex, twoSymbolsRegex } from "../../../shared/utils/regexes";
+
+import COLORS from "../../../shared/styles/variables";
+
+import { IWallet } from "../../../../types/wallet";
+import { ISwitchButton, TypeOfOutlay } from "../../../../types/common";
 
 const EditTransaction: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const { editTransactionData, isLoading, isEditTransactionOpen } = useAppSelector(state => state.transaction)
-  const { categories } = useAppSelector(state => state.category);
+  const { isLoading, editTransactionData, isEditTransactionOpen } =
+    useAppSelector((state) => state.transaction);
+  const { categories } = useAppSelector((state) => state.category);
+  const { wallets } = useAppSelector((state) => state.wallet);
 
-  const selectedCategory = categories.all.find((c) => c.id === editTransactionData?.category)
+  const selectedCategory = categories.all.find(
+    (c) => c.id === editTransactionData?.category
+  );
 
-  const [selectedCategoryValues, setSelectedCategoryValues] = useState<
-    { value: number, label: string }
-  >({
+  const [selectedCategoryValues, setSelectedCategoryValues] = useState<{
+    value: number;
+    label: string;
+  }>({
     value: selectedCategory?.id,
     label: selectedCategory?.title,
   });
 
-  const options: any = (editTransactionData.type_of_outlay === "expense"
-    ? categories.expense
-    : categories.income
-  )?.map(({ id, title }) => {
-    return { value: id, label: title }
-  })
+  const isValid =
+    Object.keys(editTransactionData)?.length >= 5 &&
+    editTransactionData?.amount_of_funds !== "";
 
-  const isValid = Object.keys(editTransactionData)?.length >= 5
-    && editTransactionData?.amount_of_funds !== "";
+  const selectOptions = setSelectOptions(
+    editTransactionData.type_of_outlay,
+    categories
+  );
+
+  const setSwitchButtonOptions = (
+    buttonName: string,
+    typeOfOutlay: TypeOfOutlay
+  ): ISwitchButton => ({
+    buttonName,
+    isActive: editTransactionData?.type_of_outlay === typeOfOutlay,
+    onTabClick: () => {
+      if (editTransactionData?.type_of_outlay === typeOfOutlay) {
+        return;
+      }
+      dispatch(
+        setEditTransactionData({
+          type_of_outlay: typeOfOutlay,
+          category: categories[typeOfOutlay][0]?.id,
+        })
+      );
+      setSelectedCategoryValues({
+        value: categories[typeOfOutlay][0]?.id,
+        label: categories[typeOfOutlay][0]?.title,
+      });
+    },
+  });
+
+  const switchButtons: ISwitchButton[] = [
+    setSwitchButtonOptions("Витрата", "expense"),
+    setSwitchButtonOptions("Надходження", "income"),
+  ];
 
   const {
     register,
@@ -54,61 +96,45 @@ const EditTransaction: React.FC = () => {
     handleSubmit,
     setValue,
     clearErrors,
-    getValues
+    getValues,
   } = useForm({ mode: "all" });
 
-  useEffect(() => {
-    setSelectedCategoryValues({
-      value: selectedCategory?.id,
-      label: selectedCategory?.title,
-    });
-    clearErrors('category');
-    setValue('category', editTransactionData?.category);
-  }, [editTransactionData?.category]);
-
-  useEffect(() => {
-    clearErrors('amount')
-    setValue('amount', editTransactionData?.amount_of_funds);
-  }, [editTransactionData?.amount_of_funds]);
-
-  useEffect(() => {
-    if (editTransactionData?.title !== "New transaction") {
-      setValue('title', editTransactionData?.title);
-    } else {
-      setValue('title', "");
-    }
-  }, [editTransactionData?.title]);
-
-  function onCategoryChange(selectedValue: any): void {
-    dispatch(setEditTransactionData({ category: selectedValue?.value }));
-    setSelectedCategoryValues({
-      value: selectedValue?.value,
-      label: selectedValue?.label
-    });
-  }
-
-  function handleCancelEditTransaction() {
+  const handleCancelEditTransaction = () => {
     dispatch(setIsEditTransactionOpen(false));
     dispatch(setEditTransactionData({}));
     dispatch(resetActiveTransactionState({}));
-  }
+  };
 
-  function handleDeleteTransaction() {
+  const handleDeleteTransaction = () => {
     dispatch(setIsEditTransactionOpen(false));
-    dispatch(transactionAction({
-      method: "DELETE",
-      id: String(editTransactionData?.id)
-    }));
+    dispatch(
+      transactionAction({
+        method: "DELETE",
+        id: String(editTransactionData?.id),
+      })
+    );
     dispatch(setActiveTransaction({}));
-  }
+  };
 
-  function handleSub(data: { amount: string, title?: string }) {
+  const onCategoryChange = (selectedValue: any): void => {
+    dispatch(setEditTransactionData({ category: selectedValue?.value }));
+    setSelectedCategoryValues({
+      value: selectedValue?.value,
+      label: selectedValue?.label,
+    });
+  };
+
+  const onWalletClick = (wallet: IWallet) => {
+    dispatch(setEditTransactionData({ wallet: wallet.id }));
+  };
+
+  const handleSub = (data: { amount: string; title?: string }) => {
     const editTransactionDataNoId = {
       ...editTransactionData,
       amount_of_funds: data?.amount,
-    }
+    };
 
-    if (!getValues('title')) {
+    if (!getValues("title")) {
       editTransactionDataNoId.title = "New transaction";
     } else {
       editTransactionDataNoId.title = data.title;
@@ -117,141 +143,126 @@ const EditTransaction: React.FC = () => {
     delete editTransactionDataNoId?.id;
 
     dispatch(setIsEditTransactionOpen(false));
-    dispatch(resetActiveTransactionState({}))
-    dispatch(transactionAction({
-      data: editTransactionDataNoId,
-      method: "PUT",
-      id: String(editTransactionData?.id)
-    }));
-  }
+    dispatch(resetActiveTransactionState({}));
+    dispatch(
+      transactionAction({
+        data: editTransactionDataNoId,
+        method: "PUT",
+        id: String(editTransactionData?.id),
+      })
+    );
+  };
+
+  useEffect(() => {
+    setSelectedCategoryValues({
+      value: selectedCategory?.id,
+      label: selectedCategory?.title,
+    });
+    clearErrors("category");
+    setValue("category", editTransactionData?.category);
+  }, [editTransactionData?.category]);
+
+  useEffect(() => {
+    clearErrors("amount");
+    setValue("amount", editTransactionData?.amount_of_funds);
+  }, [editTransactionData?.amount_of_funds]);
+
+  useEffect(() => {
+    if (editTransactionData?.title !== "New transaction") {
+      setValue("title", editTransactionData?.title);
+    } else {
+      setValue("title", "");
+    }
+  }, [editTransactionData?.title]);
 
   return (
     <Box display="flex" direction="column" width="555px">
-      <Typography
-        as="h2"
-        fw="600"
-        fz="22px"
-        mt="5px"
-        mb="30px"
-      >
+      <Typography as="h2" fw="600" fz="22px" mt="5px" mb="30px">
         Редагування транзакції
       </Typography>
-      <Box bgColor={MENU_BUTTON_SELECTED} borderRadius="16px" grow="1" p="15px" overflow="auto" height="100px">
+      <Box
+        bgColor={COLORS.MENU_BUTTON_SELECTED}
+        borderRadius="16px"
+        grow="1"
+        p="15px"
+        overflow="auto"
+        height="100px">
         <Box mb="20px">
-          <Typography
-            as="h3"
-            fz="16px"
-            fw="500"
-            mb="12px"
-          >
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
+            Тип транзакції
+          </Typography>
+          <TabSwitch switchButtons={switchButtons} />
+        </Box>
+        <Box mb="20px">
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
             Час транзакції
           </Typography>
           <DatePicker isEditTrapsactionOpen={isEditTransactionOpen} />
         </Box>
+        <Box mb="20px">
+          <Typography as="h3" fz="16px" fw="500" mb="12px">
+            Рахунок
+          </Typography>
+          <Box display="flex" wrap="wrap" gap="8px">
+            {wallets?.map((wallet) => (
+              <ListItem key={wallet.id} flex="1 1 240px">
+                <Wallet
+                  wallet={wallet}
+                  onWalletClick={() => onWalletClick(wallet)}
+                  isActive={editTransactionData?.wallet === wallet.id}
+                />
+              </ListItem>
+            ))}
+          </Box>
+        </Box>
         <Form onSubmit={handleSubmit(handleSub)}>
           <Box mb="20px">
-            <Label fw="500" mb="12px">Категорія</Label>
+            <Label fw="500" mb="12px">
+              Категорія
+            </Label>
             <Select
               value={selectedCategoryValues}
-              options={options}
+              options={selectOptions}
               onCategoryChange={onCategoryChange}
-              {...register('category', {
-                required: 'Обов\'язкове поле для заповнення',
+              {...register("category", {
+                required: "Обов'язкове поле для заповнення",
               })}
               isError={errors?.category}
             />
           </Box>
           <Box mb="20px">
-            <Label fw="500" htmlFor="title" mb="12px">
-              Деталі (не обовʼязково)
-            </Label>
-            <Input
-              type="text"
-              id="title"
-              width="93%"
-              bgColor={WHITE}
-              className={errors?.title && 'error'}
-              maxLength={50}
-              {...register('title', {
-                validate: {
-                  hasTwoSymbols: (value) => {
-                    if (!value) {
-                      clearErrors('title');
-                      return;
-                    };
-                    return twoSymbolsRegex.test(value) || 'Повинно бути не менше 2 символів';
-                  },
-                  hasTwoLetters: (value) => {
-                    if (!value) {
-                      clearErrors('title');
-                      return;
-                    };
-                    return titleRegex.test(value) || 'Повинно бути не менше 2 літер';
-                  },
-                }
-              })}
+            <BaseField
+              fieldType="text"
+              label="Деталі (не обовʼязково)"
+              errors={errors}
+              name="title"
+              registerOptions={register(
+                "title",
+                setDetailsFieldRules(clearErrors)
+              )}
             />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.title && <>{errors?.title?.message || 'Error!'}</>}
-            </Box>
           </Box>
           <Box mb="20px">
-            <Label fw="500" htmlFor="amount" mb="12px">
-              Сума
-            </Label>
-            <Input
-              type="text"
-              inputMode="numeric"
-              style={{ fontSize: "19px", fontWeight: "600" }}
-              height='25px'
-              id="amount"
-              width="225px"
-              bgColor={WHITE}
-              {...register('amount', {
-                required: 'Обов\'язкове поле для заповнення',
-                pattern: {
-                  value: moneyAmountRegex,
-                  message: 'Сума може бути від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
-                },
-                min: {
-                  value: 0.00,
-                  message: 'Сума може бути додатньою від 1 до 8 цифр перед крапкою та до 2 цифр після крапки',
-                },
-              })}
-              className={errors.amount && 'error'}
+            <BaseField
+              fieldType="text"
+              label="Сума"
+              errors={errors}
+              name="amount"
+              registerOptions={register("amount", amountFieldRules)}
             />
-            <Box
-              color="red"
-              textAlight="left"
-              border="red"
-              fz="13px"
-              height="14px"
-              m="0 0 20px 0"
-            >
-              {errors?.amount && <>{errors?.amount?.message || 'Error!'}</>}
-            </Box>
           </Box>
           <Box display="flex" gap="8px" mb="20px">
             <Button
               primary
               width="100%"
               type="submit"
-              disabled={!isValid || !!errors?.amount || isLoading}
-            >
+              disabled={!isValid || !!errors?.amount || isLoading}>
               Зберегти
             </Button>
             <Button
               secondary
               width="100%"
-              onClick={handleCancelEditTransaction}
-            >
+              onClick={handleCancelEditTransaction}>
               Скасувати
             </Button>
           </Box>
@@ -264,6 +275,6 @@ const EditTransaction: React.FC = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default EditTransaction;

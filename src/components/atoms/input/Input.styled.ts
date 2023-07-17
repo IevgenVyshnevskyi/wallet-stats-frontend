@@ -1,24 +1,26 @@
-import styled from 'styled-components';
-import { ALERT_1, ALERT_2, PRIMARY, PRIMARY_2 } from './../../../shared/styles/variables';
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import styled from "styled-components";
 
-export const Input = styled.input`
+import commonStyles from "../../../shared/styles/commonStyles";
+
+import COLORS from "../../../shared/styles/variables";
+
+const Input = styled.input`
   width: 100%;
-  ${commonStyles};
   padding: 12px 16px;
+  ${commonStyles}
   border-radius: 10px;
   font-weight: 400;
   font-size: 16px;
-  border: 2px solid ${PRIMARY_2};
+  border: 2px solid ${COLORS.PRIMARY_2};
 
   &:focus {
-    border-color: ${PRIMARY};
+    border-color: ${COLORS.PRIMARY};
     outline: none;
   }
-  
+
   &.error {
-    border: 2px solid ${ALERT_1};
-    background-color: ${ALERT_2};
+    border: 2px solid ${COLORS.ALERT_1};
+    background-color: ${COLORS.ALERT_2};
   }
 
   &:disabled {
@@ -26,3 +28,5 @@ export const Input = styled.input`
     cursor: not-allowed;
   }
 `;
+
+export default Input;

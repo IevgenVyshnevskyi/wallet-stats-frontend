@@ -1,9 +1,12 @@
-import styled from 'styled-components'
-import { BASE_1, GREY_50, PRIMARY } from '../../../shared/styles/variables'
-import { blackSVGtoWhite } from '../../../shared/styles/iconStyles'
-import { Box } from '../../atoms/box/Box.styled'
+import styled from "styled-components";
 
-export const PopupWrapper = styled(Box)`
+import blackSVGtoWhite from "../../../shared/styles/iconStyles";
+
+import Box from "../../atoms/box/Box.styled";
+
+import COLORS from "../../../shared/styles/variables";
+
+const PopupWrapper = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
@@ -12,16 +15,16 @@ export const PopupWrapper = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${GREY_50}66;
+  background-color: ${COLORS.GREY_50}66;
 
-  >${Box} {
+  > ${Box} {
     display: flex;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     padding: 32px;
     border-radius: 16px;
-    background: ${BASE_1};
+    background: ${COLORS.BASE_1};
     position: relative;
-  
+
     > button {
       top: 15px;
       right: 15px;
@@ -29,8 +32,8 @@ export const PopupWrapper = styled(Box)`
       padding: 12px 20px;
 
       &:hover {
-        background-color: ${PRIMARY};
-        border-color: ${PRIMARY};
+        background-color: ${COLORS.PRIMARY};
+        border-color: ${COLORS.PRIMARY};
 
         svg {
           ${blackSVGtoWhite}
@@ -38,4 +41,6 @@ export const PopupWrapper = styled(Box)`
       }
     }
   }
-`
+`;
+
+export default PopupWrapper;

@@ -1,29 +1,31 @@
-import webpack from 'webpack';
+import webpack from "webpack";
 
-import { BuildOptions } from '../../types/config';
+import buildLoaders from "./buildLoaders";
+import buildResolve from "./buildResolve";
+import buildPlugins from "./buildPlugins";
+import buildDevServer from "./buildDevServer";
 
-import { buildLoaders } from './buildLoaders';
-import { buildResolve } from './buildResolve';
-import { buildPlugins } from './buildPlugins';
-import { buildDevServer } from './buildDevServer';
+import { BuildOptions } from "../types/types";
 
-export function buildWebpacConfig(options: BuildOptions): webpack.Configuration {
-  const { paths, mode, isDev } = options
+const buildWebpacConfig = (options: BuildOptions): webpack.Configuration => {
+  const { paths, mode, isDev } = options;
 
   return {
     mode,
     entry: paths.entry,
     devServer: isDev ? buildDevServer(options) : undefined,
     output: {
-      filename: '[name].[contenthash].js',
+      filename: "[name].[contenthash].js",
       path: paths.output,
-      publicPath: '/',
+      publicPath: "/",
       clean: true,
     },
     module: {
-      rules: buildLoaders(options)
+      rules: buildLoaders(options),
     },
     resolve: buildResolve(),
     plugins: buildPlugins(options),
-  }
-}
+  };
+};
+
+export default buildWebpacConfig;

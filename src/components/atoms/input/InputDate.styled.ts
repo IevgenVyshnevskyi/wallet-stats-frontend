@@ -1,18 +1,22 @@
-import styled from 'styled-components';
-import { PRIMARY, PRIMARY_2, WHITE } from './../../../shared/styles/variables';
-import { commonStyles } from '../../../shared/styles/commonStyles';
+import styled from "styled-components";
 
-export const DateInput = styled.button`
+import commonStyles from "../../../shared/styles/commonStyles";
+
+import COLORS from "../../../shared/styles/variables";
+
+const DateInput = styled.button`
   ${commonStyles}
   padding: 10px 14px;
-  background: ${WHITE};
+  background: ${COLORS.WHITE};
   font-size: 16px;
   font-weight: 500;
-  border: 2px solid ${PRIMARY_2};
+  border: 2px solid ${COLORS.PRIMARY_2};
   border-radius: 12px;
 
   &:focus {
-    border-color: ${PRIMARY};
+    border-color: ${COLORS.PRIMARY};
     outline: none;
   }
 `;
+
+export default DateInput;

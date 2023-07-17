@@ -1,97 +1,77 @@
-import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
-import { ICategory, MethodTypes } from './types';
-import { $api, CATEGORY_PATH } from '../api/api';
-import { getUserDetails } from './userSlice';
-import { FilterByTypeOfOutlayOptions } from './transactionSlice';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-type CategoryState = {
-  filterByTypeOfOutlay: FilterByTypeOfOutlayOptions;
-  categories: {
-    all: ICategory[];
-    income: ICategory[];
-    expense: ICategory[];
-  };
-  totalIncomes: string;
-  totalExpenses: string;
-  activeCategory: ICategory;
-  addCategoryData: ICategory;
-  editCategoryData: ICategory;
-  isLoading: boolean;
-  error: string | null;
-  isAddCategorySuccess: boolean;
-  isEditCategorySuccess: boolean;
-  isDeleteCategorySuccess: boolean;
-  isEditCategoryOpen: boolean;
-}
+import { getUserDetails } from "./userSlice";
+
+import updateCategories from "../shared/utils/store/updateCategories";
+
+import { $api, CATEGORY_PATH } from "../api/api";
+
+import { CategoryState, ICategory } from "../../types/category";
+import { MethodTypes } from "../../types/common";
 
 type CategoryActionPayload = {
   method: MethodTypes;
   data?: ICategory;
   id?: string;
-}
+};
 
 export const categoryAction = createAsyncThunk<
   ICategory[],
   CategoryActionPayload,
   { rejectValue: string }
->(
-  'category/categoryAction',
-  async function (payload, { rejectWithValue }) {
-    const { method, data, id } = payload;
+>("category/categoryAction", async (payload, { rejectWithValue }) => {
+  const { method, data, id } = payload;
 
-    if (method !== "GET") {
-      $api({
+  if (method !== "GET") {
+    try {
+      const response = await $api({
         method,
-        url: `${CATEGORY_PATH}${id ? (id + '/') : ''}`,
+        url: `${CATEGORY_PATH}${id ? `${id}/` : ""}`,
         data: data || {},
-      })
-        .then(res => res?.data)
-        .catch(error => {
-          return rejectWithValue('Помилка');
-        });
-    }
-
-    return await $api.get(CATEGORY_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        return rejectWithValue(`Помилка`)
       });
+
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue("Помилка");
+    }
   }
-);
+
+  try {
+    const response = await $api.get(CATEGORY_PATH);
+    return response?.data;
+  } catch (error) {
+    return rejectWithValue("Помилка");
+  }
+});
 
 export const getCategories = createAsyncThunk<
   ICategory[],
   undefined,
   { rejectValue: string }
->(
-  'category/getCategories',
-  async function (_, { rejectWithValue }) {
-    return $api.get(CATEGORY_PATH)
-      .then(res => res?.data)
-      .catch(error => {
-        const errorMessage = error.response.data;
-        return rejectWithValue(errorMessage);
-      });
+>("category/getCategories", async (_, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(CATEGORY_PATH);
+    return response?.data;
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 export const getFilteredCategories = createAsyncThunk<
-  { data: ICategory[], params: string },
+  { data: ICategory[]; params: string },
   string,
   { rejectValue: string }
->(
-  'transaction/getFilteredCategories',
-  async function (params, { rejectWithValue }) {
-    try {
-      const res = await $api.get(`${CATEGORY_PATH}${params}`);
-      const data = res?.data;
-      return { data, params };
-    } catch (error) {
-      const errorMessage = error.response.data;
-      return rejectWithValue(errorMessage);
-    }
+>("transaction/getFilteredCategories", async (params, { rejectWithValue }) => {
+  try {
+    const response = await $api.get(`${CATEGORY_PATH}${params}`);
+    const data = response?.data;
+    return { data, params };
+  } catch (error) {
+    const errorMessage = error.response.data;
+    return rejectWithValue(errorMessage);
   }
-);
+});
 
 const initialState: CategoryState = {
   filterByTypeOfOutlay: "all",
@@ -111,15 +91,13 @@ const initialState: CategoryState = {
   isEditCategorySuccess: false,
   isDeleteCategorySuccess: false,
   isEditCategoryOpen: false,
-}
+};
 
 const categorySlice = createSlice({
-  name: 'category',
+  name: "category",
   initialState,
   reducers: {
-    resetCategoryState: (state) => {
-      return initialState;
-    },
+    resetCategoryState: () => initialState,
     resetError: (state) => {
       state.error = null;
     },
@@ -143,13 +121,13 @@ const categorySlice = createSlice({
       state.addCategoryData = {
         ...state.addCategoryData,
         ...action.payload,
-      }
+      };
     },
     setEditCategoryData: (state, action) => {
       state.editCategoryData = {
         ...state.editCategoryData,
         ...action.payload,
-      }
+      };
     },
     setSuccessStatus: (state, action) => {
       state.isAddCategorySuccess = action.payload;
@@ -198,20 +176,7 @@ const categorySlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredCategories.fulfilled, (state, action) => {
-        const { data, params } = action.payload;
-        switch (params) {
-          case "":
-            state.categories.all = data;
-            break;
-          case "?type_of_outlay=income":
-            state.categories.income = data;
-            break;
-          case "?type_of_outlay=expense":
-            state.categories.expense = data;
-            break;
-          default:
-            break;
-        }
+        updateCategories(state, action);
         state.isLoading = false;
       })
       .addCase(getFilteredCategories.rejected, (state, action) => {
@@ -223,14 +188,14 @@ const categorySlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getUserDetails.fulfilled, (state, action) => {
+      .addCase(getUserDetails.fulfilled, (state) => {
         state.isLoading = false;
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      })
-  }
+      });
+  },
 });
 
 export const {
@@ -244,7 +209,7 @@ export const {
   setAddCategoryData,
   setEditCategoryData,
   setSuccessStatus,
-  setIsEditCategoryOpen
+  setIsEditCategoryOpen,
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

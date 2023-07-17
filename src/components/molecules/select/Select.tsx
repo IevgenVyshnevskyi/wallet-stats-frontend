@@ -1,57 +1,57 @@
-import ReactSelect, { StylesConfig } from 'react-select'
-
-import {
-  ALERT_1,
-  ALERT_2,
-  ALMOST_BLACK_FOR_TEXT,
-  BASE_2,
-  MENU_BUTTON_HOVER,
-  PRIMARY,
-  PRIMARY_2,
-  WHITE
-} from "../../../shared/styles/variables";
+import ReactSelect, { StylesConfig } from "react-select";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+import COLORS from "../../../shared/styles/variables";
+import { SelectOptions } from "../../../../types/common";
 
 type SelectProps = {
-  value: { value: number, label: string };
-  options: any;
-  onCategoryChange: (e: any) => void;
+  value: SelectOptions;
+  options: SelectOptions[];
+  onCategoryChange: (
+    e: React.ChangeEvent<{ value: string; label: string }>
+  ) => void;
   width?: string;
-  isError?: any;
-}
+  isError?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+};
 
-const Select: React.FC<SelectProps> = ({ value, options, onCategoryChange, width, isError }) => {
+const Select: React.FC<SelectProps> = ({
+  value,
+  options,
+  onCategoryChange,
+  width,
+  isError,
+}) => {
   const customStyles: StylesConfig = {
     control: (baseStyles) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: isError ? ALERT_2 : WHITE,
-      fontSize: '16px',
-      border: `2px solid ${isError ? ALERT_1 : PRIMARY_2}`,
-      outline: 'none',
-      borderRadius: '12px',
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: isError ? COLORS.ALERT_2 : COLORS.WHITE,
+      fontSize: "16px",
+      border: `2px solid ${isError ? COLORS.ALERT_1 : COLORS.PRIMARY_2}`,
+      outline: "none",
+      borderRadius: "12px",
       padding: "3px 8px",
       width,
-      '&:hover': {
-        border: `2px solid ${PRIMARY}`,
+      "&:hover": {
+        border: `2px solid ${COLORS.PRIMARY}`,
       },
     }),
     menu: (baseStyles) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: WHITE,
-      fontSize: '16px',
-      border: `2px solid ${PRIMARY_2}`,
-      borderRadius: '12px',
-      marginTop: '4px',
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: COLORS.WHITE,
+      fontSize: "16px",
+      border: `2px solid ${COLORS.PRIMARY_2}`,
+      borderRadius: "12px",
+      marginTop: "4px",
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      color: ALMOST_BLACK_FOR_TEXT,
-      background: state.isSelected ? MENU_BUTTON_HOVER : WHITE,
-      '&:hover': {
-        background: state.isSelected ? MENU_BUTTON_HOVER : BASE_2,
-      }
-    })
+      color: COLORS.ALMOST_BLACK_FOR_TEXT,
+      background: state.isSelected ? COLORS.MENU_BUTTON_HOVER : COLORS.WHITE,
+      "&:hover": {
+        background: state.isSelected ? COLORS.MENU_BUTTON_HOVER : COLORS.BASE_2,
+      },
+    }),
   };
 
   return (
@@ -63,6 +63,6 @@ const Select: React.FC<SelectProps> = ({ value, options, onCategoryChange, width
       noOptionsMessage={() => "Категорію не знайдено"}
     />
   );
-}
+};
 
 export default Select;

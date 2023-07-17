@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import { Box } from "../../atoms/box/Box.styled";
-import { PRIMARY_HOVER, WHITE } from "../../../shared/styles/variables";
 
-export const CategoryWrapper = styled(Box)`
+import Box from "../../atoms/box/Box.styled";
+
+import COLORS from "../../../shared/styles/variables";
+
+const CategoryWrapper = styled(Box)`
   display: flex;
   align-items: center;
   gap: 16px;
@@ -11,10 +13,12 @@ export const CategoryWrapper = styled(Box)`
   width: 100%;
 
   &:hover {
-    background-color: ${PRIMARY_HOVER};
+    background-color: ${COLORS.PRIMARY_HOVER};
 
     div > h5 {
-      color: ${WHITE};
+      color: ${COLORS.WHITE};
     }
   }
 `;
+
+export default CategoryWrapper;
